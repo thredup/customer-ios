@@ -6,6 +6,8 @@
 //  Copyright © 2017 Kustomer. All rights reserved.
 //
 
+#import "Kustomer.h"
+
 @interface Kustomer (Private)
 
 @property (nonatomic, copy, readonly) NSString *apiKey;

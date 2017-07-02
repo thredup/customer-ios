@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		63A4EDD71F097D8F00EA3852 /* Kustomer_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 63A4EDD61F097D8F00EA3852 /* Kustomer_Private.h */; };
+		63A4EDDA1F09891900EA3852 /* KustomerAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = 63A4EDD81F09891900EA3852 /* KustomerAPI.h */; };
+		63A4EDDB1F09891900EA3852 /* KustomerAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A4EDD91F09891900EA3852 /* KustomerAPI.m */; };
 		63B9CD9B1F088E8800120F3E /* Kustomer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63B9CD911F088E8800120F3E /* Kustomer.framework */; };
 		63B9CDA01F088E8800120F3E /* KustomerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 63B9CD9F1F088E8800120F3E /* KustomerTests.m */; };
 		63B9CDAE1F08907700120F3E /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 63B9CDAC1F08907700120F3E /* Info.plist */; };
@@ -64,6 +66,8 @@
 		448086DB570B5537AB2DFA4E /* Pods-KustomerExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KustomerExample.release.xcconfig"; path = "Pods/Target Support Files/Pods-KustomerExample/Pods-KustomerExample.release.xcconfig"; sourceTree = "<group>"; };
 		479720192A1054576AB58BBA /* Pods-KustomerExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KustomerExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-KustomerExample/Pods-KustomerExample.debug.xcconfig"; sourceTree = "<group>"; };
 		63A4EDD61F097D8F00EA3852 /* Kustomer_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Kustomer_Private.h; sourceTree = "<group>"; };
+		63A4EDD81F09891900EA3852 /* KustomerAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KustomerAPI.h; sourceTree = "<group>"; };
+		63A4EDD91F09891900EA3852 /* KustomerAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KustomerAPI.m; sourceTree = "<group>"; };
 		63B9CD911F088E8800120F3E /* Kustomer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Kustomer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		63B9CD9A1F088E8800120F3E /* KustomerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KustomerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		63B9CD9F1F088E8800120F3E /* KustomerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KustomerTests.m; sourceTree = "<group>"; };
@@ -157,6 +161,8 @@
 				63B9CDB01F0890B400120F3E /* Kustomer.h */,
 				63A4EDD61F097D8F00EA3852 /* Kustomer_Private.h */,
 				63B9CDB11F0890B400120F3E /* Kustomer.m */,
+				63A4EDD81F09891900EA3852 /* KustomerAPI.h */,
+				63A4EDD91F09891900EA3852 /* KustomerAPI.m */,
 				63B9CDE31F095E1D00120F3E /* ViewControllers */,
 			);
 			path = Source;
@@ -227,6 +233,7 @@
 				63B9CDB21F0890B400120F3E /* Kustomer.h in Headers */,
 				63B9CDE81F095E7400120F3E /* KustomerChatViewController.h in Headers */,
 				63A4EDD71F097D8F00EA3852 /* Kustomer_Private.h in Headers */,
+				63A4EDDA1F09891900EA3852 /* KustomerAPI.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -498,6 +505,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				63B9CDB31F0890B400120F3E /* Kustomer.m in Sources */,
+				63A4EDDB1F09891900EA3852 /* KustomerAPI.m in Sources */,
 				63B9CDE91F095E7400120F3E /* KustomerChatViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

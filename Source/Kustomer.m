@@ -9,6 +9,8 @@
 #import "Kustomer.h"
 #import "Kustomer_Private.h"
 
+#import "KustomerAPI.h"
+
 static NSString *kKustomerOrgIdKey = @"org";
 static NSString *kKustomerOrgNameKey = @"orgName";
 
@@ -38,6 +40,22 @@ static NSString *kKustomerOrgNameKey = @"orgName";
     [[self sharedInstance] setApiKey:apiKey];
     [[self sharedInstance] setOrgId:tokenPayload[kKustomerOrgIdKey]];
     [[self sharedInstance] setOrgName:tokenPayload[kKustomerOrgNameKey]];
+
+    [[KustomerAPI sharedInstance] getCurrentTokens:^(NSError *error, NSDictionary *response) {
+        if (error) {
+            NSLog(@"error: %@", error);
+            return;
+        }
+
+        NSString *trackingId = [response valueForKeyPath:@"data.attributes.trackingId"];
+        NSString *trackingToken = [response valueForKeyPath:@"data.attributes.token"];
+        NSString *customerId = [response valueForKeyPath:@"data.relationships.customer.data.id"];
+        BOOL customerVerified = [[response valueForKeyPath:@"data.attributes.verified"] boolValue];
+
+        NSLog(@"trackingId: %@", trackingId);
+        NSLog(@"trackingToken: %@", trackingToken);
+        NSLog(@"customerId: %@", customerId);
+    }];
 }
 
 #pragma mark - Lifecycle methods
