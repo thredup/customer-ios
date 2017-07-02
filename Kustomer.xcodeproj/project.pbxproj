@@ -15,9 +15,12 @@
 		63B9CDBC1F089BF000120F3E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 63B9CDBB1F089BF000120F3E /* main.m */; };
 		63B9CDBF1F089BF000120F3E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 63B9CDBE1F089BF000120F3E /* AppDelegate.m */; };
 		63B9CDC21F089BF000120F3E /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63B9CDC11F089BF000120F3E /* ViewController.m */; };
-		63B9CDC51F089BF000120F3E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 63B9CDC31F089BF000120F3E /* Main.storyboard */; };
 		63B9CDC71F089BF000120F3E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 63B9CDC61F089BF000120F3E /* Assets.xcassets */; };
 		63B9CDCA1F089BF000120F3E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 63B9CDC81F089BF000120F3E /* LaunchScreen.storyboard */; };
+		63B9CDDE1F095AA200120F3E /* Kustomer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63B9CD911F088E8800120F3E /* Kustomer.framework */; };
+		63B9CDDF1F095AA200120F3E /* Kustomer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 63B9CD911F088E8800120F3E /* Kustomer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		63B9CDE81F095E7400120F3E /* KustomerChatViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 63B9CDE61F095E7400120F3E /* KustomerChatViewController.h */; };
+		63B9CDE91F095E7400120F3E /* KustomerChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63B9CDE71F095E7400120F3E /* KustomerChatViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,7 +31,28 @@
 			remoteGlobalIDString = 63B9CD901F088E8800120F3E;
 			remoteInfo = Kustomer;
 		};
+		63B9CDE01F095AA200120F3E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 63B9CD881F088E8800120F3E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 63B9CD901F088E8800120F3E;
+			remoteInfo = Kustomer;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		63B9CDE21F095AA200120F3E /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				63B9CDDF1F095AA200120F3E /* Kustomer.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		63B9CD911F088E8800120F3E /* Kustomer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Kustomer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -44,10 +68,11 @@
 		63B9CDBE1F089BF000120F3E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		63B9CDC01F089BF000120F3E /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		63B9CDC11F089BF000120F3E /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		63B9CDC41F089BF000120F3E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		63B9CDC61F089BF000120F3E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		63B9CDC91F089BF000120F3E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		63B9CDCB1F089BF000120F3E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		63B9CDE61F095E7400120F3E /* KustomerChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KustomerChatViewController.h; sourceTree = "<group>"; };
+		63B9CDE71F095E7400120F3E /* KustomerChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KustomerChatViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +95,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63B9CDDE1F095AA200120F3E /* Kustomer.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -111,6 +137,7 @@
 				63B9CDAC1F08907700120F3E /* Info.plist */,
 				63B9CDB01F0890B400120F3E /* Kustomer.h */,
 				63B9CDB11F0890B400120F3E /* Kustomer.m */,
+				63B9CDE31F095E1D00120F3E /* ViewControllers */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -122,7 +149,6 @@
 				63B9CDBE1F089BF000120F3E /* AppDelegate.m */,
 				63B9CDC01F089BF000120F3E /* ViewController.h */,
 				63B9CDC11F089BF000120F3E /* ViewController.m */,
-				63B9CDC31F089BF000120F3E /* Main.storyboard */,
 				63B9CDC61F089BF000120F3E /* Assets.xcassets */,
 				63B9CDC81F089BF000120F3E /* LaunchScreen.storyboard */,
 				63B9CDCB1F089BF000120F3E /* Info.plist */,
@@ -139,6 +165,15 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		63B9CDE31F095E1D00120F3E /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				63B9CDE61F095E7400120F3E /* KustomerChatViewController.h */,
+				63B9CDE71F095E7400120F3E /* KustomerChatViewController.m */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -147,6 +182,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				63B9CDB21F0890B400120F3E /* Kustomer.h in Headers */,
+				63B9CDE81F095E7400120F3E /* KustomerChatViewController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -196,10 +232,12 @@
 				63B9CDB41F089BF000120F3E /* Sources */,
 				63B9CDB51F089BF000120F3E /* Frameworks */,
 				63B9CDB61F089BF000120F3E /* Resources */,
+				63B9CDE21F095AA200120F3E /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				63B9CDE11F095AA200120F3E /* PBXTargetDependency */,
 			);
 			name = KustomerExample;
 			productName = KustomerExample;
@@ -274,7 +312,6 @@
 			files = (
 				63B9CDCA1F089BF000120F3E /* LaunchScreen.storyboard in Resources */,
 				63B9CDC71F089BF000120F3E /* Assets.xcassets in Resources */,
-				63B9CDC51F089BF000120F3E /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -286,6 +323,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				63B9CDB31F0890B400120F3E /* Kustomer.m in Sources */,
+				63B9CDE91F095E7400120F3E /* KustomerChatViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -315,17 +353,14 @@
 			target = 63B9CD901F088E8800120F3E /* Kustomer */;
 			targetProxy = 63B9CD9C1F088E8800120F3E /* PBXContainerItemProxy */;
 		};
+		63B9CDE11F095AA200120F3E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 63B9CD901F088E8800120F3E /* Kustomer */;
+			targetProxy = 63B9CDE01F095AA200120F3E /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		63B9CDC31F089BF000120F3E /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				63B9CDC41F089BF000120F3E /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		63B9CDC81F089BF000120F3E /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
