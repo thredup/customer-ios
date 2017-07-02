@@ -51,11 +51,7 @@
 - (void)_openSupport
 {
     KustomerChatViewController *chatViewController = [[KustomerChatViewController alloc] init];
-    [self presentViewController:chatViewController animated:YES completion:^{
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [chatViewController dismissViewControllerAnimated:YES completion:nil];
-        });
-    }];
+    [self presentViewController:chatViewController animated:YES completion:nil];
 }
 
 @end
