@@ -7,10 +7,16 @@
 //
 
 #import "Kustomer.h"
+#import "Kustomer_Private.h"
+
+static NSString *kKustomerOrgIdKey = @"org";
+static NSString *kKustomerOrgNameKey = @"orgName";
 
 @interface Kustomer ()
 
-@property (nonatomic, copy) NSString *accessToken;
+@property (nonatomic, copy, readwrite) NSString *apiKey;
+@property (nonatomic, copy, readwrite) NSString *orgId;
+@property (nonatomic, copy, readwrite) NSString *orgName;
 
 @end
 
@@ -18,9 +24,20 @@
 
 #pragma mark - Class methods
 
-+ (void)initializeWithAccessToken:(NSString *)accessToken
++ (void)initializeWithAPIKey:(NSString *)apiKey
 {
-    [[self sharedInstance] setAccessToken:accessToken];
+    // TODO: Add an assert on existence of api key
+
+    NSArray<NSString *> *apiKeyParts = [apiKey componentsSeparatedByString:@"."];
+    // TODO: Add an assert on number of api key parts
+
+    NSString *base64EncodedTokenJson = paddedBase64String(apiKeyParts[1]);
+    NSDictionary *tokenPayload = jsonFromBase64EncodedJsonString(base64EncodedTokenJson);
+
+    // TODO: Add an assert on the existence of orgId and orgName
+    [[self sharedInstance] setApiKey:apiKey];
+    [[self sharedInstance] setOrgId:tokenPayload[kKustomerOrgIdKey]];
+    [[self sharedInstance] setOrgName:tokenPayload[kKustomerOrgNameKey]];
 }
 
 #pragma mark - Lifecycle methods
@@ -35,13 +52,16 @@
     return _sharedInstance;
 }
 
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
+#pragma mark - Helper functions
 
-    }
-    return self;
+static NSString *paddedBase64String(NSString *base64String) {
+    NSUInteger paddedLength = base64String.length + (4 - (base64String.length % 4));
+    return [base64String stringByPaddingToLength:paddedLength withString:@"=" startingAtIndex:0];
+}
+
+static NSDictionary *jsonFromBase64EncodedJsonString(NSString *base64EncodedJson) {
+    NSData *decodedData = [[NSData alloc] initWithBase64EncodedString:base64EncodedJson options:kNilOptions];
+    return [NSJSONSerialization JSONObjectWithData:decodedData options:kNilOptions error:NULL];
 }
 
 @end

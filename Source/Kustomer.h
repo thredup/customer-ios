@@ -13,6 +13,8 @@ FOUNDATION_EXPORT const unsigned char KustomerVersionString[];
 
 @interface Kustomer : NSObject
 
-+ (void)initializeWithAccessToken:(NSString *)accessToken;
++ (void)initializeWithAPIKey:(NSString *)apiKey;
+
+- (instancetype)init NS_UNAVAILABLE;
 
 @end

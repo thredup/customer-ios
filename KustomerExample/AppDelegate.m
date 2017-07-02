@@ -11,6 +11,9 @@
 
 #import "Kustomer.h"
 
+// TODO:
+static NSString *kKustomerAPIKey = @"API_KEY";
+
 @interface AppDelegate ()
 
 @end
@@ -19,7 +22,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [Kustomer initializeWithAccessToken:@"ACCESS_TOKEN"];
+    [Kustomer initializeWithAPIKey:kKustomerAPIKey];
 
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.rootViewController = [[ViewController alloc] init];
