@@ -54,6 +54,7 @@
     KustomerSessionsViewController *sessionsViewController = [[KustomerSessionsViewController alloc] init];
     // KustomerChatViewController *chatViewController = [[KustomerChatViewController alloc] init];
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:sessionsViewController];
+    navController.navigationBar.barTintColor = [UIColor colorWithWhite:237.0/255.0 alpha:1.0];
     [self presentViewController:navController animated:YES completion:nil];
 }
 

@@ -8,6 +8,7 @@
 
 #import "KustomerSessionsViewController.h"
 
+#import "KustomerChatViewController.h"
 #import "KustomerPlaceholderTableViewCell.h"
 #import "KustomerSessionTableViewCell.h"
 
@@ -96,6 +97,9 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+
+    KustomerChatViewController *chatViewController = [[KustomerChatViewController alloc] init];
+    [self.navigationController pushViewController:chatViewController animated:YES];
 }
 
 @end
