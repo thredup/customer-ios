@@ -8,6 +8,7 @@
 
 #import "KustomerSessionsViewController.h"
 
+#import "KustomerPlaceholderTableViewCell.h"
 #import "KustomerSessionTableViewCell.h"
 
 @interface KustomerSessionsViewController () <UITableViewDataSource, UITableViewDelegate>
@@ -67,15 +68,25 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 1;
+    // TODO: Calculate placeholder row count based on screen height
+    return 6;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *kSessionCellIdentifier = @"SessionCell";
-    KustomerSessionTableViewCell *cell = (KustomerSessionTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kSessionCellIdentifier];
+    if (indexPath.row == 0) {
+        static NSString *kSessionCellIdentifier = @"SessionCell";
+        KustomerSessionTableViewCell *cell = (KustomerSessionTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kSessionCellIdentifier];
+        if (cell == nil) {
+            cell = [[KustomerSessionTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kSessionCellIdentifier];
+        }
+        return cell;
+    }
+
+    static NSString *kPlaceholderCellIdentifier = @"PlaceholderCell";
+    KustomerPlaceholderTableViewCell *cell = (KustomerPlaceholderTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kPlaceholderCellIdentifier];
     if (cell == nil) {
-        cell = [[KustomerSessionTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kSessionCellIdentifier];
+        cell = [[KustomerPlaceholderTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kPlaceholderCellIdentifier];
     }
     return cell;
 }

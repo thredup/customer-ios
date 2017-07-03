@@ -14,6 +14,8 @@
 		63A4EDDF1F0A941D00EA3852 /* KustomerSessionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A4EDDD1F0A941D00EA3852 /* KustomerSessionsViewController.m */; };
 		63A4EDEA1F0A96F000EA3852 /* KustomerSessionTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 63A4EDE81F0A96F000EA3852 /* KustomerSessionTableViewCell.h */; };
 		63A4EDEB1F0A96F000EA3852 /* KustomerSessionTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A4EDE91F0A96F000EA3852 /* KustomerSessionTableViewCell.m */; };
+		63A4EDEE1F0AAA1500EA3852 /* KustomerPlaceholderTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 63A4EDEC1F0AAA1500EA3852 /* KustomerPlaceholderTableViewCell.h */; };
+		63A4EDEF1F0AAA1500EA3852 /* KustomerPlaceholderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A4EDED1F0AAA1500EA3852 /* KustomerPlaceholderTableViewCell.m */; };
 		63B9CD9B1F088E8800120F3E /* Kustomer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63B9CD911F088E8800120F3E /* Kustomer.framework */; };
 		63B9CDA01F088E8800120F3E /* KustomerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 63B9CD9F1F088E8800120F3E /* KustomerTests.m */; };
 		63B9CDAE1F08907700120F3E /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 63B9CDAC1F08907700120F3E /* Info.plist */; };
@@ -76,6 +78,8 @@
 		63A4EDDD1F0A941D00EA3852 /* KustomerSessionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KustomerSessionsViewController.m; sourceTree = "<group>"; };
 		63A4EDE81F0A96F000EA3852 /* KustomerSessionTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KustomerSessionTableViewCell.h; sourceTree = "<group>"; };
 		63A4EDE91F0A96F000EA3852 /* KustomerSessionTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KustomerSessionTableViewCell.m; sourceTree = "<group>"; };
+		63A4EDEC1F0AAA1500EA3852 /* KustomerPlaceholderTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KustomerPlaceholderTableViewCell.h; sourceTree = "<group>"; };
+		63A4EDED1F0AAA1500EA3852 /* KustomerPlaceholderTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KustomerPlaceholderTableViewCell.m; sourceTree = "<group>"; };
 		63B9CD911F088E8800120F3E /* Kustomer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Kustomer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		63B9CD9A1F088E8800120F3E /* KustomerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KustomerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		63B9CD9F1F088E8800120F3E /* KustomerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KustomerTests.m; sourceTree = "<group>"; };
@@ -144,6 +148,8 @@
 			children = (
 				63A4EDE81F0A96F000EA3852 /* KustomerSessionTableViewCell.h */,
 				63A4EDE91F0A96F000EA3852 /* KustomerSessionTableViewCell.m */,
+				63A4EDEC1F0AAA1500EA3852 /* KustomerPlaceholderTableViewCell.h */,
+				63A4EDED1F0AAA1500EA3852 /* KustomerPlaceholderTableViewCell.m */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -264,6 +270,7 @@
 				63A4EDD71F097D8F00EA3852 /* Kustomer_Private.h in Headers */,
 				63A4EDDE1F0A941D00EA3852 /* KustomerSessionsViewController.h in Headers */,
 				63A4EDDA1F09891900EA3852 /* KustomerAPI.h in Headers */,
+				63A4EDEE1F0AAA1500EA3852 /* KustomerPlaceholderTableViewCell.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -535,6 +542,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				63B9CDB31F0890B400120F3E /* Kustomer.m in Sources */,
+				63A4EDEF1F0AAA1500EA3852 /* KustomerPlaceholderTableViewCell.m in Sources */,
 				63A4EDDB1F09891900EA3852 /* KustomerAPI.m in Sources */,
 				63A4EDEB1F0A96F000EA3852 /* KustomerSessionTableViewCell.m in Sources */,
 				63A4EDDF1F0A941D00EA3852 /* KustomerSessionsViewController.m in Sources */,
