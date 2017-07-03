@@ -9,6 +9,7 @@
 #import "ViewController.h"
 
 #import "KustomerChatViewController.h"
+#import "KustomerSessionsViewController.h"
 
 @interface ViewController () {
     UIButton *_supportButton;
@@ -50,8 +51,10 @@
 
 - (void)_openSupport
 {
-    KustomerChatViewController *chatViewController = [[KustomerChatViewController alloc] init];
-    [self presentViewController:chatViewController animated:YES completion:nil];
+    KustomerSessionsViewController *sessionsViewController = [[KustomerSessionsViewController alloc] init];
+    // KustomerChatViewController *chatViewController = [[KustomerChatViewController alloc] init];
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:sessionsViewController];
+    [self presentViewController:navController animated:YES completion:nil];
 }
 
 @end
