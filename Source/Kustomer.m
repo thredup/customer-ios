@@ -9,12 +9,14 @@
 #import "Kustomer.h"
 #import "Kustomer_Private.h"
 
-#import "KustomerAPI.h"
+#import "KUSAPIClient.h"
 
 static NSString *kKustomerOrgIdKey = @"org";
 static NSString *kKustomerOrgNameKey = @"orgName";
 
 @interface Kustomer ()
+
+@property (nonatomic, strong) KUSAPIClient *apiClient;
 
 @property (nonatomic, copy, readwrite) NSString *apiKey;
 @property (nonatomic, copy, readwrite) NSString *orgId;
@@ -41,20 +43,15 @@ static NSString *kKustomerOrgNameKey = @"orgName";
     [[self sharedInstance] setOrgId:tokenPayload[kKustomerOrgIdKey]];
     [[self sharedInstance] setOrgName:tokenPayload[kKustomerOrgNameKey]];
 
-    [[KustomerAPI sharedInstance] getCurrentTokens:^(NSError *error, NSDictionary *response) {
+    KUSAPIClient *apiClient = [[KUSAPIClient alloc] initWithOrgName:tokenPayload[kKustomerOrgNameKey]];
+    [[self sharedInstance] setApiClient:apiClient];
+
+    [apiClient getCurrentTrackingToken:^(NSError *error, KUSTrackingToken *trackingToken) {
         if (error) {
             NSLog(@"error: %@", error);
             return;
         }
-
-        NSString *trackingId = [response valueForKeyPath:@"data.attributes.trackingId"];
-        NSString *trackingToken = [response valueForKeyPath:@"data.attributes.token"];
-        NSString *customerId = [response valueForKeyPath:@"data.relationships.customer.data.id"];
-        BOOL customerVerified = [[response valueForKeyPath:@"data.attributes.verified"] boolValue];
-
-        NSLog(@"trackingId: %@", trackingId);
-        NSLog(@"trackingToken: %@", trackingToken);
-        NSLog(@"customerId: %@", customerId);
+        NSLog(@"trackingToken: %@", trackingToken.token);
     }];
 }
 
