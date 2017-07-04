@@ -32,7 +32,6 @@
 		63A4EDEF1F0AAA1500EA3852 /* KustomerPlaceholderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A4EDED1F0AAA1500EA3852 /* KustomerPlaceholderTableViewCell.m */; };
 		63B9CD9B1F088E8800120F3E /* Kustomer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63B9CD911F088E8800120F3E /* Kustomer.framework */; };
 		63B9CDA01F088E8800120F3E /* KustomerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 63B9CD9F1F088E8800120F3E /* KustomerTests.m */; };
-		63B9CDAE1F08907700120F3E /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 63B9CDAC1F08907700120F3E /* Info.plist */; };
 		63B9CDB21F0890B400120F3E /* Kustomer.h in Headers */ = {isa = PBXBuildFile; fileRef = 63B9CDB01F0890B400120F3E /* Kustomer.h */; };
 		63B9CDB31F0890B400120F3E /* Kustomer.m in Sources */ = {isa = PBXBuildFile; fileRef = 63B9CDB11F0890B400120F3E /* Kustomer.m */; };
 		63B9CDBC1F089BF000120F3E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 63B9CDBB1F089BF000120F3E /* main.m */; };
@@ -456,7 +455,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				63B9CDAE1F08907700120F3E /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
