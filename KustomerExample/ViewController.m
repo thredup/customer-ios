@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 
+#import "KUSNavigationController.h"
 #import "KustomerChatViewController.h"
 #import "KustomerSessionsViewController.h"
 
@@ -52,9 +53,7 @@
 - (void)_openSupport
 {
     KustomerSessionsViewController *sessionsViewController = [[KustomerSessionsViewController alloc] init];
-    // KustomerChatViewController *chatViewController = [[KustomerChatViewController alloc] init];
-    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:sessionsViewController];
-    navController.navigationBar.barTintColor = [UIColor colorWithWhite:237.0/255.0 alpha:1.0];
+    KUSNavigationController *navController = [[KUSNavigationController alloc] initWithRootViewController:sessionsViewController];
     [self presentViewController:navController animated:YES completion:nil];
 }
 
