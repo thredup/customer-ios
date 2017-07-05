@@ -12,6 +12,8 @@
 #import "KustomerPlaceholderTableViewCell.h"
 #import "KustomerSessionTableViewCell.h"
 
+#import "KUSImage.h"
+
 @interface KustomerSessionsViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -37,17 +39,29 @@
     self.tableView.separatorInset = UIEdgeInsetsZero;
     [self.view addSubview:self.tableView];
 
+    UIColor *blueColor = [UIColor colorWithRed:66.0/255.0
+                                         green:130.0/255.0
+                                          blue:252.0/255.0
+                                         alpha:1.0];
+    CGFloat buttonRadius = 4.0;
+    CGSize size = CGSizeMake(buttonRadius * 2.0, buttonRadius * 2.0);
+    UIImage *circularImage = [KUSImage circularImageWithSize:size color:blueColor];
+    UIEdgeInsets capInsets = UIEdgeInsetsMake(buttonRadius, buttonRadius, buttonRadius, buttonRadius);
+    UIImage *buttonImage = [circularImage resizableImageWithCapInsets:capInsets];
+
     // TODO: Encapsulate into class
     self.createSessionButton = [[UIButton alloc] init];
     [self.createSessionButton setTitle:@"New Conversation" forState:UIControlStateNormal];
     self.createSessionButton.titleLabel.textColor = [UIColor whiteColor];
     self.createSessionButton.titleLabel.font = [UIFont systemFontOfSize:14.0];
-    self.createSessionButton.backgroundColor = [UIColor colorWithRed:66.0/255.0
-                                                               green:130.0/255.0
-                                                                blue:252.0/255.0
-                                                               alpha:1.0];
-    self.createSessionButton.layer.cornerRadius = 4.0;
-    self.createSessionButton.layer.masksToBounds = YES;
+    [self.createSessionButton setBackgroundImage:buttonImage forState:UIControlStateNormal];
+    self.createSessionButton.layer.shadowColor = [UIColor darkGrayColor].CGColor;
+    self.createSessionButton.layer.shadowOffset = CGSizeMake(1.0, 1.0);
+    self.createSessionButton.layer.shadowRadius = 1.0;
+    self.createSessionButton.layer.shadowOpacity = 0.5;
+    [self.createSessionButton addTarget:self
+                                 action:@selector(_createSession)
+                       forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.createSessionButton];
 }
 
@@ -64,6 +78,14 @@
         .origin.y = self.view.bounds.size.height - createSessionButtonSize.height - 23.0,
         .size = createSessionButtonSize
     };
+}
+
+#pragma mark - Interface element methods
+
+- (void)_createSession
+{
+    KustomerChatViewController *chatViewController = [[KustomerChatViewController alloc] init];
+    [self.navigationController pushViewController:chatViewController animated:YES];
 }
 
 #pragma mark - UITableViewDataSource methods

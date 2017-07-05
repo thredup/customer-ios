@@ -27,6 +27,8 @@
 		6334BE4A1F0C5E3F00258DAF /* KUSNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6334BE481F0C5E3F00258DAF /* KUSNavigationController.m */; };
 		6334BE4D1F0C600F00258DAF /* KUSAttributionToolbar.h in Headers */ = {isa = PBXBuildFile; fileRef = 6334BE4B1F0C600F00258DAF /* KUSAttributionToolbar.h */; };
 		6334BE4E1F0C600F00258DAF /* KUSAttributionToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 6334BE4C1F0C600F00258DAF /* KUSAttributionToolbar.m */; };
+		6334BE541F0C66E200258DAF /* KUSImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 6334BE521F0C66E200258DAF /* KUSImage.h */; };
+		6334BE551F0C66E200258DAF /* KUSImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 6334BE531F0C66E200258DAF /* KUSImage.m */; };
 		63A4EDD71F097D8F00EA3852 /* Kustomer_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 63A4EDD61F097D8F00EA3852 /* Kustomer_Private.h */; };
 		63A4EDDE1F0A941D00EA3852 /* KustomerSessionsViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 63A4EDDC1F0A941D00EA3852 /* KustomerSessionsViewController.h */; };
 		63A4EDDF1F0A941D00EA3852 /* KustomerSessionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A4EDDD1F0A941D00EA3852 /* KustomerSessionsViewController.m */; };
@@ -108,6 +110,8 @@
 		6334BE481F0C5E3F00258DAF /* KUSNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSNavigationController.m; sourceTree = "<group>"; };
 		6334BE4B1F0C600F00258DAF /* KUSAttributionToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSAttributionToolbar.h; sourceTree = "<group>"; };
 		6334BE4C1F0C600F00258DAF /* KUSAttributionToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSAttributionToolbar.m; sourceTree = "<group>"; };
+		6334BE521F0C66E200258DAF /* KUSImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSImage.h; sourceTree = "<group>"; };
+		6334BE531F0C66E200258DAF /* KUSImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSImage.m; sourceTree = "<group>"; };
 		63A4EDD61F097D8F00EA3852 /* Kustomer_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Kustomer_Private.h; sourceTree = "<group>"; };
 		63A4EDDC1F0A941D00EA3852 /* KustomerSessionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KustomerSessionsViewController.h; sourceTree = "<group>"; };
 		63A4EDDD1F0A941D00EA3852 /* KustomerSessionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KustomerSessionsViewController.m; sourceTree = "<group>"; };
@@ -198,6 +202,15 @@
 			path = API;
 			sourceTree = "<group>";
 		};
+		6334BE4F1F0C66D500258DAF /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				6334BE521F0C66E200258DAF /* KUSImage.h */,
+				6334BE531F0C66E200258DAF /* KUSImage.m */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		63A4EDE41F0A968E00EA3852 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -260,6 +273,7 @@
 				63A4EDD61F097D8F00EA3852 /* Kustomer_Private.h */,
 				63B9CDB11F0890B400120F3E /* Kustomer.m */,
 				6334BE401F0C52C400258DAF /* API */,
+				6334BE4F1F0C66D500258DAF /* Helpers */,
 				6334BE251F0C3E7100258DAF /* Models */,
 				63B9CDE31F095E1D00120F3E /* ViewControllers */,
 				63A4EDE41F0A968E00EA3852 /* Views */,
@@ -341,6 +355,7 @@
 				63A4EDD71F097D8F00EA3852 /* Kustomer_Private.h in Headers */,
 				63A4EDDE1F0A941D00EA3852 /* KustomerSessionsViewController.h in Headers */,
 				6334BE361F0C4A1300258DAF /* KUSChatSession.h in Headers */,
+				6334BE541F0C66E200258DAF /* KUSImage.h in Headers */,
 				6334BE4D1F0C600F00258DAF /* KUSAttributionToolbar.h in Headers */,
 				6334BE491F0C5E3F00258DAF /* KUSNavigationController.h in Headers */,
 				6334BE321F0C487400258DAF /* KUSChatSettings.h in Headers */,
@@ -629,6 +644,7 @@
 				6334BE4E1F0C600F00258DAF /* KUSAttributionToolbar.m in Sources */,
 				63A4EDDF1F0A941D00EA3852 /* KustomerSessionsViewController.m in Sources */,
 				63B9CDE91F095E7400120F3E /* KustomerChatViewController.m in Sources */,
+				6334BE551F0C66E200258DAF /* KUSImage.m in Sources */,
 				6334BE2F1F0C43BE00258DAF /* KUSTrackingToken.m in Sources */,
 				6334BE371F0C4A1300258DAF /* KUSChatSession.m in Sources */,
 				6334BE3B1F0C4B3D00258DAF /* KUSChatMessage.m in Sources */,
