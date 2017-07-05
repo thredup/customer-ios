@@ -11,6 +11,7 @@
 #import "KUSChatSession.h"
 #import "KUSChatSettings.h"
 #import "KUSTrackingToken.h"
+#import "KUSPaginatedResponse.h"
 
 @interface KUSAPIClient : NSObject
 
@@ -18,6 +19,7 @@
 
 - (void)getCurrentTrackingToken:(void(^)(NSError *error, KUSTrackingToken *trackingToken))completion;
 - (void)getChatSettings:(void(^)(NSError *error, KUSChatSettings *chatSettings))completion;
+- (void)getChatSessions:(void(^)(NSError *error, KUSPaginatedResponse *chatSessionsResponse))completion;
 
 - (instancetype)init NS_UNAVAILABLE;
 

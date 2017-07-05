@@ -102,10 +102,13 @@ static NSString *kKustomerTrackingTokenHeaderKey = @"x-kustomer-tracking-token";
     }];
 }
 
-- (void)getChatSessions:(void(^)(NSError *error, NSArray<KUSChatSession *> *chatSessions))completion
+- (void)getChatSessions:(void(^)(NSError *error, KUSPaginatedResponse *chatSessionsResponse))completion
 {
     [self getEndpoint:@"/v1/chat/sessions" completion:^(NSError *error, NSDictionary *response) {
-        // TODO:
+        KUSPaginatedResponse *chatSessionsResponse = [[KUSPaginatedResponse alloc] initWithJSON:response modelClass:[KUSChatSession class]];
+        if (completion) {
+            completion(error, chatSessionsResponse);
+        }
     }];
 }
 
