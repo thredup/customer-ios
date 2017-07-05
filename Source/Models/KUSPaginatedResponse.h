@@ -23,4 +23,6 @@
 
 - (instancetype _Nullable)initWithJSON:(NSDictionary * _Nonnull)json modelClass:(Class _Nonnull)modelClass;
 
+- (instancetype _Nonnull)init NS_UNAVAILABLE;
+
 @end

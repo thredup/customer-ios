@@ -46,7 +46,66 @@ static NSString *kKustomerTrackingTokenHeaderKey = @"x-kustomer-tracking-token";
     NSString *endpointUrlString = [NSString stringWithFormat:@"%@%@", self.baseUrlString, endpoint];
     NSURL *endpointURL = [NSURL URLWithString:endpointUrlString];
     NSMutableURLRequest *urlRequest = [[NSMutableURLRequest alloc] initWithURL:endpointURL];
+    [self _performURLRequest:urlRequest completion:completion];
+}
 
+- (void)postEndpoint:(NSString *)endpoint body:(NSDictionary *)body completion:(void(^)(NSError *error, NSDictionary *response))completion
+{
+    NSString *endpointUrlString = [NSString stringWithFormat:@"%@%@", self.baseUrlString, endpoint];
+    NSURL *endpointURL = [NSURL URLWithString:endpointUrlString];
+    NSMutableURLRequest *urlRequest = [[NSMutableURLRequest alloc] initWithURL:endpointURL];
+    [urlRequest setHTTPMethod:@"POST"];
+
+    if (body) {
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:body options:kNilOptions error:NULL];
+        [urlRequest setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+        NSString *contentLength = [NSString stringWithFormat:@"%lu", (unsigned long)jsonData.length];
+        [urlRequest setValue:contentLength forHTTPHeaderField:@"Content-Length"];
+        [urlRequest setHTTPBody:jsonData];
+    }
+
+    [self _performURLRequest:urlRequest completion:completion];
+}
+
+- (void)patchEndpoint:(NSString *)endpoint body:(NSDictionary *)body completion:(void(^)(NSError *error, NSDictionary *response))completion
+{
+    NSString *endpointUrlString = [NSString stringWithFormat:@"%@%@", self.baseUrlString, endpoint];
+    NSURL *endpointURL = [NSURL URLWithString:endpointUrlString];
+    NSMutableURLRequest *urlRequest = [[NSMutableURLRequest alloc] initWithURL:endpointURL];
+    [urlRequest setHTTPMethod:@"PATCH"];
+
+    if (body) {
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:body options:kNilOptions error:NULL];
+        [urlRequest setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+        NSString *contentLength = [NSString stringWithFormat:@"%lu", (unsigned long)jsonData.length];
+        [urlRequest setValue:contentLength forHTTPHeaderField:@"Content-Length"];
+        [urlRequest setHTTPBody:jsonData];
+    }
+
+    [self _performURLRequest:urlRequest completion:completion];
+}
+
+- (void)putEndpoint:(NSString *)endpoint body:(NSDictionary *)body completion:(void(^)(NSError *error, NSDictionary *response))completion
+{
+    NSString *endpointUrlString = [NSString stringWithFormat:@"%@%@", self.baseUrlString, endpoint];
+    NSURL *endpointURL = [NSURL URLWithString:endpointUrlString];
+    NSMutableURLRequest *urlRequest = [[NSMutableURLRequest alloc] initWithURL:endpointURL];
+    [urlRequest setHTTPMethod:@"PUT"];
+
+    if (body) {
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:body options:kNilOptions error:NULL];
+        [urlRequest setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+        NSString *contentLength = [NSString stringWithFormat:@"%lu", (unsigned long)jsonData.length];
+        [urlRequest setValue:contentLength forHTTPHeaderField:@"Content-Length"];
+        [urlRequest setHTTPBody:jsonData];
+    }
+
+    [self _performURLRequest:urlRequest completion:completion];
+}
+
+- (void)_performURLRequest:(NSMutableURLRequest *)urlRequest completion:(void(^)(NSError *error, NSDictionary *response))completion
+{
+    // Attach relevant headers
     [urlRequest setValue:@"kustomer" forHTTPHeaderField:@"X-Kustomer"];
     if (self.trackingToken) {
         [urlRequest setValue:self.trackingToken forHTTPHeaderField:kKustomerTrackingTokenHeaderKey];
@@ -61,7 +120,6 @@ static NSString *kKustomerTrackingTokenHeaderKey = @"x-kustomer-tracking-token";
             }
         }
     };
-
     void (^responseBlock)(NSData *, NSURLResponse *, NSError *) = ^void(NSData *data, NSURLResponse *response, NSError *error) {
         if (error) {
             safeComplete(error, nil);
@@ -71,7 +129,6 @@ static NSString *kKustomerTrackingTokenHeaderKey = @"x-kustomer-tracking-token";
         NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&jsonError];
         safeComplete(jsonError, json);
     };
-
     NSURLSessionDataTask *dataTask = [_urlSession dataTaskWithRequest:urlRequest completionHandler:responseBlock];
     [dataTask resume];
 }
@@ -102,12 +159,36 @@ static NSString *kKustomerTrackingTokenHeaderKey = @"x-kustomer-tracking-token";
     }];
 }
 
-- (void)getChatSessions:(void(^)(NSError *error, KUSPaginatedResponse *chatSessionsResponse))completion
+- (void)getChatSessions:(void(^)(NSError *error, KUSPaginatedResponse *chatSessions))completion
 {
     [self getEndpoint:@"/v1/chat/sessions" completion:^(NSError *error, NSDictionary *response) {
         KUSPaginatedResponse *chatSessionsResponse = [[KUSPaginatedResponse alloc] initWithJSON:response modelClass:[KUSChatSession class]];
         if (completion) {
             completion(error, chatSessionsResponse);
+        }
+    }];
+}
+
+- (void)getMessagesForSessionId:(NSString *)sessionId completion:(void(^)(NSError *error, KUSPaginatedResponse *chatMessages))completion
+{
+    NSString *endpoint = [NSString stringWithFormat:@"/v1/chat/sessions/%@/messages", sessionId];
+    [self getEndpoint:endpoint completion:^(NSError *error, NSDictionary *response) {
+        KUSPaginatedResponse *chatMessagesResponse = [[KUSPaginatedResponse alloc] initWithJSON:response modelClass:[KUSChatMessage class]];
+        if (completion) {
+            completion(error, chatMessagesResponse);
+        }
+    }];
+}
+
+- (void)updateLastSeenAtForSessionId:(NSString *)sessionId completion:(void(^)(NSError *error, KUSChatSession *session))completion
+{
+    NSString *endpoint = [NSString stringWithFormat:@"/v1/chat/sessions/%@/messages", sessionId];
+    // TODO: Convert NSData to ISO8601 NSString using NSDateFormatter
+    NSDictionary *payload = @{ @"lastSeenAt": @"2017-07-05T04:41:17.310Z" };
+    [self putEndpoint:endpoint body:payload completion:^(NSError *error, NSDictionary *response) {
+        KUSChatSession *chatSession = [[KUSChatSession alloc] initWithJSON:response[@"data"]];
+        if (completion) {
+            completion(error, chatSession);
         }
     }];
 }
