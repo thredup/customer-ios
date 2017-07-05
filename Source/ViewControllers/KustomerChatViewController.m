@@ -10,6 +10,8 @@
 
 #import "KustomerInputBarView.h"
 
+#import "KUSAvatarTitleView.h"
+
 @interface KustomerChatViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -26,6 +28,10 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     self.edgesForExtendedLayout = UIRectEdgeTop | UIRectEdgeLeft | UIRectEdgeRight;
+
+    // self.navigationItem.title = @"Kustomer";
+    self.navigationItem.titleView = [[KUSAvatarTitleView alloc] init];
+    self.navigationItem.prompt = @"Questions about Kustomer?";
 
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     self.tableView.dataSource = self;

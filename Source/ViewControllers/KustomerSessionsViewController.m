@@ -12,6 +12,7 @@
 #import "KustomerPlaceholderTableViewCell.h"
 #import "KustomerSessionTableViewCell.h"
 
+#import "KUSAvatarTitleView.h"
 #import "KUSImage.h"
 
 @interface KustomerSessionsViewController () <UITableViewDataSource, UITableViewDelegate>
@@ -30,6 +31,12 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     self.edgesForExtendedLayout = UIRectEdgeTop | UIRectEdgeLeft | UIRectEdgeRight;
+
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@""
+                                                                             style:self.navigationItem.backBarButtonItem.style
+                                                                            target:nil
+                                                                            action:nil];
+    self.navigationItem.titleView = [[KUSAvatarTitleView alloc] init];
 
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     self.tableView.dataSource = self;

@@ -29,6 +29,8 @@
 		6334BE4E1F0C600F00258DAF /* KUSAttributionToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 6334BE4C1F0C600F00258DAF /* KUSAttributionToolbar.m */; };
 		6334BE541F0C66E200258DAF /* KUSImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 6334BE521F0C66E200258DAF /* KUSImage.h */; };
 		6334BE551F0C66E200258DAF /* KUSImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 6334BE531F0C66E200258DAF /* KUSImage.m */; };
+		6334BE5C1F0C783200258DAF /* KUSAvatarTitleView.h in Headers */ = {isa = PBXBuildFile; fileRef = 6334BE5A1F0C783200258DAF /* KUSAvatarTitleView.h */; };
+		6334BE5D1F0C783200258DAF /* KUSAvatarTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6334BE5B1F0C783200258DAF /* KUSAvatarTitleView.m */; };
 		63A4EDD71F097D8F00EA3852 /* Kustomer_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 63A4EDD61F097D8F00EA3852 /* Kustomer_Private.h */; };
 		63A4EDDE1F0A941D00EA3852 /* KustomerSessionsViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 63A4EDDC1F0A941D00EA3852 /* KustomerSessionsViewController.h */; };
 		63A4EDDF1F0A941D00EA3852 /* KustomerSessionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A4EDDD1F0A941D00EA3852 /* KustomerSessionsViewController.m */; };
@@ -112,6 +114,8 @@
 		6334BE4C1F0C600F00258DAF /* KUSAttributionToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSAttributionToolbar.m; sourceTree = "<group>"; };
 		6334BE521F0C66E200258DAF /* KUSImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSImage.h; sourceTree = "<group>"; };
 		6334BE531F0C66E200258DAF /* KUSImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSImage.m; sourceTree = "<group>"; };
+		6334BE5A1F0C783200258DAF /* KUSAvatarTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSAvatarTitleView.h; sourceTree = "<group>"; };
+		6334BE5B1F0C783200258DAF /* KUSAvatarTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSAvatarTitleView.m; sourceTree = "<group>"; };
 		63A4EDD61F097D8F00EA3852 /* Kustomer_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Kustomer_Private.h; sourceTree = "<group>"; };
 		63A4EDDC1F0A941D00EA3852 /* KustomerSessionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KustomerSessionsViewController.h; sourceTree = "<group>"; };
 		63A4EDDD1F0A941D00EA3852 /* KustomerSessionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KustomerSessionsViewController.m; sourceTree = "<group>"; };
@@ -219,6 +223,8 @@
 				62DF0B521F0AD5BC008557F5 /* KustomerInputBarView.m */,
 				6334BE4B1F0C600F00258DAF /* KUSAttributionToolbar.h */,
 				6334BE4C1F0C600F00258DAF /* KUSAttributionToolbar.m */,
+				6334BE5A1F0C783200258DAF /* KUSAvatarTitleView.h */,
+				6334BE5B1F0C783200258DAF /* KUSAvatarTitleView.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -348,6 +354,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6334BE451F0C52D700258DAF /* KUSAPIClient.h in Headers */,
+				6334BE5C1F0C783200258DAF /* KUSAvatarTitleView.h in Headers */,
 				6334BE3A1F0C4B3D00258DAF /* KUSChatMessage.h in Headers */,
 				63B9CDB21F0890B400120F3E /* Kustomer.h in Headers */,
 				63A4EDEA1F0A96F000EA3852 /* KustomerSessionTableViewCell.h in Headers */,
@@ -645,6 +652,7 @@
 				63A4EDDF1F0A941D00EA3852 /* KustomerSessionsViewController.m in Sources */,
 				63B9CDE91F095E7400120F3E /* KustomerChatViewController.m in Sources */,
 				6334BE551F0C66E200258DAF /* KUSImage.m in Sources */,
+				6334BE5D1F0C783200258DAF /* KUSAvatarTitleView.m in Sources */,
 				6334BE2F1F0C43BE00258DAF /* KUSTrackingToken.m in Sources */,
 				6334BE371F0C4A1300258DAF /* KUSChatSession.m in Sources */,
 				6334BE3B1F0C4B3D00258DAF /* KUSChatMessage.m in Sources */,
