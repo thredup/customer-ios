@@ -35,8 +35,24 @@ static NSString *kKustomerTrackingTokenHeaderKey = @"x-kustomer-tracking-token";
         NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
         [configuration setTimeoutIntervalForRequest:15.0];
         _urlSession = [NSURLSession sessionWithConfiguration:configuration delegate:nil delegateQueue:nil];
+
+        [self _fetchLatestTrackingToken];
     }
     return self;
+}
+
+#pragma mark - Internal methods
+
+- (void)_fetchLatestTrackingToken
+{
+    [self getCurrentTrackingToken:^(NSError *error, KUSTrackingToken *trackingToken) {
+        if (error) {
+            // TODO: Retry logic
+            NSLog(@"Tracking token error: %@", error);
+            return;
+        }
+        NSLog(@"Latest token: %@", trackingToken.token);
+    }];
 }
 
 #pragma mark - Generic methods

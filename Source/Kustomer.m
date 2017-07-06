@@ -30,29 +30,7 @@ static NSString *kKustomerOrgNameKey = @"orgName";
 
 + (void)initializeWithAPIKey:(NSString *)apiKey
 {
-    // TODO: Add an assert on existence of api key
-
-    NSArray<NSString *> *apiKeyParts = [apiKey componentsSeparatedByString:@"."];
-    // TODO: Add an assert on number of api key parts
-
-    NSString *base64EncodedTokenJson = paddedBase64String(apiKeyParts[1]);
-    NSDictionary *tokenPayload = jsonFromBase64EncodedJsonString(base64EncodedTokenJson);
-
-    // TODO: Add an assert on the existence of orgId and orgName
     [[self sharedInstance] setApiKey:apiKey];
-    [[self sharedInstance] setOrgId:tokenPayload[kKustomerOrgIdKey]];
-    [[self sharedInstance] setOrgName:tokenPayload[kKustomerOrgNameKey]];
-
-    KUSAPIClient *apiClient = [[KUSAPIClient alloc] initWithOrgName:tokenPayload[kKustomerOrgNameKey]];
-    [[self sharedInstance] setApiClient:apiClient];
-
-    [apiClient getCurrentTrackingToken:^(NSError *error, KUSTrackingToken *trackingToken) {
-        if (error) {
-            NSLog(@"error: %@", error);
-            return;
-        }
-        NSLog(@"trackingToken: %@", trackingToken.token);
-    }];
 }
 
 #pragma mark - Lifecycle methods
@@ -67,14 +45,41 @@ static NSString *kKustomerOrgNameKey = @"orgName";
     return _sharedInstance;
 }
 
+- (void)setApiKey:(NSString *)apiKey
+{
+    NSAssert(apiKey != nil, @"Kustomer requires a non-nil API key");
+
+    NSArray<NSString *> *apiKeyParts = [apiKey componentsSeparatedByString:@"."];
+    NSAssert(apiKeyParts.count > 2, @"Kustomer API key has unexpected format");
+
+    NSString *base64EncodedTokenJson = paddedBase64String(apiKeyParts[1]);
+    NSDictionary *tokenPayload = jsonFromBase64EncodedJsonString(base64EncodedTokenJson);
+
+    _apiKey = [apiKey copy];
+    self.orgId = tokenPayload[kKustomerOrgIdKey];
+    self.orgName = tokenPayload[kKustomerOrgNameKey];
+    NSAssert(self.orgName.length > 0, @"Kustomer API key missing expected field: orgName");
+
+    self.apiClient = [[KUSAPIClient alloc] initWithOrgName:self.orgName];
+    NSLog(@"Kustomer initialized for organization: %@", self.orgName);
+}
+
+#pragma mark - Private methods
+
+- (KUSAPIClient *)apiClient
+{
+    NSAssert(self.apiKey, @"Kustomer needs to be initialized before use");
+    return _apiClient;
+}
+
 #pragma mark - Helper functions
 
-static NSString *paddedBase64String(NSString *base64String) {
+NS_INLINE NSString *paddedBase64String(NSString *base64String) {
     NSUInteger paddedLength = base64String.length + (4 - (base64String.length % 4));
     return [base64String stringByPaddingToLength:paddedLength withString:@"=" startingAtIndex:0];
 }
 
-static NSDictionary *jsonFromBase64EncodedJsonString(NSString *base64EncodedJson) {
+NS_INLINE NSDictionary *jsonFromBase64EncodedJsonString(NSString *base64EncodedJson) {
     NSData *decodedData = [[NSData alloc] initWithBase64EncodedString:base64EncodedJson options:kNilOptions];
     return [NSJSONSerialization JSONObjectWithData:decodedData options:kNilOptions error:NULL];
 }
