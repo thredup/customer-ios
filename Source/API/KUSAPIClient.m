@@ -180,6 +180,28 @@ static NSString *kKustomerTrackingTokenHeaderKey = @"x-kustomer-tracking-token";
     }];
 }
 
+- (void)getChatSessionFoId:(NSString *)sessionId completion:(void(^)(NSError *error, KUSChatSession *session))completion
+{
+    NSString *endpoint = [NSString stringWithFormat:@"/v1/chat/sessions/%@", sessionId];
+    [self getEndpoint:endpoint completion:^(NSError *error, NSDictionary *response) {
+        KUSChatSession *chatSession = [[KUSChatSession alloc] initWithJSON:response[@"data"]];
+        if (completion) {
+            completion(error, chatSession);
+        }
+    }];
+}
+
+- (void)createChatSessionWithTitle:(NSString *)title completion:(void(^)(NSError *error, KUSChatSession *session))completion
+{
+    NSDictionary *payload = @{ @"title": title };
+    [self postEndpoint:@"/v1/chat/sessions" body:payload completion:^(NSError *error, NSDictionary *response) {
+        KUSChatSession *chatSession = [[KUSChatSession alloc] initWithJSON:response[@"data"]];
+        if (completion) {
+            completion(error, chatSession);
+        }
+    }];
+}
+
 - (void)updateLastSeenAtForSessionId:(NSString *)sessionId completion:(void(^)(NSError *error, KUSChatSession *session))completion
 {
     NSString *endpoint = [NSString stringWithFormat:@"/v1/chat/sessions/%@/messages", sessionId];
@@ -189,6 +211,17 @@ static NSString *kKustomerTrackingTokenHeaderKey = @"x-kustomer-tracking-token";
         KUSChatSession *chatSession = [[KUSChatSession alloc] initWithJSON:response[@"data"]];
         if (completion) {
             completion(error, chatSession);
+        }
+    }];
+}
+
+- (void)sendMessage:(NSString *)message toChatSession:(NSString *)sessionId completion:(void(^)(NSError *error, KUSChatMessage *message))completion
+{
+    NSDictionary *payload = @{ @"body": message, @"session": sessionId };
+    [self postEndpoint:@"/v1/chat/messages" body:payload completion:^(NSError *error, NSDictionary *response) {
+        KUSChatMessage *chatMessage = [[KUSChatMessage alloc] initWithJSON:response[@"data"]];
+        if (completion) {
+            completion(error, chatMessage);
         }
     }];
 }

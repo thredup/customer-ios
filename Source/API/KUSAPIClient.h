@@ -22,8 +22,11 @@
 - (void)getChatSettings:(void(^)(NSError *error, KUSChatSettings *chatSettings))completion;
 - (void)getChatSessions:(void(^)(NSError *error, KUSPaginatedResponse *chatSessions))completion;
 - (void)getMessagesForSessionId:(NSString *)sessionId completion:(void(^)(NSError *error, KUSPaginatedResponse *chatMessages))completion;
+- (void)getChatSessionFoId:(NSString *)sessionId completion:(void(^)(NSError *error, KUSChatSession *session))completion;
 
+- (void)createChatSessionWithTitle:(NSString *)title completion:(void(^)(NSError *error, KUSChatSession *session))completion;
 - (void)updateLastSeenAtForSessionId:(NSString *)sessionId completion:(void(^)(NSError *error, KUSChatSession *session))completion;
+- (void)sendMessage:(NSString *)message toChatSession:(NSString *)sessionId completion:(void(^)(NSError *error, KUSChatMessage *message))completion;
 
 - (instancetype)init NS_UNAVAILABLE;
 
