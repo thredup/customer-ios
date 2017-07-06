@@ -226,4 +226,38 @@ static NSString *kKustomerTrackingTokenHeaderKey = @"x-kustomer-tracking-token";
     }];
 }
 
+- (void)describe:(NSDictionary *)description completion:(void(^)(NSError *error, KUSCustomer *customer))completion
+{
+    [self patchEndpoint:@"/v1/customers/current" body:description completion:^(NSError *error, NSDictionary *response) {
+        KUSCustomer *customer = [[KUSCustomer alloc] initWithJSON:response[@"data"]];
+        if (completion) {
+            completion(error, customer);
+        }
+    }];
+}
+
+- (void)identify:(NSDictionary *)identity completion:(void(^)(NSError *error))completion
+{
+    [self postEndpoint:@"/v1/identity" body:identity completion:^(NSError *error, NSDictionary *response) {
+        // TODO: Determine response (KUSTrackingToken?)
+        if (completion) {
+            completion(error);
+        }
+    }];
+}
+
+- (void)clearTrackingToken:(void(^)(NSError *error, KUSTrackingToken *trackingToken))completion
+{
+    [self postEndpoint:@"/v1/tracking/tokens" body:@{} completion:^(NSError *error, NSDictionary *response) {
+        KUSTrackingToken *trackingToken = [[KUSTrackingToken alloc] initWithJSON:response[@"data"]];
+        if (trackingToken.token) {
+            _trackingToken = trackingToken.token;
+            [[NSUserDefaults standardUserDefaults] setObject:_trackingToken forKey:kKustomerTrackingTokenHeaderKey];
+        }
+        if (completion) {
+            completion(error, trackingToken);
+        }
+    }];
+}
+
 @end

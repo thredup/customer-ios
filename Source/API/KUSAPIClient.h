@@ -11,6 +11,7 @@
 #import "KUSChatSession.h"
 #import "KUSChatSettings.h"
 #import "KUSChatMessage.h"
+#import "KUSCustomer.h"
 #import "KUSTrackingToken.h"
 #import "KUSPaginatedResponse.h"
 
@@ -27,6 +28,10 @@
 - (void)createChatSessionWithTitle:(NSString *)title completion:(void(^)(NSError *error, KUSChatSession *session))completion;
 - (void)updateLastSeenAtForSessionId:(NSString *)sessionId completion:(void(^)(NSError *error, KUSChatSession *session))completion;
 - (void)sendMessage:(NSString *)message toChatSession:(NSString *)sessionId completion:(void(^)(NSError *error, KUSChatMessage *message))completion;
+
+- (void)describe:(NSDictionary *)description completion:(void(^)(NSError *error, KUSCustomer *customer))completion;
+- (void)identify:(NSDictionary *)identity completion:(void(^)(NSError *error))completion;
+- (void)clearTrackingToken:(void(^)(NSError *error, KUSTrackingToken *trackingToken))completion;
 
 - (instancetype)init NS_UNAVAILABLE;
 
