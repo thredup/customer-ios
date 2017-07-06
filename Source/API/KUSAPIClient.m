@@ -152,7 +152,7 @@ static NSString *kKustomerTrackingTokenHeaderKey = @"x-kustomer-tracking-token";
 - (void)getChatSettings:(void(^)(NSError *error, KUSChatSettings *chatSettings))completion
 {
     [self getEndpoint:@"/v1/chat/settings" completion:^(NSError *error, NSDictionary *response) {
-        KUSChatSettings *chatSettings = [[KUSChatSettings alloc] initWithJSON:response[@"data"]];
+        KUSChatSettings *chatSettings = [[KUSChatSettings alloc] initWithJSON:response[@"data"] orgName:self.orgName];
         if (completion) {
             completion(error, chatSettings);
         }

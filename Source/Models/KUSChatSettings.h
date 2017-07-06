@@ -16,4 +16,6 @@
 @property (nonatomic, copy, readonly) NSString *autoreply;
 @property (nonatomic, assign, readonly) BOOL enabled;
 
+- (instancetype)initWithJSON:(NSDictionary *)json orgName:(NSString *)orgName;
+
 @end
