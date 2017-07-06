@@ -23,9 +23,9 @@
 {
     self = [super initWithJSON:json];
     if (self) {
-        _trackingId = [json valueForKeyPath:@"attributes.trackingId"];
-        _token = [json valueForKeyPath:@"attributes.token"];
-        _verified = [[json valueForKeyPath:@"attributes.verified"] boolValue];
+        _trackingId = NSStringFromKeyPath(json, @"attributes.trackingId");
+        _token = NSStringFromKeyPath(json, @"attributes.token");
+        _verified = BOOLFromKeyPath(json, @"attributes.verified");
     }
     return self;
 }

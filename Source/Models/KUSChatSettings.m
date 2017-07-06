@@ -23,11 +23,11 @@
 {
     self = [super initWithJSON:json];
     if (self) {
-        _teamName = [json valueForKeyPath:@"attributes.teamName"];
-        _teamIconURL = [NSURL URLWithString:[json valueForKeyPath:@"attributes.teamIconUrl"]];
-        _greeting = [json valueForKeyPath:@"attributes.greeting"];
-        _autoreply = [json valueForKeyPath:@"attributes.autoreply"];
-        _enabled = [[json valueForKeyPath:@"attributes.enabled"] boolValue];
+        _teamName = NSStringFromKeyPath(json, @"attributes.teamName");
+        _teamIconURL = NSURLFromKeyPath(json, @"attributes.teamIconUrl");
+        _greeting = NSStringFromKeyPath(json, @"attributes.greeting");
+        _autoreply = NSStringFromKeyPath(json, @"attributes.autoreply");
+        _enabled = BOOLFromKeyPath(json, @"attributes.enabled");
     }
     return self;
 }

@@ -45,12 +45,44 @@
         _oid = objectId;
 
         // Grab relationship identifiers
-        _orgId = [json valueForKeyPath:@"relationships.org.data.id"];
-        _customerId = [json valueForKeyPath:@"relationships.customer.data.id"];
-        _sessionId = [json valueForKeyPath:@"relationships.session.data.id"];
-        _sentById = [json valueForKeyPath:@"relationships.sentBy.data.id"];
+        _orgId = NSStringFromKeyPath(json, @"relationships.org.data.id");
+        _customerId = NSStringFromKeyPath(json, @"relationships.customer.data.id");
+        _sessionId = NSStringFromKeyPath(json, @"relationships.session.data.id");
+        _sentById = NSStringFromKeyPath(json, @"relationships.sentBy.data.id");
     }
     return self;
+}
+
+#pragma mark - Helper methods
+
+NSURL *_Nullable NSURLFromKeyPath(NSDictionary * _Nullable dict, NSString * _Nonnull keyPath)
+{
+    NSString *value = NSStringFromKeyPath(dict, keyPath);
+    return value ? [NSURL URLWithString:value] : nil;
+}
+
+NSString *_Nullable NSStringFromKeyPath(NSDictionary * _Nullable dict, NSString * _Nonnull keyPath)
+{
+    NSString *value = [dict valueForKeyPath:keyPath];
+    return ([value isKindOfClass:[NSString class]] ? value : nil);
+}
+
+BOOL BOOLFromKeyPath(NSDictionary * _Nullable dict, NSString * _Nonnull keyPath)
+{
+    id value = [dict valueForKeyPath:keyPath];
+    if ([value respondsToSelector:@selector(boolValue)]) {
+        return [value boolValue];
+    }
+    return NO;
+}
+
+NSInteger IntegerFromKeyPath(NSDictionary * _Nullable dict, NSString * _Nonnull keyPath)
+{
+    id value = [dict valueForKeyPath:keyPath];
+    if ([value respondsToSelector:@selector(integerValue)]) {
+        return [value integerValue];
+    }
+    return 0;
 }
 
 @end

@@ -23,8 +23,8 @@
 {
     self = [super initWithJSON:json];
     if (self) {
-        _trackingId = [json valueForKeyPath:@"attributes.trackingId"];
-        _body = [json valueForKeyPath:@"attributes.body"];
+        _trackingId = NSStringFromKeyPath(json, @"attributes.trackingId");
+        _body = NSStringFromKeyPath(json, @"attributes.body");
     }
     return self;
 }

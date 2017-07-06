@@ -36,8 +36,8 @@
     // Actually create the object
     self = [super init];
     if (self) {
-        _page = [[json valueForKeyPath:@"meta.page"] integerValue];
-        _pageSize = [[json valueForKeyPath:@"meta.pageSize"] integerValue];
+        _page = IntegerFromKeyPath(json, @"meta.page");
+        _pageSize = IntegerFromKeyPath(json, @"meta.pageSize");
 
         NSArray<NSDictionary *> *jsonObjects = json[@"data"];
         NSMutableArray<__kindof KUSModel *> *objects = [[NSMutableArray alloc] init];
@@ -49,22 +49,12 @@
         }
         _objects = objects;
 
-        _selfURL = SafeNSURLFromString([json valueForKeyPath:@"links.self"]);
-        _firstURL = SafeNSURLFromString([json valueForKeyPath:@"links.first"]);
-        _prevURL = SafeNSURLFromString([json valueForKeyPath:@"links.prev"]);
-        _nextURL = SafeNSURLFromString([json valueForKeyPath:@"links.next"]);
+        _selfURL = NSURLFromKeyPath(json, @"links.self");
+        _firstURL = NSURLFromKeyPath(json, @"links.first");
+        _prevURL = NSURLFromKeyPath(json, @"links.prev");
+        _nextURL = NSURLFromKeyPath(json, @"links.next");
     }
     return self;
-}
-
-NSURL *_Nullable SafeNSURLFromString(NSString * _Nullable string) {
-    if ((NSNull *)string == [NSNull null]) {
-        return nil;
-    }
-    if (string.length > 0) {
-        return [NSURL URLWithString:string];
-    }
-    return nil;
 }
 
 @end
