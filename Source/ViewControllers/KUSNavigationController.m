@@ -30,8 +30,11 @@
 
 - (instancetype)initWithRootViewController:(UIViewController *)rootViewController
 {
-    self = [self init];
+    self = [super initWithNavigationBarClass:nil toolbarClass:[KUSAttributionToolbar class]];
     if (self) {
+        self.navigationBar.barTintColor = [UIColor colorWithWhite:237.0/255.0 alpha:1.0];
+        self.toolbarHidden = NO;
+
         [self pushViewController:rootViewController animated:NO];
     }
     return self;

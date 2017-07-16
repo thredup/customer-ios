@@ -1,31 +1,61 @@
 //
-//  KustomerChatViewController.m
+//  KUSChatViewController.m
 //  Kustomer
 //
-//  Created by Daniel Amitay on 7/2/17.
+//  Created by Daniel Amitay on 7/16/17.
 //  Copyright © 2017 Kustomer. All rights reserved.
 //
 
-#import "KustomerChatViewController.h"
+#import "KUSChatViewController.h"
+
+#import "KUSAPIClient.h"
+#import "KUSChatSession.h"
 
 #import "KustomerInputBarView.h"
-
 #import "KUSAvatarTitleView.h"
 
-@interface KustomerChatViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface KUSChatViewController () <UITableViewDataSource, UITableViewDelegate> {
+    KUSAPIClient *_apiClient;
+
+    BOOL _forNewChatSession;
+    KUSChatSession *_chatSession;
+}
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) KustomerInputBarView *inputBarView;
 
 @end
 
-@implementation KustomerChatViewController
+@implementation KUSChatViewController
+
+#pragma mark - Lifecycle methods
+
+- (instancetype)initForNewChatSessionWithAPIClient:(KUSAPIClient *)apiClient
+{
+    self = [super init];
+    if (self) {
+        _apiClient = apiClient;
+        _forNewChatSession = YES;
+    }
+    return self;
+}
+
+- (instancetype)initWithAPIClient:(KUSAPIClient *)apiClient forChatSession:(KUSChatSession *)session
+{
+    self = [super init];
+    if (self) {
+        _apiClient = apiClient;
+        _chatSession = session;
+    }
+    return self;
+}
 
 #pragma mark - UIViewController methods
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
     self.view.backgroundColor = [UIColor whiteColor];
     self.edgesForExtendedLayout = UIRectEdgeTop | UIRectEdgeLeft | UIRectEdgeRight;
 

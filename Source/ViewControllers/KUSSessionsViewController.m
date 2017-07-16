@@ -1,28 +1,42 @@
 //
-//  KustomerSessionsViewController.m
+//  KUSSessionsViewController.m
 //  Kustomer
 //
-//  Created by Daniel Amitay on 7/3/17.
+//  Created by Daniel Amitay on 7/16/17.
 //  Copyright © 2017 Kustomer. All rights reserved.
 //
 
-#import "KustomerSessionsViewController.h"
+#import "KUSSessionsViewController.h"
 
-#import "KustomerChatViewController.h"
+#import "KUSAPIClient.h"
+#import "KUSChatViewController.h"
 #import "KustomerPlaceholderTableViewCell.h"
 #import "KustomerSessionTableViewCell.h"
 
 #import "KUSAvatarTitleView.h"
 #import "KUSImage.h"
 
-@interface KustomerSessionsViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface KUSSessionsViewController () <UITableViewDataSource, UITableViewDelegate> {
+    KUSAPIClient *_apiClient;
+}
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIButton *createSessionButton;
 
 @end
 
-@implementation KustomerSessionsViewController
+@implementation KUSSessionsViewController
+
+#pragma mark - Lifecycle methods
+
+- (instancetype)initWithAPIClient:(KUSAPIClient *)apiClient
+{
+    self = [super init];
+    if (self) {
+        _apiClient = apiClient;
+    }
+    return self;
+}
 
 #pragma mark - UIViewController methods
 
@@ -91,7 +105,7 @@
 
 - (void)_createSession
 {
-    KustomerChatViewController *chatViewController = [[KustomerChatViewController alloc] init];
+    KUSChatViewController *chatViewController = [[KUSChatViewController alloc] initForNewChatSessionWithAPIClient:_apiClient];
     [self.navigationController pushViewController:chatViewController animated:YES];
 }
 
@@ -128,7 +142,8 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    KustomerChatViewController *chatViewController = [[KustomerChatViewController alloc] init];
+    KUSChatSession *chatSession = nil;
+    KUSChatViewController *chatViewController = [[KUSChatViewController alloc] initWithAPIClient:_apiClient forChatSession:chatSession];
     [self.navigationController pushViewController:chatViewController animated:YES];
 }
 

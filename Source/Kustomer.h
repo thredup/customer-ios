@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#import "KustomerViewController.h"
+
 FOUNDATION_EXPORT double KustomerVersionNumber;
 FOUNDATION_EXPORT const unsigned char KustomerVersionString[];
 

@@ -33,9 +33,13 @@
 		6334BE5D1F0C783200258DAF /* KUSAvatarTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6334BE5B1F0C783200258DAF /* KUSAvatarTitleView.m */; };
 		6334BE601F0C9B5100258DAF /* KUSPaginatedResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 6334BE5E1F0C9B5100258DAF /* KUSPaginatedResponse.h */; };
 		6334BE611F0C9B5100258DAF /* KUSPaginatedResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 6334BE5F1F0C9B5100258DAF /* KUSPaginatedResponse.m */; };
+		636531A11F1BBA7C00433A50 /* KUSSessionsViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 6365319F1F1BBA7C00433A50 /* KUSSessionsViewController.h */; };
+		636531A21F1BBA7C00433A50 /* KUSSessionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 636531A01F1BBA7C00433A50 /* KUSSessionsViewController.m */; };
+		636531A51F1BBAA100433A50 /* KustomerViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 636531A31F1BBAA100433A50 /* KustomerViewController.h */; };
+		636531A61F1BBAA100433A50 /* KustomerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 636531A41F1BBAA100433A50 /* KustomerViewController.m */; };
+		636531A91F1BBCCD00433A50 /* KUSChatViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 636531A71F1BBCCD00433A50 /* KUSChatViewController.h */; };
+		636531AA1F1BBCCD00433A50 /* KUSChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 636531A81F1BBCCD00433A50 /* KUSChatViewController.m */; };
 		63A4EDD71F097D8F00EA3852 /* Kustomer_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 63A4EDD61F097D8F00EA3852 /* Kustomer_Private.h */; };
-		63A4EDDE1F0A941D00EA3852 /* KustomerSessionsViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 63A4EDDC1F0A941D00EA3852 /* KustomerSessionsViewController.h */; };
-		63A4EDDF1F0A941D00EA3852 /* KustomerSessionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A4EDDD1F0A941D00EA3852 /* KustomerSessionsViewController.m */; };
 		63A4EDEA1F0A96F000EA3852 /* KustomerSessionTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 63A4EDE81F0A96F000EA3852 /* KustomerSessionTableViewCell.h */; };
 		63A4EDEB1F0A96F000EA3852 /* KustomerSessionTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A4EDE91F0A96F000EA3852 /* KustomerSessionTableViewCell.m */; };
 		63A4EDEE1F0AAA1500EA3852 /* KustomerPlaceholderTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 63A4EDEC1F0AAA1500EA3852 /* KustomerPlaceholderTableViewCell.h */; };
@@ -51,8 +55,6 @@
 		63B9CDCA1F089BF000120F3E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 63B9CDC81F089BF000120F3E /* LaunchScreen.storyboard */; };
 		63B9CDDE1F095AA200120F3E /* Kustomer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63B9CD911F088E8800120F3E /* Kustomer.framework */; };
 		63B9CDDF1F095AA200120F3E /* Kustomer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 63B9CD911F088E8800120F3E /* Kustomer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		63B9CDE81F095E7400120F3E /* KustomerChatViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 63B9CDE61F095E7400120F3E /* KustomerChatViewController.h */; };
-		63B9CDE91F095E7400120F3E /* KustomerChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63B9CDE71F095E7400120F3E /* KustomerChatViewController.m */; };
 		6D7CDE24CE12E0916484305C /* Pods_Kustomer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4074C2A1E9213757162ED660 /* Pods_Kustomer.framework */; };
 		7C3913946A295179BE2E925B /* Pods_KustomerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D624913E5C7AD4492EF0D39B /* Pods_KustomerTests.framework */; };
 		FC5BDC34DC026F04AE056627 /* Pods_KustomerExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BBA02B9E3111B375725C25D /* Pods_KustomerExample.framework */; };
@@ -120,9 +122,13 @@
 		6334BE5B1F0C783200258DAF /* KUSAvatarTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSAvatarTitleView.m; sourceTree = "<group>"; };
 		6334BE5E1F0C9B5100258DAF /* KUSPaginatedResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSPaginatedResponse.h; sourceTree = "<group>"; };
 		6334BE5F1F0C9B5100258DAF /* KUSPaginatedResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSPaginatedResponse.m; sourceTree = "<group>"; };
+		6365319F1F1BBA7C00433A50 /* KUSSessionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSSessionsViewController.h; sourceTree = "<group>"; };
+		636531A01F1BBA7C00433A50 /* KUSSessionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSSessionsViewController.m; sourceTree = "<group>"; };
+		636531A31F1BBAA100433A50 /* KustomerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KustomerViewController.h; sourceTree = "<group>"; };
+		636531A41F1BBAA100433A50 /* KustomerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KustomerViewController.m; sourceTree = "<group>"; };
+		636531A71F1BBCCD00433A50 /* KUSChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSChatViewController.h; sourceTree = "<group>"; };
+		636531A81F1BBCCD00433A50 /* KUSChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSChatViewController.m; sourceTree = "<group>"; };
 		63A4EDD61F097D8F00EA3852 /* Kustomer_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Kustomer_Private.h; sourceTree = "<group>"; };
-		63A4EDDC1F0A941D00EA3852 /* KustomerSessionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KustomerSessionsViewController.h; sourceTree = "<group>"; };
-		63A4EDDD1F0A941D00EA3852 /* KustomerSessionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KustomerSessionsViewController.m; sourceTree = "<group>"; };
 		63A4EDE81F0A96F000EA3852 /* KustomerSessionTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KustomerSessionTableViewCell.h; sourceTree = "<group>"; };
 		63A4EDE91F0A96F000EA3852 /* KustomerSessionTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KustomerSessionTableViewCell.m; sourceTree = "<group>"; };
 		63A4EDEC1F0AAA1500EA3852 /* KustomerPlaceholderTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KustomerPlaceholderTableViewCell.h; sourceTree = "<group>"; };
@@ -143,8 +149,6 @@
 		63B9CDC61F089BF000120F3E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		63B9CDC91F089BF000120F3E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		63B9CDCB1F089BF000120F3E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		63B9CDE61F095E7400120F3E /* KustomerChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KustomerChatViewController.h; sourceTree = "<group>"; };
-		63B9CDE71F095E7400120F3E /* KustomerChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KustomerChatViewController.m; sourceTree = "<group>"; };
 		6BBA02B9E3111B375725C25D /* Pods_KustomerExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KustomerExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F91D0EF26D550F6FA48F5E6 /* Pods-Kustomer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Kustomer.release.xcconfig"; path = "Pods/Target Support Files/Pods-Kustomer/Pods-Kustomer.release.xcconfig"; sourceTree = "<group>"; };
 		A8B9C7F846CD493168479E0A /* Pods-KustomerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KustomerTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-KustomerTests/Pods-KustomerTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -284,6 +288,8 @@
 				63B9CDB01F0890B400120F3E /* Kustomer.h */,
 				63A4EDD61F097D8F00EA3852 /* Kustomer_Private.h */,
 				63B9CDB11F0890B400120F3E /* Kustomer.m */,
+				636531A31F1BBAA100433A50 /* KustomerViewController.h */,
+				636531A41F1BBAA100433A50 /* KustomerViewController.m */,
 				6334BE401F0C52C400258DAF /* API */,
 				6334BE4F1F0C66D500258DAF /* Helpers */,
 				6334BE251F0C3E7100258DAF /* Models */,
@@ -319,10 +325,10 @@
 		63B9CDE31F095E1D00120F3E /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				63B9CDE61F095E7400120F3E /* KustomerChatViewController.h */,
-				63B9CDE71F095E7400120F3E /* KustomerChatViewController.m */,
-				63A4EDDC1F0A941D00EA3852 /* KustomerSessionsViewController.h */,
-				63A4EDDD1F0A941D00EA3852 /* KustomerSessionsViewController.m */,
+				636531A71F1BBCCD00433A50 /* KUSChatViewController.h */,
+				636531A81F1BBCCD00433A50 /* KUSChatViewController.m */,
+				6365319F1F1BBA7C00433A50 /* KUSSessionsViewController.h */,
+				636531A01F1BBA7C00433A50 /* KUSSessionsViewController.m */,
 				6334BE471F0C5E3F00258DAF /* KUSNavigationController.h */,
 				6334BE481F0C5E3F00258DAF /* KUSNavigationController.m */,
 			);
@@ -363,17 +369,18 @@
 				6334BE5C1F0C783200258DAF /* KUSAvatarTitleView.h in Headers */,
 				6334BE3A1F0C4B3D00258DAF /* KUSChatMessage.h in Headers */,
 				6334BE601F0C9B5100258DAF /* KUSPaginatedResponse.h in Headers */,
+				636531A51F1BBAA100433A50 /* KustomerViewController.h in Headers */,
 				63B9CDB21F0890B400120F3E /* Kustomer.h in Headers */,
 				63A4EDEA1F0A96F000EA3852 /* KustomerSessionTableViewCell.h in Headers */,
-				63B9CDE81F095E7400120F3E /* KustomerChatViewController.h in Headers */,
+				636531A11F1BBA7C00433A50 /* KUSSessionsViewController.h in Headers */,
 				63A4EDD71F097D8F00EA3852 /* Kustomer_Private.h in Headers */,
-				63A4EDDE1F0A941D00EA3852 /* KustomerSessionsViewController.h in Headers */,
 				6334BE361F0C4A1300258DAF /* KUSChatSession.h in Headers */,
 				6334BE541F0C66E200258DAF /* KUSImage.h in Headers */,
 				6334BE4D1F0C600F00258DAF /* KUSAttributionToolbar.h in Headers */,
 				6334BE491F0C5E3F00258DAF /* KUSNavigationController.h in Headers */,
 				6334BE321F0C487400258DAF /* KUSChatSettings.h in Headers */,
 				6334BE3E1F0C4EBE00258DAF /* KUSCustomer.h in Headers */,
+				636531A91F1BBCCD00433A50 /* KUSChatViewController.h in Headers */,
 				62DF0B531F0AD5BC008557F5 /* KustomerInputBarView.h in Headers */,
 				6334BE2E1F0C43BE00258DAF /* KUSTrackingToken.h in Headers */,
 				6334BE2A1F0C3E8600258DAF /* KUSModel.h in Headers */,
@@ -651,17 +658,18 @@
 				6334BE2B1F0C3E8600258DAF /* KUSModel.m in Sources */,
 				63A4EDEF1F0AAA1500EA3852 /* KustomerPlaceholderTableViewCell.m in Sources */,
 				6334BE4A1F0C5E3F00258DAF /* KUSNavigationController.m in Sources */,
+				636531A21F1BBA7C00433A50 /* KUSSessionsViewController.m in Sources */,
 				6334BE3F1F0C4EBE00258DAF /* KUSCustomer.m in Sources */,
 				62DF0B541F0AD5BC008557F5 /* KustomerInputBarView.m in Sources */,
 				6334BE611F0C9B5100258DAF /* KUSPaginatedResponse.m in Sources */,
 				63A4EDEB1F0A96F000EA3852 /* KustomerSessionTableViewCell.m in Sources */,
 				6334BE331F0C487400258DAF /* KUSChatSettings.m in Sources */,
 				6334BE4E1F0C600F00258DAF /* KUSAttributionToolbar.m in Sources */,
-				63A4EDDF1F0A941D00EA3852 /* KustomerSessionsViewController.m in Sources */,
-				63B9CDE91F095E7400120F3E /* KustomerChatViewController.m in Sources */,
+				636531A61F1BBAA100433A50 /* KustomerViewController.m in Sources */,
 				6334BE551F0C66E200258DAF /* KUSImage.m in Sources */,
 				6334BE5D1F0C783200258DAF /* KUSAvatarTitleView.m in Sources */,
 				6334BE2F1F0C43BE00258DAF /* KUSTrackingToken.m in Sources */,
+				636531AA1F1BBCCD00433A50 /* KUSChatViewController.m in Sources */,
 				6334BE371F0C4A1300258DAF /* KUSChatSession.m in Sources */,
 				6334BE3B1F0C4B3D00258DAF /* KUSChatMessage.m in Sources */,
 				6334BE461F0C52D700258DAF /* KUSAPIClient.m in Sources */,

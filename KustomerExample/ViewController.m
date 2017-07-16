@@ -8,9 +8,7 @@
 
 #import "ViewController.h"
 
-#import "KUSNavigationController.h"
-#import "KustomerChatViewController.h"
-#import "KustomerSessionsViewController.h"
+#import "Kustomer.h"
 
 @interface ViewController () {
     UIButton *_supportButton;
@@ -52,9 +50,8 @@
 
 - (void)_openSupport
 {
-    KustomerSessionsViewController *sessionsViewController = [[KustomerSessionsViewController alloc] init];
-    KUSNavigationController *navController = [[KUSNavigationController alloc] initWithRootViewController:sessionsViewController];
-    [self presentViewController:navController animated:YES completion:nil];
+    KustomerViewController *kustomerViewController = [[KustomerViewController alloc] init];
+    [self presentViewController:kustomerViewController animated:YES completion:nil];
 }
 
 @end
