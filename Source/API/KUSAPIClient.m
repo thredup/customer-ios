@@ -156,11 +156,13 @@ static NSString *KUSAPIRequestTypeToString(KUSAPIRequestType type)
 
     void (^safeComplete)(NSError *, NSDictionary *) = ^void(NSError *error, NSDictionary *response) {
         if (completion) {
-            if (error) {
-                completion(error, nil);
-            } else {
-                completion(nil, response);
-            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (error) {
+                    completion(error, nil);
+                } else {
+                    completion(nil, response);
+                }
+            });
         }
     };
     void (^responseBlock)(NSData *, NSURLResponse *, NSError *) = ^void(NSData *data, NSURLResponse *response, NSError *error) {
