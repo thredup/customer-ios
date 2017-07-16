@@ -8,6 +8,14 @@
 
 #import "KUSAPIClient.h"
 
+typedef NS_ENUM(NSInteger, KUSAPIRequestType) {
+    KUSAPIRequestTypeGet,
+    KUSAPIRequestTypePost,
+    KUSAPIRequestTypePatch,
+    KUSAPIRequestTypePut,
+    KUSAPIRequestTypeDelete
+};
+
 static NSString *kKustomerTrackingTokenHeaderKey = @"x-kustomer-tracking-token";
 
 @interface KUSAPIClient ()
@@ -20,6 +28,22 @@ static NSString *kKustomerTrackingTokenHeaderKey = @"x-kustomer-tracking-token";
 @end
 
 @implementation KUSAPIClient
+
+static NSString *KUSAPIRequestTypeToString(KUSAPIRequestType type)
+{
+    switch (type) {
+        case KUSAPIRequestTypeGet:
+            return @"GET";
+        case KUSAPIRequestTypePost:
+            return @"POST";
+        case KUSAPIRequestTypePatch:
+            return @"PATCH";
+        case KUSAPIRequestTypePut:
+            return @"PUT";
+        case KUSAPIRequestTypeDelete:
+            return @"DELETE";
+    }
+}
 
 #pragma mark - Lifecycle methods
 
@@ -57,66 +81,69 @@ static NSString *kKustomerTrackingTokenHeaderKey = @"x-kustomer-tracking-token";
 
 #pragma mark - Generic methods
 
-- (void)getEndpoint:(NSString *)endpoint completion:(void(^)(NSError *error, NSDictionary *response))completion
+- (NSURL *)URLForEndpoint:(NSString *)endpoint
 {
     NSString *endpointUrlString = [NSString stringWithFormat:@"%@%@", self.baseUrlString, endpoint];
-    NSURL *endpointURL = [NSURL URLWithString:endpointUrlString];
+    return [NSURL URLWithString:endpointUrlString];
+}
+
+- (void)performRequestType:(KUSAPIRequestType)type
+                  endpoint:(NSString *)endpoint
+                    params:(NSDictionary<NSString *, id> *)params
+                completion:(void(^)(NSError *error, NSDictionary *response))completion
+{
+    NSURL *endpointURL = [self URLForEndpoint:endpoint];
+
+    if (type == KUSAPIRequestTypeGet) {
+        NSURLComponents *urlComponents = [NSURLComponents componentsWithURL:endpointURL resolvingAgainstBaseURL:NO];
+        NSMutableArray<NSURLQueryItem *> *queryItems = [[NSMutableArray alloc] initWithCapacity:params.count];
+        for (NSString *key in params) {
+            id value = params[key];
+            NSString *valueString = nil;
+            if ([value isKindOfClass:[NSString class]]) {
+                valueString = (NSString *)value;
+            } else {
+                valueString = [NSString stringWithFormat:@"%@", value];
+            }
+            NSURLQueryItem *queryItem = [NSURLQueryItem queryItemWithName:key value:valueString];
+            [queryItems addObject:queryItem];
+        }
+        urlComponents.queryItems = queryItems;
+        endpointURL = urlComponents.URL;
+    }
+
     NSMutableURLRequest *urlRequest = [[NSMutableURLRequest alloc] initWithURL:endpointURL];
+    [urlRequest setHTTPMethod:KUSAPIRequestTypeToString(type)];
+
+    if (params && type != KUSAPIRequestTypeGet) {
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:params options:kNilOptions error:NULL];
+        [urlRequest setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+        NSString *contentLength = [NSString stringWithFormat:@"%lu", (unsigned long)jsonData.length];
+        [urlRequest setValue:contentLength forHTTPHeaderField:@"Content-Length"];
+        [urlRequest setHTTPBody:jsonData];
+    }
+
     [self _performURLRequest:urlRequest completion:completion];
+}
+
+- (void)getEndpoint:(NSString *)endpoint completion:(void(^)(NSError *error, NSDictionary *response))completion
+{
+    [self performRequestType:KUSAPIRequestTypeGet endpoint:endpoint params:nil completion:completion];
 }
 
 - (void)postEndpoint:(NSString *)endpoint body:(NSDictionary *)body completion:(void(^)(NSError *error, NSDictionary *response))completion
 {
-    NSString *endpointUrlString = [NSString stringWithFormat:@"%@%@", self.baseUrlString, endpoint];
-    NSURL *endpointURL = [NSURL URLWithString:endpointUrlString];
-    NSMutableURLRequest *urlRequest = [[NSMutableURLRequest alloc] initWithURL:endpointURL];
-    [urlRequest setHTTPMethod:@"POST"];
-
-    if (body) {
-        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:body options:kNilOptions error:NULL];
-        [urlRequest setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-        NSString *contentLength = [NSString stringWithFormat:@"%lu", (unsigned long)jsonData.length];
-        [urlRequest setValue:contentLength forHTTPHeaderField:@"Content-Length"];
-        [urlRequest setHTTPBody:jsonData];
-    }
-
-    [self _performURLRequest:urlRequest completion:completion];
+    [self performRequestType:KUSAPIRequestTypePost endpoint:endpoint params:body completion:completion];
 }
 
 - (void)patchEndpoint:(NSString *)endpoint body:(NSDictionary *)body completion:(void(^)(NSError *error, NSDictionary *response))completion
 {
-    NSString *endpointUrlString = [NSString stringWithFormat:@"%@%@", self.baseUrlString, endpoint];
-    NSURL *endpointURL = [NSURL URLWithString:endpointUrlString];
-    NSMutableURLRequest *urlRequest = [[NSMutableURLRequest alloc] initWithURL:endpointURL];
-    [urlRequest setHTTPMethod:@"PATCH"];
-
-    if (body) {
-        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:body options:kNilOptions error:NULL];
-        [urlRequest setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-        NSString *contentLength = [NSString stringWithFormat:@"%lu", (unsigned long)jsonData.length];
-        [urlRequest setValue:contentLength forHTTPHeaderField:@"Content-Length"];
-        [urlRequest setHTTPBody:jsonData];
-    }
-
-    [self _performURLRequest:urlRequest completion:completion];
+    [self performRequestType:KUSAPIRequestTypePatch endpoint:endpoint params:body completion:completion];
 }
 
 - (void)putEndpoint:(NSString *)endpoint body:(NSDictionary *)body completion:(void(^)(NSError *error, NSDictionary *response))completion
 {
-    NSString *endpointUrlString = [NSString stringWithFormat:@"%@%@", self.baseUrlString, endpoint];
-    NSURL *endpointURL = [NSURL URLWithString:endpointUrlString];
-    NSMutableURLRequest *urlRequest = [[NSMutableURLRequest alloc] initWithURL:endpointURL];
-    [urlRequest setHTTPMethod:@"PUT"];
-
-    if (body) {
-        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:body options:kNilOptions error:NULL];
-        [urlRequest setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-        NSString *contentLength = [NSString stringWithFormat:@"%lu", (unsigned long)jsonData.length];
-        [urlRequest setValue:contentLength forHTTPHeaderField:@"Content-Length"];
-        [urlRequest setHTTPBody:jsonData];
-    }
-
-    [self _performURLRequest:urlRequest completion:completion];
+    [self performRequestType:KUSAPIRequestTypePut endpoint:endpoint params:body completion:completion];
 }
 
 - (void)_performURLRequest:(NSMutableURLRequest *)urlRequest completion:(void(^)(NSError *error, NSDictionary *response))completion
