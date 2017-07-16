@@ -18,21 +18,26 @@
 @interface KUSAPIClient : NSObject
 
 - (instancetype)initWithOrgName:(NSString *)orgName;
+- (instancetype)init NS_UNAVAILABLE;
+
+// Identity methods
 
 - (void)getCurrentTrackingToken:(void(^)(NSError *error, KUSTrackingToken *trackingToken))completion;
-- (void)getChatSettings:(void(^)(NSError *error, KUSChatSettings *chatSettings))completion;
-- (void)getChatSessions:(void(^)(NSError *error, KUSPaginatedResponse *chatSessions))completion;
-- (void)getMessagesForSessionId:(NSString *)sessionId completion:(void(^)(NSError *error, KUSPaginatedResponse *chatMessages))completion;
-- (void)getChatSessionFoId:(NSString *)sessionId completion:(void(^)(NSError *error, KUSChatSession *session))completion;
-
-- (void)createChatSessionWithTitle:(NSString *)title completion:(void(^)(NSError *error, KUSChatSession *session))completion;
-- (void)updateLastSeenAtForSessionId:(NSString *)sessionId completion:(void(^)(NSError *error, KUSChatSession *session))completion;
-- (void)sendMessage:(NSString *)message toChatSession:(NSString *)sessionId completion:(void(^)(NSError *error, KUSChatMessage *message))completion;
-
 - (void)describe:(NSDictionary *)description completion:(void(^)(NSError *error, KUSCustomer *customer))completion;
 - (void)identify:(NSDictionary *)identity completion:(void(^)(NSError *error))completion;
 - (void)clearTrackingToken:(void(^)(NSError *error, KUSTrackingToken *trackingToken))completion;
+- (void)getChatSettings:(void(^)(NSError *error, KUSChatSettings *chatSettings))completion;
 
-- (instancetype)init NS_UNAVAILABLE;
+// Sessions methods
+
+- (void)getChatSessions:(void(^)(NSError *error, KUSPaginatedResponse *chatSessions))completion;
+- (void)getChatSessionFoId:(NSString *)sessionId completion:(void(^)(NSError *error, KUSChatSession *session))completion;
+- (void)createChatSessionWithTitle:(NSString *)title completion:(void(^)(NSError *error, KUSChatSession *session))completion;
+- (void)updateLastSeenAtForSessionId:(NSString *)sessionId completion:(void(^)(NSError *error, KUSChatSession *session))completion;
+
+// Messages methods
+
+- (void)getMessagesForSessionId:(NSString *)sessionId completion:(void(^)(NSError *error, KUSPaginatedResponse *chatMessages))completion;
+- (void)sendMessage:(NSString *)message toChatSession:(NSString *)sessionId completion:(void(^)(NSError *error, KUSChatMessage *message))completion;
 
 @end

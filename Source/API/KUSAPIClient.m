@@ -176,11 +176,46 @@ static NSString *KUSAPIRequestTypeToString(KUSAPIRequestType type)
     [dataTask resume];
 }
 
-#pragma mark - Specific methods
+#pragma mark -
+#pragma mark Identity methods
 
 - (void)getCurrentTrackingToken:(void(^)(NSError *error, KUSTrackingToken *trackingToken))completion
 {
     [self getEndpoint:@"/v1/tracking/tokens/current" completion:^(NSError *error, NSDictionary *response) {
+        KUSTrackingToken *trackingToken = [[KUSTrackingToken alloc] initWithJSON:response[@"data"]];
+        if (trackingToken.token) {
+            _trackingToken = trackingToken.token;
+            [[NSUserDefaults standardUserDefaults] setObject:_trackingToken forKey:kKustomerTrackingTokenHeaderKey];
+        }
+        if (completion) {
+            completion(error, trackingToken);
+        }
+    }];
+}
+
+- (void)describe:(NSDictionary *)description completion:(void(^)(NSError *error, KUSCustomer *customer))completion
+{
+    [self patchEndpoint:@"/v1/customers/current" body:description completion:^(NSError *error, NSDictionary *response) {
+        KUSCustomer *customer = [[KUSCustomer alloc] initWithJSON:response[@"data"]];
+        if (completion) {
+            completion(error, customer);
+        }
+    }];
+}
+
+- (void)identify:(NSDictionary *)identity completion:(void(^)(NSError *error))completion
+{
+    [self postEndpoint:@"/v1/identity" body:identity completion:^(NSError *error, NSDictionary *response) {
+        // TODO: Determine response (KUSTrackingToken?)
+        if (completion) {
+            completion(error);
+        }
+    }];
+}
+
+- (void)clearTrackingToken:(void(^)(NSError *error, KUSTrackingToken *trackingToken))completion
+{
+    [self postEndpoint:@"/v1/tracking/tokens" body:@{} completion:^(NSError *error, NSDictionary *response) {
         KUSTrackingToken *trackingToken = [[KUSTrackingToken alloc] initWithJSON:response[@"data"]];
         if (trackingToken.token) {
             _trackingToken = trackingToken.token;
@@ -202,23 +237,14 @@ static NSString *KUSAPIRequestTypeToString(KUSAPIRequestType type)
     }];
 }
 
+#pragma mark Sessions methods
+
 - (void)getChatSessions:(void(^)(NSError *error, KUSPaginatedResponse *chatSessions))completion
 {
     [self getEndpoint:@"/v1/chat/sessions" completion:^(NSError *error, NSDictionary *response) {
         KUSPaginatedResponse *chatSessionsResponse = [[KUSPaginatedResponse alloc] initWithJSON:response modelClass:[KUSChatSession class]];
         if (completion) {
             completion(error, chatSessionsResponse);
-        }
-    }];
-}
-
-- (void)getMessagesForSessionId:(NSString *)sessionId completion:(void(^)(NSError *error, KUSPaginatedResponse *chatMessages))completion
-{
-    NSString *endpoint = [NSString stringWithFormat:@"/v1/chat/sessions/%@/messages", sessionId];
-    [self getEndpoint:endpoint completion:^(NSError *error, NSDictionary *response) {
-        KUSPaginatedResponse *chatMessagesResponse = [[KUSPaginatedResponse alloc] initWithJSON:response modelClass:[KUSChatMessage class]];
-        if (completion) {
-            completion(error, chatMessagesResponse);
         }
     }];
 }
@@ -258,6 +284,19 @@ static NSString *KUSAPIRequestTypeToString(KUSAPIRequestType type)
     }];
 }
 
+#pragma mark Messages methods
+
+- (void)getMessagesForSessionId:(NSString *)sessionId completion:(void(^)(NSError *error, KUSPaginatedResponse *chatMessages))completion
+{
+    NSString *endpoint = [NSString stringWithFormat:@"/v1/chat/sessions/%@/messages", sessionId];
+    [self getEndpoint:endpoint completion:^(NSError *error, NSDictionary *response) {
+        KUSPaginatedResponse *chatMessagesResponse = [[KUSPaginatedResponse alloc] initWithJSON:response modelClass:[KUSChatMessage class]];
+        if (completion) {
+            completion(error, chatMessagesResponse);
+        }
+    }];
+}
+
 - (void)sendMessage:(NSString *)message toChatSession:(NSString *)sessionId completion:(void(^)(NSError *error, KUSChatMessage *message))completion
 {
     NSDictionary *payload = @{ @"body": message, @"session": sessionId };
@@ -265,40 +304,6 @@ static NSString *KUSAPIRequestTypeToString(KUSAPIRequestType type)
         KUSChatMessage *chatMessage = [[KUSChatMessage alloc] initWithJSON:response[@"data"]];
         if (completion) {
             completion(error, chatMessage);
-        }
-    }];
-}
-
-- (void)describe:(NSDictionary *)description completion:(void(^)(NSError *error, KUSCustomer *customer))completion
-{
-    [self patchEndpoint:@"/v1/customers/current" body:description completion:^(NSError *error, NSDictionary *response) {
-        KUSCustomer *customer = [[KUSCustomer alloc] initWithJSON:response[@"data"]];
-        if (completion) {
-            completion(error, customer);
-        }
-    }];
-}
-
-- (void)identify:(NSDictionary *)identity completion:(void(^)(NSError *error))completion
-{
-    [self postEndpoint:@"/v1/identity" body:identity completion:^(NSError *error, NSDictionary *response) {
-        // TODO: Determine response (KUSTrackingToken?)
-        if (completion) {
-            completion(error);
-        }
-    }];
-}
-
-- (void)clearTrackingToken:(void(^)(NSError *error, KUSTrackingToken *trackingToken))completion
-{
-    [self postEndpoint:@"/v1/tracking/tokens" body:@{} completion:^(NSError *error, NSDictionary *response) {
-        KUSTrackingToken *trackingToken = [[KUSTrackingToken alloc] initWithJSON:response[@"data"]];
-        if (trackingToken.token) {
-            _trackingToken = trackingToken.token;
-            [[NSUserDefaults standardUserDefaults] setObject:_trackingToken forKey:kKustomerTrackingTokenHeaderKey];
-        }
-        if (completion) {
-            completion(error, trackingToken);
         }
     }];
 }
