@@ -62,6 +62,7 @@
     self.navigationItem.titleView = [[KUSAvatarTitleView alloc] init];
 
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    self.tableView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.tableView.rowHeight = 88.0;
@@ -81,6 +82,9 @@
 
     // TODO: Encapsulate into class
     self.createSessionButton = [[UIButton alloc] init];
+    self.createSessionButton.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin
+                                                 | UIViewAutoresizingFlexibleLeftMargin
+                                                 | UIViewAutoresizingFlexibleRightMargin);
     [self.createSessionButton setTitle:@"New Conversation" forState:UIControlStateNormal];
     self.createSessionButton.titleLabel.textColor = [UIColor whiteColor];
     self.createSessionButton.titleLabel.font = [UIFont systemFontOfSize:14.0];

@@ -80,6 +80,7 @@
     self.navigationItem.prompt = @"Questions about Kustomer?";
 
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    self.tableView.autoresizingMask = (UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth);
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.tableView.rowHeight = 88.0;
@@ -90,6 +91,7 @@
     [self.view addSubview:self.tableView];
 
     self.inputBarView = [[KustomerInputBarView alloc] init];
+    self.inputBarView.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth);
     [self.view addSubview:self.inputBarView];
 }
 
