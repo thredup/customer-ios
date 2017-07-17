@@ -63,6 +63,12 @@
     self.navigationItem.titleView = [[KUSAvatarTitleView alloc] init];
     self.navigationItem.prompt = @"Questions about Kustomer?";
 
+    UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop
+                                                                                   target:self
+                                                                                   action:@selector(_dismiss)];
+    barButtonItem.style = UIBarButtonItemStyleDone;
+    self.navigationItem.rightBarButtonItem = barButtonItem;
+
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
@@ -91,6 +97,13 @@
         .size.width = self.view.bounds.size.width,
         .size.height = self.view.bounds.size.height - self.inputBarView.frame.size.height
     };
+}
+
+#pragma mark - Interface element methods
+
+- (void)_dismiss
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - UITableViewDataSource methods

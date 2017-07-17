@@ -50,6 +50,13 @@
                                                                              style:self.navigationItem.backBarButtonItem.style
                                                                             target:nil
                                                                             action:nil];
+
+    UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop
+                                                                                   target:self
+                                                                                   action:@selector(_dismiss)];
+    barButtonItem.style = UIBarButtonItemStyleDone;
+    self.navigationItem.rightBarButtonItem = barButtonItem;
+
     self.navigationItem.titleView = [[KUSAvatarTitleView alloc] init];
 
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
@@ -107,6 +114,11 @@
 {
     KUSChatViewController *chatViewController = [[KUSChatViewController alloc] initForNewChatSessionWithAPIClient:_apiClient];
     [self.navigationController pushViewController:chatViewController animated:YES];
+}
+
+- (void)_dismiss
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - UITableViewDataSource methods
