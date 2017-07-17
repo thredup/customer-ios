@@ -18,6 +18,8 @@
 
 @interface KUSSessionsViewController () <UITableViewDataSource, UITableViewDelegate> {
     KUSAPIClient *_apiClient;
+
+    NSArray<KUSChatSession *> *_chatSessions;
 }
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -91,6 +93,10 @@
                                  action:@selector(_createSession)
                        forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.createSessionButton];
+
+    self.tableView.hidden = YES;
+    self.createSessionButton.hidden = YES;
+    [self _fetchLatestChatSessions];
 }
 
 - (void)viewWillLayoutSubviews
@@ -112,7 +118,8 @@
 
 - (void)_createSession
 {
-    KUSChatViewController *chatViewController = [[KUSChatViewController alloc] initForNewChatSessionWithAPIClient:_apiClient];
+    KUSChatViewController *chatViewController = [[KUSChatViewController alloc] initWithAPIClient:_apiClient
+                                                                     forNewSessionWithBackButton:YES];
     [self.navigationController pushViewController:chatViewController animated:YES];
 }
 
@@ -121,17 +128,58 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+#pragma mark - Internal methods
+
+- (void)_fetchLatestChatSessions
+{
+    __weak KUSSessionsViewController *weakSelf = self;
+    [_apiClient getChatSessions:^(NSError *error, KUSPaginatedResponse *chatSessions) {
+        [weakSelf _handleChatSessionsResponse:chatSessions error:error];
+    }];
+}
+
+- (void)_handleChatSessionsResponse:(KUSPaginatedResponse *)response error:(NSError *)error
+{
+    if (response) {
+        _chatSessions = response.objects;
+        // _chatSessions = @[ [KUSChatSession new] ];
+        // _chatSessions = @[ [KUSChatSession new], [KUSChatSession new] ];
+        [self.tableView reloadData];
+
+        self.tableView.hidden = NO;
+        self.createSessionButton.hidden = NO;
+
+        if (_chatSessions.count == 0) {
+            // If there are no existing chat sessions, go directly to new chat screen
+            KUSChatViewController *chatViewController = [[KUSChatViewController alloc] initWithAPIClient:_apiClient
+                                                                             forNewSessionWithBackButton:NO];
+            [self.navigationController pushViewController:chatViewController animated:NO];
+        } else if (_chatSessions.count == 1) {
+            // If there is exactly one chat session, go directly to it
+            KUSChatSession *chatSession = _chatSessions.firstObject;
+            KUSChatViewController *chatViewController = [[KUSChatViewController alloc] initWithAPIClient:_apiClient
+                                                                                          forChatSession:chatSession];
+            [self.navigationController pushViewController:chatViewController animated:NO];
+        }
+    } else {
+
+    }
+}
+
 #pragma mark - UITableViewDataSource methods
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // TODO: Calculate placeholder row count based on screen height
-    return 6;
+    CGFloat visibleTableHeight = tableView.bounds.size.height - tableView.contentInset.top - tableView.contentInset.bottom;
+    CGFloat rowCountThatFitsHeight = visibleTableHeight / tableView.rowHeight;
+    NSUInteger minimumRowCount = (NSUInteger)floor(rowCountThatFitsHeight);
+    return MAX(_chatSessions.count, minimumRowCount);
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row == 0) {
+    BOOL isSessionRow = indexPath.row < _chatSessions.count;
+    if (isSessionRow) {
         static NSString *kSessionCellIdentifier = @"SessionCell";
         KustomerSessionTableViewCell *cell = (KustomerSessionTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kSessionCellIdentifier];
         if (cell == nil) {
@@ -154,9 +202,15 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    KUSChatSession *chatSession = nil;
+    KUSChatSession *chatSession = [_chatSessions objectAtIndex:indexPath.row];
     KUSChatViewController *chatViewController = [[KUSChatViewController alloc] initWithAPIClient:_apiClient forChatSession:chatSession];
     [self.navigationController pushViewController:chatViewController animated:YES];
+}
+
+- (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    BOOL isSessionRow = indexPath.row < _chatSessions.count;
+    return isSessionRow;
 }
 
 @end

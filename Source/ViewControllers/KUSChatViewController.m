@@ -30,22 +30,33 @@
 
 #pragma mark - Lifecycle methods
 
-- (instancetype)initForNewChatSessionWithAPIClient:(KUSAPIClient *)apiClient
+- (instancetype)initWithAPIClient:(KUSAPIClient *)apiClient
 {
     self = [super init];
     if (self) {
         _apiClient = apiClient;
-        _forNewChatSession = YES;
+
+        self.navigationItem.titleView = [[KUSAvatarTitleView alloc] init];
     }
     return self;
 }
 
 - (instancetype)initWithAPIClient:(KUSAPIClient *)apiClient forChatSession:(KUSChatSession *)session
 {
-    self = [super init];
+    self = [self initWithAPIClient:apiClient];
     if (self) {
-        _apiClient = apiClient;
         _chatSession = session;
+    }
+    return self;
+}
+
+- (instancetype)initWithAPIClient:(KUSAPIClient *)apiClient forNewSessionWithBackButton:(BOOL)showBackButton
+{
+    self = [self initWithAPIClient:apiClient];
+    if (self) {
+        _forNewChatSession = YES;
+
+        [self.navigationItem setHidesBackButton:!showBackButton animated:NO];
     }
     return self;
 }
@@ -59,15 +70,14 @@
     self.view.backgroundColor = [UIColor whiteColor];
     self.edgesForExtendedLayout = UIRectEdgeTop | UIRectEdgeLeft | UIRectEdgeRight;
 
-    // self.navigationItem.title = @"Kustomer";
-    self.navigationItem.titleView = [[KUSAvatarTitleView alloc] init];
-    self.navigationItem.prompt = @"Questions about Kustomer?";
-
     UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop
                                                                                    target:self
                                                                                    action:@selector(_dismiss)];
     barButtonItem.style = UIBarButtonItemStyleDone;
     self.navigationItem.rightBarButtonItem = barButtonItem;
+
+    // self.navigationItem.title = @"Kustomer";
+    self.navigationItem.prompt = @"Questions about Kustomer?";
 
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     self.tableView.dataSource = self;

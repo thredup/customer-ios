@@ -12,8 +12,8 @@
 @class KUSChatSession;
 @interface KUSChatViewController : UIViewController
 
-- (instancetype)initForNewChatSessionWithAPIClient:(KUSAPIClient *)apiClient;
 - (instancetype)initWithAPIClient:(KUSAPIClient *)apiClient forChatSession:(KUSChatSession *)session;
+- (instancetype)initWithAPIClient:(KUSAPIClient *)apiClient forNewSessionWithBackButton:(BOOL)showBackButton;
 - (instancetype)init NS_UNAVAILABLE;
 
 @end
