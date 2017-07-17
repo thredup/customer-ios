@@ -11,6 +11,7 @@
 @interface KUSImage : UIImage
 
 + (UIImage *)kustomerTeamIcon;
++ (UIImage *)kustyImage;
 
 + (UIImage *)circularImageWithSize:(CGSize)size color:(UIColor *)color;
 

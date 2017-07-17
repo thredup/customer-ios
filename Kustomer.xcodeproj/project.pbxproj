@@ -39,6 +39,8 @@
 		636531A61F1BBAA100433A50 /* KustomerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 636531A41F1BBAA100433A50 /* KustomerViewController.m */; };
 		636531A91F1BBCCD00433A50 /* KUSChatViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 636531A71F1BBCCD00433A50 /* KUSChatViewController.h */; };
 		636531AA1F1BBCCD00433A50 /* KUSChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 636531A81F1BBCCD00433A50 /* KUSChatViewController.m */; };
+		636531AE1F1C4B9700433A50 /* kustomer_team_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 636531AC1F1C4B9700433A50 /* kustomer_team_icon@2x.png */; };
+		636531AF1F1C4B9700433A50 /* kusty@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 636531AD1F1C4B9700433A50 /* kusty@2x.png */; };
 		63A4EDD71F097D8F00EA3852 /* Kustomer_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 63A4EDD61F097D8F00EA3852 /* Kustomer_Private.h */; };
 		63A4EDEA1F0A96F000EA3852 /* KustomerSessionTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 63A4EDE81F0A96F000EA3852 /* KustomerSessionTableViewCell.h */; };
 		63A4EDEB1F0A96F000EA3852 /* KustomerSessionTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A4EDE91F0A96F000EA3852 /* KustomerSessionTableViewCell.m */; };
@@ -128,6 +130,8 @@
 		636531A41F1BBAA100433A50 /* KustomerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KustomerViewController.m; sourceTree = "<group>"; };
 		636531A71F1BBCCD00433A50 /* KUSChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSChatViewController.h; sourceTree = "<group>"; };
 		636531A81F1BBCCD00433A50 /* KUSChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSChatViewController.m; sourceTree = "<group>"; };
+		636531AC1F1C4B9700433A50 /* kustomer_team_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kustomer_team_icon@2x.png"; sourceTree = "<group>"; };
+		636531AD1F1C4B9700433A50 /* kusty@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kusty@2x.png"; sourceTree = "<group>"; };
 		63A4EDD61F097D8F00EA3852 /* Kustomer_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Kustomer_Private.h; sourceTree = "<group>"; };
 		63A4EDE81F0A96F000EA3852 /* KustomerSessionTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KustomerSessionTableViewCell.h; sourceTree = "<group>"; };
 		63A4EDE91F0A96F000EA3852 /* KustomerSessionTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KustomerSessionTableViewCell.m; sourceTree = "<group>"; };
@@ -225,6 +229,15 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
+		636531AB1F1C4B9700433A50 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				636531AC1F1C4B9700433A50 /* kustomer_team_icon@2x.png */,
+				636531AD1F1C4B9700433A50 /* kusty@2x.png */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
 		63A4EDE41F0A968E00EA3852 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -292,6 +305,7 @@
 				636531A41F1BBAA100433A50 /* KustomerViewController.m */,
 				6334BE401F0C52C400258DAF /* API */,
 				6334BE4F1F0C66D500258DAF /* Helpers */,
+				636531AB1F1C4B9700433A50 /* Images */,
 				6334BE251F0C3E7100258DAF /* Models */,
 				63B9CDE31F095E1D00120F3E /* ViewControllers */,
 				63A4EDE41F0A968E00EA3852 /* Views */,
@@ -505,6 +519,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				636531AE1F1C4B9700433A50 /* kustomer_team_icon@2x.png in Resources */,
+				636531AF1F1C4B9700433A50 /* kusty@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

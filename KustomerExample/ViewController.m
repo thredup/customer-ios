@@ -9,6 +9,7 @@
 #import "ViewController.h"
 
 #import "Kustomer.h"
+#import "KUSImage.h"
 
 @interface ViewController () {
     UIButton *_supportButton;
@@ -27,8 +28,11 @@
     self.view.backgroundColor = [UIColor whiteColor];
 
     _supportButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    _supportButton.backgroundColor = [UIColor lightGrayColor];
-    [_supportButton setTitle:@"Open Support" forState:UIControlStateNormal];
+    [_supportButton setImage:[KUSImage kustyImage] forState:UIControlStateNormal];
+    _supportButton.layer.shadowColor = [UIColor blackColor].CGColor;
+    _supportButton.layer.shadowOffset = CGSizeZero;
+    _supportButton.layer.shadowRadius = 4.0;
+    _supportButton.layer.shadowOpacity = 0.33;
     [_supportButton addTarget:self
                        action:@selector(_openSupport)
              forControlEvents:UIControlEventTouchUpInside];
@@ -39,9 +43,9 @@
 - (void)viewWillLayoutSubviews
 {
     _supportButton.frame = (CGRect) {
-        .origin.x = (self.view.bounds.size.width - 250.0) / 2.0,
-        .origin.y = 200.0,
-        .size.width = 250.0,
+        .origin.x = self.view.bounds.size.width - 75.0,
+        .origin.y = self.view.bounds.size.height - 75.0,
+        .size.width = 50.0,
         .size.height = 50.0
     };
 }
