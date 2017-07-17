@@ -33,7 +33,7 @@
 
         _textView = [[UITextView alloc] init];
         _textView.text = @"Type a message...";
-        _textView.font = [UIFont systemFontOfSize:13.0];
+        _textView.font = [UIFont systemFontOfSize:14.0];
         [self addSubview:_textView];
 
         UIColor *blueColor = [UIColor colorWithRed:66.0/255.0

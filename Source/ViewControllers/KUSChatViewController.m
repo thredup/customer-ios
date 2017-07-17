@@ -13,12 +13,15 @@
 
 #import "KustomerInputBarView.h"
 #import "KUSAvatarTitleView.h"
+#import "KUSChatMessageTableViewCell.h"
 
 @interface KUSChatViewController () <UITableViewDataSource, UITableViewDelegate> {
     KUSAPIClient *_apiClient;
 
     BOOL _forNewChatSession;
     KUSChatSession *_chatSession;
+
+    NSArray<KUSChatMessage *> *_chatMessages;
 }
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -83,7 +86,6 @@
     self.tableView.autoresizingMask = (UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth);
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    self.tableView.rowHeight = 88.0;
     self.tableView.tableFooterView = [[UIView alloc] init];
     self.tableView.separatorInset = UIEdgeInsetsZero;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -93,6 +95,27 @@
     self.inputBarView = [[KustomerInputBarView alloc] init];
     self.inputBarView.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth);
     [self.view addSubview:self.inputBarView];
+
+    KUSChatMessage *chatMessage1 = [[KUSChatMessage alloc] initWithJSON:@
+                                    {
+                                        @"id": @"0",
+                                        @"type": @"chat_message",
+                                        @"attributes": @{
+                                                         @"body": @"Ignore as well :)"
+                                                         }
+                                    }];
+    KUSChatMessage *chatMessage2 = [[KUSChatMessage alloc] initWithJSON:@
+                                    {
+                                        @"id": @"0",
+                                        @"type": @"chat_message",
+                                        @"attributes": @{
+                                                         @"body": @"Thanks for the message. We'll get back to you soon as soon as possible. If you don't have time to wait, enter your email and we'll respond to you there instead."
+                                                         }
+                                    }];
+
+    if (_chatSession) {
+        _chatMessages = @[ chatMessage1, chatMessage2 ];
+    }
 }
 
 - (void)viewWillLayoutSubviews
@@ -122,20 +145,30 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 6;
+    return _chatMessages.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *kMessageCellIdentifier = @"MessageCell";
-    UITableViewCell *cell = (UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:kMessageCellIdentifier];
+    KUSChatMessageTableViewCell *cell = (KUSChatMessageTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kMessageCellIdentifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kMessageCellIdentifier];
+        cell = [[KUSChatMessageTableViewCell alloc] initWithReuseIdentifier:kMessageCellIdentifier];
     }
+
+    KUSChatMessage *chatMessage = [_chatMessages objectAtIndex:indexPath.row];
+    [cell setChatMessage:chatMessage currentUser:(indexPath.row % 2 == 0)];
+
     return cell;
 }
 
 #pragma mark - UITableViewDelegate methods
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    KUSChatMessage *chatMessage = [_chatMessages objectAtIndex:indexPath.row];
+    return [KUSChatMessageTableViewCell heightForChatMessage:chatMessage maxWidth:tableView.bounds.size.width];
+}
 
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
 {
