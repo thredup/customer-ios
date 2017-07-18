@@ -43,6 +43,8 @@
 		636531AF1F1C4B9700433A50 /* kusty@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 636531AD1F1C4B9700433A50 /* kusty@2x.png */; };
 		636531B21F1C593D00433A50 /* KUSChatMessageTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 636531B01F1C593D00433A50 /* KUSChatMessageTableViewCell.h */; };
 		636531B31F1C593D00433A50 /* KUSChatMessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 636531B11F1C593D00433A50 /* KUSChatMessageTableViewCell.m */; };
+		636531B61F1DB73B00433A50 /* KUSColor.h in Headers */ = {isa = PBXBuildFile; fileRef = 636531B41F1DB73B00433A50 /* KUSColor.h */; };
+		636531B71F1DB73B00433A50 /* KUSColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 636531B51F1DB73B00433A50 /* KUSColor.m */; };
 		63A4EDD71F097D8F00EA3852 /* Kustomer_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 63A4EDD61F097D8F00EA3852 /* Kustomer_Private.h */; };
 		63A4EDEA1F0A96F000EA3852 /* KustomerSessionTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 63A4EDE81F0A96F000EA3852 /* KustomerSessionTableViewCell.h */; };
 		63A4EDEB1F0A96F000EA3852 /* KustomerSessionTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A4EDE91F0A96F000EA3852 /* KustomerSessionTableViewCell.m */; };
@@ -136,6 +138,8 @@
 		636531AD1F1C4B9700433A50 /* kusty@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kusty@2x.png"; sourceTree = "<group>"; };
 		636531B01F1C593D00433A50 /* KUSChatMessageTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSChatMessageTableViewCell.h; sourceTree = "<group>"; };
 		636531B11F1C593D00433A50 /* KUSChatMessageTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSChatMessageTableViewCell.m; sourceTree = "<group>"; };
+		636531B41F1DB73B00433A50 /* KUSColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSColor.h; sourceTree = "<group>"; };
+		636531B51F1DB73B00433A50 /* KUSColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSColor.m; sourceTree = "<group>"; };
 		63A4EDD61F097D8F00EA3852 /* Kustomer_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Kustomer_Private.h; sourceTree = "<group>"; };
 		63A4EDE81F0A96F000EA3852 /* KustomerSessionTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KustomerSessionTableViewCell.h; sourceTree = "<group>"; };
 		63A4EDE91F0A96F000EA3852 /* KustomerSessionTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KustomerSessionTableViewCell.m; sourceTree = "<group>"; };
@@ -227,6 +231,8 @@
 		6334BE4F1F0C66D500258DAF /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				636531B41F1DB73B00433A50 /* KUSColor.h */,
+				636531B51F1DB73B00433A50 /* KUSColor.m */,
 				6334BE521F0C66E200258DAF /* KUSImage.h */,
 				6334BE531F0C66E200258DAF /* KUSImage.m */,
 			);
@@ -397,6 +403,7 @@
 				6334BE361F0C4A1300258DAF /* KUSChatSession.h in Headers */,
 				6334BE541F0C66E200258DAF /* KUSImage.h in Headers */,
 				6334BE4D1F0C600F00258DAF /* KUSAttributionToolbar.h in Headers */,
+				636531B61F1DB73B00433A50 /* KUSColor.h in Headers */,
 				6334BE491F0C5E3F00258DAF /* KUSNavigationController.h in Headers */,
 				6334BE321F0C487400258DAF /* KUSChatSettings.h in Headers */,
 				6334BE3E1F0C4EBE00258DAF /* KUSCustomer.h in Headers */,
@@ -690,6 +697,7 @@
 				6334BE4E1F0C600F00258DAF /* KUSAttributionToolbar.m in Sources */,
 				636531A61F1BBAA100433A50 /* KustomerViewController.m in Sources */,
 				6334BE551F0C66E200258DAF /* KUSImage.m in Sources */,
+				636531B71F1DB73B00433A50 /* KUSColor.m in Sources */,
 				6334BE5D1F0C783200258DAF /* KUSAvatarTitleView.m in Sources */,
 				6334BE2F1F0C43BE00258DAF /* KUSTrackingToken.m in Sources */,
 				636531B31F1C593D00433A50 /* KUSChatMessageTableViewCell.m in Sources */,

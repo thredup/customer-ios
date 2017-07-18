@@ -8,6 +8,8 @@
 
 #import "KustomerPlaceholderTableViewCell.h"
 
+#import "KUSColor.h"
+
 @implementation KustomerPlaceholderTableViewCell
 
 #pragma mark - Lifecycle methods
@@ -26,7 +28,7 @@
 
 - (void)drawRect:(CGRect)rect
 {
-    UIColor *placeholderColor = [UIColor colorWithWhite:233.0/255.0 alpha:1.0];
+    UIColor *placeholderColor = [KUSColor lightGrayColor];
     [placeholderColor setFill];
 
     CGFloat margins = 28.0;

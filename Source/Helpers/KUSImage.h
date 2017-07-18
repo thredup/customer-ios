@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface KUSImage : UIImage
+@interface KUSImage : NSObject
 
 + (UIImage *)kustomerTeamIcon;
 + (UIImage *)kustyImage;

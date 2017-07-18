@@ -9,6 +9,7 @@
 #import "KUSNavigationController.h"
 
 #import "KUSAttributionToolbar.h"
+#import "KUSColor.h"
 
 @interface KUSNavigationController ()
 
@@ -22,8 +23,8 @@
 {
     self = [super initWithNavigationBarClass:nil toolbarClass:[KUSAttributionToolbar class]];
     if (self) {
-        self.navigationBar.barTintColor = [UIColor colorWithWhite:237.0/255.0 alpha:1.0];
-        self.navigationBar.tintColor = [UIColor colorWithWhite:142.0/255.0 alpha:1.0];
+        self.navigationBar.barTintColor = [KUSColor grayColor];
+        self.navigationBar.tintColor = [KUSColor darkGrayColor];
         self.toolbarHidden = NO;
     }
     return self;
@@ -33,8 +34,8 @@
 {
     self = [super initWithNavigationBarClass:nil toolbarClass:[KUSAttributionToolbar class]];
     if (self) {
-        self.navigationBar.barTintColor = [UIColor colorWithWhite:237.0/255.0 alpha:1.0];
-        self.navigationBar.tintColor = [UIColor colorWithWhite:142.0/255.0 alpha:1.0];
+        self.navigationBar.barTintColor = [KUSColor grayColor];
+        self.navigationBar.tintColor = [KUSColor darkGrayColor];
         self.toolbarHidden = NO;
 
         [self pushViewController:rootViewController animated:NO];

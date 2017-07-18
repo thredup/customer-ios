@@ -8,6 +8,8 @@
 
 #import "KUSAttributionToolbar.h"
 
+#import "KUSColor.h"
+
 @interface KUSAttributionToolbar ()
 
 @property (nonatomic, strong) UILabel *attributionLabel;
@@ -22,13 +24,13 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.barTintColor = [UIColor colorWithWhite:237.0/255.0 alpha:1.0];
+        self.barTintColor = [KUSColor grayColor];
 
         _attributionLabel = [[UILabel alloc] init];
         _attributionLabel.text = @"Messaging by Kustomer";
         _attributionLabel.textAlignment = NSTextAlignmentCenter;
         _attributionLabel.backgroundColor = [UIColor clearColor];
-        _attributionLabel.textColor = [UIColor grayColor];
+        _attributionLabel.textColor = [KUSColor darkGrayColor];
         _attributionLabel.font = [UIFont systemFontOfSize:9.0];
         [self addSubview:_attributionLabel];
     }

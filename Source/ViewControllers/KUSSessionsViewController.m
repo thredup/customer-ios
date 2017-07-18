@@ -14,6 +14,7 @@
 #import "KustomerSessionTableViewCell.h"
 
 #import "KUSAvatarTitleView.h"
+#import "KUSColor.h"
 #import "KUSImage.h"
 
 @interface KUSSessionsViewController () <UITableViewDataSource, UITableViewDelegate> {
@@ -70,13 +71,9 @@
     self.tableView.separatorInset = UIEdgeInsetsZero;
     [self.view addSubview:self.tableView];
 
-    UIColor *blueColor = [UIColor colorWithRed:66.0/255.0
-                                         green:130.0/255.0
-                                          blue:252.0/255.0
-                                         alpha:1.0];
     CGFloat buttonRadius = 4.0;
     CGSize size = CGSizeMake(buttonRadius * 2.0, buttonRadius * 2.0);
-    UIImage *circularImage = [KUSImage circularImageWithSize:size color:blueColor];
+    UIImage *circularImage = [KUSImage circularImageWithSize:size color:[KUSColor blueColor]];
     UIEdgeInsets capInsets = UIEdgeInsetsMake(buttonRadius, buttonRadius, buttonRadius, buttonRadius);
     UIImage *buttonImage = [circularImage resizableImageWithCapInsets:capInsets];
 

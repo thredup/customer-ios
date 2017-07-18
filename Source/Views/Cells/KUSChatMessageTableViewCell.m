@@ -9,6 +9,7 @@
 #import "KUSChatMessageTableViewCell.h"
 
 #import "KUSChatMessage.h"
+#import "KUSColor.h"
 #import "KUSImage.h"
 
 static const CGFloat kBubbleTopPadding = 10.0;
@@ -138,16 +139,8 @@ static const CGFloat kMinBubbleHeight = 38.0;
     _chatMessage = chatMessage;
     _currentUser = currentUser;
 
-    UIColor *bubbleColor = (_currentUser
-                            ? [UIColor colorWithRed:58.0/255.0
-                                              green:129.0/255.0
-                                               blue:250.0/255.0
-                                              alpha:1.0]
-                            : [UIColor colorWithWhite:240.0/255.0
-                                                alpha:1.0]);
-    UIColor *textColor = (_currentUser
-                          ? [UIColor whiteColor]
-                          : [UIColor blackColor]);
+    UIColor *bubbleColor = (_currentUser ? [KUSColor blueColor] : [KUSColor grayColor]);
+    UIColor *textColor = (_currentUser ? [UIColor whiteColor] : [UIColor blackColor]);
 
     _bubbleView.backgroundColor = bubbleColor;
     _labelView.backgroundColor = bubbleColor;

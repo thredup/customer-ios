@@ -8,6 +8,7 @@
 
 #import "KustomerInputBarView.h"
 
+#import "KUSColor.h"
 #import "KUSImage.h"
 
 @interface KustomerInputBarView ()
@@ -28,7 +29,7 @@
     if (self) {
         _separatorView = [[UIView alloc] init];
         _separatorView.userInteractionEnabled = NO;
-        _separatorView.backgroundColor = [UIColor colorWithWhite:237.0/255.0 alpha:1.0];
+        _separatorView.backgroundColor = [KUSColor lightGrayColor];
         [self addSubview:_separatorView];
 
         _textView = [[UITextView alloc] init];
@@ -36,10 +37,7 @@
         _textView.font = [UIFont systemFontOfSize:14.0];
         [self addSubview:_textView];
 
-        UIColor *blueColor = [UIColor colorWithRed:66.0/255.0
-                                             green:130.0/255.0
-                                              blue:252.0/255.0
-                                             alpha:1.0];
+        UIColor *blueColor = [KUSColor blueColor];
         CGSize size = CGSizeMake(30.0, 30.0);
         UIImage *circularImage = [KUSImage circularImageWithSize:size color:blueColor];
 
