@@ -45,6 +45,13 @@ static NSString *KUSAPIRequestTypeToString(KUSAPIRequestType type)
     }
 }
 
+static NSString *KUSBaseUrlStringFromOrgName(NSString *orgName)
+{
+    NSDictionary<NSString *, NSString *> *environment = [[NSProcessInfo processInfo] environment];
+    NSString *baseDomain = environment[@"KUSTOMER_BASE_DOMAIN"] ?: @"kustomerapp.com";
+    return [NSString stringWithFormat:@"https://%@.api.%@/c", orgName, baseDomain];
+}
+
 #pragma mark - Lifecycle methods
 
 - (instancetype)initWithOrgName:(NSString *)orgName
@@ -53,8 +60,7 @@ static NSString *KUSAPIRequestTypeToString(KUSAPIRequestType type)
     if (self) {
         _orgName = orgName;
         _trackingToken = [[NSUserDefaults standardUserDefaults] stringForKey:kKustomerTrackingTokenHeaderKey];
-
-        _baseUrlString = [NSString stringWithFormat:@"https://%@.api.kustomerapp.com/c", _orgName];
+        _baseUrlString = KUSBaseUrlStringFromOrgName(_orgName);
 
         NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
         [configuration setTimeoutIntervalForRequest:15.0];
