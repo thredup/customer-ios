@@ -1,22 +1,22 @@
 //
-//  KustomerPlaceholderTableViewCell.m
+//  KUSChatPlaceholderTableViewCell.m
 //  Kustomer
 //
-//  Created by Daniel Amitay on 7/3/17.
+//  Created by Daniel Amitay on 7/22/17.
 //  Copyright © 2017 Kustomer. All rights reserved.
 //
 
-#import "KustomerPlaceholderTableViewCell.h"
+#import "KUSChatPlaceholderTableViewCell.h"
 
 #import "KUSColor.h"
 
-@implementation KustomerPlaceholderTableViewCell
+@implementation KUSChatPlaceholderTableViewCell
 
 #pragma mark - Lifecycle methods
 
-- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+- (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier
 {
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     if (self) {
         self.backgroundColor = [UIColor whiteColor];
         self.userInteractionEnabled = NO;

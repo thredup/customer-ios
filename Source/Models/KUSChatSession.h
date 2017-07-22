@@ -13,4 +13,7 @@
 @property (nonatomic, copy, readonly) NSString *preview;
 @property (nonatomic, copy, readonly) NSString *trackingId;
 
+@property (nonatomic, copy, readonly) NSDate *createdAt;
+@property (nonatomic, copy, readonly) NSDate *lastSeenAt;
+
 @end

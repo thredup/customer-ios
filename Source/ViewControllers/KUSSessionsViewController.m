@@ -10,12 +10,12 @@
 
 #import "KUSAPIClient.h"
 #import "KUSChatViewController.h"
-#import "KustomerPlaceholderTableViewCell.h"
-#import "KustomerSessionTableViewCell.h"
 
 #import "KUSAvatarTitleView.h"
 #import "KUSColor.h"
 #import "KUSImage.h"
+#import "KUSChatPlaceholderTableViewCell.h"
+#import "KUSChatSessionTableViewCell.h"
 
 @interface KUSSessionsViewController () <UITableViewDataSource, UITableViewDelegate> {
     KUSAPIClient *_apiClient;
@@ -182,17 +182,21 @@
     BOOL isSessionRow = indexPath.row < _chatSessions.count;
     if (isSessionRow) {
         static NSString *kSessionCellIdentifier = @"SessionCell";
-        KustomerSessionTableViewCell *cell = (KustomerSessionTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kSessionCellIdentifier];
+        KUSChatSessionTableViewCell *cell = (KUSChatSessionTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kSessionCellIdentifier];
         if (cell == nil) {
-            cell = [[KustomerSessionTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kSessionCellIdentifier];
+            cell = [[KUSChatSessionTableViewCell alloc] initWithReuseIdentifier:kSessionCellIdentifier];
         }
+
+        KUSChatSession *chatSession = [_chatSessions objectAtIndex:indexPath.row];
+        [cell setChatSession:chatSession];
+
         return cell;
     }
 
     static NSString *kPlaceholderCellIdentifier = @"PlaceholderCell";
-    KustomerPlaceholderTableViewCell *cell = (KustomerPlaceholderTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kPlaceholderCellIdentifier];
+    KUSChatPlaceholderTableViewCell *cell = (KUSChatPlaceholderTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kPlaceholderCellIdentifier];
     if (cell == nil) {
-        cell = [[KustomerPlaceholderTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kPlaceholderCellIdentifier];
+        cell = [[KUSChatPlaceholderTableViewCell alloc] initWithReuseIdentifier:kPlaceholderCellIdentifier];
     }
     return cell;
 }

@@ -1,16 +1,19 @@
 //
-//  KustomerSessionTableViewCell.m
+//  KUSChatSessionTableViewCell.m
 //  Kustomer
 //
-//  Created by Daniel Amitay on 7/3/17.
+//  Created by Daniel Amitay on 7/22/17.
 //  Copyright © 2017 Kustomer. All rights reserved.
 //
 
-#import "KustomerSessionTableViewCell.h"
+#import "KUSChatSessionTableViewCell.h"
 
+#import "KUSChatSession.h"
 #import "KUSImage.h"
 
-@interface KustomerSessionTableViewCell ()
+@interface KUSChatSessionTableViewCell () {
+    KUSChatSession *_chatSession;
+}
 
 @property (nonatomic, strong) UIImageView *avatarImageView;
 @property (nonatomic, strong) UILabel *titleLabel;
@@ -19,13 +22,13 @@
 
 @end
 
-@implementation KustomerSessionTableViewCell
+@implementation KUSChatSessionTableViewCell
 
 #pragma mark - Lifecycle methods
 
-- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+- (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier
 {
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     if (self) {
         _avatarImageView = [[UIImageView alloc] init];
         _avatarImageView.contentMode = UIViewContentModeScaleAspectFill;
@@ -52,21 +55,31 @@
         _dateLabel.textAlignment = NSTextAlignmentRight;
         _dateLabel.font = [UIFont systemFontOfSize:12.0];
         [self.contentView addSubview:_dateLabel];
-
-        [self _setupMockData];
     }
     return self;
 }
 
-- (void)_setupMockData
+
+#pragma mark - Property methods
+
+- (void)setChatSession:(KUSChatSession *)chatSession
 {
+    _chatSession = chatSession;
+
     self.avatarImageView.image = [KUSImage kustomerTeamIcon];
-    self.titleLabel.text = @"Chat with Kustomer";
-    self.subtitleLabel.text = @"Ignore this but allow the text to overflow so that I can see what it looks like";
+
+    // TODO: Pass in orgName
+    self.titleLabel.text = [NSString stringWithFormat:@"Chat with Kustomer"];
+
+    self.subtitleLabel.text = _chatSession.preview;
+
+    // TODO: String from lastSeenAt
     self.dateLabel.text = @"19 hours ago";
+
+    [self setNeedsLayout];
 }
 
-#pragma mark - UIView methods
+#pragma mark - Layout methods
 
 - (void)layoutSubviews
 {

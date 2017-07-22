@@ -25,6 +25,10 @@
     if (self) {
         _preview = [json valueForKeyPath:@"attributes.preview"];
         _trackingId = [json valueForKeyPath:@"attributes.trackingId"];
+
+        // TODO: ISO Date parsing
+        _createdAt = nil;
+        _lastSeenAt = nil;
     }
     return self;
 }
