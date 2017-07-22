@@ -10,6 +10,11 @@
 
 @implementation KUSChatMessage
 
+static KUSChatMessageDirection KUSChatMessageDirectionFromString(NSString *string)
+{
+    return [string isEqualToString:@"in"] ? KUSChatMessageDirectionIn : KUSChatMessageDirectionOut;
+}
+
 #pragma mark - Class methods
 
 + (NSString *)modelType
@@ -25,6 +30,10 @@
     if (self) {
         _trackingId = NSStringFromKeyPath(json, @"attributes.trackingId");
         _body = NSStringFromKeyPath(json, @"attributes.body");
+
+        // TODO: ISO Date parsing
+        _createdAt = nil;
+        _direction = KUSChatMessageDirectionFromString(NSStringFromKeyPath(json, @"attributes.direction"));
     }
     return self;
 }

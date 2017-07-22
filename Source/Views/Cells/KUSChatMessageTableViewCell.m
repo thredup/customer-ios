@@ -22,7 +22,6 @@ static const CGFloat kMinBubbleHeight = 38.0;
 
 @interface KUSChatMessageTableViewCell () {
     KUSChatMessage *_chatMessage;
-    BOOL _currentUser;
 
     UIImageView *_imageView;
     UIView *_bubbleView;
@@ -102,7 +101,9 @@ static const CGFloat kMinBubbleHeight = 38.0;
 {
     [super layoutSubviews];
 
-    _imageView.hidden = _currentUser;
+    BOOL currentUser = _chatMessage.direction == KUSChatMessageDirectionIn;
+
+    _imageView.hidden = currentUser;
     _imageView.frame = (CGRect) {
         .origin.x = 15.0,
         .origin.y = (self.contentView.bounds.size.height - 40.0) / 2.0,
@@ -119,7 +120,7 @@ static const CGFloat kMinBubbleHeight = 38.0;
     };
 
     _bubbleView.frame = (CGRect) {
-        .origin.x = _currentUser ? self.contentView.bounds.size.width - bubbleViewSize.width - 20.0 : 64.0,
+        .origin.x = currentUser ? self.contentView.bounds.size.width - bubbleViewSize.width - 20.0 : 64.0,
         .origin.y = kRowTopPadding,
         .size = bubbleViewSize
     };
@@ -134,13 +135,14 @@ static const CGFloat kMinBubbleHeight = 38.0;
 
 #pragma mark - Property methods
 
-- (void)setChatMessage:(KUSChatMessage *)chatMessage currentUser:(BOOL)currentUser
+- (void)setChatMessage:(KUSChatMessage *)chatMessage
 {
     _chatMessage = chatMessage;
-    _currentUser = currentUser;
 
-    UIColor *bubbleColor = (_currentUser ? [KUSColor blueColor] : [KUSColor grayColor]);
-    UIColor *textColor = (_currentUser ? [UIColor whiteColor] : [UIColor blackColor]);
+    BOOL currentUser = _chatMessage.direction == KUSChatMessageDirectionIn;
+
+    UIColor *bubbleColor = (currentUser ? [KUSColor blueColor] : [KUSColor grayColor]);
+    UIColor *textColor = (currentUser ? [UIColor whiteColor] : [UIColor blackColor]);
 
     _bubbleView.backgroundColor = bubbleColor;
     _labelView.backgroundColor = bubbleColor;

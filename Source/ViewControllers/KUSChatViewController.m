@@ -146,7 +146,7 @@
     }
 
     KUSChatMessage *chatMessage = [_chatMessages objectAtIndex:indexPath.row];
-    [cell setChatMessage:chatMessage currentUser:(indexPath.row % 2 == 0)];
+    [cell setChatMessage:chatMessage];
 
     return cell;
 }
