@@ -11,11 +11,11 @@
 #import "KUSAPIClient.h"
 #import "KUSChatSession.h"
 
-#import "KustomerInputBarView.h"
 #import "KUSAvatarTitleView.h"
 #import "KUSChatMessageTableViewCell.h"
+#import "KUSInputBar.h"
 
-@interface KUSChatViewController () <UITableViewDataSource, UITableViewDelegate> {
+@interface KUSChatViewController () <KUSInputBarDelegate, UITableViewDataSource, UITableViewDelegate> {
     KUSAPIClient *_apiClient;
 
     BOOL _forNewChatSession;
@@ -25,7 +25,7 @@
 }
 
 @property (nonatomic, strong) UITableView *tableView;
-@property (nonatomic, strong) KustomerInputBarView *inputBarView;
+@property (nonatomic, strong) KUSInputBar *inputBarView;
 
 @end
 
@@ -92,7 +92,8 @@
     self.tableView.separatorColor = nil;
     [self.view addSubview:self.tableView];
 
-    self.inputBarView = [[KustomerInputBarView alloc] init];
+    self.inputBarView = [[KUSInputBar alloc] init];
+    self.inputBarView.delegate = self;
     self.inputBarView.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth);
     [self.view addSubview:self.inputBarView];
 
@@ -174,6 +175,13 @@
 {
     // TODO: Support highlighting/other
     return NO;
+}
+
+#pragma mark - KUSInputBarDelegate methods
+
+- (void)inputBar:(KUSInputBar *)inputBar didEnterText:(NSString *)text
+{
+    NSLog(@"User wants to send message: %@", text);
 }
 
 @end

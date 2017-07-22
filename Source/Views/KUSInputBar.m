@@ -1,17 +1,17 @@
 //
-//  KustomerInputBarView.m
+//  KUSInputBar.m
 //  Kustomer
 //
-//  Created by Daniel Amitay on 7/3/17.
+//  Created by Daniel Amitay on 7/21/17.
 //  Copyright © 2017 Kustomer. All rights reserved.
 //
 
-#import "KustomerInputBarView.h"
+#import "KUSInputBar.h"
 
 #import "KUSColor.h"
 #import "KUSImage.h"
 
-@interface KustomerInputBarView ()
+@interface KUSInputBar ()
 
 @property (nonatomic, strong) UIView *separatorView;
 @property (nonatomic, strong) UITextView *textView;
@@ -19,7 +19,7 @@
 
 @end
 
-@implementation KustomerInputBarView
+@implementation KUSInputBar
 
 #pragma mark - Lifecycle methods
 
@@ -43,6 +43,7 @@
 
         _sendButton = [[UIButton alloc] init];
         [_sendButton setImage:circularImage forState:UIControlStateNormal];
+        [_sendButton addTarget:self action:@selector(_pressSend) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_sendButton];
     }
     return self;
@@ -69,6 +70,15 @@
         .size.width = self.bounds.size.width - CGRectGetWidth(self.sendButton.frame) - 10.0 * 2.0,
         .size.height = self.bounds.size.height - 3.0 * 2.0
     };
+}
+
+#pragma mark - Interface element methods
+
+- (void)_pressSend
+{
+    if ([self.delegate respondsToSelector:@selector(inputBar:didEnterText:)]) {
+        [self.delegate inputBar:self didEnterText:_textView.text];
+    }
 }
 
 @end
