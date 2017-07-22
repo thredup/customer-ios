@@ -37,6 +37,10 @@
 		633D8FE31F2309E700BAFAC9 /* KUSChatSessionTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 633D8FE11F2309E700BAFAC9 /* KUSChatSessionTableViewCell.m */; };
 		633D8FE61F239F9500BAFAC9 /* KUSChatPlaceholderTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 633D8FE41F239F9500BAFAC9 /* KUSChatPlaceholderTableViewCell.h */; };
 		633D8FE71F239F9500BAFAC9 /* KUSChatPlaceholderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 633D8FE51F239F9500BAFAC9 /* KUSChatPlaceholderTableViewCell.m */; };
+		633D8FED1F23C98200BAFAC9 /* KUSPaginatedDataSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 633D8FEB1F23C98200BAFAC9 /* KUSPaginatedDataSource.h */; };
+		633D8FEE1F23C98200BAFAC9 /* KUSPaginatedDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 633D8FEC1F23C98200BAFAC9 /* KUSPaginatedDataSource.m */; };
+		633D8FF21F23E07E00BAFAC9 /* KUSChatSessionsDataSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 633D8FF01F23E07E00BAFAC9 /* KUSChatSessionsDataSource.h */; };
+		633D8FF31F23E07E00BAFAC9 /* KUSChatSessionsDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 633D8FF11F23E07E00BAFAC9 /* KUSChatSessionsDataSource.m */; };
 		636531A11F1BBA7C00433A50 /* KUSSessionsViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 6365319F1F1BBA7C00433A50 /* KUSSessionsViewController.h */; };
 		636531A21F1BBA7C00433A50 /* KUSSessionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 636531A01F1BBA7C00433A50 /* KUSSessionsViewController.m */; };
 		636531A51F1BBAA100433A50 /* KustomerViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 636531A31F1BBAA100433A50 /* KustomerViewController.h */; };
@@ -132,6 +136,11 @@
 		633D8FE11F2309E700BAFAC9 /* KUSChatSessionTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSChatSessionTableViewCell.m; sourceTree = "<group>"; };
 		633D8FE41F239F9500BAFAC9 /* KUSChatPlaceholderTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSChatPlaceholderTableViewCell.h; sourceTree = "<group>"; };
 		633D8FE51F239F9500BAFAC9 /* KUSChatPlaceholderTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSChatPlaceholderTableViewCell.m; sourceTree = "<group>"; };
+		633D8FEB1F23C98200BAFAC9 /* KUSPaginatedDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSPaginatedDataSource.h; sourceTree = "<group>"; };
+		633D8FEC1F23C98200BAFAC9 /* KUSPaginatedDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSPaginatedDataSource.m; sourceTree = "<group>"; };
+		633D8FEF1F23CB0300BAFAC9 /* KUSPaginatedDataSource_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KUSPaginatedDataSource_Private.h; sourceTree = "<group>"; };
+		633D8FF01F23E07E00BAFAC9 /* KUSChatSessionsDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSChatSessionsDataSource.h; sourceTree = "<group>"; };
+		633D8FF11F23E07E00BAFAC9 /* KUSChatSessionsDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSChatSessionsDataSource.m; sourceTree = "<group>"; };
 		6365319F1F1BBA7C00433A50 /* KUSSessionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSSessionsViewController.h; sourceTree = "<group>"; };
 		636531A01F1BBA7C00433A50 /* KUSSessionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSSessionsViewController.m; sourceTree = "<group>"; };
 		636531A31F1BBAA100433A50 /* KustomerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KustomerViewController.h; sourceTree = "<group>"; };
@@ -239,6 +248,18 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
+		633D8FE81F23C96D00BAFAC9 /* DataSources */ = {
+			isa = PBXGroup;
+			children = (
+				633D8FEB1F23C98200BAFAC9 /* KUSPaginatedDataSource.h */,
+				633D8FEF1F23CB0300BAFAC9 /* KUSPaginatedDataSource_Private.h */,
+				633D8FEC1F23C98200BAFAC9 /* KUSPaginatedDataSource.m */,
+				633D8FF01F23E07E00BAFAC9 /* KUSChatSessionsDataSource.h */,
+				633D8FF11F23E07E00BAFAC9 /* KUSChatSessionsDataSource.m */,
+			);
+			path = DataSources;
+			sourceTree = "<group>";
+		};
 		636531AB1F1C4B9700433A50 /* Images */ = {
 			isa = PBXGroup;
 			children = (
@@ -316,6 +337,7 @@
 				636531A31F1BBAA100433A50 /* KustomerViewController.h */,
 				636531A41F1BBAA100433A50 /* KustomerViewController.m */,
 				6334BE401F0C52C400258DAF /* API */,
+				633D8FE81F23C96D00BAFAC9 /* DataSources */,
 				6334BE4F1F0C66D500258DAF /* Helpers */,
 				636531AB1F1C4B9700433A50 /* Images */,
 				6334BE251F0C3E7100258DAF /* Models */,
@@ -392,6 +414,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6334BE451F0C52D700258DAF /* KUSAPIClient.h in Headers */,
+				633D8FED1F23C98200BAFAC9 /* KUSPaginatedDataSource.h in Headers */,
 				6334BE5C1F0C783200258DAF /* KUSAvatarTitleView.h in Headers */,
 				6334BE3A1F0C4B3D00258DAF /* KUSChatMessage.h in Headers */,
 				633D8FDE1F22EDB800BAFAC9 /* KUSInputBar.h in Headers */,
@@ -404,6 +427,7 @@
 				633D8FE21F2309E700BAFAC9 /* KUSChatSessionTableViewCell.h in Headers */,
 				6334BE361F0C4A1300258DAF /* KUSChatSession.h in Headers */,
 				6334BE541F0C66E200258DAF /* KUSImage.h in Headers */,
+				633D8FF21F23E07E00BAFAC9 /* KUSChatSessionsDataSource.h in Headers */,
 				6334BE4D1F0C600F00258DAF /* KUSAttributionToolbar.h in Headers */,
 				636531B61F1DB73B00433A50 /* KUSColor.h in Headers */,
 				6334BE491F0C5E3F00258DAF /* KUSNavigationController.h in Headers */,
@@ -696,6 +720,7 @@
 				636531A61F1BBAA100433A50 /* KustomerViewController.m in Sources */,
 				6334BE551F0C66E200258DAF /* KUSImage.m in Sources */,
 				636531B71F1DB73B00433A50 /* KUSColor.m in Sources */,
+				633D8FEE1F23C98200BAFAC9 /* KUSPaginatedDataSource.m in Sources */,
 				6334BE5D1F0C783200258DAF /* KUSAvatarTitleView.m in Sources */,
 				6334BE2F1F0C43BE00258DAF /* KUSTrackingToken.m in Sources */,
 				633D8FE31F2309E700BAFAC9 /* KUSChatSessionTableViewCell.m in Sources */,
@@ -703,6 +728,7 @@
 				633D8FE71F239F9500BAFAC9 /* KUSChatPlaceholderTableViewCell.m in Sources */,
 				636531AA1F1BBCCD00433A50 /* KUSChatViewController.m in Sources */,
 				6334BE371F0C4A1300258DAF /* KUSChatSession.m in Sources */,
+				633D8FF31F23E07E00BAFAC9 /* KUSChatSessionsDataSource.m in Sources */,
 				6334BE3B1F0C4B3D00258DAF /* KUSChatMessage.m in Sources */,
 				6334BE461F0C52D700258DAF /* KUSAPIClient.m in Sources */,
 			);

@@ -15,10 +15,26 @@
 #import "KUSTrackingToken.h"
 #import "KUSPaginatedResponse.h"
 
+typedef NS_ENUM(NSInteger, KUSAPIRequestType) {
+    KUSAPIRequestTypeGet,
+    KUSAPIRequestTypePost,
+    KUSAPIRequestTypePatch,
+    KUSAPIRequestTypePut,
+    KUSAPIRequestTypeDelete
+};
+
 @interface KUSAPIClient : NSObject
 
 - (instancetype)initWithOrgName:(NSString *)orgName;
 - (instancetype)init NS_UNAVAILABLE;
+
+// Generic methods
+
+- (NSURL *)URLForEndpoint:(NSString *)endpoint;
+- (void)performRequestType:(KUSAPIRequestType)type
+                       URL:(NSURL *)URL
+                    params:(NSDictionary<NSString *, id> *)params
+                completion:(void(^)(NSError *error, NSDictionary *response))completion;
 
 // Identity methods
 

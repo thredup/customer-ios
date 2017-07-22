@@ -8,14 +8,6 @@
 
 #import "KUSAPIClient.h"
 
-typedef NS_ENUM(NSInteger, KUSAPIRequestType) {
-    KUSAPIRequestTypeGet,
-    KUSAPIRequestTypePost,
-    KUSAPIRequestTypePatch,
-    KUSAPIRequestTypePut,
-    KUSAPIRequestTypeDelete
-};
-
 static NSString *kKustomerTrackingTokenHeaderKey = @"x-kustomer-tracking-token";
 
 @interface KUSAPIClient ()
@@ -99,9 +91,16 @@ static NSString *KUSBaseUrlStringFromOrgName(NSString *orgName)
                 completion:(void(^)(NSError *error, NSDictionary *response))completion
 {
     NSURL *endpointURL = [self URLForEndpoint:endpoint];
+    [self performRequestType:type URL:endpointURL params:params completion:completion];
+}
 
+- (void)performRequestType:(KUSAPIRequestType)type
+                  URL:(NSURL *)URL
+                    params:(NSDictionary<NSString *, id> *)params
+                completion:(void(^)(NSError *error, NSDictionary *response))completion
+{
     if (type == KUSAPIRequestTypeGet) {
-        NSURLComponents *urlComponents = [NSURLComponents componentsWithURL:endpointURL resolvingAgainstBaseURL:NO];
+        NSURLComponents *urlComponents = [NSURLComponents componentsWithURL:URL resolvingAgainstBaseURL:NO];
         NSMutableArray<NSURLQueryItem *> *queryItems = [[NSMutableArray alloc] initWithCapacity:params.count];
         for (NSString *key in params) {
             id value = params[key];
@@ -115,10 +114,10 @@ static NSString *KUSBaseUrlStringFromOrgName(NSString *orgName)
             [queryItems addObject:queryItem];
         }
         urlComponents.queryItems = queryItems;
-        endpointURL = urlComponents.URL;
+        URL = urlComponents.URL;
     }
 
-    NSMutableURLRequest *urlRequest = [[NSMutableURLRequest alloc] initWithURL:endpointURL];
+    NSMutableURLRequest *urlRequest = [[NSMutableURLRequest alloc] initWithURL:URL];
     [urlRequest setHTTPMethod:KUSAPIRequestTypeToString(type)];
 
     if (params && type != KUSAPIRequestTypeGet) {

@@ -1,0 +1,63 @@
+//
+//  KUSPaginatedDataSource.h
+//  Kustomer
+//
+//  Created by Daniel Amitay on 7/22/17.
+//  Copyright © 2017 Kustomer. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+
+@class KUSAPIClient;
+@class KUSModel;
+@protocol KUSPaginatedDataSourceListener;
+@interface KUSPaginatedDataSource : NSObject
+
+@property (nonatomic, readonly) BOOL isFetching;
+@property (nonatomic, readonly) BOOL didFetch;
+@property (nonatomic, readonly) BOOL didFetchAll;
+
+- (instancetype)initWithAPIClient:(KUSAPIClient *)apiClient;
+- (instancetype)init NS_UNAVAILABLE;
+
+// Data methods
+- (NSUInteger)count;
+- (NSArray<__kindof KUSModel *> *)allObjects;
+- (__kindof KUSModel *)objectWithId:(NSString *)oid;
+- (__kindof KUSModel *)objectAtIndex:(NSUInteger)index;
+- (NSUInteger)indexOfObject:(__kindof KUSModel *)object;
+- (__kindof KUSModel *)firstObject;
+
+// Listener methods
+- (void)addListener:(id<KUSPaginatedDataSourceListener>)listener;
+- (void)removeListener:(id<KUSPaginatedDataSourceListener>)listener;
+
+// Fetch methods
+- (void)fetchLatest;
+- (void)fetchNext;
+
+@end
+
+typedef NS_ENUM(NSUInteger, KUSPaginatedDataSourceChangeType) {
+    KUSPaginatedDataSourceChangeInsert = 1,
+    KUSPaginatedDataSourceChangeDelete = 2,
+    KUSPaginatedDataSourceChangeMove = 3,
+    KUSPaginatedDataSourceChangeUpdate = 4
+};
+
+@protocol KUSPaginatedDataSourceListener <NSObject>
+
+@optional
+- (void)paginatedDataSourceDidLoad:(KUSPaginatedDataSource *)dataSource;
+- (void)paginatedDataSource:(KUSPaginatedDataSource *)dataSource didReceiveError:(NSError *)error;
+
+- (void)paginatedDataSource:(KUSPaginatedDataSource *)dataSource
+            didChangeObject:(__kindof KUSModel *)object
+                    atIndex:(NSUInteger)oldIndex
+              forChangeType:(KUSPaginatedDataSourceChangeType)type
+                   newIndex:(NSUInteger)newIndex;
+
+- (void)paginatedDataSourceWillChangeContent:(KUSPaginatedDataSource *)dataSource;
+- (void)paginatedDataSourceDidChangeContent:(KUSPaginatedDataSource *)dataSource;
+
+@end
