@@ -75,8 +75,11 @@ static NSString *kKustomerOrgNameKey = @"orgName";
 #pragma mark - Helper functions
 
 NS_INLINE NSString *paddedBase64String(NSString *base64String) {
-    NSUInteger paddedLength = base64String.length + (4 - (base64String.length % 4));
-    return [base64String stringByPaddingToLength:paddedLength withString:@"=" startingAtIndex:0];
+    if (base64String.length % 4) {
+        NSUInteger paddedLength = base64String.length + (4 - (base64String.length % 4));
+        return [base64String stringByPaddingToLength:paddedLength withString:@"=" startingAtIndex:0];
+    }
+    return base64String;
 }
 
 NS_INLINE NSDictionary *jsonFromBase64EncodedJsonString(NSString *base64EncodedJson) {
