@@ -97,25 +97,13 @@
     self.inputBarView.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth);
     [self.view addSubview:self.inputBarView];
 
-    KUSChatMessage *chatMessage1 = [[KUSChatMessage alloc] initWithJSON:@
-                                    {
-                                        @"id": @"0",
-                                        @"type": @"chat_message",
-                                        @"attributes": @{
-                                                         @"body": @"Ignore as well :)"
-                                                         }
-                                    }];
-    KUSChatMessage *chatMessage2 = [[KUSChatMessage alloc] initWithJSON:@
-                                    {
-                                        @"id": @"0",
-                                        @"type": @"chat_message",
-                                        @"attributes": @{
-                                                         @"body": @"Thanks for the message. We'll get back to you soon as soon as possible. If you don't have time to wait, enter your email and we'll respond to you there instead."
-                                                         }
-                                    }];
-
     if (_chatSession) {
-        _chatMessages = @[ chatMessage1, chatMessage2 ];
+        [_apiClient
+         getMessagesForSessionId:_chatSession.oid
+         completion:^(NSError *error, KUSPaginatedResponse *chatMessages) {
+             _chatMessages = chatMessages.objects;
+             [self.tableView reloadData];
+        }];
     }
 }
 
@@ -182,6 +170,37 @@
 - (void)inputBar:(KUSInputBar *)inputBar didEnterText:(NSString *)text
 {
     NSLog(@"User wants to send message: %@", text);
+
+    if (_forNewChatSession) {
+        [_apiClient createChatSessionWithTitle:text completion:^(NSError *error, KUSChatSession *session) {
+            if (error) {
+                NSLog(@"Error creating chat session: %@", error);
+                return;
+            }
+            NSLog(@"Successfully created chat session: %@", session);
+
+            _forNewChatSession = NO;
+            _chatSession = session;
+
+            [_apiClient sendMessage:text toChatSession:session.oid completion:^(NSError *error, KUSChatMessage *message) {
+                if (error) {
+                    NSLog(@"Error sending message: %@", error);
+                    return;
+                }
+                NSLog(@"Successfully sent message: %@", message);
+            }];
+        }];
+
+        return;
+    }
+
+    [_apiClient sendMessage:text toChatSession:_chatSession.oid completion:^(NSError *error, KUSChatMessage *message) {
+        if (error) {
+            NSLog(@"Error sending message: %@", error);
+            return;
+        }
+        NSLog(@"Successfully sent message: %@", message);
+    }];
 }
 
 @end

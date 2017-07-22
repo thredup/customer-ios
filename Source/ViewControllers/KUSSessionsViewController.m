@@ -143,7 +143,7 @@
 {
     if (response) {
         _chatSessions = response.objects;
-        _chatSessions = @[ [KUSChatSession new] ];
+        // _chatSessions = @[ [KUSChatSession new] ];
         // _chatSessions = @[ [KUSChatSession new], [KUSChatSession new] ];
         [self.tableView reloadData];
 
