@@ -27,12 +27,15 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        self.backgroundColor = [UIColor whiteColor];
+
         _separatorView = [[UIView alloc] init];
         _separatorView.userInteractionEnabled = NO;
         _separatorView.backgroundColor = [KUSColor lightGrayColor];
         [self addSubview:_separatorView];
 
         _textView = [[UITextView alloc] init];
+        _textView.backgroundColor = self.backgroundColor;
         _textView.text = @"Type a message...";
         _textView.font = [UIFont systemFontOfSize:14.0];
         [self addSubview:_textView];
@@ -79,6 +82,7 @@
     if ([self.delegate respondsToSelector:@selector(inputBar:didEnterText:)]) {
         [self.delegate inputBar:self didEnterText:_textView.text];
     }
+    _textView.text = @"Type a message...";
 }
 
 @end

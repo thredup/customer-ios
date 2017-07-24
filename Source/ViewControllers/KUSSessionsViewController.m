@@ -49,7 +49,6 @@
 {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
-    self.edgesForExtendedLayout = UIRectEdgeTop | UIRectEdgeLeft | UIRectEdgeRight;
 
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@""
                                                                              style:self.navigationItem.backBarButtonItem.style
@@ -118,11 +117,16 @@
 
     self.tableView.frame = self.view.bounds;
 
+    self.tableView.contentInset = (UIEdgeInsets) {
+        .top = self.topLayoutGuide.length,
+        .bottom = self.bottomLayoutGuide.length
+    };
+
     // TODO: Extract layout constants
     CGSize createSessionButtonSize = CGSizeMake(182.0, 44.0);
     self.createSessionButton.frame = (CGRect) {
         .origin.x = (self.view.bounds.size.width - createSessionButtonSize.width) / 2.0,
-        .origin.y = self.view.bounds.size.height - createSessionButtonSize.height - 23.0,
+        .origin.y = self.view.bounds.size.height - createSessionButtonSize.height - self.bottomLayoutGuide.length - 23.0,
         .size = createSessionButtonSize
     };
 }

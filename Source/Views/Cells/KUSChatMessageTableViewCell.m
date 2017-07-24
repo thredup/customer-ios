@@ -15,7 +15,8 @@
 static const CGFloat kBubbleTopPadding = 10.0;
 static const CGFloat kBubbleSidePadding = 12.0;
 
-static const CGFloat kRowTopPadding = 5.0;
+static const CGFloat kRowSidePadding = 12.0;
+static const CGFloat kRowTopPadding = 3.0;
 
 static const CGFloat kMaxBubbleWidth = 250.0;
 static const CGFloat kMinBubbleHeight = 38.0;
@@ -105,7 +106,7 @@ static const CGFloat kMinBubbleHeight = 38.0;
 
     _imageView.hidden = currentUser;
     _imageView.frame = (CGRect) {
-        .origin.x = 15.0,
+        .origin.x = kRowSidePadding,
         .origin.y = (self.contentView.bounds.size.height - 40.0) / 2.0,
         .size.width = 40.0,
         .size.height = 40.0
@@ -120,7 +121,7 @@ static const CGFloat kMinBubbleHeight = 38.0;
     };
 
     _bubbleView.frame = (CGRect) {
-        .origin.x = currentUser ? self.contentView.bounds.size.width - bubbleViewSize.width - 20.0 : 64.0,
+        .origin.x = currentUser ? self.contentView.bounds.size.width - bubbleViewSize.width - kRowSidePadding : 64.0,
         .origin.y = kRowTopPadding,
         .size = bubbleViewSize
     };

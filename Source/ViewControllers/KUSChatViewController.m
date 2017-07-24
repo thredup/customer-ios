@@ -72,7 +72,6 @@
     [super viewDidLoad];
 
     self.view.backgroundColor = [UIColor whiteColor];
-    self.edgesForExtendedLayout = UIRectEdgeTop | UIRectEdgeLeft | UIRectEdgeRight;
 
     UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop
                                                                                    target:self
@@ -110,15 +109,18 @@
 {
     [super viewWillLayoutSubviews];
 
+    self.tableView.frame = self.view.bounds;
+
+    CGFloat inputBarHeight = 50.0;
     self.inputBarView.frame = (CGRect) {
-        .origin.y = self.view.bounds.size.height - 50.0,
+        .origin.y = self.view.bounds.size.height - self.bottomLayoutGuide.length - inputBarHeight,
         .size.width = self.view.bounds.size.width,
-        .size.height = 50.0
+        .size.height = inputBarHeight
     };
 
-    self.tableView.frame = (CGRect) {
-        .size.width = self.view.bounds.size.width,
-        .size.height = self.view.bounds.size.height - self.inputBarView.frame.size.height
+    self.tableView.contentInset = (UIEdgeInsets) {
+        .top = self.topLayoutGuide.length + 3.0,
+        .bottom = self.bottomLayoutGuide.length + inputBarHeight + 3.0
     };
 }
 
