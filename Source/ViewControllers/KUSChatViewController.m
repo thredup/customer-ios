@@ -12,16 +12,17 @@
 #import "KUSChatSession.h"
 
 #import "KUSAvatarTitleView.h"
+#import "KUSChatMessagesDataSource.h"
 #import "KUSChatMessageTableViewCell.h"
 #import "KUSInputBar.h"
 
-@interface KUSChatViewController () <KUSInputBarDelegate, UITableViewDataSource, UITableViewDelegate> {
+@interface KUSChatViewController () <KUSInputBarDelegate, KUSPaginatedDataSourceListener, UITableViewDataSource, UITableViewDelegate> {
     KUSAPIClient *_apiClient;
 
     BOOL _forNewChatSession;
     KUSChatSession *_chatSession;
 
-    NSArray<KUSChatMessage *> *_chatMessages;
+    KUSChatMessagesDataSource *_chatMessagesDataSource;
 }
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -98,12 +99,10 @@
     [self.view addSubview:self.inputBarView];
 
     if (_chatSession) {
-        [_apiClient
-         getMessagesForSessionId:_chatSession.oid
-         completion:^(NSError *error, KUSPaginatedResponse *chatMessages) {
-             _chatMessages = chatMessages.objects;
-             [self.tableView reloadData];
-        }];
+        _chatMessagesDataSource = [[KUSChatMessagesDataSource alloc] initWithAPIClient:_apiClient
+                                                                           chatSession:_chatSession];
+        [_chatMessagesDataSource addListener:self];
+        [_chatMessagesDataSource fetchLatest];
     }
 }
 
@@ -130,11 +129,18 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+#pragma mark - KUSPaginatedDataSourceListener methods
+
+- (void)paginatedDataSourceDidLoad:(KUSPaginatedDataSource *)dataSource
+{
+    [self.tableView reloadData];
+}
+
 #pragma mark - UITableViewDataSource methods
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _chatMessages.count;
+    return _chatMessagesDataSource.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -145,7 +151,7 @@
         cell = [[KUSChatMessageTableViewCell alloc] initWithReuseIdentifier:kMessageCellIdentifier];
     }
 
-    KUSChatMessage *chatMessage = [_chatMessages objectAtIndex:indexPath.row];
+    KUSChatMessage *chatMessage = [_chatMessagesDataSource objectAtIndex:indexPath.row];
     [cell setChatMessage:chatMessage];
 
     return cell;
@@ -155,7 +161,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    KUSChatMessage *chatMessage = [_chatMessages objectAtIndex:indexPath.row];
+    KUSChatMessage *chatMessage = [_chatMessagesDataSource objectAtIndex:indexPath.row];
     return [KUSChatMessageTableViewCell heightForChatMessage:chatMessage maxWidth:tableView.bounds.size.width];
 }
 
@@ -181,6 +187,9 @@
 
             _forNewChatSession = NO;
             _chatSession = session;
+            _chatMessagesDataSource = [[KUSChatMessagesDataSource alloc] initWithAPIClient:_apiClient
+                                                                               chatSession:_chatSession];
+            [_chatMessagesDataSource addListener:self];
 
             [_apiClient sendMessage:text toChatSession:session.oid completion:^(NSError *error, KUSChatMessage *message) {
                 if (error) {
@@ -188,6 +197,7 @@
                     return;
                 }
                 NSLog(@"Successfully sent message: %@", message);
+                [_chatMessagesDataSource fetchLatest];
             }];
         }];
 
@@ -200,6 +210,7 @@
             return;
         }
         NSLog(@"Successfully sent message: %@", message);
+        [_chatMessagesDataSource fetchLatest];
     }];
 }
 

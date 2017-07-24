@@ -104,6 +104,13 @@
     [_chatSessionsDataSource fetchLatest];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    [_chatSessionsDataSource fetchLatest];
+}
+
 - (void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
