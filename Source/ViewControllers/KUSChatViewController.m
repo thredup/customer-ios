@@ -21,8 +21,9 @@
 
     BOOL _forNewChatSession;
     KUSChatSession *_chatSession;
-
     KUSChatMessagesDataSource *_chatMessagesDataSource;
+
+    CGFloat _keyboardHeight;
 }
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -65,6 +66,11 @@
     return self;
 }
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 #pragma mark - UIViewController methods
 
 - (void)viewDidLoad
@@ -103,6 +109,18 @@
         [_chatMessagesDataSource addListener:self];
         [_chatMessagesDataSource fetchLatest];
     }
+
+    NSArray<NSString *> *keyboardNotificationNames = @[
+        UIKeyboardWillShowNotification,
+        UIKeyboardWillChangeFrameNotification,
+        UIKeyboardWillHideNotification
+    ];
+    for (NSString *notificationName in keyboardNotificationNames) {
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(keyboardWillChangeFrame:)
+                                                     name:notificationName
+                                                   object:nil];
+    }
 }
 
 - (void)viewWillLayoutSubviews
@@ -112,15 +130,16 @@
     self.tableView.frame = self.view.bounds;
 
     CGFloat inputBarHeight = 50.0;
+    CGFloat inputBarY = self.view.bounds.size.height - MAX(self.bottomLayoutGuide.length, _keyboardHeight) - inputBarHeight;
     self.inputBarView.frame = (CGRect) {
-        .origin.y = self.view.bounds.size.height - self.bottomLayoutGuide.length - inputBarHeight,
+        .origin.y = inputBarY,
         .size.width = self.view.bounds.size.width,
         .size.height = inputBarHeight
     };
 
     self.tableView.contentInset = (UIEdgeInsets) {
         .top = self.topLayoutGuide.length + 3.0,
-        .bottom = self.bottomLayoutGuide.length + inputBarHeight + 3.0
+        .bottom = self.view.bounds.size.height - self.inputBarView.frame.origin.y + 3.0
     };
 }
 
@@ -128,6 +147,8 @@
 
 - (void)_dismiss
 {
+    [self.view endEditing:YES];
+
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -136,6 +157,33 @@
 - (void)paginatedDataSourceDidLoad:(KUSPaginatedDataSource *)dataSource
 {
     [self.tableView reloadData];
+}
+
+#pragma mark - NSNotification methods
+
+- (void)keyboardWillChangeFrame:(NSNotification *)notification
+{
+    CGRect keyboardEndFrameWindow;
+    [[notification.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] getValue: &keyboardEndFrameWindow];
+
+    double keyboardTransitionDuration;
+    [[notification.userInfo valueForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&keyboardTransitionDuration];
+
+    UIViewAnimationCurve keyboardTransitionAnimationCurve;
+    [[notification.userInfo valueForKey:UIKeyboardAnimationCurveUserInfoKey] getValue:&keyboardTransitionAnimationCurve];
+
+    CGRect keyboardEndFrameView = [self.view convertRect:keyboardEndFrameWindow fromView:nil];
+    _keyboardHeight = self.view.frame.size.height - keyboardEndFrameView.origin.y;
+
+    UIViewAnimationOptions options = keyboardTransitionAnimationCurve << 16 | UIViewAnimationOptionBeginFromCurrentState;
+    [UIView animateWithDuration:keyboardTransitionDuration
+                          delay:0.0
+                        options:options
+                     animations:^{
+                         [self.view setNeedsLayout];
+                         [self.view layoutIfNeeded];
+                     }
+                     completion:nil];
 }
 
 #pragma mark - UITableViewDataSource methods
