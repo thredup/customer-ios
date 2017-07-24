@@ -41,7 +41,7 @@ static NSString *KUSBaseUrlStringFromOrgName(NSString *orgName)
 {
     NSDictionary<NSString *, NSString *> *environment = [[NSProcessInfo processInfo] environment];
     NSString *baseDomain = environment[@"KUSTOMER_BASE_DOMAIN"] ?: @"kustomerapp.com";
-    return [NSString stringWithFormat:@"https://%@.api.%@/c", orgName, baseDomain];
+    return [NSString stringWithFormat:@"https://%@.api.%@", orgName, baseDomain];
 }
 
 #pragma mark - Lifecycle methods
@@ -81,8 +81,14 @@ static NSString *KUSBaseUrlStringFromOrgName(NSString *orgName)
 
 - (NSURL *)URLForEndpoint:(NSString *)endpoint
 {
-    NSString *endpointUrlString = [NSString stringWithFormat:@"%@%@", self.baseUrlString, endpoint];
+    NSString *endpointUrlString = [NSString stringWithFormat:@"%@/c%@", self.baseUrlString, endpoint];
     return [NSURL URLWithString:endpointUrlString];
+}
+
+- (NSURL *)URLForPath:(NSString *)path
+{
+    NSString *urlString = [NSString stringWithFormat:@"%@%@", self.baseUrlString, path];
+    return [NSURL URLWithString:urlString];
 }
 
 - (void)performRequestType:(KUSAPIRequestType)type

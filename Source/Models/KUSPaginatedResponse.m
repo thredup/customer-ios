@@ -49,10 +49,10 @@
         }
         _objects = objects;
 
-        _selfURL = NSURLFromKeyPath(json, @"links.self");
-        _firstURL = NSURLFromKeyPath(json, @"links.first");
-        _prevURL = NSURLFromKeyPath(json, @"links.prev");
-        _nextURL = NSURLFromKeyPath(json, @"links.next");
+        _selfPath = NSStringFromKeyPath(json, @"links.self");
+        _firstPath = NSStringFromKeyPath(json, @"links.first");
+        _prevPath = NSStringFromKeyPath(json, @"links.prev");
+        _nextPath = NSStringFromKeyPath(json, @"links.next");
     }
     return self;
 }

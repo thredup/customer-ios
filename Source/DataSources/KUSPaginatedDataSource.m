@@ -107,7 +107,10 @@
 
 - (void)fetchLatest
 {
-    NSURL *URL = _mostRecentPaginatedResponse.firstURL ?: [self firstURL];
+    NSURL *URL = [self firstURL];
+    if (_mostRecentPaginatedResponse.firstPath) {
+        URL = [self.apiClient URLForPath:_mostRecentPaginatedResponse.firstPath];
+    }
     if (URL == nil) {
         return;
     }
@@ -129,7 +132,10 @@
 
 - (void)fetchNext
 {
-    NSURL *URL = _lastPaginatedResponse.nextURL;
+    NSURL *URL;
+    if (_lastPaginatedResponse.nextPath) {
+        URL = [self.apiClient URLForPath:_lastPaginatedResponse.nextPath];
+    }
     if (URL == nil) {
         return;
     }
@@ -206,7 +212,7 @@
 
     self.isFetching = NO;
     self.didFetch = YES;
-    self.didFetchAll = response.nextURL == nil;
+    self.didFetchAll = response.nextPath == nil;
 
     if (didNotifyWillChange) {
         [self notifyAnnouncersDidChangeContent];

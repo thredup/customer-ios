@@ -31,6 +31,7 @@ typedef NS_ENUM(NSInteger, KUSAPIRequestType) {
 // Generic methods
 
 - (NSURL *)URLForEndpoint:(NSString *)endpoint;
+- (NSURL *)URLForPath:(NSString *)path;
 - (void)performRequestType:(KUSAPIRequestType)type
                        URL:(NSURL *)URL
                     params:(NSDictionary<NSString *, id> *)params

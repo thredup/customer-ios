@@ -16,10 +16,10 @@
 @property (nonatomic, assign, readonly) NSUInteger page;
 @property (nonatomic, assign, readonly) NSUInteger pageSize;
 
-@property (nonatomic, strong, readonly, nullable) NSURL *selfURL;
-@property (nonatomic, strong, readonly, nullable) NSURL *firstURL;
-@property (nonatomic, strong, readonly, nullable) NSURL *prevURL;
-@property (nonatomic, strong, readonly, nullable) NSURL *nextURL;
+@property (nonatomic, strong, readonly, nullable) NSString *selfPath;
+@property (nonatomic, strong, readonly, nullable) NSString *firstPath;
+@property (nonatomic, strong, readonly, nullable) NSString *prevPath;
+@property (nonatomic, strong, readonly, nullable) NSString *nextPath;
 
 - (instancetype _Nullable)initWithJSON:(NSDictionary * _Nonnull)json modelClass:(Class _Nonnull)modelClass;
 

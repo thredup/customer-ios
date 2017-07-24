@@ -22,6 +22,7 @@
     KUSAPIClient *_apiClient;
 
     KUSChatSessionsDataSource *_chatSessionsDataSource;
+    BOOL _didHandleFirstLoad;
 }
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -140,13 +141,14 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-#pragma mark - KUSPaginatedDataSourceListener methods
+#pragma mark - Internal methods
 
-- (void)paginatedDataSourceDidLoad:(KUSPaginatedDataSource *)dataSource
+- (void)_handleFirstLoadIfNecessary
 {
-    [self.tableView reloadData];
-    self.tableView.hidden = NO;
-    self.createSessionButton.hidden = NO;
+    if (_didHandleFirstLoad) {
+        return;
+    }
+    _didHandleFirstLoad = YES;
 
     if (_chatSessionsDataSource.count == 0) {
         // If there are no existing chat sessions, go directly to new chat screen
@@ -160,6 +162,17 @@
                                                                                       forChatSession:chatSession];
         [self.navigationController pushViewController:chatViewController animated:NO];
     }
+}
+
+#pragma mark - KUSPaginatedDataSourceListener methods
+
+- (void)paginatedDataSourceDidLoad:(KUSPaginatedDataSource *)dataSource
+{
+    [self.tableView reloadData];
+    self.tableView.hidden = NO;
+    self.createSessionButton.hidden = NO;
+
+    [self _handleFirstLoadIfNecessary];
 }
 
 #pragma mark - UITableViewDataSource methods
