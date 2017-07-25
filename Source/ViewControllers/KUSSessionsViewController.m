@@ -117,11 +117,6 @@
 
     self.tableView.frame = self.view.bounds;
 
-    self.tableView.contentInset = (UIEdgeInsets) {
-        .top = self.topLayoutGuide.length,
-        .bottom = self.bottomLayoutGuide.length
-    };
-
     // TODO: Extract layout constants
     CGSize createSessionButtonSize = CGSizeMake(182.0, 44.0);
     self.createSessionButton.frame = (CGRect) {

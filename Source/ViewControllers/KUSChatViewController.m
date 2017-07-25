@@ -96,6 +96,7 @@
     self.tableView.separatorInset = UIEdgeInsetsZero;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.separatorColor = nil;
+    self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
     [self.view addSubview:self.tableView];
 
     self.inputBarView = [[KUSInputBar alloc] init];
@@ -127,8 +128,6 @@
 {
     [super viewWillLayoutSubviews];
 
-    self.tableView.frame = self.view.bounds;
-
     CGFloat inputBarHeight = 50.0;
     CGFloat inputBarY = self.view.bounds.size.height - MAX(self.bottomLayoutGuide.length, _keyboardHeight) - inputBarHeight;
     self.inputBarView.frame = (CGRect) {
@@ -137,9 +136,17 @@
         .size.height = inputBarHeight
     };
 
+    self.tableView.frame = (CGRect) {
+        .size.width = self.view.bounds.size.width,
+        .size.height = self.inputBarView.frame.origin.y
+    };
+
     self.tableView.contentInset = (UIEdgeInsets) {
         .top = self.topLayoutGuide.length + 3.0,
-        .bottom = self.view.bounds.size.height - self.inputBarView.frame.origin.y + 3.0
+        .bottom = 3.0
+    };
+    self.tableView.scrollIndicatorInsets = (UIEdgeInsets) {
+        .top = self.topLayoutGuide.length
     };
 }
 
