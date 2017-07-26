@@ -128,7 +128,7 @@
 {
     [super viewWillLayoutSubviews];
 
-    CGFloat inputBarHeight = 50.0;
+    CGFloat inputBarHeight = [self.inputBarView desiredHeight];
     CGFloat inputBarY = self.view.bounds.size.height - MAX(self.bottomLayoutGuide.length, _keyboardHeight) - inputBarHeight;
     self.inputBarView.frame = (CGRect) {
         .origin.y = inputBarY,
@@ -272,6 +272,12 @@
             [_chatMessagesDataSource fetchLatest];
         });
     }];
+}
+
+- (void)inputBarTextDidChange:(KUSInputBar *)inputBar
+{
+    [self.view setNeedsLayout];
+    [self.view layoutIfNeeded];
 }
 
 @end

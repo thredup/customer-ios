@@ -13,12 +13,14 @@
 
 @property (nonatomic, weak) id<KUSInputBarDelegate> delegate;
 
+- (CGFloat)desiredHeight;
+
 @end
 
-@protocol KUSInputBarDelegate <NSObject>
+@protocol KUSInputBarDelegate <UIToolbarDelegate>
 
 @optional
-
 - (void)inputBar:(KUSInputBar *)inputBar didEnterText:(NSString *)text;
+- (void)inputBarTextDidChange:(KUSInputBar *)inputBar;
 
 @end
