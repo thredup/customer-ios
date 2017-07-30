@@ -26,6 +26,7 @@
 @property (nonatomic, readwrite) BOOL isFetching;
 @property (nonatomic, readwrite) BOOL didFetch;
 @property (nonatomic, readwrite) BOOL didFetchAll;
+@property (nonatomic, strong, readwrite) NSError *error;
 
 @end
 
@@ -118,6 +119,7 @@
         return;
     }
     self.isFetching = YES;
+    self.error = nil;
 
     __weak KUSPaginatedDataSource *weakSelf = self;
     [self.apiClient
@@ -125,8 +127,12 @@
      URL:URL
      params:nil
      completion:^(NSError *error, NSDictionary *json) {
-         KUSPaginatedResponse *response = [[KUSPaginatedResponse alloc] initWithJSON:json modelClass:[self modelClass]];
-         [weakSelf _prependResponse:response error:error];
+         __strong KUSPaginatedDataSource *strongSelf = weakSelf;
+         if (strongSelf == nil) {
+             return;
+         }
+         KUSPaginatedResponse *response = [[KUSPaginatedResponse alloc] initWithJSON:json modelClass:[strongSelf modelClass]];
+         [strongSelf _prependResponse:response error:error];
      }];
 }
 
@@ -143,6 +149,7 @@
         return;
     }
     self.isFetching = YES;
+    self.error = nil;
 
     __weak KUSPaginatedDataSource *weakSelf = self;
     [self.apiClient
@@ -150,8 +157,12 @@
      URL:URL
      params:nil
      completion:^(NSError *error, NSDictionary *json) {
-         KUSPaginatedResponse *response = [[KUSPaginatedResponse alloc] initWithJSON:json modelClass:[self modelClass]];
-         [weakSelf _appendResponse:response error:error];
+         __strong KUSPaginatedDataSource *strongSelf = weakSelf;
+         if (strongSelf == nil) {
+             return;
+         }
+         KUSPaginatedResponse *response = [[KUSPaginatedResponse alloc] initWithJSON:json modelClass:[strongSelf modelClass]];
+         [strongSelf _appendResponse:response error:error];
      }];
 }
 
@@ -172,8 +183,9 @@
 - (void)_appendResponse:(KUSPaginatedResponse *)response error:(NSError *)error
 {
     if (error || response == nil) {
-        [self notifyAnnouncersDidError:error];
         self.isFetching = NO;
+        self.error = error;
+        [self notifyAnnouncersDidError:error];
         return;
     }
 
@@ -223,8 +235,9 @@
 - (void)_prependResponse:(KUSPaginatedResponse *)response error:(NSError *)error
 {
     if (error || response == nil) {
-        [self notifyAnnouncersDidError:error];
         self.isFetching = NO;
+        self.error = error;
+        [self notifyAnnouncersDidError:error];
         return;
     }
 

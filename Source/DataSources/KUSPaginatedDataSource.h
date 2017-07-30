@@ -16,6 +16,7 @@
 @property (nonatomic, readonly) BOOL isFetching;
 @property (nonatomic, readonly) BOOL didFetch;
 @property (nonatomic, readonly) BOOL didFetchAll;
+@property (nonatomic, strong, readonly) NSError *error;
 
 - (instancetype)initWithAPIClient:(KUSAPIClient *)apiClient;
 - (instancetype)init NS_UNAVAILABLE;
