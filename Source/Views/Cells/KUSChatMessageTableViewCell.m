@@ -24,6 +24,7 @@ static const CGFloat kMinBubbleHeight = 38.0;
 
 @interface KUSChatMessageTableViewCell () {
     KUSChatMessage *_chatMessage;
+    BOOL _showsAvatar;
 
     UIImageView *_imageView;
     UIView *_bubbleView;
@@ -108,7 +109,7 @@ static const CGFloat kMinBubbleHeight = 38.0;
 
     BOOL currentUser = _chatMessage.direction == KUSChatMessageDirectionIn;
 
-    _imageView.hidden = currentUser;
+    _imageView.hidden = currentUser || !_showsAvatar;
     _imageView.frame = (CGRect) {
         .origin.x = kRowSidePadding,
         .origin.y = (self.contentView.bounds.size.height - 40.0) / 2.0,
@@ -125,7 +126,7 @@ static const CGFloat kMinBubbleHeight = 38.0;
     };
 
     _bubbleView.frame = (CGRect) {
-        .origin.x = currentUser ? self.contentView.bounds.size.width - bubbleViewSize.width - kRowSidePadding : 64.0,
+        .origin.x = currentUser ? self.contentView.bounds.size.width - bubbleViewSize.width - kRowSidePadding : 60.0,
         .origin.y = kRowTopPadding,
         .size = bubbleViewSize
     };
@@ -155,6 +156,12 @@ static const CGFloat kMinBubbleHeight = 38.0;
 
     _labelView.attributedText = [KUSText attributedStringFromText:_chatMessage.body fontSize:[[self class] fontSize]];
 
+    [self setNeedsLayout];
+}
+
+- (void)setShowsAvatar:(BOOL)showsAvatar
+{
+    _showsAvatar = showsAvatar;
     [self setNeedsLayout];
 }
 

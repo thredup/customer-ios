@@ -14,7 +14,9 @@
 + (CGFloat)heightForChatMessage:(KUSChatMessage *)chatMessage maxWidth:(CGFloat)maxWidth;
 
 - (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier;
+
 - (void)setChatMessage:(KUSChatMessage *)chatMessage;
+- (void)setShowsAvatar:(BOOL)showsAvatar;
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier NS_UNAVAILABLE;
 - (instancetype)initWithCoder:(NSCoder *)aDecoder NS_UNAVAILABLE;

@@ -208,8 +208,14 @@
         cell = [[KUSChatMessageTableViewCell alloc] initWithReuseIdentifier:kMessageCellIdentifier];
     }
 
-    KUSChatMessage *chatMessage = [_chatMessagesDataSource objectAtIndex:indexPath.row];
+    NSInteger row = indexPath.row;
+
+    KUSChatMessage *chatMessage = [_chatMessagesDataSource objectAtIndex:row];
     [cell setChatMessage:chatMessage];
+
+    KUSChatMessage *previousChatMessage = (row > 0 ? [_chatMessagesDataSource objectAtIndex:row - 1] : nil);
+    BOOL previousMessageDiffSender = ![previousChatMessage.sentById isEqualToString:chatMessage.sentById];
+    [cell setShowsAvatar:previousMessageDiffSender];
 
     return cell;
 }
