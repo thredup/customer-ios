@@ -4,14 +4,17 @@ PODS:
   - libPusher/Core (1.6.3):
     - SocketRocket (= 0.5.1)
   - SocketRocket (0.5.1)
+  - TSMarkdownParser (2.1.3)
 
 DEPENDENCIES:
   - libPusher (~> 1.6.3)
+  - TSMarkdownParser (~> 2.1.3)
 
 SPEC CHECKSUMS:
   libPusher: b7fcf16e2db51c37915613652311d66065743ead
   SocketRocket: d57c7159b83c3c6655745cd15302aa24b6bae531
+  TSMarkdownParser: 114779f14d46e7fc6d9880d4797e5abcc01f92c3
 
-PODFILE CHECKSUM: 801981d1c39584dd9187442e49e0bdd73b2b8656
+PODFILE CHECKSUM: 3e8ff4e5f66b50f3749921ee8f75097b695ca437
 
 COCOAPODS: 1.2.1
