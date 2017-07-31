@@ -8,11 +8,14 @@
 
 #import "KUSChatSessionTableViewCell.h"
 
+#import "KUSAPIClient.h"
 #import "KUSChatSession.h"
 #import "KUSImage.h"
 #import "KUSText.h"
 
 @interface KUSChatSessionTableViewCell () {
+    KUSAPIClient *_apiClient;
+
     KUSChatSession *_chatSession;
 }
 
@@ -27,10 +30,12 @@
 
 #pragma mark - Lifecycle methods
 
-- (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier
+- (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier apiClient:(KUSAPIClient *)apiClient
 {
     self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     if (self) {
+        _apiClient = apiClient;
+
         _avatarImageView = [[UIImageView alloc] init];
         _avatarImageView.contentMode = UIViewContentModeScaleAspectFill;
         _avatarImageView.layer.masksToBounds = YES;
@@ -69,8 +74,9 @@
 
     self.avatarImageView.image = [KUSImage kustomerTeamIcon];
 
-    // TODO: Pass in orgName
-    self.titleLabel.text = [NSString stringWithFormat:@"Chat with Kustomer"];
+    // TODO: Grab teamName from Chat Settings
+    // TODO: Grab username from responders/messages
+    self.titleLabel.text = [NSString stringWithFormat:@"Chat with %@", _apiClient.organizationName];
 
     self.subtitleLabel.attributedText = [KUSText attributedStringFromText:_chatSession.preview fontSize:12.0];
 

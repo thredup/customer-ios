@@ -86,7 +86,9 @@
     self.navigationItem.rightBarButtonItem = barButtonItem;
 
     // self.navigationItem.title = @"Kustomer";
-    self.navigationItem.prompt = @"Questions about Kustomer?";
+
+    // TODO: Grab from Chat Settings
+    self.navigationItem.prompt = [NSString stringWithFormat:@"Questions about %@?", _apiClient.organizationName];
 
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     self.tableView.autoresizingMask = (UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth);

@@ -28,7 +28,11 @@ typedef NS_ENUM(NSInteger, KUSAPIRequestType) {
 - (instancetype)initWithOrgName:(NSString *)orgName;
 - (instancetype)init NS_UNAVAILABLE;
 
-// Generic methods
+// Org methods
+
+- (NSString *)organizationName;
+
+// Request methods
 
 - (NSURL *)URLForEndpoint:(NSString *)endpoint;
 - (NSURL *)URLForPath:(NSString *)path;

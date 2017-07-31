@@ -191,7 +191,7 @@
         static NSString *kSessionCellIdentifier = @"SessionCell";
         KUSChatSessionTableViewCell *cell = (KUSChatSessionTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kSessionCellIdentifier];
         if (cell == nil) {
-            cell = [[KUSChatSessionTableViewCell alloc] initWithReuseIdentifier:kSessionCellIdentifier];
+            cell = [[KUSChatSessionTableViewCell alloc] initWithReuseIdentifier:kSessionCellIdentifier apiClient:_apiClient];
         }
 
         KUSChatSession *chatSession = [_chatSessionsDataSource objectAtIndex:indexPath.row];

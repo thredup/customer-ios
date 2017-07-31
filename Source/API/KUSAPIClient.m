@@ -13,6 +13,7 @@ static NSString *kKustomerTrackingTokenHeaderKey = @"x-kustomer-tracking-token";
 @interface KUSAPIClient ()
 
 @property (atomic, copy, readonly) NSString *orgName;
+@property (atomic, copy, readonly) NSString *organizationName;  // User-facing (capitalized) version of orgName
 @property (atomic, copy, readonly, nullable) NSString *trackingToken;
 @property (atomic, copy, readonly) NSString *baseUrlString;
 @property (atomic, strong, readonly) NSURLSession *urlSession;
@@ -53,6 +54,10 @@ static NSString *KUSBaseUrlStringFromOrgName(NSString *orgName)
         _orgName = orgName;
         _trackingToken = [[NSUserDefaults standardUserDefaults] stringForKey:kKustomerTrackingTokenHeaderKey];
         _baseUrlString = KUSBaseUrlStringFromOrgName(_orgName);
+        if (_orgName.length) {
+            NSString *firstLetter = [[orgName substringToIndex:1] uppercaseString];
+            _organizationName = [firstLetter stringByAppendingString:[orgName substringFromIndex:1]];
+        }
 
         NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
         [configuration setTimeoutIntervalForRequest:15.0];
@@ -77,7 +82,7 @@ static NSString *KUSBaseUrlStringFromOrgName(NSString *orgName)
     }];
 }
 
-#pragma mark - Generic methods
+#pragma mark - Request methods
 
 - (NSURL *)URLForEndpoint:(NSString *)endpoint
 {
@@ -243,7 +248,7 @@ static NSString *KUSBaseUrlStringFromOrgName(NSString *orgName)
 - (void)getChatSettings:(void(^)(NSError *error, KUSChatSettings *chatSettings))completion
 {
     [self getEndpoint:@"/v1/chat/settings" completion:^(NSError *error, NSDictionary *response) {
-        KUSChatSettings *chatSettings = [[KUSChatSettings alloc] initWithJSON:response[@"data"] orgName:self.orgName];
+        KUSChatSettings *chatSettings = [[KUSChatSettings alloc] initWithJSON:response[@"data"]];
         if (completion) {
             completion(error, chatSettings);
         }

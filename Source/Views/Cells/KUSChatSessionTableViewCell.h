@@ -8,10 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+@class KUSAPIClient;
 @class KUSChatSession;
 @interface KUSChatSessionTableViewCell : UITableViewCell
 
-- (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier;
+- (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier apiClient:(KUSAPIClient *)apiClient;
+
 - (void)setChatSession:(KUSChatSession *)chatSession;
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier NS_UNAVAILABLE;
