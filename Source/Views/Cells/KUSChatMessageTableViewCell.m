@@ -11,6 +11,7 @@
 #import "KUSChatMessage.h"
 #import "KUSColor.h"
 #import "KUSImage.h"
+#import "KUSText.h"
 
 static const CGFloat kBubbleTopPadding = 10.0;
 static const CGFloat kBubbleSidePadding = 12.0;
@@ -45,6 +46,11 @@ static const CGFloat kMinBubbleHeight = 38.0;
     return height;
 }
 
++ (CGFloat)fontSize
+{
+    return 14.0;
+}
+
 + (UIFont *)messageFont
 {
     return [UIFont systemFontOfSize:14.0];
@@ -54,15 +60,13 @@ static const CGFloat kMinBubbleHeight = 38.0;
 {
     CGFloat actualMaxWidth = MIN(kMaxBubbleWidth - kBubbleSidePadding * 2.0, maxWidth);
 
-    NSDictionary<NSString *, id> *attributes = @{
-        NSFontAttributeName: [self messageFont]
-    };
+    NSAttributedString *attributedString = [KUSText attributedStringFromText:text fontSize:[self fontSize]];
+
     CGSize maxSize = CGSizeMake(actualMaxWidth, 1000.0);
-    CGRect boundingRect = [text boundingRectWithSize:maxSize
-                                             options:(NSStringDrawingUsesLineFragmentOrigin
-                                                      | NSStringDrawingUsesFontLeading)
-                                          attributes:attributes
-                                             context:nil];
+    CGRect boundingRect = [attributedString boundingRectWithSize:maxSize
+                                                         options:(NSStringDrawingUsesLineFragmentOrigin
+                                                                  | NSStringDrawingUsesFontLeading)
+                                                         context:nil];
 
     CGFloat scale = [UIScreen mainScreen].scale;
     CGSize boundingSize = boundingRect.size;
@@ -149,7 +153,7 @@ static const CGFloat kMinBubbleHeight = 38.0;
     _labelView.backgroundColor = bubbleColor;
     _labelView.textColor = textColor;
 
-    _labelView.text = _chatMessage.body;
+    _labelView.attributedText = [KUSText attributedStringFromText:_chatMessage.body fontSize:[[self class] fontSize]];
 
     [self setNeedsLayout];
 }

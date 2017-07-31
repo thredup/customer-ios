@@ -10,6 +10,7 @@
 
 #import "KUSChatSession.h"
 #import "KUSImage.h"
+#import "KUSText.h"
 
 @interface KUSChatSessionTableViewCell () {
     KUSChatSession *_chatSession;
@@ -71,7 +72,7 @@
     // TODO: Pass in orgName
     self.titleLabel.text = [NSString stringWithFormat:@"Chat with Kustomer"];
 
-    self.subtitleLabel.text = _chatSession.preview;
+    self.subtitleLabel.attributedText = [KUSText attributedStringFromText:_chatSession.preview fontSize:12.0];
 
     // TODO: String from lastSeenAt
     self.dateLabel.text = @"19 hours ago";
