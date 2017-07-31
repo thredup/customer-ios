@@ -40,14 +40,9 @@
 
 #pragma mark - Public methods
 
-- (__kindof KUSModel *)object
-{
-    return nil;
-}
-
 - (void)fetch
 {
-    NSURL *URL = nil;
+    NSURL *URL = [self URL];
     if (URL == nil) {
         return;
     }
@@ -67,7 +62,7 @@
          if (strongSelf == nil) {
              return;
          }
-         KUSModel *model = [[KUSModel alloc] initWithJSON:response];
+         KUSModel *model = [[[self modelClass] alloc] initWithJSON:response[@"data"]];
          if (error || model == nil) {
              weakSelf.error = error;
              [self notifyAnnouncersDidError:error];

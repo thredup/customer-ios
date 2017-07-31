@@ -14,14 +14,16 @@
 #import "KUSAvatarTitleView.h"
 #import "KUSChatMessagesDataSource.h"
 #import "KUSChatMessageTableViewCell.h"
+#import "KUSChatSettingsDataSource.h"
 #import "KUSInputBar.h"
 
-@interface KUSChatViewController () <KUSInputBarDelegate, KUSPaginatedDataSourceListener, UITableViewDataSource, UITableViewDelegate> {
+@interface KUSChatViewController () <KUSInputBarDelegate, KUSObjectDataSourceListener, KUSPaginatedDataSourceListener, UITableViewDataSource, UITableViewDelegate> {
     KUSAPIClient *_apiClient;
 
     BOOL _forNewChatSession;
     KUSChatSession *_chatSession;
     KUSChatMessagesDataSource *_chatMessagesDataSource;
+    KUSChatSettingsDataSource *_chatSettingsDataSource;
 
     CGFloat _keyboardHeight;
 }
@@ -87,9 +89,6 @@
 
     // self.navigationItem.title = @"Kustomer";
 
-    // TODO: Grab from Chat Settings
-    self.navigationItem.prompt = [NSString stringWithFormat:@"Questions about %@?", _apiClient.organizationName];
-
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     self.tableView.autoresizingMask = (UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth);
     self.tableView.dataSource = self;
@@ -124,6 +123,12 @@
                                                      name:notificationName
                                                    object:nil];
     }
+
+    _chatSettingsDataSource = [[KUSChatSettingsDataSource alloc] initWithAPIClient:_apiClient];
+    [_chatSettingsDataSource addListener:self];
+    [_chatSettingsDataSource fetch];
+
+    [self _updatePromptText];
 }
 
 - (void)viewWillLayoutSubviews
@@ -159,6 +164,21 @@
     [self.view endEditing:YES];
 
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - Internal methods
+
+- (void)_updatePromptText
+{
+    KUSChatSettings *chatSettings = [_chatSettingsDataSource object];
+    self.navigationItem.prompt = chatSettings.greeting;
+}
+
+#pragma mark - KUSObjectDataSourceListener methods
+
+- (void)objectDataSourceDidLoad:(KUSObjectDataSource *)dataSource
+{
+    [self _updatePromptText];
 }
 
 #pragma mark - KUSPaginatedDataSourceListener methods

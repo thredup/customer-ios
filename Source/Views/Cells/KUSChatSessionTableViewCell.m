@@ -13,10 +13,13 @@
 #import "KUSImage.h"
 #import "KUSText.h"
 
-@interface KUSChatSessionTableViewCell () {
+#import "KUSChatSettingsDataSource.h"
+
+@interface KUSChatSessionTableViewCell () <KUSObjectDataSourceListener> {
     KUSAPIClient *_apiClient;
 
     KUSChatSession *_chatSession;
+    KUSChatSettingsDataSource *_chatSettingsDataSource;
 }
 
 @property (nonatomic, strong) UIImageView *avatarImageView;
@@ -61,6 +64,10 @@
         _dateLabel.textAlignment = NSTextAlignmentRight;
         _dateLabel.font = [UIFont systemFontOfSize:12.0];
         [self.contentView addSubview:_dateLabel];
+
+        _chatSettingsDataSource = [[KUSChatSettingsDataSource alloc] initWithAPIClient:_apiClient];
+        [_chatSettingsDataSource addListener:self];
+        [_chatSettingsDataSource fetch];
     }
     return self;
 }
@@ -74,16 +81,25 @@
 
     self.avatarImageView.image = [KUSImage kustomerTeamIcon];
 
-    // TODO: Grab teamName from Chat Settings
-    // TODO: Grab username from responders/messages
-    self.titleLabel.text = [NSString stringWithFormat:@"Chat with %@", _apiClient.organizationName];
-
     self.subtitleLabel.attributedText = [KUSText attributedStringFromText:_chatSession.preview fontSize:12.0];
 
-    // TODO: String from lastSeenAt
+    // TODO: String from lastSeenAt/last message
     self.dateLabel.text = @"19 hours ago";
 
+    [self _updateTitleLabel];
+
     [self setNeedsLayout];
+}
+
+#pragma mark - Internal methods
+
+- (void)_updateTitleLabel
+{
+    KUSChatSettings *chatSettings = [_chatSettingsDataSource object];
+    NSString *teamName = chatSettings.teamName.length ? chatSettings.teamName : _apiClient.organizationName;
+
+    // TODO: Grab username from responders/messages
+    self.titleLabel.text = [NSString stringWithFormat:@"Chat with %@", teamName];
 }
 
 #pragma mark - Layout methods
@@ -128,6 +144,13 @@
         .size.width = 80.0,
         .size.height = dateHeight
     };
+}
+
+#pragma mark - KUSObjectDataSourceListener methods
+
+- (void)objectDataSourceDidLoad:(KUSObjectDataSource *)dataSource
+{
+    [self _updateTitleLabel];
 }
 
 @end
