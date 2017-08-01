@@ -21,4 +21,6 @@ typedef NS_ENUM(NSInteger, KUSChatMessageDirection) {
 @property (nonatomic, copy, readonly) NSDate *createdAt;
 @property (nonatomic, assign, readonly) KUSChatMessageDirection direction;
 
+- (instancetype)initWithAutoreply:(NSString *)autoreply;
+
 @end

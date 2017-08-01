@@ -136,6 +136,10 @@
 
     [_chatSettingsDataSource addListener:self];
     [self _updatePromptText];
+
+    if (_chatSettingsDataSource.object) {
+        [self.tableView reloadData];
+    }
 }
 
 - (void)viewWillLayoutSubviews
@@ -186,6 +190,7 @@
 - (void)objectDataSourceDidLoad:(KUSObjectDataSource *)dataSource
 {
     [self _updatePromptText];
+    [self.tableView reloadData];
 }
 
 #pragma mark - KUSPaginatedDataSourceListener methods
@@ -302,7 +307,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _chatMessagesDataSource.count;
+    return [self numberOfChatMessages];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -314,13 +319,10 @@
         cell.transform = tableView.transform;
     }
 
-    NSInteger numberOfRows = [tableView numberOfRowsInSection:indexPath.section];
-    NSInteger row = indexPath.row;
-
-    KUSChatMessage *chatMessage = [_chatMessagesDataSource objectAtIndex:row];
+    KUSChatMessage *chatMessage = [self messageForRow:indexPath.row];
     [cell setChatMessage:chatMessage];
 
-    KUSChatMessage *previousChatMessage = (row < numberOfRows - 1 ? [_chatMessagesDataSource objectAtIndex:row + 1] : nil);
+    KUSChatMessage *previousChatMessage = [self messageBeforeRow:indexPath.row];
     BOOL previousMessageDiffSender = ![previousChatMessage.sentById isEqualToString:chatMessage.sentById];
     [cell setShowsAvatar:previousMessageDiffSender];
 
@@ -331,7 +333,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    KUSChatMessage *chatMessage = [_chatMessagesDataSource objectAtIndex:indexPath.row];
+    KUSChatMessage *chatMessage = [self messageForRow:indexPath.row];
     return [KUSChatMessageTableViewCell heightForChatMessage:chatMessage maxWidth:tableView.bounds.size.width];
 }
 
@@ -339,6 +341,53 @@
 {
     // TODO: Support highlighting/other
     return NO;
+}
+
+#pragma mark - UITableView high-level helpers
+
+- (BOOL)_shouldShowAutoreply
+{
+    NSUInteger count = [_chatMessagesDataSource count];
+    KUSChatSettings *chatSettings = _chatSettingsDataSource.object;
+    BOOL shouldShowAutoreply = chatSettings.autoreply.length > 0 && count > 0;
+    return shouldShowAutoreply;
+}
+
+- (NSUInteger)numberOfChatMessages
+{
+    NSUInteger count = [_chatMessagesDataSource count];
+    if ([self _shouldShowAutoreply]) {
+        return count + 1;
+    } else {
+        return count;
+    }
+}
+
+- (KUSChatMessage *)messageForRow:(NSInteger)row
+{
+    NSInteger numberOfRows = [self numberOfChatMessages];
+    KUSChatMessage *chatMessage;
+
+    if ([self _shouldShowAutoreply] && row == numberOfRows - 2) {
+        KUSChatSettings *chatSettings = _chatSettingsDataSource.object;
+        NSString *autoreplyText = chatSettings.autoreply;
+        chatMessage = [[KUSChatMessage alloc] initWithAutoreply:autoreplyText];
+    } else if ([self _shouldShowAutoreply] && row >= numberOfRows - 1) {
+        chatMessage = [_chatMessagesDataSource objectAtIndex:row - 1];
+    } else {
+        chatMessage = [_chatMessagesDataSource objectAtIndex:row];
+    }
+    return chatMessage;
+}
+
+- (KUSChatMessage *)messageBeforeRow:(NSInteger)row
+{
+    NSInteger numberOfRows = [self numberOfChatMessages];
+    if (row < numberOfRows - 1) {
+        return [self messageBeforeRow:row + 1];
+    } else {
+        return nil;
+    }
 }
 
 #pragma mark - KUSInputBarDelegate methods

@@ -38,6 +38,20 @@ static KUSChatMessageDirection KUSChatMessageDirectionFromString(NSString *strin
     return self;
 }
 
+- (instancetype)initWithAutoreply:(NSString *)autoreply
+{
+    NSDictionary *json = @{
+        @"type": @"chat_message",
+        @"id": @"__team",
+        @"attributes": @{
+            @"trackingId": @"__none",
+            @"body": autoreply,
+            @"direction": @"out"
+        }
+    };
+    return [self initWithJSON:json];
+}
+
 #pragma mark - NSObject methods
 
 - (NSString *)description
