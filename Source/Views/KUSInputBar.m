@@ -102,6 +102,7 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
         [self.delegate inputBar:self didEnterText:_textView.text];
     }
     _textView.text = nil;
+    [self textViewDidChange:_textView];
 }
 
 #pragma mark - UITextViewDelegate methods

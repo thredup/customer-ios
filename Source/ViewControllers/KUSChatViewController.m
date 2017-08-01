@@ -195,9 +195,17 @@
     if (!_didLoadInitialContent) {
         [self.tableView reloadData];
         _didLoadInitialContent = YES;
+    } else {
+        [self.tableView reloadData];
     }
+
+    __weak KUSChatMessagesDataSource *weakDataSource = _chatMessagesDataSource;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [weakDataSource fetchLatest];
+    });
 }
 
+/*
 - (void)paginatedDataSourceWillChangeContent:(KUSPaginatedDataSource *)dataSource
 {
     if (!_didLoadInitialContent) {
@@ -246,6 +254,7 @@
 
     [self.tableView endUpdates];
 }
+*/
 
 #pragma mark - NSNotification methods
 
@@ -280,7 +289,10 @@
 - (BOOL)scrollViewShouldScrollToTop:(UIScrollView *)scrollView
 {
     if (scrollView == self.tableView) {
-        CGPoint offset = CGPointMake(0.0, scrollView.contentSize.height - scrollView.bounds.size.height + scrollView.contentInset.bottom);
+        CGPoint offset = CGPointMake(0.0,
+                                     scrollView.contentSize.height
+                                     - scrollView.bounds.size.height
+                                     + scrollView.contentInset.bottom);
         [scrollView setContentOffset:offset animated:YES];
     }
     return NO;
@@ -348,6 +360,7 @@
             _chatMessagesDataSource = [[KUSChatMessagesDataSource alloc] initWithAPIClient:_apiClient
                                                                                chatSession:_chatSession];
             [_chatMessagesDataSource addListener:self];
+            [_chatMessagesDataSource fetchLatest];
 
             [_apiClient sendMessage:text toChatSession:session.oid completion:^(NSError *error, KUSChatMessage *message) {
                 if (error) {
@@ -355,7 +368,6 @@
                     return;
                 }
                 NSLog(@"Successfully sent message: %@", message);
-                [_chatMessagesDataSource fetchLatest];
             }];
         }];
 
@@ -368,10 +380,6 @@
             return;
         }
         NSLog(@"Successfully sent message: %@", message);
-
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [_chatMessagesDataSource fetchLatest];
-        });
     }];
 }
 
