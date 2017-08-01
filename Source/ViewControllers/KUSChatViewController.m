@@ -91,13 +91,14 @@
 
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     self.tableView.autoresizingMask = (UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth);
+    self.tableView.scrollsToTop = YES;
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    self.tableView.tableFooterView = [[UIView alloc] init];
     self.tableView.separatorInset = UIEdgeInsetsZero;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.separatorColor = nil;
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
+    self.tableView.transform = CGAffineTransformMakeScale(1.0, -1.0);
     [self.view addSubview:self.tableView];
 
     self.inputBarView = [[KUSInputBar alloc] init];
@@ -149,11 +150,11 @@
     };
 
     self.tableView.contentInset = (UIEdgeInsets) {
-        .top = self.topLayoutGuide.length + 3.0,
-        .bottom = 3.0
+        .top = 4.0,
+        .bottom = self.topLayoutGuide.length + 4.0
     };
     self.tableView.scrollIndicatorInsets = (UIEdgeInsets) {
-        .top = self.topLayoutGuide.length
+        .bottom = self.topLayoutGuide.length
     };
 }
 
@@ -215,6 +216,18 @@
                      completion:nil];
 }
 
+
+#pragma mark - UIScrollViewDelegate Methods
+
+- (BOOL)scrollViewShouldScrollToTop:(UIScrollView *)scrollView
+{
+    if (scrollView == self.tableView) {
+        CGPoint offset = CGPointMake(0.0, scrollView.contentSize.height - scrollView.bounds.size.height + scrollView.contentInset.bottom);
+        [scrollView setContentOffset:offset animated:YES];
+    }
+    return NO;
+}
+
 #pragma mark - UITableViewDataSource methods
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -228,14 +241,16 @@
     KUSChatMessageTableViewCell *cell = (KUSChatMessageTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kMessageCellIdentifier];
     if (cell == nil) {
         cell = [[KUSChatMessageTableViewCell alloc] initWithReuseIdentifier:kMessageCellIdentifier];
+        cell.transform = tableView.transform;
     }
 
+    NSInteger numberOfRows = [tableView numberOfRowsInSection:indexPath.section];
     NSInteger row = indexPath.row;
 
     KUSChatMessage *chatMessage = [_chatMessagesDataSource objectAtIndex:row];
     [cell setChatMessage:chatMessage];
 
-    KUSChatMessage *previousChatMessage = (row > 0 ? [_chatMessagesDataSource objectAtIndex:row - 1] : nil);
+    KUSChatMessage *previousChatMessage = (row < numberOfRows - 1 ? [_chatMessagesDataSource objectAtIndex:row + 1] : nil);
     BOOL previousMessageDiffSender = ![previousChatMessage.sentById isEqualToString:chatMessage.sentById];
     [cell setShowsAvatar:previousMessageDiffSender];
 

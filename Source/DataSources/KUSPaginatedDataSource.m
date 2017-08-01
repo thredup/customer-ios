@@ -245,7 +245,7 @@
 
     NSMutableDictionary<NSString *, NSNumber *> *objectIdToPrevious = [[NSMutableDictionary alloc] init];
 
-    for (KUSModel *object in response.objects) {
+    for (KUSModel *object in response.objects.reverseObjectEnumerator) {
         NSUInteger indexOfObject = [self indexOfObject:object];
         if (indexOfObject == NSNotFound) {
             // New object

@@ -16,7 +16,7 @@
 static const CGFloat kBubbleTopPadding = 10.0;
 static const CGFloat kBubbleSidePadding = 12.0;
 
-static const CGFloat kRowSidePadding = 12.0;
+static const CGFloat kRowSidePadding = 11.0;
 static const CGFloat kRowTopPadding = 3.0;
 
 static const CGFloat kMaxBubbleWidth = 250.0;
