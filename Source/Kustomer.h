@@ -17,6 +17,8 @@ FOUNDATION_EXPORT const unsigned char KustomerVersionString[];
 
 + (void)initializeWithAPIKey:(NSString *)apiKey;
 
++ (void)resetTracking;
+
 - (instancetype)init NS_UNAVAILABLE;
 
 @end

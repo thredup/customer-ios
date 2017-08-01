@@ -33,6 +33,11 @@ static NSString *kKustomerOrgNameKey = @"orgName";
     [[self sharedInstance] setApiKey:apiKey];
 }
 
++ (void)resetTracking
+{
+    [[self sharedInstance] resetTracking];
+}
+
 #pragma mark - Lifecycle methods
 
 + (instancetype)sharedInstance
@@ -62,6 +67,7 @@ static NSString *kKustomerOrgNameKey = @"orgName";
 
     self.apiClient = [[KUSAPIClient alloc] initWithOrgName:self.orgName];
     NSLog(@"Kustomer initialized for organization: %@", self.orgName);
+    [self.apiClient getCurrentTrackingToken:nil];
 }
 
 #pragma mark - Private methods
@@ -70,6 +76,15 @@ static NSString *kKustomerOrgNameKey = @"orgName";
 {
     NSAssert(self.apiKey, @"Kustomer needs to be initialized before use");
     return _apiClient;
+}
+
+#pragma mark - Internal methods
+
+- (void)resetTracking
+{
+    self.apiClient = [[KUSAPIClient alloc] initWithOrgName:self.orgName];
+    NSLog(@"Kustomer initialized for organization: %@", self.orgName);
+    [self.apiClient clearTrackingToken:nil];
 }
 
 #pragma mark - Helper functions

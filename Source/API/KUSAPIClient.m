@@ -62,24 +62,8 @@ static NSString *KUSBaseUrlStringFromOrgName(NSString *orgName)
         NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
         [configuration setTimeoutIntervalForRequest:15.0];
         _urlSession = [NSURLSession sessionWithConfiguration:configuration delegate:nil delegateQueue:nil];
-
-        [self _fetchLatestTrackingToken];
     }
     return self;
-}
-
-#pragma mark - Internal methods
-
-- (void)_fetchLatestTrackingToken
-{
-    [self getCurrentTrackingToken:^(NSError *error, KUSTrackingToken *trackingToken) {
-        if (error) {
-            // TODO: Retry logic
-            NSLog(@"Tracking token error: %@", error);
-            return;
-        }
-        NSLog(@"Latest token: %@", trackingToken.token);
-    }];
 }
 
 #pragma mark - Request methods
@@ -203,6 +187,7 @@ static NSString *KUSBaseUrlStringFromOrgName(NSString *orgName)
         KUSTrackingToken *trackingToken = [[KUSTrackingToken alloc] initWithJSON:response[@"data"]];
         if (trackingToken.token) {
             _trackingToken = trackingToken.token;
+            NSLog(@"Latest token: %@", trackingToken.token);
             [[NSUserDefaults standardUserDefaults] setObject:_trackingToken forKey:kKustomerTrackingTokenHeaderKey];
         }
         if (completion) {
@@ -237,6 +222,7 @@ static NSString *KUSBaseUrlStringFromOrgName(NSString *orgName)
         KUSTrackingToken *trackingToken = [[KUSTrackingToken alloc] initWithJSON:response[@"data"]];
         if (trackingToken.token) {
             _trackingToken = trackingToken.token;
+            NSLog(@"Latest token: %@", trackingToken.token);
             [[NSUserDefaults standardUserDefaults] setObject:_trackingToken forKey:kKustomerTrackingTokenHeaderKey];
         }
         if (completion) {
