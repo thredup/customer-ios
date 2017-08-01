@@ -93,13 +93,19 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
 
 #pragma mark - Interface element methods
 
+- (NSString *)_actualText
+{
+    return [_textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+}
+
 - (void)_pressSend
 {
-    if (_textView.text.length == 0) {
+    NSString *actualText = [self _actualText];
+    if (actualText.length == 0) {
         return;
     }
     if ([self.delegate respondsToSelector:@selector(inputBar:didEnterText:)]) {
-        [self.delegate inputBar:self didEnterText:_textView.text];
+        [self.delegate inputBar:self didEnterText:actualText];
     }
     _textView.text = nil;
     [self textViewDidChange:_textView];
