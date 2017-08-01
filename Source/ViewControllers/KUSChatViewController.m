@@ -126,9 +126,14 @@
     }
 
     _chatSettingsDataSource = [[KUSChatSettingsDataSource alloc] initWithAPIClient:_apiClient];
-    [_chatSettingsDataSource addListener:self];
     [_chatSettingsDataSource fetch];
+}
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+
+    [_chatSettingsDataSource addListener:self];
     [self _updatePromptText];
 }
 
