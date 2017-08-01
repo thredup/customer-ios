@@ -34,6 +34,28 @@
     return [self imageNamed:@"kusty"];
 }
 
++ (UIImage *)sendArrowImage
+{
+    return [self imageNamed:@"up_arrow"];
+}
+
++ (UIImage *)sendImageWithSize:(CGSize)size color:(UIColor *)color
+{
+    UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, color.CGColor);
+    CGContextFillEllipseInRect(context, (CGRect) { .size = size });
+    CGSize arrowSize = CGSizeMake(ceil(size.width * 0.45), ceil(size.height * 0.45));
+    [[self sendArrowImage] drawInRect:(CGRect) {
+        .origin.x = (size.width - arrowSize.width) / 2.0,
+        .origin.y = (size.height - arrowSize.height) / 2.0,
+        .size = arrowSize
+    }];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image;
+}
+
 + (UIImage *)circularImageWithSize:(CGSize)size color:(UIColor *)color
 {
     UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);

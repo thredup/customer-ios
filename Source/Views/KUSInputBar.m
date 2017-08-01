@@ -47,7 +47,7 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
 
         UIColor *blueColor = [KUSColor blueColor];
         CGSize size = CGSizeMake(30.0, 30.0);
-        UIImage *circularImage = [KUSImage circularImageWithSize:size color:blueColor];
+        UIImage *circularImage = [KUSImage sendImageWithSize:size color:blueColor];
 
         _sendButton = [[UIButton alloc] init];
         [_sendButton setImage:circularImage forState:UIControlStateNormal];
@@ -95,10 +95,13 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
 
 - (void)_pressSend
 {
+    if (_textView.text.length == 0) {
+        return;
+    }
     if ([self.delegate respondsToSelector:@selector(inputBar:didEnterText:)]) {
         [self.delegate inputBar:self didEnterText:_textView.text];
     }
-    _textView.text = @"Type a message...";
+    _textView.text = nil;
 }
 
 #pragma mark - UITextViewDelegate methods
