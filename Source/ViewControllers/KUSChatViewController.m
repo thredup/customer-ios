@@ -24,6 +24,7 @@
     KUSChatSession *_chatSession;
     KUSChatMessagesDataSource *_chatMessagesDataSource;
     KUSChatSettingsDataSource *_chatSettingsDataSource;
+    BOOL _didLoadInitialContent;
 
     CGFloat _keyboardHeight;
 }
@@ -192,6 +193,56 @@
 - (void)paginatedDataSourceDidLoad:(KUSPaginatedDataSource *)dataSource
 {
     [self.tableView reloadData];
+    _didLoadInitialContent = YES;
+}
+
+- (void)paginatedDataSourceWillChangeContent:(KUSPaginatedDataSource *)dataSource
+{
+    if (!_didLoadInitialContent) {
+        return;
+    }
+
+    [self.tableView beginUpdates];
+}
+
+- (void)paginatedDataSource:(KUSPaginatedDataSource *)dataSource
+            didChangeObject:(__kindof KUSModel *)object
+                    atIndex:(NSUInteger)oldIndex
+              forChangeType:(KUSPaginatedDataSourceChangeType)type
+                   newIndex:(NSUInteger)newIndex
+{
+    if (!_didLoadInitialContent) {
+        return;
+    }
+
+    NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:newIndex inSection:0];
+    NSIndexPath *oldIndexPath = [NSIndexPath indexPathForRow:oldIndex inSection:0];
+    UITableView *tableView = self.tableView;
+
+    switch(type) {
+        case KUSPaginatedDataSourceChangeInsert:
+            [tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+        case KUSPaginatedDataSourceChangeDelete:
+            [tableView deleteRowsAtIndexPaths:@[oldIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+        case KUSPaginatedDataSourceChangeUpdate:
+            [tableView reloadRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+        case KUSPaginatedDataSourceChangeMove:
+            [tableView deleteRowsAtIndexPaths:@[oldIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            [tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+    }
+}
+
+- (void)paginatedDataSourceDidChangeContent:(KUSPaginatedDataSource *)dataSource
+{
+    if (!_didLoadInitialContent) {
+        return;
+    }
+
+    [self.tableView endUpdates];
 }
 
 #pragma mark - NSNotification methods
