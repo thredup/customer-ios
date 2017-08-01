@@ -196,6 +196,10 @@
 
     for (KUSModel *object in response.objects) {
         NSUInteger indexOfObject = [self indexOfObject:object];
+        [objectIdToPrevious setObject:@(indexOfObject) forKey:object.oid];
+    }
+    for (KUSModel *object in response.objects) {
+        NSUInteger indexOfObject = [self indexOfObject:object];
         if (indexOfObject == NSNotFound) {
             // New object
             [_fetchedModels addObject:object];
@@ -205,8 +209,8 @@
             [_fetchedModels addObject:object];
         }
         [_fetchedModelsById setObject:object forKey:object.oid];
-        [objectIdToPrevious setObject:@(indexOfObject) forKey:object.oid];
     }
+
     BOOL didNotifyWillChange = NO;
     for (NSString *objectId in objectIdToPrevious) {
         NSUInteger previousIndex = [objectIdToPrevious[objectId] unsignedIntegerValue];
@@ -247,6 +251,10 @@
 
     for (KUSModel *object in response.objects.reverseObjectEnumerator) {
         NSUInteger indexOfObject = [self indexOfObject:object];
+        [objectIdToPrevious setObject:@(indexOfObject) forKey:object.oid];
+    }
+    for (KUSModel *object in response.objects.reverseObjectEnumerator) {
+        NSUInteger indexOfObject = [self indexOfObject:object];
         if (indexOfObject == NSNotFound) {
             // New object
             [_fetchedModels insertObject:object atIndex:0];
@@ -256,8 +264,8 @@
             [_fetchedModels insertObject:object atIndex:0];
         }
         [_fetchedModelsById setObject:object forKey:object.oid];
-        [objectIdToPrevious setObject:@(indexOfObject) forKey:object.oid];
     }
+
     BOOL didNotifyWillChange = NO;
     for (NSString *objectId in objectIdToPrevious) {
         NSUInteger previousIndex = [objectIdToPrevious[objectId] unsignedIntegerValue];

@@ -192,8 +192,10 @@
 
 - (void)paginatedDataSourceDidLoad:(KUSPaginatedDataSource *)dataSource
 {
-    [self.tableView reloadData];
-    _didLoadInitialContent = YES;
+    if (!_didLoadInitialContent) {
+        [self.tableView reloadData];
+        _didLoadInitialContent = YES;
+    }
 }
 
 - (void)paginatedDataSourceWillChangeContent:(KUSPaginatedDataSource *)dataSource
@@ -221,10 +223,10 @@
 
     switch(type) {
         case KUSPaginatedDataSourceChangeInsert:
-            [tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            [tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationBottom];
             break;
         case KUSPaginatedDataSourceChangeDelete:
-            [tableView deleteRowsAtIndexPaths:@[oldIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            [tableView deleteRowsAtIndexPaths:@[oldIndexPath] withRowAnimation:UITableViewRowAnimationBottom];
             break;
         case KUSPaginatedDataSourceChangeUpdate:
             [tableView reloadRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
