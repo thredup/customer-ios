@@ -39,6 +39,11 @@
     return [self imageNamed:@"up_arrow"];
 }
 
++ (UIImage *)pencilImage
+{
+    return [self imageNamed:@"pencil_image"];
+}
+
 + (UIImage *)sendImageWithSize:(CGSize)size color:(UIColor *)color
 {
     UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);

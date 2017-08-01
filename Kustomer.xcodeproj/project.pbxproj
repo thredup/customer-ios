@@ -74,6 +74,7 @@
 		63D9C17D1F2F705100999183 /* KUSChatSettingsDataSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 63D9C17B1F2F705100999183 /* KUSChatSettingsDataSource.h */; };
 		63D9C17E1F2F705100999183 /* KUSChatSettingsDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 63D9C17C1F2F705100999183 /* KUSChatSettingsDataSource.m */; };
 		63D9C1821F3046DA00999183 /* up_arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63D9C1811F3046DA00999183 /* up_arrow@2x.png */; };
+		63D9C1841F304A7600999183 /* pencil_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63D9C1831F304A7600999183 /* pencil_image@2x.png */; };
 		63EB38541F2D83430020F38B /* KUSObjectDataSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 63EB38521F2D83430020F38B /* KUSObjectDataSource.h */; };
 		63EB38551F2D83430020F38B /* KUSObjectDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 63EB38531F2D83430020F38B /* KUSObjectDataSource.m */; };
 		63EB38571F2E1D880020F38B /* KUSObjectDataSource_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 63EB38561F2E1D880020F38B /* KUSObjectDataSource_Private.h */; };
@@ -191,6 +192,7 @@
 		63D9C17B1F2F705100999183 /* KUSChatSettingsDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSChatSettingsDataSource.h; sourceTree = "<group>"; };
 		63D9C17C1F2F705100999183 /* KUSChatSettingsDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSChatSettingsDataSource.m; sourceTree = "<group>"; };
 		63D9C1811F3046DA00999183 /* up_arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "up_arrow@2x.png"; sourceTree = "<group>"; };
+		63D9C1831F304A7600999183 /* pencil_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pencil_image@2x.png"; sourceTree = "<group>"; };
 		63EB38521F2D83430020F38B /* KUSObjectDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSObjectDataSource.h; sourceTree = "<group>"; };
 		63EB38531F2D83430020F38B /* KUSObjectDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSObjectDataSource.m; sourceTree = "<group>"; };
 		63EB38561F2E1D880020F38B /* KUSObjectDataSource_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSObjectDataSource_Private.h; sourceTree = "<group>"; };
@@ -299,6 +301,7 @@
 				636531AC1F1C4B9700433A50 /* kustomer_team_icon@2x.png */,
 				636531AD1F1C4B9700433A50 /* kusty@2x.png */,
 				63D9C1811F3046DA00999183 /* up_arrow@2x.png */,
+				63D9C1831F304A7600999183 /* pencil_image@2x.png */,
 			);
 			path = Images;
 			sourceTree = "<group>";
@@ -600,6 +603,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				63D9C1821F3046DA00999183 /* up_arrow@2x.png in Resources */,
+				63D9C1841F304A7600999183 /* pencil_image@2x.png in Resources */,
 				636531AE1F1C4B9700433A50 /* kustomer_team_icon@2x.png in Resources */,
 				636531AF1F1C4B9700433A50 /* kusty@2x.png in Resources */,
 			);

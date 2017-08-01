@@ -13,6 +13,7 @@
 + (UIImage *)kustomerTeamIcon;
 + (UIImage *)kustyImage;
 + (UIImage *)sendArrowImage;
++ (UIImage *)pencilImage;
 
 + (UIImage *)sendImageWithSize:(CGSize)size color:(UIColor *)color;
 + (UIImage *)circularImageWithSize:(CGSize)size color:(UIColor *)color;

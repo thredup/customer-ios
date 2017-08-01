@@ -83,6 +83,13 @@
     self.createSessionButton.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin
                                                  | UIViewAutoresizingFlexibleLeftMargin
                                                  | UIViewAutoresizingFlexibleRightMargin);
+
+    UIImage *pencilImage = [KUSImage pencilImage];
+    [self.createSessionButton setImage:pencilImage forState:UIControlStateNormal];
+    [self.createSessionButton setImage:pencilImage forState:UIControlStateHighlighted];
+    [self.createSessionButton setTitleEdgeInsets:UIEdgeInsetsMake(0.0, 5.0, 0.0, 0.0)];
+    [self.createSessionButton setImageEdgeInsets:UIEdgeInsetsMake(0.0, 0.0, 0.0, 5.0)];
+
     [self.createSessionButton setTitle:@"New Conversation" forState:UIControlStateNormal];
     self.createSessionButton.titleLabel.textColor = [UIColor whiteColor];
     self.createSessionButton.titleLabel.font = [UIFont systemFontOfSize:14.0];
