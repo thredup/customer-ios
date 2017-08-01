@@ -33,4 +33,12 @@
     return self;
 }
 
+#pragma mark - NSObject methods
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"<%@ %p: oid: %@; preview: %@>",
+            NSStringFromClass([self class]), self, self.oid, self.preview];
+}
+
 @end

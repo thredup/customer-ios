@@ -38,4 +38,12 @@ static KUSChatMessageDirection KUSChatMessageDirectionFromString(NSString *strin
     return self;
 }
 
+#pragma mark - NSObject methods
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"<%@ %p: oid: %@; body: %@>",
+            NSStringFromClass([self class]), self, self.oid, self.body];
+}
+
 @end

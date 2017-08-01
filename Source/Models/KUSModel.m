@@ -53,6 +53,14 @@
     return self;
 }
 
+#pragma mark - NSObject methods
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"<%@ %p: oid: %@>",
+            NSStringFromClass([self class]), self, self.oid];
+}
+
 #pragma mark - Helper methods
 
 NSURL *_Nullable NSURLFromKeyPath(NSDictionary * _Nullable dict, NSString * _Nonnull keyPath)
