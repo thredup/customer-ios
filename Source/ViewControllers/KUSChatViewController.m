@@ -129,6 +129,10 @@
 
     _chatSettingsDataSource = [[KUSChatSettingsDataSource alloc] initWithAPIClient:_apiClient];
     [_chatSettingsDataSource fetch];
+
+    // Force layout so that animated presentations start from the right state
+    [self.view setNeedsLayout];
+    [self.view layoutIfNeeded];
 }
 
 - (void)viewDidAppear:(BOOL)animated
