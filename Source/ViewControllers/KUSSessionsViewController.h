@@ -6,10 +6,10 @@
 //  Copyright © 2017 Kustomer. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "KUSBaseViewController.h"
 
 @class KUSAPIClient;
-@interface KUSSessionsViewController : UIViewController
+@interface KUSSessionsViewController : KUSBaseViewController
 
 - (instancetype)initWithAPIClient:(KUSAPIClient *)apiClient;
 - (instancetype)init NS_UNAVAILABLE;

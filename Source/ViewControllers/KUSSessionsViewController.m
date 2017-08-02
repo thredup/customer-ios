@@ -109,6 +109,7 @@
     _chatSessionsDataSource = [[KUSChatSessionsDataSource alloc] initWithAPIClient:_apiClient];
     [_chatSessionsDataSource addListener:self];
     [_chatSessionsDataSource fetchLatest];
+    [self showLoadingIndicator];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -174,6 +175,7 @@
 
 - (void)paginatedDataSourceDidLoad:(KUSPaginatedDataSource *)dataSource
 {
+    [self hideLoadingIndicator];
     [self.tableView reloadData];
     self.tableView.hidden = NO;
     self.createSessionButton.hidden = NO;

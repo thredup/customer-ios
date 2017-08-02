@@ -112,6 +112,7 @@
                                                                            chatSession:_chatSession];
         [_chatMessagesDataSource addListener:self];
         [_chatMessagesDataSource fetchLatest];
+        [self showLoadingIndicator];
     }
 
     NSArray<NSString *> *keyboardNotificationNames = @[
@@ -204,6 +205,8 @@
 
 - (void)paginatedDataSourceDidLoad:(KUSPaginatedDataSource *)dataSource
 {
+    [self hideLoadingIndicator];
+
     if (!_didLoadInitialContent) {
         [self.tableView reloadData];
         _didLoadInitialContent = YES;

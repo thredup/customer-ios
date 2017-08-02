@@ -6,11 +6,11 @@
 //  Copyright © 2017 Kustomer. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "KUSBaseViewController.h"
 
 @class KUSAPIClient;
 @class KUSChatSession;
-@interface KUSChatViewController : UIViewController
+@interface KUSChatViewController : KUSBaseViewController
 
 - (instancetype)initWithAPIClient:(KUSAPIClient *)apiClient forChatSession:(KUSChatSession *)session;
 - (instancetype)initWithAPIClient:(KUSAPIClient *)apiClient forNewSessionWithBackButton:(BOOL)showBackButton;
