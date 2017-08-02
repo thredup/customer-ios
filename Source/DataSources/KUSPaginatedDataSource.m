@@ -21,7 +21,7 @@
     KUSPaginatedResponse *_lastPaginatedResponse;
 }
 
-@property (nonatomic, strong, readwrite) KUSAPIClient *apiClient;
+@property (nonatomic, weak, readwrite) KUSAPIClient *apiClient;
 
 @property (nonatomic, readwrite) BOOL isFetching;
 @property (nonatomic, readwrite) BOOL didFetch;

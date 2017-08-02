@@ -12,7 +12,7 @@
 
 @interface KUSObjectDataSource (Private)
 
-@property (nonatomic, strong, readonly) KUSAPIClient *apiClient;
+@property (nonatomic, weak, readonly) KUSAPIClient *apiClient;
 
 // Methods to subclass
 - (NSURL *)URL;

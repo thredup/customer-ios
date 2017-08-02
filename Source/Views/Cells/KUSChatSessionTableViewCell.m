@@ -19,7 +19,6 @@
     KUSAPIClient *_apiClient;
 
     KUSChatSession *_chatSession;
-    KUSChatSettingsDataSource *_chatSettingsDataSource;
 }
 
 @property (nonatomic, strong) UIImageView *avatarImageView;
@@ -65,9 +64,7 @@
         _dateLabel.font = [UIFont systemFontOfSize:12.0];
         [self.contentView addSubview:_dateLabel];
 
-        _chatSettingsDataSource = [[KUSChatSettingsDataSource alloc] initWithAPIClient:_apiClient];
-        [_chatSettingsDataSource addListener:self];
-        [_chatSettingsDataSource fetch];
+        [_apiClient.chatSettingsDataSource addListener:self];
     }
     return self;
 }
@@ -95,7 +92,7 @@
 
 - (void)_updateTitleLabel
 {
-    KUSChatSettings *chatSettings = [_chatSettingsDataSource object];
+    KUSChatSettings *chatSettings = [_apiClient.chatSettingsDataSource object];
     NSString *teamName = chatSettings.teamName.length ? chatSettings.teamName : _apiClient.organizationName;
 
     // TODO: Grab username from responders/messages

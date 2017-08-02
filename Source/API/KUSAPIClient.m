@@ -8,9 +8,13 @@
 
 #import "KUSAPIClient.h"
 
+#import "KUSChatSettingsDataSource.h"
+
 static NSString *kKustomerTrackingTokenHeaderKey = @"x-kustomer-tracking-token";
 
-@interface KUSAPIClient ()
+@interface KUSAPIClient () {
+    KUSChatSettingsDataSource *_chatSettingsDataSource;
+}
 
 @property (atomic, copy, readonly) NSString *orgName;
 @property (atomic, copy, readonly) NSString *organizationName;  // User-facing (capitalized) version of orgName
@@ -62,6 +66,8 @@ static NSString *KUSBaseUrlStringFromOrgName(NSString *orgName)
         NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
         [configuration setTimeoutIntervalForRequest:15.0];
         _urlSession = [NSURLSession sessionWithConfiguration:configuration delegate:nil delegateQueue:nil];
+
+        [self.chatSettingsDataSource fetch];
     }
     return self;
 }
@@ -310,6 +316,16 @@ static NSString *KUSBaseUrlStringFromOrgName(NSString *orgName)
             completion(error, chatMessage);
         }
     }];
+}
+
+#pragma mark - Data sources
+
+- (KUSChatSettingsDataSource *)chatSettingsDataSource
+{
+    if (_chatSettingsDataSource == nil) {
+        _chatSettingsDataSource = [[KUSChatSettingsDataSource alloc] initWithAPIClient:self];
+    }
+    return _chatSettingsDataSource;
 }
 
 @end

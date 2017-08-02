@@ -19,7 +19,7 @@
 @property (nonatomic, strong, readwrite) NSError *error;
 @property (nonatomic, strong, readwrite) __kindof KUSModel *object;
 
-@property (nonatomic, strong, readwrite) KUSAPIClient *apiClient;
+@property (nonatomic, weak, readwrite) KUSAPIClient *apiClient;
 
 @end
 

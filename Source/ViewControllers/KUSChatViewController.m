@@ -23,7 +23,6 @@
     BOOL _forNewChatSession;
     KUSChatSession *_chatSession;
     KUSChatMessagesDataSource *_chatMessagesDataSource;
-    KUSChatSettingsDataSource *_chatSettingsDataSource;
     BOOL _didLoadInitialContent;
 
     CGFloat _keyboardHeight;
@@ -127,9 +126,6 @@
                                                    object:nil];
     }
 
-    _chatSettingsDataSource = [[KUSChatSettingsDataSource alloc] initWithAPIClient:_apiClient];
-    [_chatSettingsDataSource fetch];
-
     // Force layout so that animated presentations start from the right state
     [self.view setNeedsLayout];
     [self.view layoutIfNeeded];
@@ -139,11 +135,11 @@
 {
     [super viewDidAppear:animated];
 
-    [_chatSettingsDataSource addListener:self];
-    [self _updatePromptText];
-
-    if (_chatSettingsDataSource.object) {
+    if (_apiClient.chatSettingsDataSource.object) {
+        [self _updatePromptText];
         [self.tableView reloadData];
+    } else {
+        [_apiClient.chatSettingsDataSource addListener:self];
     }
 
     [_inputBarView becomeFirstResponder];
@@ -193,7 +189,7 @@
 
 - (void)_updatePromptText
 {
-    KUSChatSettings *chatSettings = [_chatSettingsDataSource object];
+    KUSChatSettings *chatSettings = _apiClient.chatSettingsDataSource.object;
     self.navigationItem.prompt = chatSettings.greeting;
 }
 
@@ -362,7 +358,7 @@
 - (BOOL)_shouldShowAutoreply
 {
     NSUInteger count = [_chatMessagesDataSource count];
-    KUSChatSettings *chatSettings = _chatSettingsDataSource.object;
+    KUSChatSettings *chatSettings = _apiClient.chatSettingsDataSource.object;
     BOOL shouldShowAutoreply = chatSettings.autoreply.length > 0 && count > 0;
     return shouldShowAutoreply;
 }
@@ -383,7 +379,7 @@
     KUSChatMessage *chatMessage;
 
     if ([self _shouldShowAutoreply] && row == numberOfRows - 2) {
-        KUSChatSettings *chatSettings = _chatSettingsDataSource.object;
+        KUSChatSettings *chatSettings = _apiClient.chatSettingsDataSource.object;
         NSString *autoreplyText = chatSettings.autoreply;
         chatMessage = [[KUSChatMessage alloc] initWithAutoreply:autoreplyText];
     } else if ([self _shouldShowAutoreply] && row >= numberOfRows - 1) {

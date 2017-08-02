@@ -23,6 +23,7 @@ typedef NS_ENUM(NSInteger, KUSAPIRequestType) {
     KUSAPIRequestTypeDelete
 };
 
+@class KUSChatSettingsDataSource;
 @interface KUSAPIClient : NSObject
 
 - (instancetype)initWithOrgName:(NSString *)orgName;
@@ -60,5 +61,9 @@ typedef NS_ENUM(NSInteger, KUSAPIRequestType) {
 
 - (void)getMessagesForSessionId:(NSString *)sessionId completion:(void(^)(NSError *error, KUSPaginatedResponse *chatMessages))completion;
 - (void)sendMessage:(NSString *)message toChatSession:(NSString *)sessionId completion:(void(^)(NSError *error, KUSChatMessage *message))completion;
+
+// Data sources
+
+- (KUSChatSettingsDataSource *)chatSettingsDataSource;
 
 @end
