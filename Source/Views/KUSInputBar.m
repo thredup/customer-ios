@@ -91,6 +91,28 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
     return MAX(height, kKUSInputBarMinimumHeight);
 }
 
+#pragma mark - UIResponder methods
+
+- (BOOL)canBecomeFirstResponder
+{
+    return [_textView canBecomeFirstResponder];
+}
+
+- (BOOL)becomeFirstResponder
+{
+    return [_textView becomeFirstResponder];
+}
+
+- (BOOL)canResignFirstResponder
+{
+    return [_textView canResignFirstResponder];
+}
+
+- (BOOL)resignFirstResponder
+{
+    return [_textView resignFirstResponder];
+}
+
 #pragma mark - Interface element methods
 
 - (NSString *)_actualText

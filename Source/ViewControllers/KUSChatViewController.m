@@ -140,6 +140,15 @@
     if (_chatSettingsDataSource.object) {
         [self.tableView reloadData];
     }
+
+    [_inputBarView becomeFirstResponder];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+
+    [_inputBarView resignFirstResponder];
 }
 
 - (void)viewWillLayoutSubviews
@@ -172,8 +181,6 @@
 
 - (void)_dismiss
 {
-    [self.view endEditing:YES];
-
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -266,7 +273,7 @@
 - (void)keyboardWillChangeFrame:(NSNotification *)notification
 {
     CGRect keyboardEndFrameWindow;
-    [[notification.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] getValue: &keyboardEndFrameWindow];
+    [[notification.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] getValue:&keyboardEndFrameWindow];
 
     double keyboardTransitionDuration;
     [[notification.userInfo valueForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&keyboardTransitionDuration];
