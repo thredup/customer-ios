@@ -14,6 +14,7 @@
 - (instancetype)init NS_UNAVAILABLE;
 
 // Org methods
+- (NSString *)orgName;
 - (NSString *)organizationName;
 
 @end
