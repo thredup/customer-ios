@@ -8,6 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
+#import "KUSChatSessionsDataSource.h"
+#import "KUSChatSettingsDataSource.h"
+#import "KUSTrackingTokenDataSource.h"
+
 @interface KUSUserSession : NSObject
 
 - (instancetype)initWithOrgName:(NSString *)orgName;
@@ -16,5 +20,10 @@
 // Org methods
 - (NSString *)orgName;
 - (NSString *)organizationName;
+
+// Datasource objects
+- (KUSChatSessionsDataSource *)chatSessionsDataSource;
+- (KUSChatSettingsDataSource *)chatSettingsDataSource;
+- (KUSTrackingTokenDataSource *)trackingTokenDataSource;
 
 @end
