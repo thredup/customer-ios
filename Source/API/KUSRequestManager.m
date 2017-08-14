@@ -14,13 +14,15 @@ static NSString *kKustomerTrackingTokenHeaderKey = @"x-kustomer-tracking-token";
 
 typedef void (^KUSTrackingTokenCompletion)(NSError *error, NSString *trackingToken);
 
-@interface KUSRequestManager () {
+@interface KUSRequestManager () <KUSObjectDataSourceListener> {
     __weak KUSUserSession *_userSession;
 }
 
 @property (nonatomic, strong, readonly) NSString *baseUrlString;
 @property (nonatomic, strong, readonly) NSURLSession *urlSession;
 @property (nonatomic, strong, readonly) dispatch_queue_t queue;
+
+@property (nonatomic, copy, null_resettable) NSMutableArray<KUSTrackingTokenCompletion> *pendingTrackingTokenCompletions;
 
 @end
 
@@ -43,6 +45,8 @@ typedef void (^KUSTrackingTokenCompletion)(NSError *error, NSString *trackingTok
         NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
         [configuration setTimeoutIntervalForRequest:15.0];
         _urlSession = [NSURLSession sessionWithConfiguration:configuration delegate:nil delegateQueue:operationQueue];
+
+        [_userSession.trackingTokenDataSource addListener:self];
     }
     return self;
 }
@@ -159,14 +163,54 @@ typedef void (^KUSTrackingTokenCompletion)(NSError *error, NSString *trackingTok
 
 - (void)_dispenseTrackingToken:(KUSTrackingTokenCompletion)callback
 {
-    NSString *trackingToken = @"";
+    KUSTrackingToken *trackingTokenObj = _userSession.trackingTokenDataSource.object;
+    NSString *trackingToken = trackingTokenObj.token;
     if (trackingToken) {
         dispatch_async(self.queue, ^{
             callback(nil, trackingToken);
         });
     } else {
-
+        [self.pendingTrackingTokenCompletions addObject:callback];
+        [_userSession.trackingTokenDataSource fetch];
     }
+}
+
+- (void)_firePendingTokenCompletionsWithToken:(NSString *)token error:(NSError *)error
+{
+    NSArray<KUSTrackingTokenCompletion> *completions = [_pendingTrackingTokenCompletions copy];
+    _pendingTrackingTokenCompletions = nil;
+
+    if (completions.count) {
+        dispatch_async(self.queue, ^{
+            for (KUSTrackingTokenCompletion completion in completions) {
+                completion(error, token);
+            }
+        });
+    }
+}
+
+#pragma mark - KUSObjectDataSourceListener methods
+
+- (void)objectDataSourceDidLoad:(KUSObjectDataSource *)dataSource
+{
+    KUSTrackingToken *trackingTokenObj = dataSource.object;
+    NSString *trackingToken = trackingTokenObj.token;
+    [self _firePendingTokenCompletionsWithToken:trackingToken error:nil];
+}
+
+- (void)objectDataSource:(KUSObjectDataSource *)dataSource didReceiveError:(NSError *)error
+{
+    [self _firePendingTokenCompletionsWithToken:nil error:error];
+}
+
+#pragma mark - Lazy-loaded methods
+
+- (NSMutableArray<KUSTrackingTokenCompletion> *)pendingTrackingTokenCompletions
+{
+    if (_pendingTrackingTokenCompletions == nil) {
+        _pendingTrackingTokenCompletions = [[NSMutableArray alloc] init];
+    }
+    return _pendingTrackingTokenCompletions;
 }
 
 #pragma mark - Helper methods
