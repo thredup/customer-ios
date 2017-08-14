@@ -10,6 +10,10 @@
 
 #import "KUSUserSession.h"
 
+static NSString *kKustomerTrackingTokenHeaderKey = @"x-kustomer-tracking-token";
+
+typedef void (^KUSTrackingTokenCompletion)(NSError *error, NSString *trackingToken);
+
 @interface KUSRequestManager () {
     __weak KUSUserSession *_userSession;
 }
@@ -98,7 +102,19 @@
          additionalHeaders:(NSDictionary *)additionalHeaders
                 completion:(KUSRequestCompletion)completion
 {
-    dispatch_async(self.queue, ^{
+    void (^safeComplete)(NSError *, NSDictionary *) = ^void(NSError *error, NSDictionary *response) {
+        if (completion) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (error) {
+                    completion(error, nil);
+                } else {
+                    completion(nil, response);
+                }
+            });
+        }
+    };
+
+    void (^performRequestWithTrackingToken)(NSString *) = ^void(NSString *trackingToken) {
         NSURL *finalURL = (type == KUSRequestTypeGet ? KUSURLFromURLAndQueryParams(URL, params) : URL);
         NSMutableURLRequest *urlRequest = [[NSMutableURLRequest alloc] initWithURL:finalURL];
         [urlRequest setHTTPMethod:KUSRequestTypeToString(type)];
@@ -107,23 +123,10 @@
             KUSAttachJSONBodyToRequest(urlRequest, params);
         }
 
-        /*
-        if (authenticated && self.trackingToken) {
-            [urlRequest setValue:self.trackingToken forHTTPHeaderField:kKustomerTrackingTokenHeaderKey];
+        if (authenticated && trackingToken) {
+            [urlRequest setValue:trackingToken forHTTPHeaderField:kKustomerTrackingTokenHeaderKey];
         }
-        */
 
-        void (^safeComplete)(NSError *, NSDictionary *) = ^void(NSError *error, NSDictionary *response) {
-            if (completion) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if (error) {
-                        completion(error, nil);
-                    } else {
-                        completion(nil, response);
-                    }
-                });
-            }
-        };
         void (^responseBlock)(NSData *, NSURLResponse *, NSError *) = ^void(NSData *data, NSURLResponse *response, NSError *error) {
             if (error) {
                 safeComplete(error, nil);
@@ -135,7 +138,35 @@
         };
         NSURLSessionDataTask *dataTask = [_urlSession dataTaskWithRequest:urlRequest completionHandler:responseBlock];
         [dataTask resume];
-    });
+    };
+
+    if (authenticated) {
+        [self _dispenseTrackingToken:^(NSError *error, NSString *trackingToken) {
+            if (error) {
+                safeComplete(error, nil);
+            } else {
+                performRequestWithTrackingToken(trackingToken);
+            }
+        }];
+    } else {
+        dispatch_async(self.queue, ^{
+            performRequestWithTrackingToken(nil);
+        });
+    }
+}
+
+#pragma mark - Internal methods
+
+- (void)_dispenseTrackingToken:(KUSTrackingTokenCompletion)callback
+{
+    NSString *trackingToken = @"";
+    if (trackingToken) {
+        dispatch_async(self.queue, ^{
+            callback(nil, trackingToken);
+        });
+    } else {
+
+    }
 }
 
 #pragma mark - Helper methods
