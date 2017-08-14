@@ -7,6 +7,7 @@
 //
 
 #import "KUSObjectDataSource.h"
+#import "KUSObjectDataSource_Private.h"
 
 #import "KUSAPIClient.h"
 
@@ -42,10 +43,6 @@
 
 - (void)fetch
 {
-    NSURL *URL = [self URL];
-    if (URL == nil) {
-        return;
-    }
     if (self.isFetching) {
         return;
     }
@@ -53,32 +50,25 @@
     self.error = nil;
 
     __weak KUSObjectDataSource *weakSelf = self;
-    [self.apiClient
-     performRequestType:KUSAPIRequestTypeGet
-     URL:URL
-     params:nil
-     completion:^(NSError *error, NSDictionary *response) {
-         __strong KUSObjectDataSource *strongSelf = weakSelf;
-         if (strongSelf == nil) {
-             return;
-         }
-         KUSModel *model = [[[self modelClass] alloc] initWithJSON:response[@"data"]];
-         if (error || model == nil) {
-             weakSelf.error = error;
-             [self notifyAnnouncersDidError:error];
-         } else {
-             weakSelf.object = model;
-             [self notifyAnnouncersDidLoad];
-         }
-     }];
+    [self performRequestWithCompletion:^(NSError *error, NSDictionary *response) {
+        __strong KUSObjectDataSource *strongSelf = weakSelf;
+        if (strongSelf == nil) {
+            return;
+        }
+        KUSModel *model = [[[self modelClass] alloc] initWithJSON:response[@"data"]];
+        if (error || model == nil) {
+            weakSelf.error = error;
+            [self notifyAnnouncersDidError:error];
+        } else {
+            weakSelf.object = model;
+            [self notifyAnnouncersDidLoad];
+        }
+    }];
 }
 
 #pragma mark - Subclass methods
 
-- (NSURL *)URL
-{
-    return nil;
-}
+- (void)performRequestWithCompletion:(KUSRequestCompletion)completion {}
 
 - (Class)modelClass
 {

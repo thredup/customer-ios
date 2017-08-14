@@ -12,9 +12,13 @@
 
 @implementation KUSChatSettingsDataSource
 
-- (NSURL *)URL
+- (void)performRequestWithCompletion:(KUSRequestCompletion)completion
 {
-    return [self.apiClient URLForEndpoint:@"/v1/chat/settings"];
+    NSURL *URL = [self.apiClient URLForEndpoint:@"/v1/chat/settings"];
+    [self.apiClient performRequestType:KUSAPIRequestTypeGet
+                                   URL:URL
+                                params:nil
+                            completion:completion];
 }
 
 - (Class)modelClass
