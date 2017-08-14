@@ -9,14 +9,12 @@
 #import "Kustomer.h"
 
 @class KUSAPIClient;
+@class KUSUserSession;
 @interface Kustomer (Private)
-
-@property (nonatomic, copy, readonly) NSString *apiKey;
-@property (nonatomic, copy, readonly) NSString *orgId;
-@property (nonatomic, copy, readonly) NSString *orgName;
 
 + (instancetype)sharedInstance;
 
 - (KUSAPIClient *)apiClient;
+- (KUSUserSession *)userSession;
 
 @end

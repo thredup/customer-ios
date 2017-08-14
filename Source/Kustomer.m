@@ -10,6 +10,7 @@
 #import "Kustomer_Private.h"
 
 #import "KUSAPIClient.h"
+#import "KUSUserSession.h"
 
 static NSString *kKustomerOrgIdKey = @"org";
 static NSString *kKustomerOrgNameKey = @"orgName";
@@ -17,6 +18,7 @@ static NSString *kKustomerOrgNameKey = @"orgName";
 @interface Kustomer ()
 
 @property (nonatomic, strong) KUSAPIClient *apiClient;
+@property (nonatomic, strong) KUSUserSession *userSession;
 
 @property (nonatomic, copy, readwrite) NSString *apiKey;
 @property (nonatomic, copy, readwrite) NSString *orgId;
@@ -66,8 +68,11 @@ static NSString *kKustomerOrgNameKey = @"orgName";
     NSAssert(self.orgName.length > 0, @"Kustomer API key missing expected field: orgName");
 
     self.apiClient = [[KUSAPIClient alloc] initWithOrgName:self.orgName];
-    NSLog(@"Kustomer initialized for organization: %@", self.orgName);
     [self.apiClient getCurrentTrackingToken:nil];
+
+    self.userSession = [[KUSUserSession alloc] initWithOrgName:self.orgName];
+
+    NSLog(@"Kustomer initialized for organization: %@", self.orgName);
 }
 
 #pragma mark - Private methods
@@ -76,6 +81,12 @@ static NSString *kKustomerOrgNameKey = @"orgName";
 {
     NSAssert(self.apiKey, @"Kustomer needs to be initialized before use");
     return _apiClient;
+}
+
+- (KUSUserSession *)userSession
+{
+    NSAssert(_userSession, @"Kustomer needs to be initialized before use");
+    return _userSession;
 }
 
 #pragma mark - Internal methods

@@ -80,6 +80,8 @@
 		63EB38541F2D83430020F38B /* KUSObjectDataSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 63EB38521F2D83430020F38B /* KUSObjectDataSource.h */; };
 		63EB38551F2D83430020F38B /* KUSObjectDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 63EB38531F2D83430020F38B /* KUSObjectDataSource.m */; };
 		63EB38571F2E1D880020F38B /* KUSObjectDataSource_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 63EB38561F2E1D880020F38B /* KUSObjectDataSource_Private.h */; };
+		63EDF3D11F412503000345D8 /* KUSUserSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 63EDF3CF1F412503000345D8 /* KUSUserSession.h */; };
+		63EDF3D21F412503000345D8 /* KUSUserSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 63EDF3D01F412503000345D8 /* KUSUserSession.m */; };
 		6D7CDE24CE12E0916484305C /* Pods_Kustomer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4074C2A1E9213757162ED660 /* Pods_Kustomer.framework */; };
 		7C3913946A295179BE2E925B /* Pods_KustomerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D624913E5C7AD4492EF0D39B /* Pods_KustomerTests.framework */; };
 		FC5BDC34DC026F04AE056627 /* Pods_KustomerExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BBA02B9E3111B375725C25D /* Pods_KustomerExample.framework */; };
@@ -200,6 +202,8 @@
 		63EB38521F2D83430020F38B /* KUSObjectDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSObjectDataSource.h; sourceTree = "<group>"; };
 		63EB38531F2D83430020F38B /* KUSObjectDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSObjectDataSource.m; sourceTree = "<group>"; };
 		63EB38561F2E1D880020F38B /* KUSObjectDataSource_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSObjectDataSource_Private.h; sourceTree = "<group>"; };
+		63EDF3CF1F412503000345D8 /* KUSUserSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSUserSession.h; sourceTree = "<group>"; };
+		63EDF3D01F412503000345D8 /* KUSUserSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSUserSession.m; sourceTree = "<group>"; };
 		6BBA02B9E3111B375725C25D /* Pods_KustomerExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KustomerExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F91D0EF26D550F6FA48F5E6 /* Pods-Kustomer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Kustomer.release.xcconfig"; path = "Pods/Target Support Files/Pods-Kustomer/Pods-Kustomer.release.xcconfig"; sourceTree = "<group>"; };
 		A8B9C7F846CD493168479E0A /* Pods-KustomerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KustomerTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-KustomerTests/Pods-KustomerTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -263,6 +267,8 @@
 			children = (
 				6334BE431F0C52D700258DAF /* KUSAPIClient.h */,
 				6334BE441F0C52D700258DAF /* KUSAPIClient.m */,
+				63EDF3CF1F412503000345D8 /* KUSUserSession.h */,
+				63EDF3D01F412503000345D8 /* KUSUserSession.m */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -486,6 +492,7 @@
 				6334BE321F0C487400258DAF /* KUSChatSettings.h in Headers */,
 				6334BE3E1F0C4EBE00258DAF /* KUSCustomer.h in Headers */,
 				636531A91F1BBCCD00433A50 /* KUSChatViewController.h in Headers */,
+				63EDF3D11F412503000345D8 /* KUSUserSession.h in Headers */,
 				6334BE2E1F0C43BE00258DAF /* KUSTrackingToken.h in Headers */,
 				6334BE2A1F0C3E8600258DAF /* KUSModel.h in Headers */,
 				636531B21F1C593D00433A50 /* KUSChatMessageTableViewCell.h in Headers */,
@@ -783,6 +790,7 @@
 				6334BE2F1F0C43BE00258DAF /* KUSTrackingToken.m in Sources */,
 				633D8FE31F2309E700BAFAC9 /* KUSChatSessionTableViewCell.m in Sources */,
 				636531B31F1C593D00433A50 /* KUSChatMessageTableViewCell.m in Sources */,
+				63EDF3D21F412503000345D8 /* KUSUserSession.m in Sources */,
 				633D8FE71F239F9500BAFAC9 /* KUSChatPlaceholderTableViewCell.m in Sources */,
 				636531AA1F1BBCCD00433A50 /* KUSChatViewController.m in Sources */,
 				6334BE371F0C4A1300258DAF /* KUSChatSession.m in Sources */,
