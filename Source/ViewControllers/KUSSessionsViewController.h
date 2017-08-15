@@ -8,10 +8,10 @@
 
 #import "KUSBaseViewController.h"
 
-@class KUSAPIClient;
+@class KUSUserSession;
 @interface KUSSessionsViewController : KUSBaseViewController
 
-- (instancetype)initWithAPIClient:(KUSAPIClient *)apiClient;
+- (instancetype)initWithUserSession:(KUSUserSession *)userSession;
 - (instancetype)init NS_UNAVAILABLE;
 
 @end

@@ -8,13 +8,11 @@
 
 #import "Kustomer.h"
 
-@class KUSAPIClient;
 @class KUSUserSession;
 @interface Kustomer (Private)
 
 + (instancetype)sharedInstance;
 
-- (KUSAPIClient *)apiClient;
 - (KUSUserSession *)userSession;
 
 @end

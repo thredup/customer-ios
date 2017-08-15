@@ -16,7 +16,7 @@
 
 - (NSURL *)firstURL
 {
-    return [self.apiClient URLForEndpoint:@"/v1/chat/sessions"];
+    return [self.userSession.requestManager URLForEndpoint:@"/c/v1/chat/sessions"];
 }
 
 - (Class)modelClass

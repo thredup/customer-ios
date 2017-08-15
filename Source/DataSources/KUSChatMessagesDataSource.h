@@ -13,7 +13,7 @@
 
 @interface KUSChatMessagesDataSource : KUSPaginatedDataSource
 
-- (instancetype)initWithAPIClient:(KUSAPIClient *)apiClient chatSession:(KUSChatSession *)session;
-- (instancetype)initWithAPIClient:(KUSAPIClient *)apiClient NS_UNAVAILABLE;
+- (instancetype)initWithUserSession:(KUSUserSession *)userSession chatSession:(KUSChatSession *)session;
+- (instancetype)initWithUserSession:(KUSUserSession *)userSession NS_UNAVAILABLE;
 
 @end

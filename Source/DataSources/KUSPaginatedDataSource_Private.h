@@ -8,11 +8,11 @@
 
 #import "KUSPaginatedDataSource.h"
 
-#import "KUSAPIClient.h"
+#import "KUSUserSession.h"
 
 @interface KUSPaginatedDataSource (Private)
 
-@property (nonatomic, weak, readonly) KUSAPIClient *apiClient;
+@property (nonatomic, weak, readonly) KUSUserSession *userSession;
 
 // Methods to subclass
 - (NSURL *)firstURL;

@@ -8,12 +8,12 @@
 
 #import "KUSObjectDataSource.h"
 
-#import "KUSAPIClient.h"
+#import "KUSUserSession.h"
 #import "KUSRequestManager.h"
 
 @interface KUSObjectDataSource (Private)
 
-@property (nonatomic, weak, readonly) KUSAPIClient *apiClient;
+@property (nonatomic, weak, readonly) KUSUserSession *userSession;
 
 // Methods to subclass
 - (void)performRequestWithCompletion:(KUSRequestCompletion)completion;

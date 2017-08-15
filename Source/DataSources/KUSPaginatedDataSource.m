@@ -21,7 +21,7 @@
     KUSPaginatedResponse *_lastPaginatedResponse;
 }
 
-@property (nonatomic, weak, readwrite) KUSAPIClient *apiClient;
+@property (nonatomic, weak, readwrite) KUSUserSession *userSession;
 
 @property (nonatomic, readwrite) BOOL isFetching;
 @property (nonatomic, readwrite) BOOL didFetch;
@@ -34,11 +34,11 @@
 
 #pragma mark - Lifecycle methods
 
-- (instancetype)initWithAPIClient:(KUSAPIClient *)apiClient
+- (instancetype)initWithUserSession:(KUSUserSession *)userSession
 {
     self = [super init];
     if (self) {
-        _apiClient = apiClient;
+        _userSession = userSession;
 
         _listeners = [NSHashTable hashTableWithOptions:NSPointerFunctionsWeakMemory];
 
@@ -110,7 +110,7 @@
 {
     NSURL *URL = [self firstURL];
     if (_mostRecentPaginatedResponse.firstPath) {
-        URL = [self.apiClient URLForPath:_mostRecentPaginatedResponse.firstPath];
+        URL = [self.userSession.requestManager URLForEndpoint:_mostRecentPaginatedResponse.firstPath];
     }
     if (URL == nil) {
         return;
@@ -122,10 +122,11 @@
     self.error = nil;
 
     __weak KUSPaginatedDataSource *weakSelf = self;
-    [self.apiClient
-     performRequestType:KUSAPIRequestTypeGet
+    [self.userSession.requestManager
+     performRequestType:KUSRequestTypeGet
      URL:URL
      params:nil
+     authenticated:YES
      completion:^(NSError *error, NSDictionary *json) {
          __strong KUSPaginatedDataSource *strongSelf = weakSelf;
          if (strongSelf == nil) {
@@ -140,7 +141,7 @@
 {
     NSURL *URL;
     if (_lastPaginatedResponse.nextPath) {
-        URL = [self.apiClient URLForPath:_lastPaginatedResponse.nextPath];
+        URL = [self.userSession.requestManager URLForEndpoint:_mostRecentPaginatedResponse.firstPath];
     }
     if (URL == nil) {
         return;
@@ -152,10 +153,11 @@
     self.error = nil;
 
     __weak KUSPaginatedDataSource *weakSelf = self;
-    [self.apiClient
-     performRequestType:KUSAPIRequestTypeGet
+    [self.userSession.requestManager
+     performRequestType:KUSRequestTypeGet
      URL:URL
      params:nil
+     authenticated:YES
      completion:^(NSError *error, NSDictionary *json) {
          __strong KUSPaginatedDataSource *strongSelf = weakSelf;
          if (strongSelf == nil) {

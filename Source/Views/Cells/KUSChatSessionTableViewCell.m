@@ -8,15 +8,15 @@
 
 #import "KUSChatSessionTableViewCell.h"
 
-#import "KUSAPIClient.h"
 #import "KUSChatSession.h"
 #import "KUSImage.h"
 #import "KUSText.h"
+#import "KUSUserSession.h"
 
 #import "KUSChatSettingsDataSource.h"
 
 @interface KUSChatSessionTableViewCell () <KUSObjectDataSourceListener> {
-    KUSAPIClient *_apiClient;
+    KUSUserSession *_userSession;
 
     KUSChatSession *_chatSession;
 }
@@ -32,11 +32,11 @@
 
 #pragma mark - Lifecycle methods
 
-- (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier apiClient:(KUSAPIClient *)apiClient
+- (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier userSession:(KUSUserSession *)userSession
 {
     self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     if (self) {
-        _apiClient = apiClient;
+        _userSession = userSession;
 
         _avatarImageView = [[UIImageView alloc] init];
         _avatarImageView.contentMode = UIViewContentModeScaleAspectFill;
@@ -64,7 +64,7 @@
         _dateLabel.font = [UIFont systemFontOfSize:12.0];
         [self.contentView addSubview:_dateLabel];
 
-        [_apiClient.chatSettingsDataSource addListener:self];
+        [_userSession.chatSettingsDataSource addListener:self];
     }
     return self;
 }
@@ -92,8 +92,8 @@
 
 - (void)_updateTitleLabel
 {
-    KUSChatSettings *chatSettings = [_apiClient.chatSettingsDataSource object];
-    NSString *teamName = chatSettings.teamName.length ? chatSettings.teamName : _apiClient.organizationName;
+    KUSChatSettings *chatSettings = [_userSession.chatSettingsDataSource object];
+    NSString *teamName = chatSettings.teamName.length ? chatSettings.teamName : _userSession.organizationName;
 
     // TODO: Grab username from responders/messages
     self.titleLabel.text = [NSString stringWithFormat:@"Chat with %@", teamName];

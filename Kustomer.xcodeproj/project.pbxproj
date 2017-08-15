@@ -21,8 +21,6 @@
 		6334BE3B1F0C4B3D00258DAF /* KUSChatMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 6334BE391F0C4B3D00258DAF /* KUSChatMessage.m */; };
 		6334BE3E1F0C4EBE00258DAF /* KUSCustomer.h in Headers */ = {isa = PBXBuildFile; fileRef = 6334BE3C1F0C4EBE00258DAF /* KUSCustomer.h */; };
 		6334BE3F1F0C4EBE00258DAF /* KUSCustomer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6334BE3D1F0C4EBE00258DAF /* KUSCustomer.m */; };
-		6334BE451F0C52D700258DAF /* KUSAPIClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 6334BE431F0C52D700258DAF /* KUSAPIClient.h */; };
-		6334BE461F0C52D700258DAF /* KUSAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 6334BE441F0C52D700258DAF /* KUSAPIClient.m */; };
 		6334BE491F0C5E3F00258DAF /* KUSNavigationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 6334BE471F0C5E3F00258DAF /* KUSNavigationController.h */; };
 		6334BE4A1F0C5E3F00258DAF /* KUSNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6334BE481F0C5E3F00258DAF /* KUSNavigationController.m */; };
 		6334BE4D1F0C600F00258DAF /* KUSAttributionToolbar.h in Headers */ = {isa = PBXBuildFile; fileRef = 6334BE4B1F0C600F00258DAF /* KUSAttributionToolbar.h */; };
@@ -141,8 +139,6 @@
 		6334BE391F0C4B3D00258DAF /* KUSChatMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSChatMessage.m; sourceTree = "<group>"; };
 		6334BE3C1F0C4EBE00258DAF /* KUSCustomer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSCustomer.h; sourceTree = "<group>"; };
 		6334BE3D1F0C4EBE00258DAF /* KUSCustomer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSCustomer.m; sourceTree = "<group>"; };
-		6334BE431F0C52D700258DAF /* KUSAPIClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSAPIClient.h; sourceTree = "<group>"; };
-		6334BE441F0C52D700258DAF /* KUSAPIClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSAPIClient.m; sourceTree = "<group>"; };
 		6334BE471F0C5E3F00258DAF /* KUSNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSNavigationController.h; sourceTree = "<group>"; };
 		6334BE481F0C5E3F00258DAF /* KUSNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSNavigationController.m; sourceTree = "<group>"; };
 		6334BE4B1F0C600F00258DAF /* KUSAttributionToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSAttributionToolbar.h; sourceTree = "<group>"; };
@@ -273,8 +269,6 @@
 		6334BE401F0C52C400258DAF /* API */ = {
 			isa = PBXGroup;
 			children = (
-				6334BE431F0C52D700258DAF /* KUSAPIClient.h */,
-				6334BE441F0C52D700258DAF /* KUSAPIClient.m */,
 				63EDF3D31F414A67000345D8 /* KUSRequestManager.h */,
 				63EDF3D41F414A67000345D8 /* KUSRequestManager.m */,
 				63EDF3CF1F412503000345D8 /* KUSUserSession.h */,
@@ -476,7 +470,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6334BE451F0C52D700258DAF /* KUSAPIClient.h in Headers */,
 				633D8FED1F23C98200BAFAC9 /* KUSPaginatedDataSource.h in Headers */,
 				63EB38571F2E1D880020F38B /* KUSObjectDataSource_Private.h in Headers */,
 				6334BE5C1F0C783200258DAF /* KUSAvatarTitleView.h in Headers */,
@@ -813,7 +806,6 @@
 				633FADBD1F258C2E0060B4A6 /* KUSChatMessagesDataSource.m in Sources */,
 				633D8FF31F23E07E00BAFAC9 /* KUSChatSessionsDataSource.m in Sources */,
 				6334BE3B1F0C4B3D00258DAF /* KUSChatMessage.m in Sources */,
-				6334BE461F0C52D700258DAF /* KUSAPIClient.m in Sources */,
 				63EB38551F2D83430020F38B /* KUSObjectDataSource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

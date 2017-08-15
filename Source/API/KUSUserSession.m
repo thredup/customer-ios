@@ -18,6 +18,8 @@
 @property (nonatomic, strong, null_resettable) KUSChatSettingsDataSource *chatSettingsDataSource;
 @property (nonatomic, strong, null_resettable) KUSTrackingTokenDataSource *trackingTokenDataSource;
 
+@property (nonatomic, strong, null_resettable) KUSRequestManager *requestManager;
+
 @end
 
 @implementation KUSUserSession
@@ -34,6 +36,8 @@
             NSString *firstLetter = [[_orgName substringToIndex:1] uppercaseString];
             _organizationName = [firstLetter stringByAppendingString:[_orgName substringFromIndex:1]];
         }
+
+        [self.chatSettingsDataSource fetch];
     }
     return self;
 }
@@ -43,8 +47,7 @@
 - (KUSChatSessionsDataSource *)chatSessionsDataSource
 {
     if (_chatSessionsDataSource == nil) {
-        // TODO: Fix when converted to userSession
-        _chatSessionsDataSource = [[KUSChatSessionsDataSource alloc] initWithAPIClient:nil];
+        _chatSessionsDataSource = [[KUSChatSessionsDataSource alloc] initWithUserSession:self];
     }
     return _chatSessionsDataSource;
 }
@@ -52,8 +55,7 @@
 - (KUSChatSettingsDataSource *)chatSettingsDataSource
 {
     if (_chatSettingsDataSource == nil) {
-        // TODO: Fix when converted to userSession
-        _chatSettingsDataSource = [[KUSChatSettingsDataSource alloc] initWithAPIClient:nil];
+        _chatSettingsDataSource = [[KUSChatSettingsDataSource alloc] initWithUserSession:self];
     }
     return _chatSettingsDataSource;
 }
@@ -61,10 +63,19 @@
 - (KUSTrackingTokenDataSource *)trackingTokenDataSource
 {
     if (_trackingTokenDataSource == nil) {
-        // TODO: Fix when converted to userSession
-        _trackingTokenDataSource = [[KUSTrackingTokenDataSource alloc] initWithAPIClient:nil];
+        _trackingTokenDataSource = [[KUSTrackingTokenDataSource alloc] initWithUserSession:self];
     }
     return _trackingTokenDataSource;
+}
+
+#pragma mark - Request manager
+
+- (KUSRequestManager *)requestManager
+{
+    if (_requestManager == nil) {
+        _requestManager = [[KUSRequestManager alloc] initWithUserSession:self];
+    }
+    return _requestManager;
 }
 
 @end

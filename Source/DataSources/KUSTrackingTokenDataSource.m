@@ -14,11 +14,9 @@
 
 - (void)performRequestWithCompletion:(KUSRequestCompletion)completion
 {
-    NSURL *URL = [self.apiClient URLForEndpoint:@"/v1/tracking/tokens/current"];
-    [self.apiClient performRequestType:KUSAPIRequestTypeGet
-                                   URL:URL
-                                params:nil
-                            completion:completion];
+    [self.userSession.requestManager getEndpoint:@"/c/v1/tracking/tokens/current"
+                                   authenticated:NO
+                                      completion:completion];
 }
 
 - (Class)modelClass

@@ -20,9 +20,9 @@
 
 #pragma mark - Lifecycle methods
 
-- (instancetype)initWithAPIClient:(KUSAPIClient *)apiClient chatSession:(KUSChatSession *)session
+- (instancetype)initWithUserSession:(KUSUserSession *)userSession chatSession:(KUSChatSession *)session;
 {
-    self = [super initWithAPIClient:apiClient];
+    self = [super initWithUserSession:userSession];
     if (self) {
         _chatSession = session;
     }
@@ -35,8 +35,8 @@
 {
     NSString *sessionId = _chatSession.oid;
     if (sessionId) {
-        NSString *endpoint = [NSString stringWithFormat:@"/v1/chat/sessions/%@/messages", sessionId];
-        return [self.apiClient URLForEndpoint:endpoint];
+        NSString *endpoint = [NSString stringWithFormat:@"/c/v1/chat/sessions/%@/messages", sessionId];
+        return [self.userSession.requestManager URLForEndpoint:endpoint];
     }
     return nil;
 }

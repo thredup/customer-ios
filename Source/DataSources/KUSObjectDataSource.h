@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class KUSAPIClient;
+@class KUSUserSession;
 @class KUSModel;
 @protocol KUSObjectDataSourceListener;
 @interface KUSObjectDataSource : NSObject
@@ -17,7 +17,7 @@
 @property (nonatomic, readonly) BOOL didFetch;
 @property (nonatomic, readonly) NSError *error;
 
-- (instancetype)initWithAPIClient:(KUSAPIClient *)apiClient;
+- (instancetype)initWithUserSession:(KUSUserSession *)userSession;
 - (instancetype)init NS_UNAVAILABLE;
 
 // Data methods

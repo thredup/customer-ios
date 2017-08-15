@@ -20,8 +20,8 @@
 
 - (instancetype)init
 {
-    KUSAPIClient *apiClient = [Kustomer sharedInstance].apiClient;
-    KUSSessionsViewController *sessionsViewController = [[KUSSessionsViewController alloc] initWithAPIClient:apiClient];
+    KUSUserSession *userSession = [Kustomer sharedInstance].userSession;
+    KUSSessionsViewController *sessionsViewController = [[KUSSessionsViewController alloc] initWithUserSession:userSession];
     return [super initWithRootViewController:sessionsViewController];
 }
 

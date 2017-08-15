@@ -8,8 +8,8 @@
 
 #import "KUSChatViewController.h"
 
-#import "KUSAPIClient.h"
 #import "KUSChatSession.h"
+#import "KUSUserSession.h"
 
 #import "KUSAvatarTitleView.h"
 #import "KUSChatMessagesDataSource.h"
@@ -18,7 +18,7 @@
 #import "KUSInputBar.h"
 
 @interface KUSChatViewController () <KUSInputBarDelegate, KUSObjectDataSourceListener, KUSPaginatedDataSourceListener, UITableViewDataSource, UITableViewDelegate> {
-    KUSAPIClient *_apiClient;
+    KUSUserSession *_userSession;
 
     BOOL _forNewChatSession;
     KUSChatSession *_chatSession;
@@ -37,29 +37,29 @@
 
 #pragma mark - Lifecycle methods
 
-- (instancetype)initWithAPIClient:(KUSAPIClient *)apiClient
+- (instancetype)initWithUserSession:(KUSUserSession *)userSession
 {
     self = [super init];
     if (self) {
-        _apiClient = apiClient;
+        _userSession = userSession;
 
         self.navigationItem.titleView = [[KUSAvatarTitleView alloc] init];
     }
     return self;
 }
 
-- (instancetype)initWithAPIClient:(KUSAPIClient *)apiClient forChatSession:(KUSChatSession *)session
+- (instancetype)initWithUserSession:(KUSUserSession *)userSession forChatSession:(KUSChatSession *)session
 {
-    self = [self initWithAPIClient:apiClient];
+    self = [self initWithUserSession:userSession];
     if (self) {
         _chatSession = session;
     }
     return self;
 }
 
-- (instancetype)initWithAPIClient:(KUSAPIClient *)apiClient forNewSessionWithBackButton:(BOOL)showBackButton
+- (instancetype)initWithUserSession:(KUSUserSession *)userSession forNewSessionWithBackButton:(BOOL)showBackButton
 {
-    self = [self initWithAPIClient:apiClient];
+    self = [self initWithUserSession:userSession];
     if (self) {
         _forNewChatSession = YES;
 
@@ -108,7 +108,7 @@
     [self.view addSubview:self.inputBarView];
 
     if (_chatSession) {
-        _chatMessagesDataSource = [[KUSChatMessagesDataSource alloc] initWithAPIClient:_apiClient
+        _chatMessagesDataSource = [[KUSChatMessagesDataSource alloc] initWithUserSession:_userSession
                                                                            chatSession:_chatSession];
         [_chatMessagesDataSource addListener:self];
         [_chatMessagesDataSource fetchLatest];
@@ -136,11 +136,11 @@
 {
     [super viewDidAppear:animated];
 
-    if (_apiClient.chatSettingsDataSource.object) {
+    if (_userSession.chatSettingsDataSource.object) {
         [self _updatePromptText];
         [self.tableView reloadData];
     } else {
-        [_apiClient.chatSettingsDataSource addListener:self];
+        [_userSession.chatSettingsDataSource addListener:self];
     }
 
     [_inputBarView becomeFirstResponder];
@@ -190,7 +190,7 @@
 
 - (void)_updatePromptText
 {
-    KUSChatSettings *chatSettings = _apiClient.chatSettingsDataSource.object;
+    KUSChatSettings *chatSettings = _userSession.chatSettingsDataSource.object;
     self.navigationItem.prompt = chatSettings.greeting;
 }
 
@@ -359,7 +359,7 @@
 - (BOOL)_shouldShowAutoreply
 {
     NSUInteger count = [_chatMessagesDataSource count];
-    KUSChatSettings *chatSettings = _apiClient.chatSettingsDataSource.object;
+    KUSChatSettings *chatSettings = _userSession.chatSettingsDataSource.object;
     BOOL shouldShowAutoreply = chatSettings.autoreply.length > 0 && count > 0;
     return shouldShowAutoreply;
 }
@@ -380,7 +380,7 @@
     KUSChatMessage *chatMessage;
 
     if ([self _shouldShowAutoreply] && row == numberOfRows - 2) {
-        KUSChatSettings *chatSettings = _apiClient.chatSettingsDataSource.object;
+        KUSChatSettings *chatSettings = _userSession.chatSettingsDataSource.object;
         NSString *autoreplyText = chatSettings.autoreply;
         chatMessage = [[KUSChatMessage alloc] initWithAutoreply:autoreplyText];
     } else if ([self _shouldShowAutoreply] && row >= numberOfRows - 1) {
@@ -407,6 +407,8 @@
 {
     NSLog(@"User wants to send message: %@", text);
 
+    // TODO: Re-implement message sending
+    /*
     if (_forNewChatSession) {
         [_apiClient createChatSessionWithTitle:text completion:^(NSError *error, KUSChatSession *session) {
             if (error) {
@@ -441,6 +443,7 @@
         }
         NSLog(@"Successfully sent message: %@", message);
     }];
+    */
 }
 
 - (void)inputBarTextDidChange:(KUSInputBar *)inputBar

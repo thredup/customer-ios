@@ -9,7 +9,6 @@
 #import "Kustomer.h"
 #import "Kustomer_Private.h"
 
-#import "KUSAPIClient.h"
 #import "KUSUserSession.h"
 
 static NSString *kKustomerOrgIdKey = @"org";
@@ -17,7 +16,6 @@ static NSString *kKustomerOrgNameKey = @"orgName";
 
 @interface Kustomer ()
 
-@property (nonatomic, strong) KUSAPIClient *apiClient;
 @property (nonatomic, strong) KUSUserSession *userSession;
 
 @property (nonatomic, copy, readwrite) NSString *apiKey;
@@ -67,21 +65,12 @@ static NSString *kKustomerOrgNameKey = @"orgName";
     self.orgName = tokenPayload[kKustomerOrgNameKey];
     NSAssert(self.orgName.length > 0, @"Kustomer API key missing expected field: orgName");
 
-    self.apiClient = [[KUSAPIClient alloc] initWithOrgName:self.orgName];
-    [self.apiClient getCurrentTrackingToken:nil];
-
     self.userSession = [[KUSUserSession alloc] initWithOrgName:self.orgName];
 
     NSLog(@"Kustomer initialized for organization: %@", self.orgName);
 }
 
 #pragma mark - Private methods
-
-- (KUSAPIClient *)apiClient
-{
-    NSAssert(self.apiKey, @"Kustomer needs to be initialized before use");
-    return _apiClient;
-}
 
 - (KUSUserSession *)userSession
 {
@@ -93,9 +82,7 @@ static NSString *kKustomerOrgNameKey = @"orgName";
 
 - (void)resetTracking
 {
-    self.apiClient = [[KUSAPIClient alloc] initWithOrgName:self.orgName];
-    NSLog(@"Kustomer initialized for organization: %@", self.orgName);
-    [self.apiClient clearTrackingToken:nil];
+    // TODO: Re-implement tracking clear
 }
 
 #pragma mark - Helper functions

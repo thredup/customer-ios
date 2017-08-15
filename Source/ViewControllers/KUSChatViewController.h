@@ -8,12 +8,12 @@
 
 #import "KUSBaseViewController.h"
 
-@class KUSAPIClient;
 @class KUSChatSession;
+@class KUSUserSession;
 @interface KUSChatViewController : KUSBaseViewController
 
-- (instancetype)initWithAPIClient:(KUSAPIClient *)apiClient forChatSession:(KUSChatSession *)session;
-- (instancetype)initWithAPIClient:(KUSAPIClient *)apiClient forNewSessionWithBackButton:(BOOL)showBackButton;
+- (instancetype)initWithUserSession:(KUSUserSession *)userSession forChatSession:(KUSChatSession *)session;
+- (instancetype)initWithUserSession:(KUSUserSession *)userSession forNewSessionWithBackButton:(BOOL)showBackButton;
 - (instancetype)init NS_UNAVAILABLE;
 
 @end

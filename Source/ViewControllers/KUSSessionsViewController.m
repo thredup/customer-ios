@@ -8,9 +8,9 @@
 
 #import "KUSSessionsViewController.h"
 
-#import "KUSAPIClient.h"
 #import "KUSChatSessionsDataSource.h"
 #import "KUSChatViewController.h"
+#import "KUSUserSession.h"
 
 #import "KUSAvatarTitleView.h"
 #import "KUSColor.h"
@@ -19,7 +19,7 @@
 #import "KUSChatSessionTableViewCell.h"
 
 @interface KUSSessionsViewController () <KUSPaginatedDataSourceListener, UITableViewDataSource, UITableViewDelegate> {
-    KUSAPIClient *_apiClient;
+    KUSUserSession *_userSession;
 
     KUSChatSessionsDataSource *_chatSessionsDataSource;
     BOOL _didHandleFirstLoad;
@@ -34,11 +34,11 @@
 
 #pragma mark - Lifecycle methods
 
-- (instancetype)initWithAPIClient:(KUSAPIClient *)apiClient
+- (instancetype)initWithUserSession:(KUSUserSession *)userSession
 {
     self = [super init];
     if (self) {
-        _apiClient = apiClient;
+        _userSession = userSession;
     }
     return self;
 }
@@ -108,7 +108,7 @@
     self.tableView.hidden = YES;
     self.createSessionButton.hidden = YES;
 
-    _chatSessionsDataSource = [[KUSChatSessionsDataSource alloc] initWithAPIClient:_apiClient];
+    _chatSessionsDataSource = [[KUSChatSessionsDataSource alloc] initWithUserSession:_userSession];
     [_chatSessionsDataSource addListener:self];
     [_chatSessionsDataSource fetchLatest];
     [self showLoadingIndicator];
@@ -140,8 +140,8 @@
 
 - (void)_createSession
 {
-    KUSChatViewController *chatViewController = [[KUSChatViewController alloc] initWithAPIClient:_apiClient
-                                                                     forNewSessionWithBackButton:YES];
+    KUSChatViewController *chatViewController = [[KUSChatViewController alloc] initWithUserSession:_userSession
+                                                                       forNewSessionWithBackButton:YES];
     [self.navigationController pushViewController:chatViewController animated:YES];
 }
 
@@ -161,14 +161,14 @@
 
     if (_chatSessionsDataSource.count == 0) {
         // If there are no existing chat sessions, go directly to new chat screen
-        KUSChatViewController *chatViewController = [[KUSChatViewController alloc] initWithAPIClient:_apiClient
-                                                                         forNewSessionWithBackButton:NO];
+        KUSChatViewController *chatViewController = [[KUSChatViewController alloc] initWithUserSession:_userSession
+                                                                           forNewSessionWithBackButton:NO];
         [self.navigationController pushViewController:chatViewController animated:NO];
     } else if (_chatSessionsDataSource.count == 1) {
         // If there is exactly one chat session, go directly to it
         KUSChatSession *chatSession = [_chatSessionsDataSource firstObject];
-        KUSChatViewController *chatViewController = [[KUSChatViewController alloc] initWithAPIClient:_apiClient
-                                                                                      forChatSession:chatSession];
+        KUSChatViewController *chatViewController = [[KUSChatViewController alloc] initWithUserSession:_userSession
+                                                                                        forChatSession:chatSession];
         [self.navigationController pushViewController:chatViewController animated:NO];
     }
 }
@@ -202,7 +202,7 @@
         static NSString *kSessionCellIdentifier = @"SessionCell";
         KUSChatSessionTableViewCell *cell = (KUSChatSessionTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kSessionCellIdentifier];
         if (cell == nil) {
-            cell = [[KUSChatSessionTableViewCell alloc] initWithReuseIdentifier:kSessionCellIdentifier apiClient:_apiClient];
+            cell = [[KUSChatSessionTableViewCell alloc] initWithReuseIdentifier:kSessionCellIdentifier userSession:_userSession];
         }
 
         KUSChatSession *chatSession = [_chatSessionsDataSource objectAtIndex:indexPath.row];
@@ -226,7 +226,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
     KUSChatSession *chatSession = [_chatSessionsDataSource objectAtIndex:indexPath.row];
-    KUSChatViewController *chatViewController = [[KUSChatViewController alloc] initWithAPIClient:_apiClient forChatSession:chatSession];
+    KUSChatViewController *chatViewController = [[KUSChatViewController alloc] initWithUserSession:_userSession forChatSession:chatSession];
     [self.navigationController pushViewController:chatViewController animated:YES];
 }
 

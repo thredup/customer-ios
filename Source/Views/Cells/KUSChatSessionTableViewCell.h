@@ -8,11 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@class KUSAPIClient;
 @class KUSChatSession;
+@class KUSUserSession;
 @interface KUSChatSessionTableViewCell : UITableViewCell
 
-- (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier apiClient:(KUSAPIClient *)apiClient;
+- (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier userSession:(KUSUserSession *)userSession;
 
 - (void)setChatSession:(KUSChatSession *)chatSession;
 

@@ -14,11 +14,9 @@
 
 - (void)performRequestWithCompletion:(KUSRequestCompletion)completion
 {
-    NSURL *URL = [self.apiClient URLForEndpoint:@"/v1/chat/settings"];
-    [self.apiClient performRequestType:KUSAPIRequestTypeGet
-                                   URL:URL
-                                params:nil
-                            completion:completion];
+    [self.userSession.requestManager getEndpoint:@"/c/v1/chat/settings"
+                                   authenticated:YES
+                                      completion:completion];
 }
 
 - (Class)modelClass

@@ -9,8 +9,6 @@
 #import "KUSObjectDataSource.h"
 #import "KUSObjectDataSource_Private.h"
 
-#import "KUSAPIClient.h"
-
 @interface KUSObjectDataSource () {
     NSHashTable<id<KUSObjectDataSourceListener>> *_listeners;
 }
@@ -20,7 +18,7 @@
 @property (nonatomic, strong, readwrite) NSError *error;
 @property (nonatomic, strong, readwrite) __kindof KUSModel *object;
 
-@property (nonatomic, weak, readwrite) KUSAPIClient *apiClient;
+@property (nonatomic, weak, readwrite) KUSUserSession *userSession;
 
 @end
 
@@ -28,11 +26,11 @@
 
 #pragma mark - Lifecycle methods
 
-- (instancetype)initWithAPIClient:(KUSAPIClient *)apiClient
+- (instancetype)initWithUserSession:(KUSUserSession *)userSession
 {
     self = [super init];
     if (self) {
-        _apiClient = apiClient;
+        _userSession = userSession;
 
         _listeners = [NSHashTable hashTableWithOptions:NSPointerFunctionsWeakMemory];
     }
