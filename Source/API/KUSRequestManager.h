@@ -16,6 +16,8 @@ typedef NS_ENUM(NSInteger, KUSRequestType) {
     KUSRequestTypeDelete
 };
 
+extern NSString *const kKustomerTrackingTokenHeaderKey;
+
 typedef void (^KUSRequestCompletion)(NSError *error, NSDictionary *response);
 
 @class KUSUserSession;

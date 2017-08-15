@@ -10,7 +10,7 @@
 
 #import "KUSUserSession.h"
 
-static NSString *kKustomerTrackingTokenHeaderKey = @"x-kustomer-tracking-token";
+NSString *const kKustomerTrackingTokenHeaderKey = @"x-kustomer-tracking-token";
 
 typedef void (^KUSTrackingTokenCompletion)(NSError *error, NSString *trackingToken);
 
@@ -163,8 +163,7 @@ typedef void (^KUSTrackingTokenCompletion)(NSError *error, NSString *trackingTok
 
 - (void)_dispenseTrackingToken:(KUSTrackingTokenCompletion)callback
 {
-    KUSTrackingToken *trackingTokenObj = _userSession.trackingTokenDataSource.object;
-    NSString *trackingToken = trackingTokenObj.token;
+    NSString *trackingToken = _userSession.trackingTokenDataSource.currentTrackingToken;
     if (trackingToken) {
         dispatch_async(self.queue, ^{
             callback(nil, trackingToken);
@@ -193,9 +192,10 @@ typedef void (^KUSTrackingTokenCompletion)(NSError *error, NSString *trackingTok
 
 - (void)objectDataSourceDidLoad:(KUSObjectDataSource *)dataSource
 {
-    KUSTrackingToken *trackingTokenObj = dataSource.object;
-    NSString *trackingToken = trackingTokenObj.token;
-    [self _firePendingTokenCompletionsWithToken:trackingToken error:nil];
+    if (dataSource == _userSession.trackingTokenDataSource) {
+        NSString *trackingToken = _userSession.trackingTokenDataSource.currentTrackingToken;
+        [self _firePendingTokenCompletionsWithToken:trackingToken error:nil];
+    }
 }
 
 - (void)objectDataSource:(KUSObjectDataSource *)dataSource didReceiveError:(NSError *)error

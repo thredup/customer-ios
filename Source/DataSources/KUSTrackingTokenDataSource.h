@@ -12,4 +12,6 @@
 
 @interface KUSTrackingTokenDataSource : KUSObjectDataSource
 
+- (nullable NSString *)currentTrackingToken;
+
 @end
