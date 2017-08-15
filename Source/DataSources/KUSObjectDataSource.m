@@ -20,6 +20,8 @@
 
 @property (nonatomic, weak, readwrite) KUSUserSession *userSession;
 
+@property (nonatomic, strong, nullable) NSObject *requestMarker;
+
 @end
 
 @implementation KUSObjectDataSource
@@ -37,7 +39,7 @@
     return self;
 }
 
-#pragma mark - Public methods
+#pragma mark - Request methods
 
 - (void)fetch
 {
@@ -47,21 +49,36 @@
     self.isFetching = YES;
     self.error = nil;
 
+    NSObject *requestMarker = [[NSObject alloc] init];
+    self.requestMarker = requestMarker;
+
     __weak KUSObjectDataSource *weakSelf = self;
     [self performRequestWithCompletion:^(NSError *error, NSDictionary *response) {
         __strong KUSObjectDataSource *strongSelf = weakSelf;
         if (strongSelf == nil) {
             return;
         }
+        // Check to make sure that the request marker did not change
+        if (strongSelf.requestMarker != requestMarker) {
+            return;
+        }
+        strongSelf.requestMarker = nil;
+
         KUSModel *model = [[[self modelClass] alloc] initWithJSON:response[@"data"]];
         if (error || model == nil) {
-            weakSelf.error = error;
+            strongSelf.error = error;
             [self notifyAnnouncersDidError:error];
         } else {
-            weakSelf.object = model;
+            strongSelf.object = model;
             [self notifyAnnouncersDidLoad];
         }
     }];
+}
+
+- (void)cancel
+{
+    self.isFetching = NO;
+    self.requestMarker = nil;
 }
 
 #pragma mark - Subclass methods

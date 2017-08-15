@@ -27,8 +27,9 @@
 - (void)addListener:(id<KUSObjectDataSourceListener>)listener;
 - (void)removeListener:(id<KUSObjectDataSourceListener>)listener;
 
-// Fetch methods
+// Request methods
 - (void)fetch;
+- (void)cancel;
 
 @end
 

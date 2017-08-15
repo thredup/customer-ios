@@ -28,6 +28,8 @@
 @property (nonatomic, readwrite) BOOL didFetchAll;
 @property (nonatomic, strong, readwrite) NSError *error;
 
+@property (nonatomic, strong, nullable) NSObject *requestMarker;
+
 @end
 
 @implementation KUSPaginatedDataSource
@@ -121,6 +123,9 @@
     self.isFetching = YES;
     self.error = nil;
 
+    NSObject *requestMarker = [[NSObject alloc] init];
+    self.requestMarker = requestMarker;
+
     __weak KUSPaginatedDataSource *weakSelf = self;
     [self.userSession.requestManager
      performRequestType:KUSRequestTypeGet
@@ -132,6 +137,12 @@
          if (strongSelf == nil) {
              return;
          }
+         // Check to make sure that the request marker did not change
+         if (strongSelf.requestMarker != requestMarker) {
+             return;
+         }
+         strongSelf.requestMarker = nil;
+
          KUSPaginatedResponse *response = [[KUSPaginatedResponse alloc] initWithJSON:json modelClass:[strongSelf modelClass]];
          [strongSelf _prependResponse:response error:error];
      }];
@@ -152,6 +163,9 @@
     self.isFetching = YES;
     self.error = nil;
 
+    NSObject *requestMarker = [[NSObject alloc] init];
+    self.requestMarker = requestMarker;
+
     __weak KUSPaginatedDataSource *weakSelf = self;
     [self.userSession.requestManager
      performRequestType:KUSRequestTypeGet
@@ -163,9 +177,21 @@
          if (strongSelf == nil) {
              return;
          }
+         // Check to make sure that the request marker did not change
+         if (strongSelf.requestMarker != requestMarker) {
+             return;
+         }
+         strongSelf.requestMarker = nil;
+
          KUSPaginatedResponse *response = [[KUSPaginatedResponse alloc] initWithJSON:json modelClass:[strongSelf modelClass]];
          [strongSelf _appendResponse:response error:error];
      }];
+}
+
+- (void)cancel
+{
+    self.isFetching = NO;
+    self.requestMarker = nil;
 }
 
 #pragma mark - Subclass methods

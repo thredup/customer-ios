@@ -33,9 +33,10 @@
 - (void)addListener:(id<KUSPaginatedDataSourceListener>)listener;
 - (void)removeListener:(id<KUSPaginatedDataSourceListener>)listener;
 
-// Fetch methods
+// Request methods
 - (void)fetchLatest;
 - (void)fetchNext;
+- (void)cancel;
 
 @end
 
