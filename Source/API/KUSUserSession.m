@@ -42,6 +42,17 @@
     return self;
 }
 
+#pragma mark - Public methods
+
+- (void)resetTracking
+{
+    // Nil out any user-specific datasources
+    _chatSessionsDataSource = nil;
+
+    // Request a new tracking token
+    [self.trackingTokenDataSource reset];
+}
+
 #pragma mark - Datasource objects
 
 - (KUSChatSessionsDataSource *)chatSessionsDataSource

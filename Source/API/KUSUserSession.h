@@ -18,6 +18,8 @@
 - (instancetype)initWithOrgName:(NSString *)orgName;
 - (instancetype)init NS_UNAVAILABLE;
 
+- (void)resetTracking;
+
 // Org methods
 - (NSString *)orgName;
 - (NSString *)organizationName;

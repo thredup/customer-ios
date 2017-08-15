@@ -82,7 +82,7 @@ static NSString *kKustomerOrgNameKey = @"orgName";
 
 - (void)resetTracking
 {
-    // TODO: Re-implement tracking clear
+    [self.userSession resetTracking];
 }
 
 #pragma mark - Helper functions

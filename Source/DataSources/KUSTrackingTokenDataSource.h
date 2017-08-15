@@ -14,4 +14,6 @@
 
 - (nullable NSString *)currentTrackingToken;
 
+- (void)reset;
+
 @end

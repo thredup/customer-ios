@@ -10,7 +10,9 @@
 
 #import "KUSObjectDataSource_Private.h"
 
-@interface KUSTrackingTokenDataSource () <KUSObjectDataSourceListener>
+@interface KUSTrackingTokenDataSource () <KUSObjectDataSourceListener> {
+    BOOL _wantsReset;
+}
 
 @end
 
@@ -31,8 +33,11 @@
 
 - (void)performRequestWithCompletion:(KUSRequestCompletion)completion
 {
-    NSURL *URL = [self.userSession.requestManager URLForEndpoint:@"/c/v1/tracking/tokens/current"];
-    [self.userSession.requestManager performRequestType:KUSRequestTypeGet
+    NSString *endpoint = (_wantsReset ? @"/c/v1/tracking/tokens" : @"/c/v1/tracking/tokens/current");
+    NSURL *URL = [self.userSession.requestManager URLForEndpoint:endpoint];
+    KUSRequestType requestType = (_wantsReset ? KUSRequestTypePost : KUSRequestTypeGet);
+
+    [self.userSession.requestManager performRequestType:requestType
                                                     URL:URL
                                                  params:nil
                                           authenticated:NO
@@ -51,6 +56,13 @@
 {
     KUSTrackingToken *trackingTokenObj = self.object;
     return trackingTokenObj.token;
+}
+
+- (void)reset
+{
+    _wantsReset = YES;
+    [self cancel];
+    [self fetch];
 }
 
 #pragma mark - Internal methods
@@ -76,6 +88,8 @@
 
 - (void)objectDataSourceDidLoad:(KUSObjectDataSource *)dataSource
 {
+    _wantsReset = NO;
+
     NSString *currentTrackingToken = self.currentTrackingToken;
     [[NSUserDefaults standardUserDefaults] setObject:currentTrackingToken forKey:kKustomerTrackingTokenHeaderKey];
 }
