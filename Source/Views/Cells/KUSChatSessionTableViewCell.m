@@ -8,6 +8,8 @@
 
 #import "KUSChatSessionTableViewCell.h"
 
+#import <SDWebImage/UIImageView+WebCache.h>
+
 #import "KUSChatSession.h"
 #import "KUSImage.h"
 #import "KUSText.h"
@@ -76,14 +78,13 @@
 {
     _chatSession = chatSession;
 
-    self.avatarImageView.image = [KUSImage kustomerTeamIcon];
-
     self.subtitleLabel.attributedText = [KUSText attributedStringFromText:_chatSession.preview fontSize:12.0];
 
     // TODO: String from lastSeenAt/last message
     self.dateLabel.text = @"19 hours ago";
 
     [self _updateTitleLabel];
+    [self _updateAvatarImage];
 
     [self setNeedsLayout];
 }
@@ -97,6 +98,18 @@
 
     // TODO: Grab username from responders/messages
     self.titleLabel.text = [NSString stringWithFormat:@"Chat with %@", teamName];
+}
+
+- (void)_updateAvatarImage
+{
+    KUSChatSettings *chatSettings = _userSession.chatSettingsDataSource.object;
+    if (chatSettings.teamIconURL) {
+        [self.avatarImageView sd_setImageWithURL:chatSettings.teamIconURL
+                                placeholderImage:[KUSImage kustomerTeamIcon]
+                                         options:SDWebImageRefreshCached];
+    } else {
+        [self.avatarImageView setImage:[KUSImage kustomerTeamIcon]];
+    }
 }
 
 #pragma mark - Layout methods
@@ -148,6 +161,7 @@
 - (void)objectDataSourceDidLoad:(KUSObjectDataSource *)dataSource
 {
     [self _updateTitleLabel];
+    [self _updateAvatarImage];
 }
 
 @end
