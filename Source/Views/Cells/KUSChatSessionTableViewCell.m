@@ -103,12 +103,14 @@
 - (void)_updateAvatarImage
 {
     KUSChatSettings *chatSettings = _userSession.chatSettingsDataSource.object;
+    NSString *teamName = chatSettings.teamName ?: _userSession.organizationName;
+    UIImage *placeholderImage = [KUSImage defaultAvatarImageForName:teamName];
     if (chatSettings.teamIconURL) {
         [self.avatarImageView sd_setImageWithURL:chatSettings.teamIconURL
-                                placeholderImage:[KUSImage kustomerTeamIcon]
+                                placeholderImage:placeholderImage
                                          options:SDWebImageRefreshCached];
     } else {
-        [self.avatarImageView setImage:[KUSImage kustomerTeamIcon]];
+        [self.avatarImageView setImage:placeholderImage];
     }
 }
 

@@ -18,4 +18,6 @@
 + (UIImage *)sendImageWithSize:(CGSize)size color:(UIColor *)color;
 + (UIImage *)circularImageWithSize:(CGSize)size color:(UIColor *)color;
 
++ (UIImage *)defaultAvatarImageForName:(NSString *)name;
+
 @end
