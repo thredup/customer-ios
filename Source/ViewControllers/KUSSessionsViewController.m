@@ -63,7 +63,7 @@
     barButtonItem.style = UIBarButtonItemStyleDone;
     self.navigationItem.rightBarButtonItem = barButtonItem;
 
-    self.navigationItem.titleView = [[KUSAvatarTitleView alloc] init];
+    self.navigationItem.titleView = [[KUSAvatarTitleView alloc] initWithUserSession:_userSession];
 
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     self.tableView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);

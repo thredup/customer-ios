@@ -57,6 +57,8 @@
 		636531B31F1C593D00433A50 /* KUSChatMessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 636531B11F1C593D00433A50 /* KUSChatMessageTableViewCell.m */; };
 		636531B61F1DB73B00433A50 /* KUSColor.h in Headers */ = {isa = PBXBuildFile; fileRef = 636531B41F1DB73B00433A50 /* KUSColor.h */; };
 		636531B71F1DB73B00433A50 /* KUSColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 636531B51F1DB73B00433A50 /* KUSColor.m */; };
+		6371779D1F43EDDC00A7F79C /* KUSAvatarImageView.h in Headers */ = {isa = PBXBuildFile; fileRef = 6371779B1F43EDDC00A7F79C /* KUSAvatarImageView.h */; };
+		6371779E1F43EDDC00A7F79C /* KUSAvatarImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6371779C1F43EDDC00A7F79C /* KUSAvatarImageView.m */; };
 		63A4EDD71F097D8F00EA3852 /* Kustomer_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 63A4EDD61F097D8F00EA3852 /* Kustomer_Private.h */; };
 		63B9CD9B1F088E8800120F3E /* Kustomer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63B9CD911F088E8800120F3E /* Kustomer.framework */; };
 		63B9CDA01F088E8800120F3E /* KustomerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 63B9CD9F1F088E8800120F3E /* KustomerTests.m */; };
@@ -176,6 +178,8 @@
 		636531B11F1C593D00433A50 /* KUSChatMessageTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSChatMessageTableViewCell.m; sourceTree = "<group>"; };
 		636531B41F1DB73B00433A50 /* KUSColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSColor.h; sourceTree = "<group>"; };
 		636531B51F1DB73B00433A50 /* KUSColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSColor.m; sourceTree = "<group>"; };
+		6371779B1F43EDDC00A7F79C /* KUSAvatarImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSAvatarImageView.h; sourceTree = "<group>"; };
+		6371779C1F43EDDC00A7F79C /* KUSAvatarImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSAvatarImageView.m; sourceTree = "<group>"; };
 		63A4EDD61F097D8F00EA3852 /* Kustomer_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Kustomer_Private.h; sourceTree = "<group>"; };
 		63B9CD911F088E8800120F3E /* Kustomer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Kustomer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		63B9CD9A1F088E8800120F3E /* KustomerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KustomerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -330,6 +334,8 @@
 				6334BE4C1F0C600F00258DAF /* KUSAttributionToolbar.m */,
 				6334BE5A1F0C783200258DAF /* KUSAvatarTitleView.h */,
 				6334BE5B1F0C783200258DAF /* KUSAvatarTitleView.m */,
+				6371779B1F43EDDC00A7F79C /* KUSAvatarImageView.h */,
+				6371779C1F43EDDC00A7F79C /* KUSAvatarImageView.m */,
 				633D8FDC1F22EDB800BAFAC9 /* KUSInputBar.h */,
 				633D8FDD1F22EDB800BAFAC9 /* KUSInputBar.m */,
 				633FADC21F26E7630060B4A6 /* KUSTextView.h */,
@@ -490,6 +496,7 @@
 				6334BE361F0C4A1300258DAF /* KUSChatSession.h in Headers */,
 				6334BE541F0C66E200258DAF /* KUSImage.h in Headers */,
 				63EDF3D91F415797000345D8 /* KUSTrackingTokenDataSource.h in Headers */,
+				6371779D1F43EDDC00A7F79C /* KUSAvatarImageView.h in Headers */,
 				633D8FF21F23E07E00BAFAC9 /* KUSChatSessionsDataSource.h in Headers */,
 				6334BE4D1F0C600F00258DAF /* KUSAttributionToolbar.h in Headers */,
 				636531B61F1DB73B00433A50 /* KUSColor.h in Headers */,
@@ -807,6 +814,7 @@
 				633D8FF31F23E07E00BAFAC9 /* KUSChatSessionsDataSource.m in Sources */,
 				6334BE3B1F0C4B3D00258DAF /* KUSChatMessage.m in Sources */,
 				63EB38551F2D83430020F38B /* KUSObjectDataSource.m in Sources */,
+				6371779E1F43EDDC00A7F79C /* KUSAvatarImageView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

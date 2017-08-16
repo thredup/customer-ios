@@ -8,11 +8,12 @@
 
 #import "KUSAvatarTitleView.h"
 
-#import "KUSImage.h"
+#import "KUSAvatarImageView.h"
+#import "KUSUserSession.h"
 
 @interface KUSAvatarTitleView ()
 
-@property (nonatomic, strong) UIImageView *avatarImageView;
+@property (nonatomic, strong) KUSAvatarImageView *avatarImageView;
 
 @end
 
@@ -20,14 +21,11 @@
 
 #pragma mark - Lifecycle methods
 
-- (instancetype)initWithFrame:(CGRect)frame
+- (instancetype)initWithUserSession:(KUSUserSession *)userSession
 {
-    self = [super initWithFrame:frame];
+    self = [super init];
     if (self) {
-        _avatarImageView = [[UIImageView alloc] init];
-        _avatarImageView.contentMode = UIViewContentModeScaleAspectFill;
-        _avatarImageView.image = [KUSImage kustomerTeamIcon];
-        _avatarImageView.layer.masksToBounds = YES;
+        _avatarImageView = [[KUSAvatarImageView alloc] initWithUserSession:userSession];
         [self addSubview:_avatarImageView];
     }
     return self;
@@ -46,7 +44,6 @@
         .size.width = avatarHeight,
         .size.height = avatarHeight
     };
-    self.avatarImageView.layer.cornerRadius = avatarHeight / 2.0;
 }
 
 - (CGSize)sizeThatFits:(CGSize)size

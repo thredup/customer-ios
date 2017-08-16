@@ -10,8 +10,10 @@
 
 #import "KUSChatMessage.h"
 #import "KUSColor.h"
-#import "KUSImage.h"
 #import "KUSText.h"
+#import "KUSUserSession.h"
+
+#import "KUSAvatarImageView.h"
 
 static const CGFloat kBubbleTopPadding = 10.0;
 static const CGFloat kBubbleSidePadding = 12.0;
@@ -23,10 +25,11 @@ static const CGFloat kMaxBubbleWidth = 250.0;
 static const CGFloat kMinBubbleHeight = 38.0;
 
 @interface KUSChatMessageTableViewCell () {
+    KUSUserSession *_userSession;
     KUSChatMessage *_chatMessage;
     BOOL _showsAvatar;
 
-    UIImageView *_imageView;
+    KUSAvatarImageView *_avatarImageView;
     UIView *_bubbleView;
     UILabel *_labelView;
 }
@@ -78,15 +81,12 @@ static const CGFloat kMinBubbleHeight = 38.0;
 
 #pragma mark - Lifecycle methods
 
-- (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier
+- (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier userSession:(KUSUserSession *)userSession
 {
     self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     if (self) {
-        _imageView = [[UIImageView alloc] init];
-        _imageView.contentMode = UIViewContentModeScaleAspectFill;
-        _imageView.image = [KUSImage kustomerTeamIcon];
-        _imageView.layer.masksToBounds = YES;
-        [self.contentView addSubview:_imageView];
+        _avatarImageView = [[KUSAvatarImageView alloc] initWithUserSession:userSession];
+        [self.contentView addSubview:_avatarImageView];
 
         _bubbleView = [[UIView alloc] init];
         _bubbleView.layer.masksToBounds = YES;
@@ -109,14 +109,13 @@ static const CGFloat kMinBubbleHeight = 38.0;
 
     BOOL currentUser = _chatMessage.direction == KUSChatMessageDirectionIn;
 
-    _imageView.hidden = currentUser || !_showsAvatar;
-    _imageView.frame = (CGRect) {
+    _avatarImageView.hidden = currentUser || !_showsAvatar;
+    _avatarImageView.frame = (CGRect) {
         .origin.x = kRowSidePadding,
         .origin.y = (self.contentView.bounds.size.height - 40.0) / 2.0,
         .size.width = 40.0,
         .size.height = 40.0
     };
-    _imageView.layer.cornerRadius = _imageView.frame.size.width / 2.0;
 
     CGSize boundingSizeForText = [[self class] boundingSizeForText:_chatMessage.body maxWidth:self.contentView.bounds.size.width];
 

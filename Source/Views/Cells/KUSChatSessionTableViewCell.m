@@ -8,13 +8,11 @@
 
 #import "KUSChatSessionTableViewCell.h"
 
-#import <SDWebImage/UIImageView+WebCache.h>
-
 #import "KUSChatSession.h"
-#import "KUSImage.h"
 #import "KUSText.h"
 #import "KUSUserSession.h"
 
+#import "KUSAvatarImageView.h"
 #import "KUSChatSettingsDataSource.h"
 
 @interface KUSChatSessionTableViewCell () <KUSObjectDataSourceListener> {
@@ -23,7 +21,7 @@
     KUSChatSession *_chatSession;
 }
 
-@property (nonatomic, strong) UIImageView *avatarImageView;
+@property (nonatomic, strong) KUSAvatarImageView *avatarImageView;
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UILabel *subtitleLabel;
 @property (nonatomic, strong) UILabel *dateLabel;
@@ -40,9 +38,7 @@
     if (self) {
         _userSession = userSession;
 
-        _avatarImageView = [[UIImageView alloc] init];
-        _avatarImageView.contentMode = UIViewContentModeScaleAspectFill;
-        _avatarImageView.layer.masksToBounds = YES;
+        _avatarImageView = [[KUSAvatarImageView alloc] initWithUserSession:userSession];
         [self.contentView addSubview:_avatarImageView];
 
         _titleLabel = [[UILabel alloc] init];
@@ -84,7 +80,6 @@
     self.dateLabel.text = @"19 hours ago";
 
     [self _updateTitleLabel];
-    [self _updateAvatarImage];
 
     [self setNeedsLayout];
 }
@@ -100,20 +95,6 @@
     self.titleLabel.text = [NSString stringWithFormat:@"Chat with %@", teamName];
 }
 
-- (void)_updateAvatarImage
-{
-    KUSChatSettings *chatSettings = _userSession.chatSettingsDataSource.object;
-    NSString *teamName = chatSettings.teamName ?: _userSession.organizationName;
-    UIImage *placeholderImage = [KUSImage defaultAvatarImageForName:teamName];
-    if (chatSettings.teamIconURL) {
-        [self.avatarImageView sd_setImageWithURL:chatSettings.teamIconURL
-                                placeholderImage:placeholderImage
-                                         options:SDWebImageRefreshCached];
-    } else {
-        [self.avatarImageView setImage:placeholderImage];
-    }
-}
-
 #pragma mark - Layout methods
 
 - (void)layoutSubviews
@@ -127,8 +108,6 @@
         .origin.y = (self.bounds.size.height - avatarImageSize.height) / 2.0,
         .size = avatarImageSize
     };
-    self.avatarImageView.layer.cornerRadius = avatarImageSize.width / 2.0;
-
 
     CGFloat textXOffset = CGRectGetMaxX(self.avatarImageView.frame) + 8.0;
     CGFloat rightMargin = 20.0;
@@ -163,7 +142,6 @@
 - (void)objectDataSourceDidLoad:(KUSObjectDataSource *)dataSource
 {
     [self _updateTitleLabel];
-    [self _updateAvatarImage];
 }
 
 @end

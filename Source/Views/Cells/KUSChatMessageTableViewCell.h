@@ -9,11 +9,12 @@
 #import <UIKit/UIKit.h>
 
 @class KUSChatMessage;
+@class KUSUserSession;
 @interface KUSChatMessageTableViewCell : UITableViewCell
 
 + (CGFloat)heightForChatMessage:(KUSChatMessage *)chatMessage maxWidth:(CGFloat)maxWidth;
 
-- (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier;
+- (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier userSession:(KUSUserSession *)userSession;
 
 - (void)setChatMessage:(KUSChatMessage *)chatMessage;
 - (void)setShowsAvatar:(BOOL)showsAvatar;

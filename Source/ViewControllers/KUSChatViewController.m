@@ -43,7 +43,7 @@
     if (self) {
         _userSession = userSession;
 
-        self.navigationItem.titleView = [[KUSAvatarTitleView alloc] init];
+        self.navigationItem.titleView = [[KUSAvatarTitleView alloc] initWithUserSession:userSession];
     }
     return self;
 }
@@ -326,7 +326,7 @@
     static NSString *kMessageCellIdentifier = @"MessageCell";
     KUSChatMessageTableViewCell *cell = (KUSChatMessageTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kMessageCellIdentifier];
     if (cell == nil) {
-        cell = [[KUSChatMessageTableViewCell alloc] initWithReuseIdentifier:kMessageCellIdentifier];
+        cell = [[KUSChatMessageTableViewCell alloc] initWithReuseIdentifier:kMessageCellIdentifier userSession:_userSession];
         cell.transform = tableView.transform;
     }
 
