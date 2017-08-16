@@ -74,16 +74,20 @@
 
 + (UIImage *)defaultAvatarImageForName:(NSString *)name
 {
-    NSString *firstLetter = @"*";
-    if (name.length > 0) {
-        firstLetter = [[name substringToIndex:1] uppercaseString];
+    NSArray<NSString *> *initials = [self _initialsFromName:name];
+
+    // For parity with the web ui
+    // https://github.com/Sitebase/react-avatar/blob/0f790acb720502cb26f572dca58a6e67557d71b3/lib/utils.js#L56
+    unichar letterSum = 0;
+    for (NSString *initial in initials) {
+        letterSum += [initial characterAtIndex:0];
     }
-    NSUInteger letterHash = [firstLetter hash];
-    NSUInteger colorIndex = letterHash % [self _defaultNameColors].count;
+    NSString *text = [initials componentsJoinedByString:@""];
+    NSUInteger colorIndex = letterSum % [self _defaultNameColors].count;
     UIColor *color = [self _defaultNameColors][colorIndex];
 
     CGRect imageRect = CGRectMake(0.0, 0.0, 40.0, 40.0);
-    CGRect boundingRect = [firstLetter boundingRectWithSize:imageRect.size
+    CGRect boundingRect = [text boundingRectWithSize:imageRect.size
                                                     options:kNilOptions
                                                  attributes:[self _defaultAvatarTextAttributes]
                                                     context:nil];
@@ -96,7 +100,7 @@
         .x = (imageRect.size.width - boundingRect.size.width) / 2.0,
         .y = (imageRect.size.height - boundingRect.size.height) / 2.0
     };
-    [firstLetter drawAtPoint:drawPoint withAttributes:[self _defaultAvatarTextAttributes]];
+    [text drawAtPoint:drawPoint withAttributes:[self _defaultAvatarTextAttributes]];
 
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
@@ -104,6 +108,26 @@
 }
 
 #pragma mark - Internal methods
+
++ (NSArray<NSString *> *)_initialsFromName:(NSString *)name
+{
+    NSInteger maximumInitialsCount = 3;
+    NSArray<NSString *> *words = [name componentsSeparatedByString:@" "];
+    NSMutableArray<NSString *> *initials = [[NSMutableArray alloc] init];
+    for (NSString *word in words) {
+        if (word.length > 0) {
+            NSString *firstLetter = [[word substringToIndex:1] uppercaseString];
+            [initials addObject:firstLetter];
+        }
+        if (initials.count >= maximumInitialsCount) {
+            break;
+        }
+    }
+    if (initials.count) {
+        return initials;
+    }
+    return @[ @"*" ];
+}
 
 + (NSDictionary<NSString *, id> *)_defaultAvatarTextAttributes
 {
@@ -115,8 +139,8 @@
 
 + (NSArray<UIColor *> *)_defaultNameColors
 {
+    // For parity with the web ui
     // https://github.com/Sitebase/react-avatar/blob/0f790acb720502cb26f572dca58a6e67557d71b3/lib/utils.js#L53
-    // For parity with the kustomer web ui
     static NSArray<UIColor *> *_defaultNameColors = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
