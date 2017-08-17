@@ -93,6 +93,11 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
 
 #pragma mark - UIResponder methods
 
+- (BOOL)isFirstResponder
+{
+    return [_textView isFirstResponder];
+}
+
 - (BOOL)canBecomeFirstResponder
 {
     return [_textView canBecomeFirstResponder];

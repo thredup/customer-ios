@@ -480,7 +480,7 @@
 {
     NSInteger numberOfRows = [self numberOfChatMessages];
     if (row < numberOfRows - 1) {
-        return [self messageBeforeRow:row + 1];
+        return [self messageForRow:row + 1];
     } else {
         return nil;
     }
