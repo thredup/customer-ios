@@ -9,6 +9,7 @@
 #import "KUSChatSessionTableViewCell.h"
 
 #import "KUSChatSession.h"
+#import "KUSColor.h"
 #import "KUSText.h"
 #import "KUSUserSession.h"
 
@@ -37,6 +38,9 @@
     self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     if (self) {
         _userSession = userSession;
+
+        self.selectedBackgroundView = [[UIView alloc] init];
+        self.selectedBackgroundView.backgroundColor = [KUSColor lightGrayColor];
 
         _avatarImageView = [[KUSAvatarImageView alloc] initWithUserSession:userSession];
         [self.contentView addSubview:_avatarImageView];
