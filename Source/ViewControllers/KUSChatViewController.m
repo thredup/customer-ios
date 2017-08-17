@@ -11,11 +11,13 @@
 #import "KUSChatSession.h"
 #import "KUSUserSession.h"
 
-#import "KUSAvatarTitleView.h"
+#import "KUSColor.h"
+#import "KUSAvatarImageView.h"
 #import "KUSChatMessagesDataSource.h"
 #import "KUSChatMessageTableViewCell.h"
 #import "KUSChatSettingsDataSource.h"
 #import "KUSInputBar.h"
+#import "KUSFauxNavigationBar.h"
 
 @interface KUSChatViewController () <KUSInputBarDelegate, KUSObjectDataSourceListener, KUSPaginatedDataSourceListener, UITableViewDataSource, UITableViewDelegate> {
     KUSUserSession *_userSession;
@@ -30,6 +32,10 @@
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) KUSInputBar *inputBarView;
+@property (nonatomic, strong) KUSFauxNavigationBar *fauxNavigationBar;
+@property (nonatomic, strong) KUSAvatarImageView *avatarImageView;
+@property (nonatomic, strong) UILabel *nameLabel;
+@property (nonatomic, strong) UILabel *greetingLabel;
 
 @end
 
@@ -42,8 +48,6 @@
     self = [super init];
     if (self) {
         _userSession = userSession;
-
-        self.navigationItem.titleView = [[KUSAvatarTitleView alloc] initWithUserSession:userSession];
     }
     return self;
 }
@@ -102,6 +106,24 @@
     self.tableView.transform = CGAffineTransformMakeScale(1.0, -1.0);
     [self.view addSubview:self.tableView];
 
+    self.fauxNavigationBar = [[KUSFauxNavigationBar alloc] init];
+    [self.view addSubview:self.fauxNavigationBar];
+
+    self.avatarImageView = [[KUSAvatarImageView alloc] initWithUserSession:_userSession];
+    [self.fauxNavigationBar addSubview:self.avatarImageView];
+
+    self.nameLabel = [[UILabel alloc] init];
+    self.nameLabel.font = [UIFont boldSystemFontOfSize:13.0];
+    self.nameLabel.textAlignment = NSTextAlignmentCenter;
+    self.nameLabel.textColor = [UIColor darkGrayColor];
+    [self.fauxNavigationBar addSubview:self.nameLabel];
+
+    self.greetingLabel = [[UILabel alloc] init];
+    self.greetingLabel.font = [UIFont systemFontOfSize:11.0];
+    self.greetingLabel.textAlignment = NSTextAlignmentCenter;
+    self.greetingLabel.textColor = [KUSColor darkGrayColor];
+    [self.fauxNavigationBar addSubview:self.greetingLabel];
+
     self.inputBarView = [[KUSInputBar alloc] init];
     self.inputBarView.delegate = self;
     self.inputBarView.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth);
@@ -127,6 +149,10 @@
                                                    object:nil];
     }
 
+    [_userSession.chatSettingsDataSource addListener:self];
+
+    [self _updateTextLabels];
+
     // Force layout so that animated presentations start from the right state
     [self.view setNeedsLayout];
     [self.view layoutIfNeeded];
@@ -135,13 +161,6 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-
-    if (_userSession.chatSettingsDataSource.object) {
-        [self _updatePromptText];
-        [self.tableView reloadData];
-    } else {
-        [_userSession.chatSettingsDataSource addListener:self];
-    }
 
     [_inputBarView becomeFirstResponder];
 }
@@ -157,12 +176,40 @@
 {
     [super viewWillLayoutSubviews];
 
+    CGFloat extraNavigationBarHeight = 36.0;
+    CGFloat navigationBarHeight = self.topLayoutGuide.length + extraNavigationBarHeight;
+
     CGFloat inputBarHeight = [self.inputBarView desiredHeight];
     CGFloat inputBarY = self.view.bounds.size.height - MAX(self.bottomLayoutGuide.length, _keyboardHeight) - inputBarHeight;
     self.inputBarView.frame = (CGRect) {
         .origin.y = inputBarY,
         .size.width = self.view.bounds.size.width,
         .size.height = inputBarHeight
+    };
+
+    self.fauxNavigationBar.frame = (CGRect) {
+        .size.width = self.view.bounds.size.width,
+        .size.height = navigationBarHeight
+    };
+
+    CGFloat avatarSize = 30.0;
+    CGFloat statusBarHeight = 20.0;
+    self.avatarImageView.frame = (CGRect) {
+        .origin.x = (self.fauxNavigationBar.bounds.size.width - avatarSize) / 2.0,
+        .origin.y = (self.fauxNavigationBar.bounds.size.height - extraNavigationBarHeight - avatarSize - statusBarHeight) / 2.0 + statusBarHeight,
+        .size.width = avatarSize,
+        .size.height = avatarSize
+    };
+
+    self.nameLabel.frame = (CGRect) {
+        .origin.y = self.avatarImageView.frame.origin.y + self.avatarImageView.frame.size.height + 4.0,
+        .size.width = self.fauxNavigationBar.bounds.size.width,
+        .size.height = 16.0
+    };
+    self.greetingLabel.frame = (CGRect) {
+        .origin.y = self.nameLabel.frame.origin.y + self.nameLabel.frame.size.height + 2.0,
+        .size.width = self.fauxNavigationBar.bounds.size.width,
+        .size.height = 13.0
     };
 
     self.tableView.frame = (CGRect) {
@@ -172,10 +219,10 @@
 
     self.tableView.contentInset = (UIEdgeInsets) {
         .top = 4.0,
-        .bottom = self.topLayoutGuide.length + 4.0
+        .bottom = navigationBarHeight + 4.0
     };
     self.tableView.scrollIndicatorInsets = (UIEdgeInsets) {
-        .bottom = self.topLayoutGuide.length
+        .bottom = navigationBarHeight
     };
 }
 
@@ -188,17 +235,20 @@
 
 #pragma mark - Internal methods
 
-- (void)_updatePromptText
+- (void)_updateTextLabels
 {
     KUSChatSettings *chatSettings = _userSession.chatSettingsDataSource.object;
-    self.navigationItem.prompt = chatSettings.greeting;
+    NSString *teamName = chatSettings.teamName.length ? chatSettings.teamName : _userSession.organizationName;
+    self.nameLabel.text = teamName;
+
+    self.greetingLabel.text = chatSettings.greeting;
 }
 
 #pragma mark - KUSObjectDataSourceListener methods
 
 - (void)objectDataSourceDidLoad:(KUSObjectDataSource *)dataSource
 {
-    [self _updatePromptText];
+    [self _updateTextLabels];
     [self.tableView reloadData];
 }
 

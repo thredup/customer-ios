@@ -12,11 +12,12 @@
 #import "KUSChatViewController.h"
 #import "KUSUserSession.h"
 
-#import "KUSAvatarTitleView.h"
+#import "KUSAvatarImageView.h"
 #import "KUSColor.h"
 #import "KUSImage.h"
 #import "KUSChatPlaceholderTableViewCell.h"
 #import "KUSChatSessionTableViewCell.h"
+#import "KUSFauxNavigationBar.h"
 
 @interface KUSSessionsViewController () <KUSPaginatedDataSourceListener, UITableViewDataSource, UITableViewDelegate> {
     KUSUserSession *_userSession;
@@ -27,6 +28,8 @@
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIButton *createSessionButton;
+@property (nonatomic, strong) KUSFauxNavigationBar *fauxNavigationBar;
+@property (nonatomic, strong) KUSAvatarImageView *avatarImageView;
 
 @end
 
@@ -63,8 +66,6 @@
     barButtonItem.style = UIBarButtonItemStyleDone;
     self.navigationItem.rightBarButtonItem = barButtonItem;
 
-    self.navigationItem.titleView = [[KUSAvatarTitleView alloc] initWithUserSession:_userSession];
-
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     self.tableView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
     self.tableView.dataSource = self;
@@ -74,6 +75,12 @@
     self.tableView.separatorInset = UIEdgeInsetsZero;
     self.tableView.separatorColor = [KUSColor grayColor];
     [self.view addSubview:self.tableView];
+
+    self.fauxNavigationBar = [[KUSFauxNavigationBar alloc] init];
+    [self.view addSubview:self.fauxNavigationBar];
+
+    self.avatarImageView = [[KUSAvatarImageView alloc] initWithUserSession:_userSession];
+    [self.fauxNavigationBar addSubview:self.avatarImageView];
 
     CGFloat buttonRadius = 4.0;
     CGSize size = CGSizeMake(buttonRadius * 2.0, buttonRadius * 2.0);
@@ -127,6 +134,20 @@
     [super viewWillLayoutSubviews];
 
     self.tableView.frame = self.view.bounds;
+
+    self.fauxNavigationBar.frame = (CGRect) {
+        .size.width = self.view.bounds.size.width,
+        .size.height = self.topLayoutGuide.length
+    };
+
+    CGFloat avatarSize = 30.0;
+    CGFloat statusBarHeight = 20.0;
+    self.avatarImageView.frame = (CGRect) {
+        .origin.x = (self.fauxNavigationBar.bounds.size.width - avatarSize) / 2.0,
+        .origin.y = (self.fauxNavigationBar.bounds.size.height - avatarSize - statusBarHeight) / 2.0 + statusBarHeight,
+        .size.width = avatarSize,
+        .size.height = avatarSize
+    };
 
     // TODO: Extract layout constants
     CGSize createSessionButtonSize = CGSizeMake(182.0, 44.0);

@@ -23,9 +23,7 @@
 {
     self = [super initWithNavigationBarClass:nil toolbarClass:[KUSAttributionToolbar class]];
     if (self) {
-        self.navigationBar.barTintColor = [KUSColor grayColor];
-        self.navigationBar.tintColor = [KUSColor darkGrayColor];
-        self.toolbarHidden = NO;
+        [self _commonInit];
     }
     return self;
 }
@@ -34,13 +32,23 @@
 {
     self = [super initWithNavigationBarClass:nil toolbarClass:[KUSAttributionToolbar class]];
     if (self) {
-        self.navigationBar.barTintColor = [KUSColor grayColor];
-        self.navigationBar.tintColor = [KUSColor darkGrayColor];
-        self.toolbarHidden = NO;
-
+        [self _commonInit];
         [self pushViewController:rootViewController animated:NO];
     }
     return self;
+}
+
+#pragma mark - Internal methods
+
+- (void)_commonInit
+{
+    UIImage *transparentImage = [UIImage new];
+    self.navigationBar.tintColor = [KUSColor darkGrayColor];
+    self.navigationBar.shadowImage = transparentImage;
+    self.navigationBar.translucent = YES;
+    [self.navigationBar setBackgroundImage:transparentImage forBarMetrics:UIBarMetricsDefault];
+
+    self.toolbarHidden = NO;
 }
 
 @end
