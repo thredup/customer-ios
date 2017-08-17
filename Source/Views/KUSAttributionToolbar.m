@@ -24,7 +24,8 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.barTintColor = [KUSColor grayColor];
+        self.translucent = NO;
+        self.barTintColor = [KUSColor lightGrayColor];
 
         _attributionLabel = [[UILabel alloc] init];
         _attributionLabel.text = @"Messaging by Kustomer";

@@ -146,7 +146,7 @@ static const CGFloat kMinBubbleHeight = 38.0;
 
     BOOL currentUser = _chatMessage.direction == KUSChatMessageDirectionIn;
 
-    UIColor *bubbleColor = (currentUser ? [KUSColor blueColor] : [KUSColor grayColor]);
+    UIColor *bubbleColor = (currentUser ? [KUSColor blueColor] : [KUSColor lightGrayColor]);
     UIColor *textColor = (currentUser ? [UIColor whiteColor] : [UIColor blackColor]);
 
     _bubbleView.backgroundColor = bubbleColor;

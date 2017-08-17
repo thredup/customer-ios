@@ -44,14 +44,14 @@
 
 + (UIColor *)lightGrayColor
 {
-    return [UIColor colorWithWhite:237.0/255.0 alpha:1.0];
+    return [UIColor colorWithWhite:241.0/255.0 alpha:1.0];
 }
 
 + (UIColor *)grayColor
 {
-    return [UIColor colorWithRed:236.0/255.0
-                           green:239.0/255.0
-                            blue:241.0/255.0
+    return [UIColor colorWithRed:219.0/255.0
+                           green:222.0/255.0
+                            blue:224.0/255.0
                            alpha:1.0];
 }
 

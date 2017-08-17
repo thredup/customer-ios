@@ -72,6 +72,7 @@
     self.tableView.rowHeight = 88.0;
     self.tableView.tableFooterView = [[UIView alloc] init];
     self.tableView.separatorInset = UIEdgeInsetsZero;
+    self.tableView.separatorColor = [KUSColor grayColor];
     [self.view addSubview:self.tableView];
 
     CGFloat buttonRadius = 4.0;
