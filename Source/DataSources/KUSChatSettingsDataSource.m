@@ -12,6 +12,8 @@
 
 @implementation KUSChatSettingsDataSource
 
+#pragma mark - KUSObjectDataSource subclass methods
+
 - (void)performRequestWithCompletion:(KUSRequestCompletion)completion
 {
     [self.userSession.requestManager getEndpoint:@"/c/v1/chat/settings"

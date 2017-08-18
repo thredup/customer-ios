@@ -17,6 +17,7 @@
 @property (nonatomic, strong, null_resettable) KUSChatSessionsDataSource *chatSessionsDataSource;
 @property (nonatomic, strong, null_resettable) KUSChatSettingsDataSource *chatSettingsDataSource;
 @property (nonatomic, strong, null_resettable) KUSTrackingTokenDataSource *trackingTokenDataSource;
+@property (nonatomic, strong, null_resettable) KUSUsersDataSource *usersDataSource;
 
 @property (nonatomic, strong, null_resettable) KUSRequestManager *requestManager;
 
@@ -77,6 +78,14 @@
         _trackingTokenDataSource = [[KUSTrackingTokenDataSource alloc] initWithUserSession:self];
     }
     return _trackingTokenDataSource;
+}
+
+- (KUSUsersDataSource *)usersDataSource
+{
+    if (_usersDataSource == nil) {
+        _usersDataSource = [[KUSUsersDataSource alloc] initWithUserSession:self];
+    }
+    return _usersDataSource;
 }
 
 #pragma mark - Request manager

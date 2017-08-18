@@ -12,6 +12,7 @@
 #import "KUSChatSettingsDataSource.h"
 #import "KUSRequestManager.h"
 #import "KUSTrackingTokenDataSource.h"
+#import "KUSUsersDataSource.h"
 
 @interface KUSUserSession : NSObject
 
@@ -28,6 +29,7 @@
 - (KUSChatSessionsDataSource *)chatSessionsDataSource;
 - (KUSChatSettingsDataSource *)chatSettingsDataSource;
 - (KUSTrackingTokenDataSource *)trackingTokenDataSource;
+- (KUSUsersDataSource *)usersDataSource;
 
 // Request manager
 - (KUSRequestManager *)requestManager;
