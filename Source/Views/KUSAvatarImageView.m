@@ -11,10 +11,13 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 
 #import "KUSImage.h"
+#import "KUSUser.h"
 #import "KUSUserSession.h"
 
 @interface KUSAvatarImageView () <KUSObjectDataSourceListener> {
     __weak KUSUserSession *_userSession;
+
+    __weak KUSUserDataSource *_userDataSource;
 }
 
 @end
@@ -31,9 +34,10 @@
 
         self.contentMode = UIViewContentModeScaleAspectFill;
         self.layer.masksToBounds = YES;
-        [self _updateAvatarImage];
 
         [_userSession.chatSettingsDataSource addListener:self];
+
+        [self _updateAvatarImage];
     }
     return self;
 }
@@ -52,15 +56,39 @@
     self.layer.cornerRadius = self.bounds.size.width / 2.0;
 }
 
+#pragma mark - Property methods
+
+- (void)setUserId:(NSString *)userId
+{
+    if (_userId == userId || [_userId isEqualToString:userId]) {
+        return;
+    }
+    [_userDataSource removeListener:self];
+    _userId = userId;
+    _userDataSource = [_userSession.usersDataSource userDataSourceForUserId:_userId];
+    [_userDataSource addListener:self];
+    [self _updateAvatarImage];
+}
+
 #pragma mark - Internal methods
 
 - (void)_updateAvatarImage
 {
+    KUSUser *user = _userDataSource.object;
+    if (_userDataSource && user == nil && !_userDataSource.isFetching) {
+        [_userDataSource fetch];
+    }
     KUSChatSettings *chatSettings = _userSession.chatSettingsDataSource.object;
-    NSString *teamName = chatSettings.teamName ?: _userSession.organizationName;
-    UIImage *placeholderImage = [KUSImage defaultAvatarImageForName:teamName];
-    if (chatSettings.teamIconURL) {
-        [self sd_setImageWithURL:chatSettings.teamIconURL
+    if (_userSession.chatSettingsDataSource && chatSettings == nil && !_userSession.chatSettingsDataSource.isFetching) {
+        [_userSession.chatSettingsDataSource fetch];
+    }
+
+    NSString *name = user.displayName ?: chatSettings.teamName ?: _userSession.organizationName;
+    NSURL *iconURL = user.avatarURL ?: chatSettings.teamIconURL;
+
+    UIImage *placeholderImage = [KUSImage defaultAvatarImageForName:name];
+    if (iconURL) {
+        [self sd_setImageWithURL:iconURL
                 placeholderImage:placeholderImage
                          options:SDWebImageRefreshCached];
     } else {
@@ -73,6 +101,8 @@
 - (void)objectDataSourceDidLoad:(KUSObjectDataSource *)dataSource
 {
     if (dataSource == _userSession.chatSettingsDataSource) {
+        [self _updateAvatarImage];
+    } else if (dataSource == _userDataSource) {
         [self _updateAvatarImage];
     }
 }

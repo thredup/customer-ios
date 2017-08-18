@@ -155,6 +155,8 @@ static const CGFloat kMinBubbleHeight = 38.0;
 
     _labelView.attributedText = [KUSText attributedStringFromText:_chatMessage.body fontSize:[[self class] fontSize]];
 
+    [_avatarImageView setUserId:(currentUser ? nil : _chatMessage.sentById)];
+
     [self setNeedsLayout];
 }
 

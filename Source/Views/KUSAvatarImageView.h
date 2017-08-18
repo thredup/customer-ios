@@ -11,6 +11,8 @@
 @class KUSUserSession;
 @interface KUSAvatarImageView : UIImageView
 
+@property (nonatomic, copy) NSString *userId;
+
 - (instancetype)initWithUserSession:(KUSUserSession *)userSession;
 - (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithFrame:(CGRect)frame NS_UNAVAILABLE;
