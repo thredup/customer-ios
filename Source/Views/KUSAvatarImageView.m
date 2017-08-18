@@ -65,7 +65,7 @@
     }
     [_userDataSource removeListener:self];
     _userId = userId;
-    _userDataSource = [_userSession.usersDataSource userDataSourceForUserId:_userId];
+    _userDataSource = [_userSession userDataSourceForUserId:_userId];
     [_userDataSource addListener:self];
     [self _updateAvatarImage];
 }

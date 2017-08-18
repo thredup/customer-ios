@@ -27,8 +27,6 @@
 		6334BE4E1F0C600F00258DAF /* KUSAttributionToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 6334BE4C1F0C600F00258DAF /* KUSAttributionToolbar.m */; };
 		6334BE541F0C66E200258DAF /* KUSImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 6334BE521F0C66E200258DAF /* KUSImage.h */; };
 		6334BE551F0C66E200258DAF /* KUSImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 6334BE531F0C66E200258DAF /* KUSImage.m */; };
-		6334BE5C1F0C783200258DAF /* KUSAvatarTitleView.h in Headers */ = {isa = PBXBuildFile; fileRef = 6334BE5A1F0C783200258DAF /* KUSAvatarTitleView.h */; };
-		6334BE5D1F0C783200258DAF /* KUSAvatarTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6334BE5B1F0C783200258DAF /* KUSAvatarTitleView.m */; };
 		6334BE601F0C9B5100258DAF /* KUSPaginatedResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 6334BE5E1F0C9B5100258DAF /* KUSPaginatedResponse.h */; };
 		6334BE611F0C9B5100258DAF /* KUSPaginatedResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 6334BE5F1F0C9B5100258DAF /* KUSPaginatedResponse.m */; };
 		633D8FDE1F22EDB800BAFAC9 /* KUSInputBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 633D8FDC1F22EDB800BAFAC9 /* KUSInputBar.h */; };
@@ -61,8 +59,6 @@
 		6371779E1F43EDDC00A7F79C /* KUSAvatarImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6371779C1F43EDDC00A7F79C /* KUSAvatarImageView.m */; };
 		637177A11F452B8F00A7F79C /* KUSFauxNavigationBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 6371779F1F452B8F00A7F79C /* KUSFauxNavigationBar.h */; };
 		637177A21F452B8F00A7F79C /* KUSFauxNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 637177A01F452B8F00A7F79C /* KUSFauxNavigationBar.m */; };
-		637177A51F46A0BE00A7F79C /* KUSUsersDataSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 637177A31F46A0BE00A7F79C /* KUSUsersDataSource.h */; };
-		637177A61F46A0BE00A7F79C /* KUSUsersDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 637177A41F46A0BE00A7F79C /* KUSUsersDataSource.m */; };
 		637177A91F46A0DA00A7F79C /* KUSUserDataSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 637177A71F46A0DA00A7F79C /* KUSUserDataSource.h */; };
 		637177AA1F46A0DA00A7F79C /* KUSUserDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 637177A81F46A0DA00A7F79C /* KUSUserDataSource.m */; };
 		637177AD1F46A28300A7F79C /* KUSUser.h in Headers */ = {isa = PBXBuildFile; fileRef = 637177AB1F46A28300A7F79C /* KUSUser.h */; };
@@ -155,8 +151,6 @@
 		6334BE4C1F0C600F00258DAF /* KUSAttributionToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSAttributionToolbar.m; sourceTree = "<group>"; };
 		6334BE521F0C66E200258DAF /* KUSImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSImage.h; sourceTree = "<group>"; };
 		6334BE531F0C66E200258DAF /* KUSImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSImage.m; sourceTree = "<group>"; };
-		6334BE5A1F0C783200258DAF /* KUSAvatarTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSAvatarTitleView.h; sourceTree = "<group>"; };
-		6334BE5B1F0C783200258DAF /* KUSAvatarTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSAvatarTitleView.m; sourceTree = "<group>"; };
 		6334BE5E1F0C9B5100258DAF /* KUSPaginatedResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSPaginatedResponse.h; sourceTree = "<group>"; };
 		6334BE5F1F0C9B5100258DAF /* KUSPaginatedResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSPaginatedResponse.m; sourceTree = "<group>"; };
 		633D8FDC1F22EDB800BAFAC9 /* KUSInputBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSInputBar.h; sourceTree = "<group>"; };
@@ -190,8 +184,6 @@
 		6371779C1F43EDDC00A7F79C /* KUSAvatarImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSAvatarImageView.m; sourceTree = "<group>"; };
 		6371779F1F452B8F00A7F79C /* KUSFauxNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSFauxNavigationBar.h; sourceTree = "<group>"; };
 		637177A01F452B8F00A7F79C /* KUSFauxNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSFauxNavigationBar.m; sourceTree = "<group>"; };
-		637177A31F46A0BE00A7F79C /* KUSUsersDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSUsersDataSource.h; sourceTree = "<group>"; };
-		637177A41F46A0BE00A7F79C /* KUSUsersDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSUsersDataSource.m; sourceTree = "<group>"; };
 		637177A71F46A0DA00A7F79C /* KUSUserDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSUserDataSource.h; sourceTree = "<group>"; };
 		637177A81F46A0DA00A7F79C /* KUSUserDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSUserDataSource.m; sourceTree = "<group>"; };
 		637177AB1F46A28300A7F79C /* KUSUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSUser.h; sourceTree = "<group>"; };
@@ -329,8 +321,6 @@
 				63D9C17C1F2F705100999183 /* KUSChatSettingsDataSource.m */,
 				63EDF3D71F415797000345D8 /* KUSTrackingTokenDataSource.h */,
 				63EDF3D81F415797000345D8 /* KUSTrackingTokenDataSource.m */,
-				637177A31F46A0BE00A7F79C /* KUSUsersDataSource.h */,
-				637177A41F46A0BE00A7F79C /* KUSUsersDataSource.m */,
 				637177A71F46A0DA00A7F79C /* KUSUserDataSource.h */,
 				637177A81F46A0DA00A7F79C /* KUSUserDataSource.m */,
 			);
@@ -356,8 +346,6 @@
 				6334BE4C1F0C600F00258DAF /* KUSAttributionToolbar.m */,
 				6371779F1F452B8F00A7F79C /* KUSFauxNavigationBar.h */,
 				637177A01F452B8F00A7F79C /* KUSFauxNavigationBar.m */,
-				6334BE5A1F0C783200258DAF /* KUSAvatarTitleView.h */,
-				6334BE5B1F0C783200258DAF /* KUSAvatarTitleView.m */,
 				6371779B1F43EDDC00A7F79C /* KUSAvatarImageView.h */,
 				6371779C1F43EDDC00A7F79C /* KUSAvatarImageView.m */,
 				633D8FDC1F22EDB800BAFAC9 /* KUSInputBar.h */,
@@ -502,7 +490,6 @@
 			files = (
 				633D8FED1F23C98200BAFAC9 /* KUSPaginatedDataSource.h in Headers */,
 				63EB38571F2E1D880020F38B /* KUSObjectDataSource_Private.h in Headers */,
-				6334BE5C1F0C783200258DAF /* KUSAvatarTitleView.h in Headers */,
 				6334BE3A1F0C4B3D00258DAF /* KUSChatMessage.h in Headers */,
 				63EB38541F2D83430020F38B /* KUSObjectDataSource.h in Headers */,
 				63D9C17D1F2F705100999183 /* KUSChatSettingsDataSource.h in Headers */,
@@ -514,7 +501,6 @@
 				636531A51F1BBAA100433A50 /* KustomerViewController.h in Headers */,
 				633D8FE61F239F9500BAFAC9 /* KUSChatPlaceholderTableViewCell.h in Headers */,
 				63B9CDB21F0890B400120F3E /* Kustomer.h in Headers */,
-				637177A51F46A0BE00A7F79C /* KUSUsersDataSource.h in Headers */,
 				637177AD1F46A28300A7F79C /* KUSUser.h in Headers */,
 				637177A91F46A0DA00A7F79C /* KUSUserDataSource.h in Headers */,
 				636531A11F1BBA7C00433A50 /* KUSSessionsViewController.h in Headers */,
@@ -819,7 +805,6 @@
 				6334BE4A1F0C5E3F00258DAF /* KUSNavigationController.m in Sources */,
 				636531A21F1BBA7C00433A50 /* KUSSessionsViewController.m in Sources */,
 				6334BE3F1F0C4EBE00258DAF /* KUSCustomer.m in Sources */,
-				637177A61F46A0BE00A7F79C /* KUSUsersDataSource.m in Sources */,
 				6334BE611F0C9B5100258DAF /* KUSPaginatedResponse.m in Sources */,
 				6334BE331F0C487400258DAF /* KUSChatSettings.m in Sources */,
 				63EDF3DA1F415797000345D8 /* KUSTrackingTokenDataSource.m in Sources */,
@@ -834,7 +819,6 @@
 				63D9C18C1F31761B00999183 /* KUSBaseViewController.m in Sources */,
 				636531B71F1DB73B00433A50 /* KUSColor.m in Sources */,
 				633D8FEE1F23C98200BAFAC9 /* KUSPaginatedDataSource.m in Sources */,
-				6334BE5D1F0C783200258DAF /* KUSAvatarTitleView.m in Sources */,
 				6334BE2F1F0C43BE00258DAF /* KUSTrackingToken.m in Sources */,
 				633D8FE31F2309E700BAFAC9 /* KUSChatSessionTableViewCell.m in Sources */,
 				636531B31F1C593D00433A50 /* KUSChatMessageTableViewCell.m in Sources */,

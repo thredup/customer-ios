@@ -16,10 +16,12 @@
 #import "KUSAvatarImageView.h"
 #import "KUSChatSettingsDataSource.h"
 
-@interface KUSChatSessionTableViewCell () <KUSObjectDataSourceListener> {
+@interface KUSChatSessionTableViewCell () <KUSObjectDataSourceListener, KUSPaginatedDataSourceListener> {
     KUSUserSession *_userSession;
 
     KUSChatSession *_chatSession;
+
+    KUSChatMessagesDataSource *_chatMessagesDataSource;
 }
 
 @property (nonatomic, strong) KUSAvatarImageView *avatarImageView;
@@ -83,12 +85,21 @@
     // TODO: String from lastSeenAt/last message
     self.dateLabel.text = @"19 hours ago";
 
+    _chatMessagesDataSource = [_userSession chatMessagesDataSourceForSession:_chatSession];
+    [_chatMessagesDataSource addListener:self];
+
+    [self _updateAvatar];
     [self _updateTitleLabel];
 
     [self setNeedsLayout];
 }
 
 #pragma mark - Internal methods
+
+- (void)_updateAvatar
+{
+    [self.avatarImageView setUserId:_chatMessagesDataSource.firstOtherUserId];
+}
 
 - (void)_updateTitleLabel
 {
@@ -146,6 +157,13 @@
 - (void)objectDataSourceDidLoad:(KUSObjectDataSource *)dataSource
 {
     [self _updateTitleLabel];
+}
+
+#pragma mark - KUSPaginatedDataSourceListener methods
+
+- (void)paginatedDataSourceDidLoad:(KUSPaginatedDataSource *)dataSource
+{
+    [self _updateAvatar];
 }
 
 @end

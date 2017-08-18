@@ -46,4 +46,17 @@
     return [KUSChatMessage class];
 }
 
+#pragma mark - Public methods
+
+- (NSString *)firstOtherUserId
+{
+    for (KUSChatMessage *message in self.allObjects) {
+        BOOL currentUser = message.direction == KUSChatMessageDirectionIn;
+        if (!currentUser) {
+            return message.sentById;
+        }
+    }
+    return nil;
+}
+
 @end

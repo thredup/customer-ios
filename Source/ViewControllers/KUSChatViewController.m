@@ -136,10 +136,10 @@
     [self.view addSubview:self.inputBarView];
 
     if (_chatSession) {
-        _chatMessagesDataSource = [[KUSChatMessagesDataSource alloc] initWithUserSession:_userSession
-                                                                           chatSession:_chatSession];
+        _chatMessagesDataSource = [_userSession chatMessagesDataSourceForSession:_chatSession];
         [_chatMessagesDataSource addListener:self];
         [_chatMessagesDataSource fetchLatest];
+        [self.avatarImageView setUserId:_chatMessagesDataSource.firstOtherUserId];
         [self showLoadingIndicator];
     }
 
@@ -299,6 +299,8 @@
     } else {
         [self.tableView reloadData];
     }
+
+    [self.avatarImageView setUserId:_chatMessagesDataSource.firstOtherUserId];
 
     __weak KUSChatMessagesDataSource *weakDataSource = _chatMessagesDataSource;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{

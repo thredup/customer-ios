@@ -17,7 +17,9 @@
 @property (nonatomic, strong, null_resettable) KUSChatSessionsDataSource *chatSessionsDataSource;
 @property (nonatomic, strong, null_resettable) KUSChatSettingsDataSource *chatSettingsDataSource;
 @property (nonatomic, strong, null_resettable) KUSTrackingTokenDataSource *trackingTokenDataSource;
-@property (nonatomic, strong, null_resettable) KUSUsersDataSource *usersDataSource;
+
+@property (nonatomic, strong, null_resettable) NSMutableDictionary<NSString *, KUSUserDataSource *> *userDataSources;
+@property (nonatomic, strong, null_resettable) NSMutableDictionary<NSString *, KUSChatMessagesDataSource *> *chatMessagesDataSources;
 
 @property (nonatomic, strong, null_resettable) KUSRequestManager *requestManager;
 
@@ -80,12 +82,47 @@
     return _trackingTokenDataSource;
 }
 
-- (KUSUsersDataSource *)usersDataSource
+- (NSMutableDictionary<NSString *, KUSUserDataSource *> *)userDataSources
 {
-    if (_usersDataSource == nil) {
-        _usersDataSource = [[KUSUsersDataSource alloc] initWithUserSession:self];
+    if (_userDataSources == nil) {
+        _userDataSources = [[NSMutableDictionary alloc] init];
     }
-    return _usersDataSource;
+    return _userDataSources;
+}
+
+- (NSMutableDictionary<NSString *, KUSChatMessagesDataSource *> *)chatMessagesDataSources
+{
+    if (_chatMessagesDataSources == nil) {
+        _chatMessagesDataSources = [[NSMutableDictionary alloc] init];
+    }
+    return _chatMessagesDataSources;
+}
+
+- (KUSChatMessagesDataSource *)chatMessagesDataSourceForSession:(KUSChatSession *)session
+{
+    NSString *sessionId = session.oid;
+    KUSChatMessagesDataSource *chatMessagesDataSource = [self.chatMessagesDataSources objectForKey:sessionId];
+    if (chatMessagesDataSource == nil) {
+        chatMessagesDataSource = [[KUSChatMessagesDataSource alloc] initWithUserSession:self chatSession:session];
+        [self.chatMessagesDataSources setObject:chatMessagesDataSource forKey:sessionId];
+    }
+
+    return chatMessagesDataSource;
+}
+
+- (KUSUserDataSource *)userDataSourceForUserId:(NSString *)userId
+{
+    if (userId.length == 0 || [userId isEqualToString:@"__team"]) {
+        return nil;
+    }
+
+    KUSUserDataSource *userDataSource = [self.userDataSources objectForKey:userId];
+    if (userDataSource == nil) {
+        userDataSource = [[KUSUserDataSource alloc] initWithUserSession:self userId:userId];
+        [self.userDataSources setObject:userDataSource forKey:userId];
+    }
+
+    return userDataSource;
 }
 
 #pragma mark - Request manager

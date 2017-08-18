@@ -16,4 +16,6 @@
 - (instancetype)initWithUserSession:(KUSUserSession *)userSession chatSession:(KUSChatSession *)session;
 - (instancetype)initWithUserSession:(KUSUserSession *)userSession NS_UNAVAILABLE;
 
+- (NSString *)firstOtherUserId;
+
 @end
