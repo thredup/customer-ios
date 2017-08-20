@@ -17,14 +17,15 @@
 
 @interface KUSUserSession : NSObject
 
-- (instancetype)initWithOrgName:(NSString *)orgName;
+- (instancetype)initWithOrgName:(NSString *)orgName orgId:(NSString *)orgId;
 - (instancetype)init NS_UNAVAILABLE;
 
 - (void)resetTracking;
 
 // Org methods
+- (NSString *)orgId;
 - (NSString *)orgName;
-- (NSString *)organizationName;
+- (NSString *)organizationName; // User facing
 
 // Datasource objects
 - (KUSChatSessionsDataSource *)chatSessionsDataSource;

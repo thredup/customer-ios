@@ -65,7 +65,7 @@ static NSString *kKustomerOrgNameKey = @"orgName";
     self.orgName = tokenPayload[kKustomerOrgNameKey];
     NSAssert(self.orgName.length > 0, @"Kustomer API key missing expected field: orgName");
 
-    self.userSession = [[KUSUserSession alloc] initWithOrgName:self.orgName];
+    self.userSession = [[KUSUserSession alloc] initWithOrgName:self.orgName orgId:self.orgId];
 
     NSLog(@"Kustomer initialized for organization: %@", self.orgName);
 }

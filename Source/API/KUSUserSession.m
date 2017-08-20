@@ -8,8 +8,11 @@
 
 #import "KUSUserSession.h"
 
+#import "KUSPushClient.h"
+
 @interface KUSUserSession ()
 
+@property (nonatomic, copy, readonly) NSString *orgId;
 @property (nonatomic, copy, readonly) NSString *orgName;
 @property (nonatomic, copy, readonly) NSString *organizationName;  // User-facing (capitalized) version of orgName
 
@@ -22,6 +25,7 @@
 @property (nonatomic, strong, null_resettable) NSMutableDictionary<NSString *, KUSChatMessagesDataSource *> *chatMessagesDataSources;
 
 @property (nonatomic, strong, null_resettable) KUSRequestManager *requestManager;
+@property (nonatomic, strong, null_resettable) KUSPushClient *pushClient;
 
 @end
 
@@ -29,17 +33,19 @@
 
 #pragma mark - Lifecycle methods
 
-- (instancetype)initWithOrgName:(NSString *)orgName
+- (instancetype)initWithOrgName:(NSString *)orgName orgId:(NSString *)orgId
 {
     self = [super init];
     if (self) {
         _orgName = orgName;
+        _orgId = orgId;
 
         if (_orgName.length) {
             NSString *firstLetter = [[_orgName substringToIndex:1] uppercaseString];
             _organizationName = [firstLetter stringByAppendingString:[_orgName substringFromIndex:1]];
         }
 
+        [self pushClient];
         [self.chatSettingsDataSource fetch];
     }
     return self;
@@ -51,7 +57,9 @@
 {
     // Nil out any user-specific datasources
     _chatSessionsDataSource = nil;
+    _pushClient = nil;
 
+    [self pushClient];
     // Request a new tracking token
     [self.trackingTokenDataSource reset];
 }
@@ -133,6 +141,17 @@
         _requestManager = [[KUSRequestManager alloc] initWithUserSession:self];
     }
     return _requestManager;
+}
+
+#pragma mark - Push client
+
+
+- (KUSPushClient *)pushClient
+{
+    if (_pushClient == nil) {
+        _pushClient = [[KUSPushClient alloc] initWithUserSession:self];
+    }
+    return _pushClient;
 }
 
 @end
