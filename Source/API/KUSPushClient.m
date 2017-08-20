@@ -72,7 +72,6 @@
     }
 
     if (_pusherClient == nil) {
-        NSLog(@"Creating PTPusher instance");
         _pusherClient = [PTPusher pusherWithKey:@"YOUR_API_KEY" delegate:self encrypted:YES];
         _pusherClient.authorizationURL = [self _pusherAuthURL];
         [_pusherClient connect];

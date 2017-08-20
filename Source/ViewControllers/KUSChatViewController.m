@@ -523,15 +523,15 @@
 
         return;
     }
+    */
 
-    [_apiClient sendMessage:text toChatSession:_chatSession.oid completion:^(NSError *error, KUSChatMessage *message) {
+    [_chatMessagesDataSource sendTextMessage:text completion:^(NSError *error, KUSChatMessage *message) {
         if (error) {
             NSLog(@"Error sending message: %@", error);
             return;
         }
         NSLog(@"Successfully sent message: %@", message);
     }];
-    */
 }
 
 - (void)inputBarTextDidChange:(KUSInputBar *)inputBar

@@ -163,6 +163,12 @@
     [_placeholderLabel setFont:font];
 }
 
+- (void)setText:(NSString *)text
+{
+    [super setText:text];
+    [self setNeedsLayout];
+}
+
 #pragma mark - NSNotificationCenter methods
 
 - (void)_didChangeText:(NSNotification *)notification

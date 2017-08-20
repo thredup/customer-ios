@@ -65,4 +65,32 @@
     }
 }
 
+- (void)sendTextMessage:(NSString *)text completion:(void(^)(NSError *error, KUSChatMessage *message))completion
+{
+    // TODO: Placeholder message logic?
+
+    __weak KUSChatMessagesDataSource *weakSelf = self;
+    [self.userSession.requestManager
+     performRequestType:KUSRequestTypePost
+     endpoint:@"/c/v1/chat/messages"
+     params:@{ @"body": text, @"session": _sessionId }
+     authenticated:YES
+     completion:^(NSError *error, NSDictionary *response) {
+         if (error) {
+             if (completion) {
+                 completion(error, nil);
+             }
+             return;
+         }
+
+         KUSChatMessage *message = [[KUSChatMessage alloc] initWithJSON:response[@"data"]];
+         if (message) {
+             [weakSelf prependMessages:@[ message ]];
+         }
+         if (completion) {
+             completion(nil, message);
+         }
+     }];
+}
+
 @end
