@@ -10,6 +10,7 @@
 
 #import "KUSUserSession.h"
 
+NSString *const kKustomerCORSHeaderKey = @"X-Kustomer";
 NSString *const kKustomerTrackingTokenHeaderKey = @"x-kustomer-tracking-token";
 
 typedef void (^KUSTrackingTokenCompletion)(NSError *error, NSString *trackingToken);
@@ -122,7 +123,7 @@ typedef void (^KUSTrackingTokenCompletion)(NSError *error, NSString *trackingTok
         NSURL *finalURL = (type == KUSRequestTypeGet ? KUSURLFromURLAndQueryParams(URL, params) : URL);
         NSMutableURLRequest *urlRequest = [[NSMutableURLRequest alloc] initWithURL:finalURL];
         [urlRequest setHTTPMethod:KUSRequestTypeToString(type)];
-        [urlRequest setValue:@"kustomer" forHTTPHeaderField:@"X-Kustomer"];
+        [urlRequest setValue:@"kustomer" forHTTPHeaderField:kKustomerCORSHeaderKey];
         if (type != KUSRequestTypeGet) {
             KUSAttachJSONBodyToRequest(urlRequest, params);
         }
