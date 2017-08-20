@@ -9,13 +9,14 @@
 #import "KUSPaginatedDataSource.h"
 
 #import "KUSChatMessage.h"
-#import "KUSChatSession.h"
 
 @interface KUSChatMessagesDataSource : KUSPaginatedDataSource
 
-- (instancetype)initWithUserSession:(KUSUserSession *)userSession chatSession:(KUSChatSession *)session;
+- (instancetype)initWithUserSession:(KUSUserSession *)userSession sessionId:(NSString *)sessionId;
 - (instancetype)initWithUserSession:(KUSUserSession *)userSession NS_UNAVAILABLE;
 
 - (NSString *)firstOtherUserId;
+
+- (void)upsertMessageReceivedFromPusher:(KUSChatMessage *)chatMessage;
 
 @end

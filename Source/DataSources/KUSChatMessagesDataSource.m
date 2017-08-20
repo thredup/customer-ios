@@ -11,7 +11,7 @@
 #import "KUSPaginatedDataSource_Private.h"
 
 @interface KUSChatMessagesDataSource () {
-    KUSChatSession *_chatSession;
+    NSString *_sessionId;
 }
 
 @end
@@ -20,11 +20,11 @@
 
 #pragma mark - Lifecycle methods
 
-- (instancetype)initWithUserSession:(KUSUserSession *)userSession chatSession:(KUSChatSession *)session;
+- (instancetype)initWithUserSession:(KUSUserSession *)userSession sessionId:(NSString *)sessionId;
 {
     self = [super initWithUserSession:userSession];
     if (self) {
-        _chatSession = session;
+        _sessionId = sessionId;
     }
     return self;
 }
@@ -33,9 +33,8 @@
 
 - (NSURL *)firstURL
 {
-    NSString *sessionId = _chatSession.oid;
-    if (sessionId) {
-        NSString *endpoint = [NSString stringWithFormat:@"/c/v1/chat/sessions/%@/messages", sessionId];
+    if (_sessionId) {
+        NSString *endpoint = [NSString stringWithFormat:@"/c/v1/chat/sessions/%@/messages", _sessionId];
         return [self.userSession.requestManager URLForEndpoint:endpoint];
     }
     return nil;
@@ -57,6 +56,13 @@
         }
     }
     return nil;
+}
+
+- (void)upsertMessageReceivedFromPusher:(KUSChatMessage *)chatMessage
+{
+    if (chatMessage) {
+        [self prependMessages:@[ chatMessage ]];
+    }
 }
 
 @end

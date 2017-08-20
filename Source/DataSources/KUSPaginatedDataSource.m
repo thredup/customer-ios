@@ -275,13 +275,19 @@
 
     _mostRecentPaginatedResponse = response;
 
+    [self prependMessages:response.objects];
+    [self notifyAnnouncersDidLoad];
+}
+
+- (void)prependMessages:(NSArray<KUSChatMessage *> *)messages
+{
     NSMutableDictionary<NSString *, NSNumber *> *objectIdToPrevious = [[NSMutableDictionary alloc] init];
 
-    for (KUSModel *object in response.objects.reverseObjectEnumerator) {
+    for (KUSModel *object in messages.reverseObjectEnumerator) {
         NSUInteger indexOfObject = [self indexOfObject:object];
         [objectIdToPrevious setObject:@(indexOfObject) forKey:object.oid];
     }
-    for (KUSModel *object in response.objects.reverseObjectEnumerator) {
+    for (KUSModel *object in messages.reverseObjectEnumerator) {
         NSUInteger indexOfObject = [self indexOfObject:object];
         if (indexOfObject == NSNotFound) {
             // New object
@@ -315,7 +321,6 @@
     if (didNotifyWillChange) {
         [self notifyAnnouncersDidChangeContent];
     }
-    [self notifyAnnouncersDidLoad];
 }
 
 #pragma mark - Internal listener methods

@@ -16,7 +16,6 @@
 {
     TSMarkdownParser *parser = [TSMarkdownParser standardParser];
 
-
     parser.defaultAttributes = KUSAttributedFontWithSize(parser.defaultAttributes, fontSize);
     parser.imageAttributes = KUSAttributedFontWithSize(parser.imageAttributes, fontSize);
     parser.linkAttributes = KUSAttributedFontWithSize(parser.linkAttributes, fontSize);

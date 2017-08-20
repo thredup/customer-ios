@@ -106,12 +106,15 @@
     return _chatMessagesDataSources;
 }
 
-- (KUSChatMessagesDataSource *)chatMessagesDataSourceForSession:(KUSChatSession *)session
+- (KUSChatMessagesDataSource *)chatMessagesDataSourceForSessionId:(NSString *)sessionId
 {
-    NSString *sessionId = session.oid;
+    if (sessionId.length == 0) {
+        return nil;
+    }
+
     KUSChatMessagesDataSource *chatMessagesDataSource = [self.chatMessagesDataSources objectForKey:sessionId];
     if (chatMessagesDataSource == nil) {
-        chatMessagesDataSource = [[KUSChatMessagesDataSource alloc] initWithUserSession:self chatSession:session];
+        chatMessagesDataSource = [[KUSChatMessagesDataSource alloc] initWithUserSession:self sessionId:sessionId];
         [self.chatMessagesDataSources setObject:chatMessagesDataSource forKey:sessionId];
     }
 

@@ -32,7 +32,7 @@
 - (KUSChatSettingsDataSource *)chatSettingsDataSource;
 - (KUSTrackingTokenDataSource *)trackingTokenDataSource;
 
-- (KUSChatMessagesDataSource *)chatMessagesDataSourceForSession:(KUSChatSession *)session;
+- (KUSChatMessagesDataSource *)chatMessagesDataSourceForSessionId:(NSString *)sessionId;
 - (KUSUserDataSource *)userDataSourceForUserId:(NSString *)userId;
 
 // Request manager

@@ -104,7 +104,10 @@
 
 - (void)_onPusherChatMessageSend:(PTPusherEvent *)event
 {
-    NSLog(@"_onPusherChatMessageSend: %@", event.data);
+    NSLog(@"Received chat message from Pusher");
+    KUSChatMessage *chatMessage = [[KUSChatMessage alloc] initWithJSON:event.data[@"data"]];
+    KUSChatMessagesDataSource *messagesDataSource = [_userSession chatMessagesDataSourceForSessionId:chatMessage.sessionId];
+    [messagesDataSource upsertMessageReceivedFromPusher:chatMessage];
 }
 
 #pragma mark - KUSObjectDataSourceListener methods
@@ -134,8 +137,6 @@
 - (void)pusher:(PTPusher *)pusher willAuthorizeChannel:(PTPusherChannel *)channel
 withAuthOperation:(PTPusherChannelAuthorizationOperation *)operation
 {
-    NSLog(@"Pusher will authorize channel: %@", channel.name);
-
     [operation.mutableURLRequest setValue:@"kustomer" forHTTPHeaderField:kKustomerCORSHeaderKey];
     [operation.mutableURLRequest setValue:_userSession.trackingTokenDataSource.currentTrackingToken
                        forHTTPHeaderField:kKustomerTrackingTokenHeaderKey];

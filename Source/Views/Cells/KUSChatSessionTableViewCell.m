@@ -85,7 +85,7 @@
     // TODO: String from lastSeenAt/last message
     self.dateLabel.text = @"19 hours ago";
 
-    _chatMessagesDataSource = [_userSession chatMessagesDataSourceForSession:_chatSession];
+    _chatMessagesDataSource = [_userSession chatMessagesDataSourceForSessionId:_chatSession.oid];
     [_chatMessagesDataSource addListener:self];
 
     [self _updateAvatar];
