@@ -88,9 +88,7 @@
 
     UIImage *placeholderImage = [KUSImage defaultAvatarImageForName:name];
     if (iconURL) {
-        [self sd_setImageWithURL:iconURL
-                placeholderImage:placeholderImage
-                         options:SDWebImageRefreshCached];
+        [self sd_setImageWithURL:iconURL placeholderImage:placeholderImage];
     } else {
         [self setImage:placeholderImage];
     }

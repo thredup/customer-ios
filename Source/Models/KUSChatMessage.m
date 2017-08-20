@@ -47,6 +47,13 @@ static KUSChatMessageDirection KUSChatMessageDirectionFromString(NSString *strin
             @"trackingId": @"__none",
             @"body": autoreply,
             @"direction": @"out"
+        },
+        @"relationships": @{
+            @"sentBy": @{
+                @"data": @{
+                    @"id": @"__team"
+                }
+            }
         }
     };
     return [self initWithJSON:json];
