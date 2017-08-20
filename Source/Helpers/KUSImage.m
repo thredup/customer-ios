@@ -24,11 +24,6 @@
 
 #pragma mark - Public methods
 
-+ (UIImage *)kustomerTeamIcon
-{
-    return [self imageNamed:@"kustomer_team_icon"];
-}
-
 + (UIImage *)kustyImage
 {
     return [self imageNamed:@"kusty"];

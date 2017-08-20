@@ -49,7 +49,6 @@
 		636531A61F1BBAA100433A50 /* KustomerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 636531A41F1BBAA100433A50 /* KustomerViewController.m */; };
 		636531A91F1BBCCD00433A50 /* KUSChatViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 636531A71F1BBCCD00433A50 /* KUSChatViewController.h */; };
 		636531AA1F1BBCCD00433A50 /* KUSChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 636531A81F1BBCCD00433A50 /* KUSChatViewController.m */; };
-		636531AE1F1C4B9700433A50 /* kustomer_team_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 636531AC1F1C4B9700433A50 /* kustomer_team_icon@2x.png */; };
 		636531AF1F1C4B9700433A50 /* kusty@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 636531AD1F1C4B9700433A50 /* kusty@2x.png */; };
 		636531B21F1C593D00433A50 /* KUSChatMessageTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 636531B01F1C593D00433A50 /* KUSChatMessageTableViewCell.h */; };
 		636531B31F1C593D00433A50 /* KUSChatMessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 636531B11F1C593D00433A50 /* KUSChatMessageTableViewCell.m */; };
@@ -174,7 +173,6 @@
 		636531A41F1BBAA100433A50 /* KustomerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KustomerViewController.m; sourceTree = "<group>"; };
 		636531A71F1BBCCD00433A50 /* KUSChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSChatViewController.h; sourceTree = "<group>"; };
 		636531A81F1BBCCD00433A50 /* KUSChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSChatViewController.m; sourceTree = "<group>"; };
-		636531AC1F1C4B9700433A50 /* kustomer_team_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kustomer_team_icon@2x.png"; sourceTree = "<group>"; };
 		636531AD1F1C4B9700433A50 /* kusty@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kusty@2x.png"; sourceTree = "<group>"; };
 		636531B01F1C593D00433A50 /* KUSChatMessageTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSChatMessageTableViewCell.h; sourceTree = "<group>"; };
 		636531B11F1C593D00433A50 /* KUSChatMessageTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSChatMessageTableViewCell.m; sourceTree = "<group>"; };
@@ -330,7 +328,6 @@
 		636531AB1F1C4B9700433A50 /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				636531AC1F1C4B9700433A50 /* kustomer_team_icon@2x.png */,
 				636531AD1F1C4B9700433A50 /* kusty@2x.png */,
 				63D9C1811F3046DA00999183 /* up_arrow@2x.png */,
 				63D9C1831F304A7600999183 /* pencil_image@2x.png */,
@@ -646,7 +643,6 @@
 			files = (
 				63D9C1821F3046DA00999183 /* up_arrow@2x.png in Resources */,
 				63D9C1841F304A7600999183 /* pencil_image@2x.png in Resources */,
-				636531AE1F1C4B9700433A50 /* kustomer_team_icon@2x.png in Resources */,
 				636531AF1F1C4B9700433A50 /* kusty@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

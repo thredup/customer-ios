@@ -10,7 +10,6 @@
 
 @interface KUSImage : NSObject
 
-+ (UIImage *)kustomerTeamIcon;
 + (UIImage *)kustyImage;
 + (UIImage *)sendArrowImage;
 + (UIImage *)pencilImage;
