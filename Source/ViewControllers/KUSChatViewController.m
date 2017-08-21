@@ -295,68 +295,13 @@
 {
     if (!_didLoadInitialContent) {
         [self hideLoadingIndicator];
-        [self.tableView reloadData];
         _didLoadInitialContent = YES;
     }
-
-    [self.avatarImageView setUserId:_chatMessagesDataSource.firstOtherUserId];
-
-    /*
-    __weak KUSChatMessagesDataSource *weakDataSource = _chatMessagesDataSource;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [weakDataSource fetchLatest];
-    });
-    */
 }
-
-/*
-- (void)paginatedDataSourceWillChangeContent:(KUSPaginatedDataSource *)dataSource
-{
-    if (!_didLoadInitialContent) {
-        return;
-    }
-
-    [self.tableView beginUpdates];
-}
-
-- (void)paginatedDataSource:(KUSPaginatedDataSource *)dataSource
-            didChangeObject:(__kindof KUSModel *)object
-                    atIndex:(NSUInteger)oldIndex
-              forChangeType:(KUSPaginatedDataSourceChangeType)type
-                   newIndex:(NSUInteger)newIndex
-{
-    if (!_didLoadInitialContent) {
-        return;
-    }
-
-    NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:newIndex inSection:0];
-    NSIndexPath *oldIndexPath = [NSIndexPath indexPathForRow:oldIndex inSection:0];
-    UITableView *tableView = self.tableView;
-
-    switch(type) {
-        case KUSPaginatedDataSourceChangeInsert:
-            [tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationBottom];
-            break;
-        case KUSPaginatedDataSourceChangeDelete:
-            [tableView deleteRowsAtIndexPaths:@[oldIndexPath] withRowAnimation:UITableViewRowAnimationBottom];
-            break;
-        case KUSPaginatedDataSourceChangeUpdate:
-            [tableView reloadRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-            break;
-        case KUSPaginatedDataSourceChangeMove:
-            [tableView deleteRowsAtIndexPaths:@[oldIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-            [tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-            break;
-    }
-}
-*/
 
 - (void)paginatedDataSourceDidChangeContent:(KUSPaginatedDataSource *)dataSource
 {
-    if (!_didLoadInitialContent) {
-        return;
-    }
-
+    [self.avatarImageView setUserId:_chatMessagesDataSource.firstOtherUserId];
     [self.tableView reloadData];
 }
 
@@ -495,10 +440,8 @@
 {
     NSLog(@"User wants to send message: %@", text);
 
-    // TODO: Re-implement message sending
-    /*
     if (_forNewChatSession) {
-        [_apiClient createChatSessionWithTitle:text completion:^(NSError *error, KUSChatSession *session) {
+        [_userSession.chatSessionsDataSource createSessionWithTitle:text completion:^(NSError *error, KUSChatSession *session) {
             if (error) {
                 NSLog(@"Error creating chat session: %@", error);
                 return;
@@ -507,14 +450,12 @@
 
             _forNewChatSession = NO;
             _chatSession = session;
+            _chatMessagesDataSource = [_userSession chatMessagesDataSourceForSessionId:_chatSession.oid];
+            [_chatMessagesDataSource addListener:self];
+            _didLoadInitialContent = YES;
             [self.view setNeedsLayout];
 
-            _chatMessagesDataSource = [[KUSChatMessagesDataSource alloc] initWithAPIClient:_apiClient
-                                                                               chatSession:_chatSession];
-            [_chatMessagesDataSource addListener:self];
-            [_chatMessagesDataSource fetchLatest];
-
-            [_apiClient sendMessage:text toChatSession:session.oid completion:^(NSError *error, KUSChatMessage *message) {
+            [_chatMessagesDataSource sendTextMessage:text completion:^(NSError *error, KUSChatMessage *message) {
                 if (error) {
                     NSLog(@"Error sending message: %@", error);
                     return;
@@ -522,18 +463,15 @@
                 NSLog(@"Successfully sent message: %@", message);
             }];
         }];
-
-        return;
+    } else {
+        [_chatMessagesDataSource sendTextMessage:text completion:^(NSError *error, KUSChatMessage *message) {
+            if (error) {
+                NSLog(@"Error sending message: %@", error);
+                return;
+            }
+            NSLog(@"Successfully sent message: %@", message);
+        }];
     }
-    */
-
-    [_chatMessagesDataSource sendTextMessage:text completion:^(NSError *error, KUSChatMessage *message) {
-        if (error) {
-            NSLog(@"Error sending message: %@", error);
-            return;
-        }
-        NSLog(@"Successfully sent message: %@", message);
-    }];
 }
 
 - (void)inputBarTextDidChange:(KUSInputBar *)inputBar

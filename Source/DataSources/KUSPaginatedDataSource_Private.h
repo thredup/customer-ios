@@ -18,6 +18,6 @@
 - (NSURL *)firstURL;
 - (Class)modelClass;
 
-- (void)prependMessages:(NSArray<KUSChatMessage *> *)messages;
+- (void)prependObjects:(NSArray<KUSModel *> *)objects;
 
 @end

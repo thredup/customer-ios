@@ -197,14 +197,17 @@
 
 #pragma mark - KUSPaginatedDataSourceListener methods
 
+- (void)paginatedDataSourceDidChangeContent:(KUSPaginatedDataSource *)dataSource
+{
+    [self.tableView reloadData];
+}
+
 - (void)paginatedDataSourceDidLoad:(KUSPaginatedDataSource *)dataSource
 {
     [self hideLoadingIndicator];
-    [self.tableView reloadData];
+    [self _handleFirstLoadIfNecessary];
     self.tableView.hidden = NO;
     self.createSessionButton.hidden = NO;
-
-    [self _handleFirstLoadIfNecessary];
 }
 
 #pragma mark - UITableViewDataSource methods

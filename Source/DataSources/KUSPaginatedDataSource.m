@@ -275,19 +275,19 @@
 
     _mostRecentPaginatedResponse = response;
 
-    [self prependMessages:response.objects];
+    [self prependObjects:response.objects];
     [self notifyAnnouncersDidLoad];
 }
 
-- (void)prependMessages:(NSArray<KUSChatMessage *> *)messages
+- (void)prependObjects:(NSArray<KUSModel *> *)objects
 {
     NSMutableDictionary<NSString *, NSNumber *> *objectIdToPrevious = [[NSMutableDictionary alloc] init];
 
-    for (KUSModel *object in messages.reverseObjectEnumerator) {
+    for (KUSModel *object in objects.reverseObjectEnumerator) {
         NSUInteger indexOfObject = [self indexOfObject:object];
         [objectIdToPrevious setObject:@(indexOfObject) forKey:object.oid];
     }
-    for (KUSModel *object in messages.reverseObjectEnumerator) {
+    for (KUSModel *object in objects.reverseObjectEnumerator) {
         NSUInteger indexOfObject = [self indexOfObject:object];
         if (indexOfObject == NSNotFound) {
             // New object

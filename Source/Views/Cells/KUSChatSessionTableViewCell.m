@@ -86,6 +86,9 @@
 
     _chatMessagesDataSource = [_userSession chatMessagesDataSourceForSessionId:_chatSession.oid];
     [_chatMessagesDataSource addListener:self];
+    if (!_chatMessagesDataSource.didFetch && !_chatMessagesDataSource.isFetching) {
+        [_chatMessagesDataSource fetchLatest];
+    }
 
     [self _updateAvatar];
     [self _updateLabels];

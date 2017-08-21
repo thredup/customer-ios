@@ -61,7 +61,7 @@
 - (void)upsertMessageReceivedFromPusher:(KUSChatMessage *)chatMessage
 {
     if (chatMessage) {
-        [self prependMessages:@[ chatMessage ]];
+        [self prependObjects:@[ chatMessage ]];
     }
 }
 
@@ -85,7 +85,7 @@
 
          KUSChatMessage *message = [[KUSChatMessage alloc] initWithJSON:response[@"data"]];
          if (message) {
-             [weakSelf prependMessages:@[ message ]];
+             [weakSelf prependObjects:@[ message ]];
          }
          if (completion) {
              completion(nil, message);
