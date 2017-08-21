@@ -22,6 +22,7 @@
     KUSChatSession *_chatSession;
 
     KUSChatMessagesDataSource *_chatMessagesDataSource;
+    KUSUserDataSource *_userDataSource;
 }
 
 @property (nonatomic, strong) KUSAvatarImageView *avatarImageView;
@@ -80,16 +81,11 @@
 {
     _chatSession = chatSession;
 
-    self.subtitleLabel.attributedText = [KUSText attributedStringFromText:_chatSession.preview fontSize:12.0];
-
-    // TODO: String from lastSeenAt/last message
-    self.dateLabel.text = @"19 hours ago";
-
     _chatMessagesDataSource = [_userSession chatMessagesDataSourceForSessionId:_chatSession.oid];
     [_chatMessagesDataSource addListener:self];
 
     [self _updateAvatar];
-    [self _updateTitleLabel];
+    [self _updateLabels];
 
     [self setNeedsLayout];
 }
@@ -101,13 +97,27 @@
     [self.avatarImageView setUserId:_chatMessagesDataSource.firstOtherUserId];
 }
 
-- (void)_updateTitleLabel
+- (void)_updateLabels
 {
-    KUSChatSettings *chatSettings = [_userSession.chatSettingsDataSource object];
-    NSString *teamName = chatSettings.teamName.length ? chatSettings.teamName : _userSession.organizationName;
+    [_userDataSource removeListener:self];
+    _userDataSource = [_userSession userDataSourceForUserId:_chatMessagesDataSource.firstOtherUserId];
+    [_userDataSource addListener:self];
 
-    // TODO: Grab username from responders/messages
-    self.titleLabel.text = [NSString stringWithFormat:@"Chat with %@", teamName];
+    KUSUser *firstOtherUser = _userDataSource.object;
+    NSString *responderName = firstOtherUser.displayName;
+    if (responderName.length == 0) {
+        KUSChatSettings *chatSettings = [_userSession.chatSettingsDataSource object];
+        responderName = chatSettings.teamName.length ? chatSettings.teamName : _userSession.organizationName;
+    }
+
+    self.titleLabel.text = [NSString stringWithFormat:@"Chat with %@", responderName];
+
+    KUSChatMessage *latestMessage = _chatMessagesDataSource.firstObject;
+    NSString *subtitleText = latestMessage.body ?: _chatSession.preview;
+    self.subtitleLabel.attributedText = [KUSText attributedStringFromText:subtitleText fontSize:12.0];
+
+    // TODO: String from lastSeenAt/last message
+    self.dateLabel.text = @"19 hours ago";
 }
 
 #pragma mark - Layout methods
@@ -156,13 +166,14 @@
 
 - (void)objectDataSourceDidLoad:(KUSObjectDataSource *)dataSource
 {
-    [self _updateTitleLabel];
+    [self _updateLabels];
 }
 
 #pragma mark - KUSPaginatedDataSourceListener methods
 
-- (void)paginatedDataSourceDidLoad:(KUSPaginatedDataSource *)dataSource
+- (void)paginatedDataSourceDidChangeContent:(KUSPaginatedDataSource *)dataSource
 {
+    [self _updateLabels];
     [self _updateAvatar];
 }
 
