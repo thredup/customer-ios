@@ -116,7 +116,7 @@
     self.tableView.hidden = YES;
     self.createSessionButton.hidden = YES;
 
-    _chatSessionsDataSource = [[KUSChatSessionsDataSource alloc] initWithUserSession:_userSession];
+    _chatSessionsDataSource = _userSession.chatSessionsDataSource;
     [_chatSessionsDataSource addListener:self];
     [_chatSessionsDataSource fetchLatest];
     [self showLoadingIndicator];

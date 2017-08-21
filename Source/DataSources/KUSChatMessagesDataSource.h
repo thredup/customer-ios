@@ -16,6 +16,7 @@
 - (instancetype)initWithUserSession:(KUSUserSession *)userSession NS_UNAVAILABLE;
 
 - (NSString *)firstOtherUserId;
+- (NSUInteger)unreadCountAfterDate:(NSDate *)date;
 
 - (void)upsertMessageReceivedFromPusher:(KUSChatMessage *)chatMessage;
 

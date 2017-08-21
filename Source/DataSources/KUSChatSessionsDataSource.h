@@ -13,5 +13,6 @@
 @interface KUSChatSessionsDataSource : KUSPaginatedDataSource
 
 - (void)createSessionWithTitle:(NSString *)title completion:(void(^)(NSError *error, KUSChatSession *session))completion;
+- (void)updateLastSeenAtForSessionId:(NSString *)sessionId completion:(void(^)(NSError *error, KUSChatSession *session))completion;
 
 @end

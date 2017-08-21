@@ -323,6 +323,26 @@
     }
 }
 
+- (void)updateObjects:(NSArray<KUSModel *> *)objects
+{
+    if (objects.count == 0) {
+        return;
+    }
+
+    [self notifyAnnouncersWillChangeContent];
+
+    for (KUSModel *object in objects) {
+        NSUInteger indexOfObject = [self indexOfObject:object];
+        if (indexOfObject != NSNotFound) {
+            [_fetchedModels replaceObjectAtIndex:indexOfObject withObject:object];
+            [_fetchedModelsById setObject:object forKey:object.oid];
+            [self notifyAnnouncersForObject:object previousIndex:indexOfObject newIndex:indexOfObject];
+        }
+    }
+
+    [self notifyAnnouncersDidChangeContent];
+}
+
 #pragma mark - Internal listener methods
 
 - (void)notifyAnnouncersWillChangeContent

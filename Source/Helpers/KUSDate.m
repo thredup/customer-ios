@@ -39,10 +39,47 @@ const NSTimeInterval kDaysPerWeek = 7.0;
     }
 }
 
++ (NSDate *)dateFromString:(NSString *)string
+{
+    return (string.length ? [_ISO8601DateFormatterFromString() dateFromString:string] : nil);
+}
+
++ (NSString *)stringFromDate:(NSDate *)date
+{
+    return (date ? [_ISO8601DateFormatterFromDate() stringFromDate:date] : nil);
+}
+
+#pragma mark - Helper logic
+
 static NSString *_AgoTextWithCountAndUnit(NSTimeInterval unitCount, NSString *unit)
 {
     int integerUnit = (int)round(unitCount);
     return [NSString stringWithFormat:@"%i %@%@ ago", integerUnit, unit, (integerUnit > 1 ? @"s": @"")];
+}
+
+static NSDateFormatter *_ISO8601DateFormatterFromDate()
+{
+    static NSDateFormatter *_dateFormatter;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _dateFormatter = [[NSDateFormatter alloc] init];
+        [_dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
+        [_dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
+        [_dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+    });
+    return _dateFormatter;
+}
+
+static NSDateFormatter *_ISO8601DateFormatterFromString()
+{
+    static NSDateFormatter *_dateFormatter;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _dateFormatter = [[NSDateFormatter alloc] init];
+        [_dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZ"];
+        [_dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
+    });
+    return _dateFormatter;
 }
 
 @end

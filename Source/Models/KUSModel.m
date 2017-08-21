@@ -8,6 +8,8 @@
 
 #import "KUSModel.h"
 
+#import "KUSDate.h"
+
 @implementation KUSModel
 
 #pragma mark - Class methods
@@ -96,27 +98,7 @@ NSInteger IntegerFromKeyPath(NSDictionary * _Nullable dict, NSString * _Nonnull 
 NSDate *DateFromKeyPath(NSDictionary * _Nullable dict, NSString * _Nonnull keyPath)
 {
     NSString *value = NSStringFromKeyPath(dict, keyPath);
-    return (value ? _DateFromISO8601String(value) : nil);
-}
-
-static NSDate *_DateFromISO8601String(NSString * _Nonnull dateString)
-{
-    if (dateString.length == 0) {
-        return nil;
-    }
-    return [_ISO8601DateFormatter() dateFromString:dateString];
-}
-
-static NSDateFormatter *_ISO8601DateFormatter()
-{
-    static NSDateFormatter *_dateFormatter;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        _dateFormatter = [[NSDateFormatter alloc] init];
-        [_dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZ"];
-        [_dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
-    });
-    return _dateFormatter;
+    return (value ? [KUSDate dateFromString:value] : nil);
 }
 
 @end

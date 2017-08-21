@@ -58,6 +58,24 @@
     return nil;
 }
 
+- (NSUInteger)unreadCountAfterDate:(NSDate *)date
+{
+    NSUInteger count = 0;
+    for (KUSChatMessage *message in self.allObjects) {
+        BOOL currentUser = message.direction == KUSChatMessageDirectionIn;
+        if (currentUser) {
+            return count;
+        }
+        if (message.createdAt) {
+            if ([message.createdAt compare:date] == NSOrderedAscending) {
+                return count;
+            }
+            count++;
+        }
+    }
+    return count;
+}
+
 - (void)upsertMessageReceivedFromPusher:(KUSChatMessage *)chatMessage
 {
     if (chatMessage) {

@@ -34,6 +34,14 @@
                            alpha:1.0];
 }
 
++ (UIColor *)redColor
+{
+    return [UIColor colorWithRed:231.0/255.0
+                           green:81.0/255.0
+                            blue:36.0/255.0
+                           alpha:1.0];
+}
+
 + (UIColor *)yellowColor
 {
     return [UIColor colorWithRed:245.0/255.0

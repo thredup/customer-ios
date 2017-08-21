@@ -12,4 +12,7 @@
 
 + (NSString *)humanReadableTextFromDate:(NSDate *)date;
 
++ (NSDate *)dateFromString:(NSString *)string;
++ (NSString *)stringFromDate:(NSDate *)date;
+
 @end

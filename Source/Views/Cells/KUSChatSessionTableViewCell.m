@@ -30,6 +30,7 @@
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UILabel *subtitleLabel;
 @property (nonatomic, strong) UILabel *dateLabel;
+@property (nonatomic, strong) UILabel *unreadCountLabel;
 
 @end
 
@@ -67,10 +68,19 @@
         _dateLabel.backgroundColor = [UIColor whiteColor];
         _dateLabel.textColor = [UIColor lightGrayColor];
         _dateLabel.textAlignment = NSTextAlignmentRight;
-        _dateLabel.font = [UIFont systemFontOfSize:11.0];
+        _dateLabel.font = [UIFont systemFontOfSize:12.0];
         _dateLabel.adjustsFontSizeToFitWidth = YES;
-        _dateLabel.minimumScaleFactor = 10.0 / 11.0;
+        _dateLabel.minimumScaleFactor = 10.0 / 12.0;
         [self.contentView addSubview:_dateLabel];
+
+        _unreadCountLabel = [[UILabel alloc] init];
+        _unreadCountLabel.textColor = [UIColor whiteColor];
+        _unreadCountLabel.textAlignment = NSTextAlignmentCenter;
+        _unreadCountLabel.font = [UIFont systemFontOfSize:10.0];
+        _unreadCountLabel.layer.masksToBounds = YES;
+        _unreadCountLabel.layer.cornerRadius = 4.0;
+        _unreadCountLabel.layer.backgroundColor = [KUSColor redColor].CGColor;
+        [self.contentView addSubview:_unreadCountLabel];
 
         [_userSession.chatSettingsDataSource addListener:self];
     }
@@ -92,8 +102,6 @@
 
     [self _updateAvatar];
     [self _updateLabels];
-
-    [self setNeedsLayout];
 }
 
 #pragma mark - Internal methods
@@ -126,6 +134,17 @@
     // Date text (from last message date, or session created at)
     NSDate *sessionDate = latestMessage.createdAt ?: _chatSession.createdAt;
     self.dateLabel.text = [KUSDate humanReadableTextFromDate:sessionDate];
+
+    // Unread count (number of messages > the lastSeenAt)
+    NSUInteger unreadCount = [_chatMessagesDataSource unreadCountAfterDate:_chatSession.lastSeenAt];
+    if (unreadCount > 0) {
+        self.unreadCountLabel.text = [NSString stringWithFormat:@"%lu", unreadCount];
+        self.unreadCountLabel.hidden = NO;
+    } else {
+        self.unreadCountLabel.hidden = YES;
+    }
+
+    [self setNeedsLayout];
 }
 
 #pragma mark - Layout methods
@@ -153,11 +172,20 @@
         .size.height = titleHeight
     };
 
+    CGSize unreadSize = [self.unreadCountLabel sizeThatFits:CGSizeMake(CGFLOAT_MAX, 15.0)];
+    unreadSize.height = 15.0;
+    unreadSize.width = MAX(ceil(unreadSize.width + 4.0), 15.0);
+    self.unreadCountLabel.frame = (CGRect) {
+        .origin.x = self.bounds.size.width - rightMargin - unreadSize.width,
+        .origin.y = (self.bounds.size.height / 2.0) + 4.0,
+        .size = unreadSize
+    };
+
     CGFloat subtitleHeight = ceil(self.subtitleLabel.font.lineHeight);
     self.subtitleLabel.frame = (CGRect) {
         .origin.x = textXOffset,
         .origin.y = (self.bounds.size.height / 2.0) + 4.0,
-        .size.width = self.bounds.size.width - textXOffset - rightMargin,
+        .size.width = self.bounds.size.width - textXOffset - rightMargin - (self.unreadCountLabel ? unreadSize.width + 10.0 : 0.0),
         .size.height = subtitleHeight
     };
 

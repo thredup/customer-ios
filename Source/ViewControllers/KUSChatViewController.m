@@ -171,6 +171,8 @@
     [super viewDidAppear:animated];
 
     [_inputBarView becomeFirstResponder];
+
+    [_userSession.chatSessionsDataSource updateLastSeenAtForSessionId:_chatSession.oid completion:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -178,6 +180,8 @@
     [super viewWillDisappear:animated];
 
     [_inputBarView resignFirstResponder];
+
+    [_userSession.chatSessionsDataSource updateLastSeenAtForSessionId:_chatSession.oid completion:nil];
 }
 
 - (void)viewWillLayoutSubviews
