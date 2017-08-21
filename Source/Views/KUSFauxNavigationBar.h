@@ -8,6 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
+@class KUSUserSession;
 @interface KUSFauxNavigationBar : UIView
+
+@property (nonatomic, copy) NSString *sessionId;
+@property (nonatomic, assign) BOOL showsLabels;
+
+- (instancetype)initWithUserSession:(KUSUserSession *)userSession;
+- (instancetype)initWithFrame:(CGRect)frame NS_UNAVAILABLE;
+- (instancetype)init NS_UNAVAILABLE;
+
+- (CGFloat)desiredHeightWithTopInset:(CGFloat)topInset;
 
 @end

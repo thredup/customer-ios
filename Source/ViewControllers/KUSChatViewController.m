@@ -33,9 +33,6 @@
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) KUSInputBar *inputBarView;
 @property (nonatomic, strong) KUSFauxNavigationBar *fauxNavigationBar;
-@property (nonatomic, strong) KUSAvatarImageView *avatarImageView;
-@property (nonatomic, strong) UILabel *nameLabel;
-@property (nonatomic, strong) UILabel *greetingLabel;
 
 @end
 
@@ -92,8 +89,6 @@
     barButtonItem.style = UIBarButtonItemStyleDone;
     self.navigationItem.rightBarButtonItem = barButtonItem;
 
-    // self.navigationItem.title = @"Kustomer";
-
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     self.tableView.autoresizingMask = (UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth);
     self.tableView.scrollsToTop = YES;
@@ -106,29 +101,10 @@
     self.tableView.transform = CGAffineTransformMakeScale(1.0, -1.0);
     [self.view addSubview:self.tableView];
 
-    self.fauxNavigationBar = [[KUSFauxNavigationBar alloc] init];
+    self.fauxNavigationBar = [[KUSFauxNavigationBar alloc] initWithUserSession:_userSession];
+    [self.fauxNavigationBar setSessionId:_chatSession.oid];
+    [self.fauxNavigationBar setShowsLabels:YES];
     [self.view addSubview:self.fauxNavigationBar];
-
-    self.avatarImageView = [[KUSAvatarImageView alloc] initWithUserSession:_userSession];
-    [self.fauxNavigationBar addSubview:self.avatarImageView];
-
-    self.nameLabel = [[UILabel alloc] init];
-    self.nameLabel.font = [UIFont boldSystemFontOfSize:13.0];
-    self.nameLabel.textAlignment = NSTextAlignmentCenter;
-    self.nameLabel.textColor = [UIColor darkGrayColor];
-    self.nameLabel.lineBreakMode = NSLineBreakByTruncatingTail;
-    self.nameLabel.numberOfLines = 1;
-    [self.fauxNavigationBar addSubview:self.nameLabel];
-
-    self.greetingLabel = [[UILabel alloc] init];
-    self.greetingLabel.font = [UIFont systemFontOfSize:11.0];
-    self.greetingLabel.textAlignment = NSTextAlignmentCenter;
-    self.greetingLabel.textColor = [KUSColor darkGrayColor];
-    self.greetingLabel.lineBreakMode = NSLineBreakByTruncatingTail;
-    self.greetingLabel.numberOfLines = 1;
-    self.greetingLabel.adjustsFontSizeToFitWidth = YES;
-    self.greetingLabel.minimumScaleFactor = 0.9;
-    [self.fauxNavigationBar addSubview:self.greetingLabel];
 
     self.inputBarView = [[KUSInputBar alloc] init];
     self.inputBarView.delegate = self;
@@ -139,7 +115,6 @@
         _chatMessagesDataSource = [_userSession chatMessagesDataSourceForSessionId:_chatSession.oid];
         [_chatMessagesDataSource addListener:self];
         [_chatMessagesDataSource fetchLatest];
-        [self.avatarImageView setUserId:_chatMessagesDataSource.firstOtherUserId];
         if (!_chatMessagesDataSource.didFetch) {
             [self showLoadingIndicator];
         }
@@ -158,8 +133,6 @@
     }
 
     [_userSession.chatSettingsDataSource addListener:self];
-
-    [self _updateTextLabels];
 
     // Force layout so that animated presentations start from the right state
     [self.view setNeedsLayout];
@@ -188,9 +161,6 @@
 {
     [super viewWillLayoutSubviews];
 
-    CGFloat avatarSize = 30.0;
-    CGFloat labelSidePad = 10.0;
-    CGFloat statusBarHeight = 20.0;
     CGFloat extraNavigationBarHeight = (_forNewChatSession ? 146.0 : 36.0);
     CGFloat navigationBarHeight = self.topLayoutGuide.length + extraNavigationBarHeight;
 
@@ -204,54 +174,8 @@
 
     self.fauxNavigationBar.frame = (CGRect) {
         .size.width = self.view.bounds.size.width,
-        .size.height = navigationBarHeight
+        .size.height = [self.fauxNavigationBar desiredHeightWithTopInset:self.topLayoutGuide.length]
     };
-
-    if (_forNewChatSession) {
-        self.nameLabel.font = [UIFont boldSystemFontOfSize:15.0];
-        self.greetingLabel.font = [UIFont systemFontOfSize:13.0];
-
-        self.avatarImageView.frame = (CGRect) {
-            .origin.x = (self.fauxNavigationBar.bounds.size.width - avatarSize) / 2.0,
-            .origin.y = (self.fauxNavigationBar.bounds.size.height / 2.0) - avatarSize,
-            .size.width = avatarSize,
-            .size.height = avatarSize
-        };
-        self.nameLabel.frame = (CGRect) {
-            .origin.x = labelSidePad,
-            .origin.y = self.avatarImageView.frame.origin.y + self.avatarImageView.frame.size.height + 8.0,
-            .size.width = self.fauxNavigationBar.bounds.size.width - labelSidePad * 2.0,
-            .size.height = 20.0
-        };
-        self.greetingLabel.frame = (CGRect) {
-            .origin.x = labelSidePad,
-            .origin.y = self.nameLabel.frame.origin.y + self.nameLabel.frame.size.height + 8.0,
-            .size.width = self.fauxNavigationBar.bounds.size.width - labelSidePad * 2.0,
-            .size.height = 16.0
-        };
-    } else {
-        self.nameLabel.font = [UIFont boldSystemFontOfSize:13.0];
-        self.greetingLabel.font = [UIFont systemFontOfSize:11.0];
-
-        self.avatarImageView.frame = (CGRect) {
-            .origin.x = (self.fauxNavigationBar.bounds.size.width - avatarSize) / 2.0,
-            .origin.y = (self.fauxNavigationBar.bounds.size.height - extraNavigationBarHeight - avatarSize - statusBarHeight) / 2.0 + statusBarHeight,
-            .size.width = avatarSize,
-            .size.height = avatarSize
-        };
-        self.nameLabel.frame = (CGRect) {
-            .origin.x = labelSidePad,
-            .origin.y = self.avatarImageView.frame.origin.y + self.avatarImageView.frame.size.height + 4.0,
-            .size.width = self.fauxNavigationBar.bounds.size.width - labelSidePad * 2.0,
-            .size.height = 16.0
-        };
-        self.greetingLabel.frame = (CGRect) {
-            .origin.x = labelSidePad,
-            .origin.y = self.nameLabel.frame.origin.y + self.nameLabel.frame.size.height + 2.0,
-            .size.width = self.fauxNavigationBar.bounds.size.width - labelSidePad * 2.0,
-            .size.height = 13.0
-        };
-    }
 
     self.tableView.frame = (CGRect) {
         .size.width = self.view.bounds.size.width,
@@ -274,22 +198,10 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-#pragma mark - Internal methods
-
-- (void)_updateTextLabels
-{
-    KUSChatSettings *chatSettings = _userSession.chatSettingsDataSource.object;
-    NSString *teamName = chatSettings.teamName.length ? chatSettings.teamName : _userSession.organizationName;
-    self.nameLabel.text = teamName;
-
-    self.greetingLabel.text = chatSettings.greeting;
-}
-
 #pragma mark - KUSObjectDataSourceListener methods
 
 - (void)objectDataSourceDidLoad:(KUSObjectDataSource *)dataSource
 {
-    [self _updateTextLabels];
     [self.tableView reloadData];
 }
 
@@ -305,7 +217,6 @@
 
 - (void)paginatedDataSourceDidChangeContent:(KUSPaginatedDataSource *)dataSource
 {
-    [self.avatarImageView setUserId:_chatMessagesDataSource.firstOtherUserId];
     [self.tableView reloadData];
 }
 
@@ -454,6 +365,7 @@
 
             _forNewChatSession = NO;
             _chatSession = session;
+            [self.fauxNavigationBar setSessionId:_chatSession.oid];
             _chatMessagesDataSource = [_userSession chatMessagesDataSourceForSessionId:_chatSession.oid];
             [_chatMessagesDataSource addListener:self];
             _didLoadInitialContent = YES;
