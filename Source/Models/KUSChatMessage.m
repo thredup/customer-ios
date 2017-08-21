@@ -31,8 +31,7 @@ static KUSChatMessageDirection KUSChatMessageDirectionFromString(NSString *strin
         _trackingId = NSStringFromKeyPath(json, @"attributes.trackingId");
         _body = NSStringFromKeyPath(json, @"attributes.body");
 
-        // TODO: ISO Date parsing
-        _createdAt = nil;
+        _createdAt = DateFromKeyPath(json, @"attributes.createdAt");
         _direction = KUSChatMessageDirectionFromString(NSStringFromKeyPath(json, @"attributes.direction"));
     }
     return self;

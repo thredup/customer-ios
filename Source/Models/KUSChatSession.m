@@ -23,12 +23,11 @@
 {
     self = [super initWithJSON:json];
     if (self) {
-        _preview = [json valueForKeyPath:@"attributes.preview"];
-        _trackingId = [json valueForKeyPath:@"attributes.trackingId"];
+        _preview = NSStringFromKeyPath(json, @"attributes.preview");
+        _trackingId = NSStringFromKeyPath(json, @"attributes.trackingId");
 
-        // TODO: ISO Date parsing
-        _createdAt = nil;
-        _lastSeenAt = nil;
+        _createdAt = DateFromKeyPath(json, @"attributes.createdAt");
+        _lastSeenAt = DateFromKeyPath(json, @"attributes.lastSeenAt");
     }
     return self;
 }
