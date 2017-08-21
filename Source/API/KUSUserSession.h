@@ -17,10 +17,9 @@
 
 @interface KUSUserSession : NSObject
 
+- (instancetype)initWithOrgName:(NSString *)orgName orgId:(NSString *)orgId reset:(BOOL)reset NS_DESIGNATED_INITIALIZER;
 - (instancetype)initWithOrgName:(NSString *)orgName orgId:(NSString *)orgId;
 - (instancetype)init NS_UNAVAILABLE;
-
-- (void)resetTracking;
 
 // Org methods
 - (NSString *)orgId;

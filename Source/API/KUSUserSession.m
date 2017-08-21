@@ -33,7 +33,7 @@
 
 #pragma mark - Lifecycle methods
 
-- (instancetype)initWithOrgName:(NSString *)orgName orgId:(NSString *)orgId
+- (instancetype)initWithOrgName:(NSString *)orgName orgId:(NSString *)orgId reset:(BOOL)reset
 {
     self = [super init];
     if (self) {
@@ -45,23 +45,19 @@
             _organizationName = [firstLetter stringByAppendingString:[_orgName substringFromIndex:1]];
         }
 
-        [self pushClient];
+        if (reset) {
+            [self.trackingTokenDataSource reset];
+        }
+
         [self.chatSettingsDataSource fetch];
+        [self pushClient];
     }
     return self;
 }
 
-#pragma mark - Public methods
-
-- (void)resetTracking
+- (instancetype)initWithOrgName:(NSString *)orgName orgId:(NSString *)orgId
 {
-    // Nil out any user-specific datasources
-    _chatSessionsDataSource = nil;
-    _pushClient = nil;
-
-    [self pushClient];
-    // Request a new tracking token
-    [self.trackingTokenDataSource reset];
+    return [self initWithOrgName:orgName orgId:orgId reset:NO];
 }
 
 #pragma mark - Datasource objects

@@ -38,6 +38,12 @@
     return self;
 }
 
+- (void)dealloc
+{
+    [_pusherClient unsubscribeAllChannels];
+    [_pusherClient disconnect];
+}
+
 #pragma mark - Channel constructors
 
 - (NSURL *)_pusherAuthURL

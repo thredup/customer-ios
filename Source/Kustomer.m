@@ -82,7 +82,8 @@ static NSString *kKustomerOrgNameKey = @"orgName";
 
 - (void)resetTracking
 {
-    [self.userSession resetTracking];
+    NSLog(@"Kustomer tracking being reset");
+    self.userSession = [[KUSUserSession alloc] initWithOrgName:self.orgName orgId:self.orgId reset:YES];
 }
 
 #pragma mark - Helper functions
