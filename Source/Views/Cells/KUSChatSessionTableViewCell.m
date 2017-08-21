@@ -10,6 +10,7 @@
 
 #import "KUSChatSession.h"
 #import "KUSColor.h"
+#import "KUSDate.h"
 #import "KUSText.h"
 #import "KUSUserSession.h"
 
@@ -66,7 +67,9 @@
         _dateLabel.backgroundColor = [UIColor whiteColor];
         _dateLabel.textColor = [UIColor lightGrayColor];
         _dateLabel.textAlignment = NSTextAlignmentRight;
-        _dateLabel.font = [UIFont systemFontOfSize:12.0];
+        _dateLabel.font = [UIFont systemFontOfSize:11.0];
+        _dateLabel.adjustsFontSizeToFitWidth = YES;
+        _dateLabel.minimumScaleFactor = 10.0 / 11.0;
         [self.contentView addSubview:_dateLabel];
 
         [_userSession.chatSettingsDataSource addListener:self];
@@ -103,21 +106,23 @@
     _userDataSource = [_userSession userDataSourceForUserId:_chatMessagesDataSource.firstOtherUserId];
     [_userDataSource addListener:self];
 
+    // Title text (from last responder, chat settings, or organization name)
     KUSUser *firstOtherUser = _userDataSource.object;
     NSString *responderName = firstOtherUser.displayName;
     if (responderName.length == 0) {
         KUSChatSettings *chatSettings = [_userSession.chatSettingsDataSource object];
         responderName = chatSettings.teamName.length ? chatSettings.teamName : _userSession.organizationName;
     }
-
     self.titleLabel.text = [NSString stringWithFormat:@"Chat with %@", responderName];
 
+    // Subtitle text (from last message, or preview text)
     KUSChatMessage *latestMessage = _chatMessagesDataSource.firstObject;
     NSString *subtitleText = latestMessage.body ?: _chatSession.preview;
     self.subtitleLabel.attributedText = [KUSText attributedStringFromText:subtitleText fontSize:12.0];
 
-    // TODO: String from lastSeenAt/last message
-    self.dateLabel.text = @"19 hours ago";
+    // Date text (from last message date, or session created at)
+    NSDate *sessionDate = latestMessage.createdAt ?: _chatSession.createdAt;
+    self.dateLabel.text = [KUSDate humanReadableTextFromDate:sessionDate];
 }
 
 #pragma mark - Layout methods
@@ -141,7 +146,7 @@
     self.titleLabel.frame = (CGRect) {
         .origin.x = textXOffset,
         .origin.y = (self.bounds.size.height / 2.0) - titleHeight - 4.0,
-        .size.width = self.bounds.size.width - textXOffset - rightMargin - 80,
+        .size.width = self.bounds.size.width - textXOffset - rightMargin - 90.0,
         .size.height = titleHeight
     };
 
@@ -155,9 +160,9 @@
 
     CGFloat dateHeight = ceil(self.dateLabel.font.lineHeight);
     self.dateLabel.frame = (CGRect) {
-        .origin.x = self.bounds.size.width - rightMargin - 80.0,
+        .origin.x = self.bounds.size.width - rightMargin - 90.0,
         .origin.y = (self.bounds.size.height / 2.0) - dateHeight - 4.0,
-        .size.width = 80.0,
+        .size.width = 90.0,
         .size.height = dateHeight
     };
 }

@@ -11,6 +11,8 @@
 		63035BDA1F2EBCD400FBBF66 /* KUSText.m in Sources */ = {isa = PBXBuildFile; fileRef = 63035BD81F2EBCD400FBBF66 /* KUSText.m */; };
 		63270E951F4A1FA200E25BF5 /* KUSPushClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 63270E931F4A1FA200E25BF5 /* KUSPushClient.h */; };
 		63270E961F4A1FA200E25BF5 /* KUSPushClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 63270E941F4A1FA200E25BF5 /* KUSPushClient.m */; };
+		63270E991F4A717600E25BF5 /* KUSDate.h in Headers */ = {isa = PBXBuildFile; fileRef = 63270E971F4A717600E25BF5 /* KUSDate.h */; };
+		63270E9A1F4A717600E25BF5 /* KUSDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 63270E981F4A717600E25BF5 /* KUSDate.m */; };
 		6334BE2A1F0C3E8600258DAF /* KUSModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 6334BE281F0C3E8600258DAF /* KUSModel.h */; };
 		6334BE2B1F0C3E8600258DAF /* KUSModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6334BE291F0C3E8600258DAF /* KUSModel.m */; };
 		6334BE2E1F0C43BE00258DAF /* KUSTrackingToken.h in Headers */ = {isa = PBXBuildFile; fileRef = 6334BE2C1F0C43BE00258DAF /* KUSTrackingToken.h */; };
@@ -136,6 +138,8 @@
 		63035BD81F2EBCD400FBBF66 /* KUSText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSText.m; sourceTree = "<group>"; };
 		63270E931F4A1FA200E25BF5 /* KUSPushClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSPushClient.h; sourceTree = "<group>"; };
 		63270E941F4A1FA200E25BF5 /* KUSPushClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSPushClient.m; sourceTree = "<group>"; };
+		63270E971F4A717600E25BF5 /* KUSDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSDate.h; sourceTree = "<group>"; };
+		63270E981F4A717600E25BF5 /* KUSDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSDate.m; sourceTree = "<group>"; };
 		6334BE281F0C3E8600258DAF /* KUSModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSModel.h; sourceTree = "<group>"; };
 		6334BE291F0C3E8600258DAF /* KUSModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSModel.m; sourceTree = "<group>"; };
 		6334BE2C1F0C43BE00258DAF /* KUSTrackingToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSTrackingToken.h; sourceTree = "<group>"; };
@@ -300,6 +304,8 @@
 			children = (
 				636531B41F1DB73B00433A50 /* KUSColor.h */,
 				636531B51F1DB73B00433A50 /* KUSColor.m */,
+				63270E971F4A717600E25BF5 /* KUSDate.h */,
+				63270E981F4A717600E25BF5 /* KUSDate.m */,
 				6334BE521F0C66E200258DAF /* KUSImage.h */,
 				6334BE531F0C66E200258DAF /* KUSImage.m */,
 				63035BD71F2EBCD400FBBF66 /* KUSText.h */,
@@ -525,6 +531,7 @@
 				636531A91F1BBCCD00433A50 /* KUSChatViewController.h in Headers */,
 				63EDF3D11F412503000345D8 /* KUSUserSession.h in Headers */,
 				6334BE2E1F0C43BE00258DAF /* KUSTrackingToken.h in Headers */,
+				63270E991F4A717600E25BF5 /* KUSDate.h in Headers */,
 				63270E951F4A1FA200E25BF5 /* KUSPushClient.h in Headers */,
 				6334BE2A1F0C3E8600258DAF /* KUSModel.h in Headers */,
 				636531B21F1C593D00433A50 /* KUSChatMessageTableViewCell.h in Headers */,
@@ -829,6 +836,7 @@
 				63EDF3D21F412503000345D8 /* KUSUserSession.m in Sources */,
 				633D8FE71F239F9500BAFAC9 /* KUSChatPlaceholderTableViewCell.m in Sources */,
 				636531AA1F1BBCCD00433A50 /* KUSChatViewController.m in Sources */,
+				63270E9A1F4A717600E25BF5 /* KUSDate.m in Sources */,
 				6334BE371F0C4A1300258DAF /* KUSChatSession.m in Sources */,
 				633FADBD1F258C2E0060B4A6 /* KUSChatMessagesDataSource.m in Sources */,
 				633D8FF31F23E07E00BAFAC9 /* KUSChatSessionsDataSource.m in Sources */,

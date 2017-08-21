@@ -140,7 +140,9 @@
         [_chatMessagesDataSource addListener:self];
         [_chatMessagesDataSource fetchLatest];
         [self.avatarImageView setUserId:_chatMessagesDataSource.firstOtherUserId];
-        [self showLoadingIndicator];
+        if (!_chatMessagesDataSource.didFetch) {
+            [self showLoadingIndicator];
+        }
     }
 
     NSArray<NSString *> *keyboardNotificationNames = @[
