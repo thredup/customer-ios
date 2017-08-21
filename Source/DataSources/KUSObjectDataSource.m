@@ -106,7 +106,7 @@
 
 - (void)notifyAnnouncersDidError:(NSError *)error
 {
-    for (id<KUSObjectDataSourceListener> listener in _listeners) {
+    for (id<KUSObjectDataSourceListener> listener in [_listeners copy]) {
         if ([listener respondsToSelector:@selector(objectDataSource:didReceiveError:)]) {
             [listener objectDataSource:self didReceiveError:error];
         }
@@ -115,7 +115,7 @@
 
 - (void)notifyAnnouncersDidLoad
 {
-    for (id<KUSObjectDataSourceListener> listener in _listeners) {
+    for (id<KUSObjectDataSourceListener> listener in [_listeners copy]) {
         if ([listener respondsToSelector:@selector(objectDataSourceDidLoad:)]) {
             [listener objectDataSourceDidLoad:self];
         }

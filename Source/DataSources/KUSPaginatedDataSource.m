@@ -327,7 +327,7 @@
 
 - (void)notifyAnnouncersWillChangeContent
 {
-    for (id<KUSPaginatedDataSourceListener> listener in _listeners) {
+    for (id<KUSPaginatedDataSourceListener> listener in [_listeners copy]) {
         if ([listener respondsToSelector:@selector(paginatedDataSourceWillChangeContent:)]) {
             [listener paginatedDataSourceWillChangeContent:self];
         }
@@ -336,7 +336,7 @@
 
 - (void)notifyAnnouncersDidChangeContent
 {
-    for (id<KUSPaginatedDataSourceListener> listener in _listeners) {
+    for (id<KUSPaginatedDataSourceListener> listener in [_listeners copy]) {
         if ([listener respondsToSelector:@selector(paginatedDataSourceDidChangeContent:)]) {
             [listener paginatedDataSourceDidChangeContent:self];
         }
@@ -353,7 +353,7 @@
     } else if (prevIndex != newIndex) {
         changeType = KUSPaginatedDataSourceChangeMove;
     }
-    for (id<KUSPaginatedDataSourceListener> listener in _listeners) {
+    for (id<KUSPaginatedDataSourceListener> listener in [_listeners copy]) {
         if ([listener respondsToSelector:@selector(paginatedDataSource:didChangeObject:atIndex:forChangeType:newIndex:)]) {
             [listener paginatedDataSource:self
                           didChangeObject:object
@@ -366,7 +366,7 @@
 
 - (void)notifyAnnouncersDidError:(NSError *)error
 {
-    for (id<KUSPaginatedDataSourceListener> listener in _listeners) {
+    for (id<KUSPaginatedDataSourceListener> listener in [_listeners copy]) {
         if ([listener respondsToSelector:@selector(paginatedDataSource:didReceiveError:)]) {
             [listener paginatedDataSource:self didReceiveError:error];
         }
@@ -375,7 +375,7 @@
 
 - (void)notifyAnnouncersDidLoad
 {
-    for (id<KUSPaginatedDataSourceListener> listener in _listeners) {
+    for (id<KUSPaginatedDataSourceListener> listener in [_listeners copy]) {
         if ([listener respondsToSelector:@selector(paginatedDataSourceDidLoad:)]) {
             [listener paginatedDataSourceDidLoad:self];
         }
