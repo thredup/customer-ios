@@ -69,6 +69,11 @@
 
 + (UIImage *)defaultAvatarImageForName:(NSString *)name
 {
+    UIImage *cachedImage = [[self _defaultAvatarImageCache] objectForKey:name];
+    if (cachedImage) {
+        return cachedImage;
+    }
+
     NSArray<NSString *> *initials = [self _initialsFromName:name];
 
     // For parity with the web ui
@@ -99,6 +104,9 @@
 
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
+
+    [[self _defaultAvatarImageCache] setObject:image forKey:name];
+
     return image;
 }
 
@@ -149,6 +157,17 @@
         ];
     });
     return _defaultNameColors;
+}
+
++ (NSCache<NSString *, UIImage *> *)_defaultAvatarImageCache
+{
+    static NSCache *_defaultAvatarIamgeCache;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _defaultAvatarIamgeCache = [[NSCache alloc] init];
+        _defaultAvatarIamgeCache.countLimit = 10;
+    });
+    return _defaultAvatarIamgeCache;
 }
 
 @end
