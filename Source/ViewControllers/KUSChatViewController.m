@@ -26,7 +26,6 @@
     BOOL _forNewChatSession;
     KUSChatSession *_chatSession;
     KUSChatMessagesDataSource *_chatMessagesDataSource;
-    BOOL _didLoadInitialContent;
 
     CGFloat _keyboardHeight;
 }
@@ -214,10 +213,7 @@
 
 - (void)paginatedDataSourceDidLoad:(KUSPaginatedDataSource *)dataSource
 {
-    if (!_didLoadInitialContent) {
-        [self hideLoadingIndicator];
-        _didLoadInitialContent = YES;
-    }
+    [self hideLoadingIndicator];
 }
 
 - (void)paginatedDataSourceDidChangeContent:(KUSPaginatedDataSource *)dataSource
@@ -373,7 +369,6 @@
             [self.fauxNavigationBar setSessionId:_chatSession.oid];
             _chatMessagesDataSource = [_userSession chatMessagesDataSourceForSessionId:_chatSession.oid];
             [_chatMessagesDataSource addListener:self];
-            _didLoadInitialContent = YES;
             [self.view setNeedsLayout];
 
             [_chatMessagesDataSource sendTextMessage:text completion:^(NSError *error, KUSChatMessage *message) {

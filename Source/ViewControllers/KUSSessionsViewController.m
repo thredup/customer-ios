@@ -110,13 +110,17 @@
                        forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.createSessionButton];
 
-    self.tableView.hidden = YES;
-    self.createSessionButton.hidden = YES;
-
     _chatSessionsDataSource = _userSession.chatSessionsDataSource;
     [_chatSessionsDataSource addListener:self];
     [_chatSessionsDataSource fetchLatest];
-    [self showLoadingIndicator];
+
+    if (_chatSessionsDataSource.didFetch) {
+        [self _handleFirstLoadIfNecessary];
+    } else {
+        self.tableView.hidden = YES;
+        self.createSessionButton.hidden = YES;
+        [self showLoadingIndicator];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
