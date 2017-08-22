@@ -18,6 +18,7 @@
 #import "KUSChatSettingsDataSource.h"
 #import "KUSInputBar.h"
 #import "KUSFauxNavigationBar.h"
+#import "KustomerWindow.h"
 
 @interface KUSChatViewController () <KUSInputBarDelegate, KUSObjectDataSourceListener, KUSPaginatedDataSourceListener, UITableViewDataSource, UITableViewDelegate> {
     KUSUserSession *_userSession;
@@ -195,6 +196,10 @@
 
 - (void)_dismiss
 {
+    if ([self.view.window isKindOfClass:[KustomerWindow class]]) {
+        [[KustomerWindow sharedInstance] hide];
+        [_inputBarView resignFirstResponder];
+    }
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

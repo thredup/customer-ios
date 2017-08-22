@@ -16,8 +16,11 @@ FOUNDATION_EXPORT const unsigned char KustomerVersionString[];
 @interface Kustomer : NSObject
 
 + (void)initializeWithAPIKey:(NSString *)apiKey;
-
 + (void)resetTracking;
+
++ (void)presentSupportWindow;
++ (void)presentSupportWindowFromPoint:(CGPoint)point;
++ (void)hideSupportWindow;
 
 - (instancetype)init NS_UNAVAILABLE;
 

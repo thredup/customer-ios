@@ -12,8 +12,10 @@
 #import "KUSImage.h"
 
 @interface ViewController () {
-    UIButton *_supportButton;
     UIButton *_resetButton;
+    UIButton *_presentButton;
+
+    UIButton *_supportButton;
 }
 
 @end
@@ -42,6 +44,14 @@
            forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_resetButton];
 
+    _presentButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [_presentButton setBackgroundImage:buttonImage forState:UIControlStateNormal];
+    [_presentButton setTitle:@"Manually Present Support" forState:UIControlStateNormal];
+    [_presentButton addTarget:self
+                     action:@selector(_presentSupport)
+           forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:_presentButton];
+
     _supportButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [_supportButton setImage:[KUSImage kustyImage] forState:UIControlStateNormal];
     _supportButton.layer.shadowColor = [UIColor blackColor].CGColor;
@@ -65,6 +75,13 @@
         .size.width = self.view.bounds.size.width - 100.0,
         .size.height = 50.0
     };
+    _presentButton.frame = (CGRect) {
+        .origin.x = 50.0,
+        .origin.y = 300.0,
+        .size.width = self.view.bounds.size.width - 100.0,
+        .size.height = 50.0
+    };
+
     _supportButton.frame = (CGRect) {
         .origin.x = self.view.bounds.size.width - 75.0,
         .origin.y = self.view.bounds.size.height - 75.0,
@@ -76,6 +93,11 @@
 #pragma mark - Interface methods
 
 - (void)_openSupport
+{
+    [Kustomer presentSupportWindowFromPoint:_supportButton.center];
+}
+
+- (void)_presentSupport
 {
     KustomerViewController *kustomerViewController = [[KustomerViewController alloc] init];
     [self presentViewController:kustomerViewController animated:YES completion:nil];

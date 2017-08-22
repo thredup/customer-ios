@@ -10,6 +10,7 @@
 #import "Kustomer_Private.h"
 
 #import "KUSUserSession.h"
+#import "KustomerWindow.h"
 
 static NSString *kKustomerOrgIdKey = @"org";
 static NSString *kKustomerOrgNameKey = @"orgName";
@@ -36,6 +37,27 @@ static NSString *kKustomerOrgNameKey = @"orgName";
 + (void)resetTracking
 {
     [[self sharedInstance] resetTracking];
+}
+
+#pragma mark - Presentation methods
+
++ (void)presentSupportWindow
+{
+    CGPoint midPoint = (CGPoint) {
+        .x = [UIScreen mainScreen].bounds.size.width / 2.0,
+        .y = [UIScreen mainScreen].bounds.size.height / 2.0
+    };
+    [self presentSupportWindowFromPoint:midPoint];
+}
+
++ (void)presentSupportWindowFromPoint:(CGPoint)point
+{
+    [[KustomerWindow sharedInstance] showFromPoint:point];
+}
+
++ (void)hideSupportWindow
+{
+    [[KustomerWindow sharedInstance] hide];
 }
 
 #pragma mark - Lifecycle methods

@@ -11,6 +11,7 @@
 #import "KUSAvatarImageView.h"
 #import "KUSColor.h"
 #import "KUSUserSession.h"
+#import "KustomerWindow.h"
 
 @interface KUSFauxNavigationBar () <KUSObjectDataSourceListener, KUSPaginatedDataSourceListener> {
     KUSUserSession *_userSession;
@@ -72,7 +73,7 @@
     [super layoutSubviews];
 
     CGFloat avatarSize = 30.0;
-    CGFloat statusBarHeight = 20.0;
+    CGFloat statusBarHeight = ([self.window isKindOfClass:[KustomerWindow class]] ? 0.0 : 20.0);
     CGFloat labelSidePad = 10.0;
 
     if (self.showsLabels) {
