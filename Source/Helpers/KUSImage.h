@@ -13,6 +13,7 @@
 + (UIImage *)kustyImage;
 + (UIImage *)sendArrowImage;
 + (UIImage *)pencilImage;
++ (UIImage *)errorImage;
 
 + (UIImage *)sendImageWithSize:(CGSize)size color:(UIColor *)color;
 + (UIImage *)circularImageWithSize:(CGSize)size color:(UIColor *)color;

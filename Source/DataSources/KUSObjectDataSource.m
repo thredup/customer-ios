@@ -65,6 +65,8 @@
         strongSelf.requestMarker = nil;
 
         KUSModel *model = [[[self modelClass] alloc] initWithJSON:response[@"data"]];
+
+        self.isFetching = NO;
         if (error || model == nil) {
             strongSelf.error = error;
             [self notifyAnnouncersDidError:error];

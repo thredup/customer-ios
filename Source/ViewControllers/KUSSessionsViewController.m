@@ -167,6 +167,12 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (void)userTappedRetryButton
+{
+    [_chatSessionsDataSource fetchLatest];
+    [self showLoadingIndicatorWithText:@"Loading..."];
+}
+
 #pragma mark - Internal methods
 
 - (void)_handleFirstLoadIfNecessary
@@ -203,6 +209,14 @@
     [self _handleFirstLoadIfNecessary];
     self.tableView.hidden = NO;
     self.createSessionButton.hidden = NO;
+}
+
+- (void)paginatedDataSource:(KUSPaginatedDataSource *)dataSource didReceiveError:(NSError *)error
+{
+    NSString *errorText = error.localizedDescription ?: @"Something went wrong. Please try again.";
+    [self showErrorWithText:errorText];
+    self.tableView.hidden = YES;
+    self.createSessionButton.hidden = YES;
 }
 
 #pragma mark - UITableViewDataSource methods

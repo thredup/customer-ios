@@ -15,6 +15,7 @@
 		63270E9A1F4A717600E25BF5 /* KUSDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 63270E981F4A717600E25BF5 /* KUSDate.m */; };
 		63270E9D1F4BBA6A00E25BF5 /* KustomerWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 63270E9B1F4BBA6A00E25BF5 /* KustomerWindow.h */; };
 		63270E9E1F4BBA6A00E25BF5 /* KustomerWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 63270E9C1F4BBA6A00E25BF5 /* KustomerWindow.m */; };
+		63270EA01F4D386D00E25BF5 /* error_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63270E9F1F4D386D00E25BF5 /* error_icon@2x.png */; };
 		6334BE2A1F0C3E8600258DAF /* KUSModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 6334BE281F0C3E8600258DAF /* KUSModel.h */; };
 		6334BE2B1F0C3E8600258DAF /* KUSModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6334BE291F0C3E8600258DAF /* KUSModel.m */; };
 		6334BE2E1F0C43BE00258DAF /* KUSTrackingToken.h in Headers */ = {isa = PBXBuildFile; fileRef = 6334BE2C1F0C43BE00258DAF /* KUSTrackingToken.h */; };
@@ -144,6 +145,7 @@
 		63270E981F4A717600E25BF5 /* KUSDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSDate.m; sourceTree = "<group>"; };
 		63270E9B1F4BBA6A00E25BF5 /* KustomerWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KustomerWindow.h; sourceTree = "<group>"; };
 		63270E9C1F4BBA6A00E25BF5 /* KustomerWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KustomerWindow.m; sourceTree = "<group>"; };
+		63270E9F1F4D386D00E25BF5 /* error_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "error_icon@2x.png"; sourceTree = "<group>"; };
 		6334BE281F0C3E8600258DAF /* KUSModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSModel.h; sourceTree = "<group>"; };
 		6334BE291F0C3E8600258DAF /* KUSModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSModel.m; sourceTree = "<group>"; };
 		6334BE2C1F0C43BE00258DAF /* KUSTrackingToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSTrackingToken.h; sourceTree = "<group>"; };
@@ -347,6 +349,7 @@
 				636531AD1F1C4B9700433A50 /* kusty@2x.png */,
 				63D9C1811F3046DA00999183 /* up_arrow@2x.png */,
 				63D9C1831F304A7600999183 /* pencil_image@2x.png */,
+				63270E9F1F4D386D00E25BF5 /* error_icon@2x.png */,
 			);
 			path = Images;
 			sourceTree = "<group>";
@@ -662,6 +665,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63270EA01F4D386D00E25BF5 /* error_icon@2x.png in Resources */,
 				63D9C1821F3046DA00999183 /* up_arrow@2x.png in Resources */,
 				63D9C1841F304A7600999183 /* pencil_image@2x.png in Resources */,
 				636531AF1F1C4B9700433A50 /* kusty@2x.png in Resources */,

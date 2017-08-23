@@ -39,6 +39,11 @@
     return [self imageNamed:@"pencil_image"];
 }
 
++ (UIImage *)errorImage
+{
+    return [self imageNamed:@"error_icon"];
+}
+
 + (UIImage *)sendImageWithSize:(CGSize)size color:(UIColor *)color
 {
     UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);

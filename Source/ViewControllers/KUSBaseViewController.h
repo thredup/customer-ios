@@ -10,7 +10,13 @@
 
 @interface KUSBaseViewController : UIViewController
 
+- (void)showLoadingIndicatorWithText:(NSString *)text;
 - (void)showLoadingIndicator;
 - (void)hideLoadingIndicator;
+- (void)showErrorWithText:(NSString *)text;
+
+// Subclass overridable methods
+
+- (void)userTappedRetryButton;
 
 @end
