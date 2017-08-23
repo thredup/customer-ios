@@ -139,7 +139,17 @@ typedef void (^KUSTrackingTokenCompletion)(NSError *error, NSString *trackingTok
             }
             NSError *jsonError;
             NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&jsonError];
-            safeComplete(jsonError, json);
+
+            NSArray<NSDictionary *> *kErrors = [json objectForKey:@"errors"];
+            if ([kErrors isKindOfClass:[NSArray class]] && [kErrors.firstObject isKindOfClass:[NSDictionary class]]) {
+                NSDictionary *kError = kErrors.firstObject;
+                NSError *error = [NSError errorWithDomain:@"com.kustomer.error"
+                                                     code:0
+                                                 userInfo:kError];
+                safeComplete(error, nil);
+            } else {
+                safeComplete(jsonError, json);
+            }
         };
         NSURLSessionDataTask *dataTask = [_urlSession dataTaskWithRequest:urlRequest completionHandler:responseBlock];
         [dataTask resume];
