@@ -53,6 +53,8 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
         [_sendButton setImage:circularImage forState:UIControlStateNormal];
         [_sendButton addTarget:self action:@selector(_pressSend) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_sendButton];
+
+        [self _updateSendButton];
     }
     return self;
 }
@@ -138,6 +140,12 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
     [self textViewDidChange:_textView];
 }
 
+- (void)_updateSendButton
+{
+    _sendButton.userInteractionEnabled = [self _actualText].length > 0;
+    _sendButton.alpha = ([self _actualText].length ? 1.0 : 0.5);
+}
+
 #pragma mark - UITextViewDelegate methods
 
 - (void)textViewDidChange:(UITextView *)textView
@@ -145,6 +153,7 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
     if ([self.delegate respondsToSelector:@selector(inputBarTextDidChange:)]) {
         [self.delegate inputBarTextDidChange:self];
     }
+    [self _updateSendButton];
     [self setNeedsLayout];
     [self layoutIfNeeded];
 }
