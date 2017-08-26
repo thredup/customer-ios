@@ -74,7 +74,7 @@ static KUSChatMessageDirection KUSChatMessageDirectionFromString(NSString *strin
                  KUSChatMessage *imageMessage = [[KUSChatMessage alloc] initWithJSON:mutableImageJSON
                                                                                type:KUSChatMessageTypeImage
                                                                            imageURL:matchedURL];
-                 imageMessage->_body = @"_Image message_";
+                 imageMessage->_body = matchedText;
                  [chatMessages addObject:imageMessage];
                  lastLocation = match.range.location + match.range.length;
              }

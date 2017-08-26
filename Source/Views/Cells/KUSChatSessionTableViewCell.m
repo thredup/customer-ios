@@ -127,12 +127,18 @@
     self.titleLabel.text = [NSString stringWithFormat:@"Chat with %@", responderName];
 
     // Subtitle text (from last message, or preview text)
-    KUSChatMessage *latestMessage = _chatMessagesDataSource.firstObject;
-    NSString *subtitleText = latestMessage.body ?: _chatSession.preview;
+    KUSChatMessage *latestTextMessage = nil;
+    for (KUSChatMessage *message in _chatMessagesDataSource.allObjects) {
+        if (message.type == KUSChatMessageTypeText) {
+            latestTextMessage = message;
+            break;
+        }
+    }
+    NSString *subtitleText = latestTextMessage.body ?: _chatSession.preview;
     self.subtitleLabel.attributedText = [KUSText attributedStringFromText:subtitleText fontSize:12.0];
 
     // Date text (from last message date, or session created at)
-    NSDate *sessionDate = latestMessage.createdAt ?: _chatSession.createdAt;
+    NSDate *sessionDate = latestTextMessage.createdAt ?: _chatSession.createdAt;
     self.dateLabel.text = [KUSDate humanReadableTextFromDate:sessionDate];
 
     // Unread count (number of messages > the lastSeenAt)
