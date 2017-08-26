@@ -258,7 +258,7 @@
 
     self.isFetching = NO;
     self.didFetch = YES;
-    self.didFetchAll = response.nextPath == nil;
+    self.didFetchAll = (self.didFetchAll || response.nextPath == nil);
 
     if (didNotifyWillChange) {
         [self notifyAnnouncersDidChangeContent];
@@ -279,7 +279,7 @@
 
     self.isFetching = NO;
     self.didFetch = YES;
-    self.didFetchAll = response.nextPath == nil;
+    self.didFetchAll = (self.didFetchAll || response.nextPath == nil);
 
     [self prependObjects:response.objects];
 
