@@ -20,5 +20,6 @@
 
 - (void)prependObjects:(NSArray<KUSModel *> *)objects;
 - (void)updateObjects:(NSArray<KUSModel *> *)objects;
+- (void)removeObjects:(NSArray<KUSModel *> *)objects;
 
 @end

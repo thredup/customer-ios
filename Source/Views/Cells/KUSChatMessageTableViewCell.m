@@ -31,6 +31,7 @@ static const CGFloat kMinBubbleHeight = 38.0;
     KUSUserSession *_userSession;
     KUSChatMessage *_chatMessage;
     BOOL _showsAvatar;
+    NSTimer *_placeholderFadeTimer;
 
     KUSAvatarImageView *_avatarImageView;
     UIView *_bubbleView;
@@ -177,6 +178,35 @@ static const CGFloat kMinBubbleHeight = 38.0;
     }
 }
 
+#pragma mark - Internal logic methods
+
+// If sending messages takes less than 500ms, we don't want to show the loading indicator
+static NSTimeInterval kOptimisticSendLoadingDelay = 0.5;
+
+- (void)_updateAlphaForPlaceholder
+{
+    [_placeholderFadeTimer invalidate];
+    _placeholderFadeTimer = nil;
+
+    if (_chatMessage.placeholder) {
+        NSTimeInterval timeElapsed = -[_chatMessage.placeholderDate timeIntervalSinceNow];
+        if (timeElapsed >= kOptimisticSendLoadingDelay) {
+            _bubbleView.alpha = 0.5;
+        } else {
+            _bubbleView.alpha = 1.0;
+
+            NSTimeInterval timerInterval = kOptimisticSendLoadingDelay - timeElapsed;
+            _placeholderFadeTimer = [NSTimer scheduledTimerWithTimeInterval:timerInterval
+                                                                     target:self
+                                                                   selector:_cmd
+                                                                   userInfo:nil
+                                                                    repeats:NO];
+        }
+    } else {
+        _bubbleView.alpha = 1.0;
+    }
+}
+
 #pragma mark - Property methods
 
 - (void)setChatMessage:(KUSChatMessage *)chatMessage
@@ -209,6 +239,7 @@ static const CGFloat kMinBubbleHeight = 38.0;
 
     [_avatarImageView setUserId:(currentUser ? nil : _chatMessage.sentById)];
 
+    [self _updateAlphaForPlaceholder];
     [self setNeedsLayout];
 }
 

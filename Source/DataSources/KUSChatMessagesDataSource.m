@@ -85,7 +85,10 @@
 
 - (void)sendTextMessage:(NSString *)text completion:(void(^)(NSError *error, KUSChatMessage *message))completion
 {
-    // TODO: Placeholder message logic?
+    KUSChatMessage *temporaryMessage = [[KUSChatMessage alloc] initPlaceholderWithText:text];
+    if (temporaryMessage) {
+        [self prependObjects:@[ temporaryMessage ]];
+    }
 
     __weak KUSChatMessagesDataSource *weakSelf = self;
     [self.userSession.requestManager
@@ -94,6 +97,9 @@
      params:@{ @"body": text, @"session": _sessionId }
      authenticated:YES
      completion:^(NSError *error, NSDictionary *response) {
+         if (temporaryMessage) {
+             [self removeObjects:@[ temporaryMessage ]];
+         }
          if (error) {
              if (completion) {
                  completion(error, nil);

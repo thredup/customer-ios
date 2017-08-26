@@ -333,18 +333,48 @@
         return;
     }
 
-    [self notifyAnnouncersWillChangeContent];
-
+    BOOL didNotifyWillChange = NO;
     for (KUSModel *object in objects) {
         NSUInteger indexOfObject = [self indexOfObject:object];
         if (indexOfObject != NSNotFound) {
+            if (!didNotifyWillChange) {
+                [self notifyAnnouncersWillChangeContent];
+                didNotifyWillChange = YES;
+            }
             [_fetchedModels replaceObjectAtIndex:indexOfObject withObject:object];
             [_fetchedModelsById setObject:object forKey:object.oid];
             [self notifyAnnouncersForObject:object previousIndex:indexOfObject newIndex:indexOfObject];
         }
     }
 
-    [self notifyAnnouncersDidChangeContent];
+    if (didNotifyWillChange) {
+        [self notifyAnnouncersDidChangeContent];
+    }
+}
+
+- (void)removeObjects:(NSArray<KUSModel *> *)objects
+{
+    if (objects.count == 0) {
+        return;
+    }
+
+    BOOL didNotifyWillChange = NO;
+    for (KUSModel *object in objects) {
+        NSUInteger indexOfObject = [self indexOfObject:object];
+        if (indexOfObject != NSNotFound) {
+            if (!didNotifyWillChange) {
+                [self notifyAnnouncersWillChangeContent];
+                didNotifyWillChange = YES;
+            }
+            [_fetchedModels removeObjectAtIndex:indexOfObject];
+            [_fetchedModelsById removeObjectForKey:object.oid];
+            [self notifyAnnouncersForObject:object previousIndex:indexOfObject newIndex:NSNotFound];
+        }
+    }
+
+    if (didNotifyWillChange) {
+        [self notifyAnnouncersDidChangeContent];
+    }
 }
 
 #pragma mark - Internal listener methods

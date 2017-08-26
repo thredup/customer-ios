@@ -123,21 +123,31 @@ static KUSChatMessageDirection KUSChatMessageDirectionFromString(NSString *strin
 {
     NSDictionary *json = @{
         @"type": @"chat_message",
-        @"id": @"__team",
+        @"id": @"__autoreply",
         @"attributes": @{
-            @"trackingId": @"__none",
             @"body": autoreply,
             @"direction": @"out"
-        },
-        @"relationships": @{
-            @"sentBy": @{
-                @"data": @{
-                    @"id": @"__team"
-                }
-            }
         }
     };
     return [self initWithJSON:json];
+}
+
+- (instancetype)initPlaceholderWithText:(NSString *)text
+{
+    NSDictionary *json = @{
+        @"type": @"chat_message",
+        @"id": [[NSUUID UUID] UUIDString],
+        @"attributes": @{
+            @"body": text,
+            @"direction": @"in"
+        }
+    };
+    self = [self initWithJSON:json];
+    if (self) {
+        self->_placeholder = YES;
+        self->_placeholderDate = [NSDate date];
+    }
+    return self;
 }
 
 #pragma mark - NSObject methods
