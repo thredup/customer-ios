@@ -17,6 +17,7 @@ typedef NS_ENUM(NSInteger, KUSRequestType) {
 };
 
 extern NSString *const kKustomerCORSHeaderKey;
+extern NSString *const kKustomerCORSHeaderValue;
 extern NSString *const kKustomerTrackingTokenHeaderKey;
 
 typedef void (^KUSRequestCompletion)(NSError *error, NSDictionary *response);

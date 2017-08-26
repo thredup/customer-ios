@@ -104,7 +104,9 @@
 
 - (void)_onPusherIdentityUpdate:(PTPusherEvent *)event
 {
-    NSLog(@"_onPusherIdentityUpdate: %@", event.data);
+    NSLog(@"Received updated tracking token from Pusher");
+
+    [_userSession.trackingTokenDataSource fetch];
 }
 
 - (void)_onPusherChatMessageSend:(PTPusherEvent *)event
@@ -145,7 +147,7 @@
 - (void)pusher:(PTPusher *)pusher willAuthorizeChannel:(PTPusherChannel *)channel
 withAuthOperation:(PTPusherChannelAuthorizationOperation *)operation
 {
-    [operation.mutableURLRequest setValue:@"kustomer" forHTTPHeaderField:kKustomerCORSHeaderKey];
+    [operation.mutableURLRequest setValue:kKustomerCORSHeaderValue forHTTPHeaderField:kKustomerCORSHeaderKey];
     [operation.mutableURLRequest setValue:_userSession.trackingTokenDataSource.currentTrackingToken
                        forHTTPHeaderField:kKustomerTrackingTokenHeaderKey];
 }
