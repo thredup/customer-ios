@@ -42,8 +42,8 @@
         NSArray<NSDictionary *> *jsonObjects = json[@"data"];
         NSMutableArray<__kindof KUSModel *> *objects = [[NSMutableArray alloc] init];
         for (NSDictionary *jsonObject in jsonObjects) {
-            KUSModel *model = [[modelClass alloc] initWithJSON:jsonObject];
-            if (model) {
+            NSArray<__kindof KUSModel *> *models = [modelClass objectsWithJSON:jsonObject];
+            for (__kindof KUSModel *model in [models reverseObjectEnumerator]) {
                 [objects addObject:model];
             }
         }

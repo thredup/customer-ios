@@ -20,12 +20,13 @@
 
 + (NSString * _Nullable)modelType;
 
++ (NSArray<__kindof KUSModel *> *_Nullable)objectsWithJSON:(NSDictionary * _Nonnull)json;
 - (instancetype _Nullable)initWithJSON:(NSDictionary * _Nonnull)json;
 
 NSURL *_Nullable NSURLFromKeyPath(NSDictionary * _Nullable dict, NSString * _Nonnull keyPath);
 NSString *_Nullable NSStringFromKeyPath(NSDictionary * _Nullable dict, NSString * _Nonnull keyPath);
 BOOL BOOLFromKeyPath(NSDictionary * _Nullable dict, NSString * _Nonnull keyPath);
 NSInteger IntegerFromKeyPath(NSDictionary * _Nullable dict, NSString * _Nonnull keyPath);
-NSDate *DateFromKeyPath(NSDictionary * _Nullable dict, NSString * _Nonnull keyPath);
+NSDate * _Nullable DateFromKeyPath(NSDictionary * _Nullable dict, NSString * _Nonnull keyPath);
 
 @end

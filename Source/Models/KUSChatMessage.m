@@ -24,17 +24,99 @@ static KUSChatMessageDirection KUSChatMessageDirectionFromString(NSString *strin
 
 #pragma mark - Lifecycle methods
 
-- (instancetype)initWithJSON:(NSDictionary *)json
++ (NSArray<__kindof KUSModel *> *_Nullable)objectsWithJSON:(NSDictionary * _Nonnull)json
+{
+    KUSChatMessage *standardChatMessage = [[KUSChatMessage alloc] initWithJSON:json];
+    if (standardChatMessage == nil) {
+        return @[];
+    }
+
+    NSString *body = standardChatMessage.body;
+
+    // The markdown url pattern we want to detect
+    NSString *imagePattern = @"!\\[.*\\]\\(.*\\)";
+
+    NSMutableArray<KUSChatMessage *> *chatMessages = [[NSMutableArray alloc] init];
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:imagePattern options:kNilOptions error:NULL];
+
+    __block NSUInteger lastId = 0;
+    __block NSUInteger lastLocation = 0;
+
+    [regex
+     enumerateMatchesInString:body
+     options:kNilOptions
+     range:NSMakeRange(0, body.length)
+     usingBlock:^(NSTextCheckingResult *match, NSMatchingFlags flags, BOOL *stop){
+         NSDataDetector *detector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error:NULL];
+         NSArray<NSTextCheckingResult *> *linkMatches = [detector matchesInString:body
+                                                                          options:kNilOptions
+                                                                            range:match.range];
+         NSTextCheckingResult *linkMatch = linkMatches.firstObject;
+         if (linkMatch) {
+             NSString *matchedText = [body substringWithRange:linkMatch.range];
+             NSURL *matchedURL = [NSURL URLWithString:matchedText];
+             if (matchedURL) {
+                 NSMutableDictionary *mutablePreviousJSON = [json mutableCopy];
+                 [mutablePreviousJSON setObject:[NSString stringWithFormat:@"%@_%lu", standardChatMessage.oid, lastId] forKey:@"id"];
+                 NSString *previousText = [body substringWithRange:NSMakeRange(lastLocation, match.range.location - lastLocation)];
+                 previousText = [previousText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                 if (previousText.length) {
+                     KUSChatMessage *previousChatMessage = [[KUSChatMessage alloc] initWithJSON:mutablePreviousJSON];
+                     if (previousChatMessage) {
+                         previousChatMessage->_body = previousText;
+                         [chatMessages addObject:previousChatMessage];
+                         lastId++;
+                     }
+                 }
+
+                 NSMutableDictionary *mutableImageJSON = [json mutableCopy];
+                 [mutableImageJSON setObject:[NSString stringWithFormat:@"%@_%lu", standardChatMessage.oid, lastId] forKey:@"id"];
+                 KUSChatMessage *imageMessage = [[KUSChatMessage alloc] initWithJSON:mutableImageJSON
+                                                                               type:KUSChatMessageTypeImage
+                                                                           imageURL:matchedURL];
+                 imageMessage->_body = @"_Image message_";
+                 [chatMessages addObject:imageMessage];
+                 lastLocation = match.range.location + match.range.length;
+             }
+         }
+     }];
+    if (chatMessages.count == 0) {
+        [chatMessages addObject:standardChatMessage];
+    } else {
+        NSMutableDictionary *mutablePreviousJSON = [json mutableCopy];
+        [mutablePreviousJSON setObject:[NSString stringWithFormat:@"%@_%lu", standardChatMessage.oid, lastId] forKey:@"id"];
+        NSString *previousText = [body substringWithRange:NSMakeRange(lastLocation, body.length - lastLocation)];
+        previousText = [previousText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        if (previousText.length) {
+            KUSChatMessage *previousChatMessage = [[KUSChatMessage alloc] initWithJSON:mutablePreviousJSON];
+            if (previousChatMessage) {
+                previousChatMessage->_body = previousText;
+                [chatMessages addObject:previousChatMessage];
+                lastId++;
+            }
+        }
+    }
+    return chatMessages;
+}
+
+- (instancetype)initWithJSON:(NSDictionary *)json type:(KUSChatMessageType)type imageURL:(NSURL *)URL
 {
     self = [super initWithJSON:json];
     if (self) {
         _trackingId = NSStringFromKeyPath(json, @"attributes.trackingId");
         _body = NSStringFromKeyPath(json, @"attributes.body");
+        _type = type;
+        _imageURL = URL;
 
         _createdAt = DateFromKeyPath(json, @"attributes.createdAt");
         _direction = KUSChatMessageDirectionFromString(NSStringFromKeyPath(json, @"attributes.direction"));
     }
     return self;
+}
+
+- (instancetype)initWithJSON:(NSDictionary *)json
+{
+    return [self initWithJSON:json type:KUSChatMessageTypeText imageURL:nil];
 }
 
 - (instancetype)initWithAutoreply:(NSString *)autoreply

@@ -21,6 +21,12 @@
 
 #pragma mark - Lifecycle methods
 
++ (NSArray<__kindof KUSModel *> *_Nullable)objectsWithJSON:(NSDictionary * _Nonnull)json
+{
+    KUSModel *model = [[self alloc] initWithJSON:json];
+    return (model ? @[ model ] : nil);
+}
+
 - (instancetype _Nullable)initWithJSON:(NSDictionary * _Nonnull)json
 {
     // Reject non-dictionary objects
