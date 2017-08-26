@@ -110,9 +110,12 @@
 - (void)_onPusherChatMessageSend:(PTPusherEvent *)event
 {
     NSLog(@"Received chat message from Pusher");
-    KUSChatMessage *chatMessage = [[KUSChatMessage alloc] initWithJSON:event.data[@"data"]];
-    KUSChatMessagesDataSource *messagesDataSource = [_userSession chatMessagesDataSourceForSessionId:chatMessage.sessionId];
-    [messagesDataSource upsertMessageReceivedFromPusher:chatMessage];
+
+    NSArray<KUSChatMessage *> *chatMessages = [KUSChatMessage objectsWithJSON:event.data[@"data"]];
+    for (KUSChatMessage *chatMessage in chatMessages) {
+        KUSChatMessagesDataSource *messagesDataSource = [_userSession chatMessagesDataSourceForSessionId:chatMessage.sessionId];
+        [messagesDataSource upsertMessageReceivedFromPusher:chatMessage];
+    }
 }
 
 #pragma mark - KUSObjectDataSourceListener methods
