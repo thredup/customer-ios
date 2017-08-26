@@ -274,7 +274,7 @@ static NSURL *KUSURLFromURLAndQueryParams(NSURL *URL, NSDictionary<NSString *, i
 
 static void KUSAttachJSONBodyToRequest(NSMutableURLRequest *mutableURLRequest, NSDictionary<NSString *, id> *params)
 {
-    if (params.count > 0) {
+    if (params) {
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:params options:kNilOptions error:NULL];
         [mutableURLRequest setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
         NSString *contentLength = [NSString stringWithFormat:@"%lu", (unsigned long)jsonData.length];

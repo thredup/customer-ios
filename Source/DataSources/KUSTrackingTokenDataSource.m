@@ -39,7 +39,7 @@
 
     [self.userSession.requestManager performRequestType:requestType
                                                     URL:URL
-                                                 params:nil
+                                                 params:@{}
                                           authenticated:NO
                                       additionalHeaders:[self _additionalHeaders]
                                              completion:completion];
