@@ -381,6 +381,7 @@
 
             _forNewChatSession = NO;
             _chatSession = session;
+            [self.navigationItem setHidesBackButton:NO animated:YES];
             [self.fauxNavigationBar setSessionId:_chatSession.oid];
             _chatMessagesDataSource = [_userSession chatMessagesDataSourceForSessionId:_chatSession.oid];
             [_chatMessagesDataSource addListener:self];
