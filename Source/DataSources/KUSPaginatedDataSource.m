@@ -275,7 +275,12 @@
 
     _mostRecentPaginatedResponse = response;
 
+    self.isFetching = NO;
+    self.didFetch = YES;
+    self.didFetchAll = response.nextPath == nil;
+
     [self prependObjects:response.objects];
+
     [self notifyAnnouncersDidLoad];
 }
 
@@ -314,9 +319,6 @@
             [self notifyAnnouncersForObject:object previousIndex:previousIndex newIndex:indexOfObject];
         }
     }
-
-    self.isFetching = NO;
-    self.didFetch = YES;
 
     if (didNotifyWillChange) {
         [self notifyAnnouncersDidChangeContent];

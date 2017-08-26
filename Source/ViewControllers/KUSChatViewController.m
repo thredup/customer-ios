@@ -221,6 +221,15 @@
     [self.tableView reloadData];
 }
 
+- (void)paginatedDataSource:(KUSPaginatedDataSource *)dataSource didReceiveError:(NSError *)error
+{
+    if (dataSource == _chatMessagesDataSource && !_chatMessagesDataSource.didFetch) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [_chatMessagesDataSource fetchLatest];
+        });
+    }
+}
+
 #pragma mark - NSNotification methods
 
 - (void)keyboardWillChangeFrame:(NSNotification *)notification
@@ -309,7 +318,7 @@
 {
     NSUInteger count = [_chatMessagesDataSource count];
     KUSChatSettings *chatSettings = _userSession.chatSettingsDataSource.object;
-    BOOL shouldShowAutoreply = chatSettings.autoreply.length > 0 && count > 0;
+    BOOL shouldShowAutoreply = chatSettings.autoreply.length > 0 && count > 0 && _chatMessagesDataSource.didFetchAll;
     return shouldShowAutoreply;
 }
 
@@ -369,6 +378,7 @@
             [self.fauxNavigationBar setSessionId:_chatSession.oid];
             _chatMessagesDataSource = [_userSession chatMessagesDataSourceForSessionId:_chatSession.oid];
             [_chatMessagesDataSource addListener:self];
+            [_chatMessagesDataSource fetchLatest];
             [self.view setNeedsLayout];
 
             [_chatMessagesDataSource sendTextMessage:text completion:^(NSError *error, KUSChatMessage *message) {
