@@ -8,6 +8,9 @@
 
 #import "KUSChatMessageTableViewCell.h"
 
+#import <SDWebImage/UIImageView+WebCache.h>
+#import <SDWebImage/UIView+WebCache.h>
+
 #import "KUSChatMessage.h"
 #import "KUSColor.h"
 #import "KUSText.h"
@@ -32,6 +35,7 @@ static const CGFloat kMinBubbleHeight = 38.0;
     KUSAvatarImageView *_avatarImageView;
     UIView *_bubbleView;
     UILabel *_labelView;
+    UIImageView *_imageView;
 }
 
 @end
@@ -42,8 +46,7 @@ static const CGFloat kMinBubbleHeight = 38.0;
 
 + (CGFloat)heightForChatMessage:(KUSChatMessage *)chatMessage maxWidth:(CGFloat)maxWidth
 {
-    CGSize boundingSizeForText = [self boundingSizeForText:chatMessage.body maxWidth:maxWidth];
-    CGFloat height = boundingSizeForText.height;
+    CGFloat height = [self boundingSizeForMessage:chatMessage maxWidth:maxWidth].height;
     height += kBubbleTopPadding * 2.0;
     height = MAX(height, kMinBubbleHeight);
     height += kRowTopPadding * 2.0;
@@ -58,6 +61,24 @@ static const CGFloat kMinBubbleHeight = 38.0;
 + (UIFont *)messageFont
 {
     return [UIFont systemFontOfSize:14.0];
+}
+
++ (CGSize)boundingSizeForMessage:(KUSChatMessage *)message maxWidth:(CGFloat)maxWidth
+{
+    switch (message.type) {
+        default:
+        case KUSChatMessageTypeText:
+            return [self boundingSizeForText:message.body maxWidth:maxWidth];
+        case KUSChatMessageTypeImage:
+            return [self boundingSizeForImage:message.imageURL maxWidth:maxWidth];
+    }
+}
+
++ (CGSize)boundingSizeForImage:(NSURL *)imageURL maxWidth:(CGFloat)maxWidth
+{
+    CGFloat actualMaxWidth = MIN(kMaxBubbleWidth - kBubbleSidePadding * 2.0, maxWidth);
+    CGFloat size = MIN(ceil([UIScreen mainScreen].bounds.size.width / 2.0), actualMaxWidth);
+    return CGSizeMake(size, size);
 }
 
 + (CGSize)boundingSizeForText:(NSString *)text maxWidth:(CGFloat)maxWidth
@@ -97,6 +118,13 @@ static const CGFloat kMinBubbleHeight = 38.0;
         _labelView.font = [[self class] messageFont];
         _labelView.numberOfLines = 0;
         [_bubbleView addSubview:_labelView];
+
+        _imageView = [[UIImageView alloc] init];
+        _imageView.backgroundColor = [UIColor clearColor];
+        _imageView.contentMode = UIViewContentModeScaleAspectFill;
+        _imageView.layer.cornerRadius = 4.0;
+        _imageView.layer.masksToBounds = YES;
+        [_bubbleView addSubview:_imageView];
     }
     return self;
 }
@@ -117,13 +145,12 @@ static const CGFloat kMinBubbleHeight = 38.0;
         .size.height = 40.0
     };
 
-    CGSize boundingSizeForText = [[self class] boundingSizeForText:_chatMessage.body maxWidth:self.contentView.bounds.size.width];
+    CGSize boundingSizeForContent = [[self class] boundingSizeForMessage:_chatMessage maxWidth:self.contentView.bounds.size.width];
 
     CGSize bubbleViewSize = (CGSize) {
-        .width = boundingSizeForText.width + kBubbleSidePadding * 2.0,
+        .width = boundingSizeForContent.width + kBubbleSidePadding * 2.0,
         .height = self.contentView.bounds.size.height - kRowTopPadding * 2.0
     };
-
     _bubbleView.frame = (CGRect) {
         .origin.x = currentUser ? self.contentView.bounds.size.width - bubbleViewSize.width - kRowSidePadding : 60.0,
         .origin.y = kRowTopPadding,
@@ -131,11 +158,23 @@ static const CGFloat kMinBubbleHeight = 38.0;
     };
     _bubbleView.layer.cornerRadius = MIN(_bubbleView.frame.size.height / 2.0, 15.0);
 
-    _labelView.frame = (CGRect) {
-        .origin.x = (_bubbleView.bounds.size.width - boundingSizeForText.width) / 2.0,
-        .origin.y = (_bubbleView.bounds.size.height - boundingSizeForText.height) / 2.0,
-        .size = boundingSizeForText
-    };
+    switch (_chatMessage.type) {
+        default:
+        case KUSChatMessageTypeText: {
+            _labelView.frame = (CGRect) {
+                .origin.x = (_bubbleView.bounds.size.width - boundingSizeForContent.width) / 2.0,
+                .origin.y = (_bubbleView.bounds.size.height - boundingSizeForContent.height) / 2.0,
+                .size = boundingSizeForContent
+            };
+        }   break;
+        case KUSChatMessageTypeImage: {
+            _imageView.frame = (CGRect) {
+                .origin.x = (_bubbleView.bounds.size.width - boundingSizeForContent.width) / 2.0,
+                .origin.y = (_bubbleView.bounds.size.height - boundingSizeForContent.height) / 2.0,
+                .size = boundingSizeForContent
+            };
+        }   break;
+    }
 }
 
 #pragma mark - Property methods
@@ -150,10 +189,23 @@ static const CGFloat kMinBubbleHeight = 38.0;
     UIColor *textColor = (currentUser ? [UIColor whiteColor] : [UIColor blackColor]);
 
     _bubbleView.backgroundColor = bubbleColor;
+    _imageView.backgroundColor = bubbleColor;
     _labelView.backgroundColor = bubbleColor;
     _labelView.textColor = textColor;
-
     _labelView.attributedText = [KUSText attributedStringFromText:_chatMessage.body fontSize:[[self class] fontSize]];
+
+    _labelView.hidden = _chatMessage.type != KUSChatMessageTypeText;
+    _imageView.hidden = _chatMessage.type != KUSChatMessageTypeImage;
+
+    if (_chatMessage.type == KUSChatMessageTypeImage) {
+        [_imageView sd_setShowActivityIndicatorView:YES];
+        [_imageView sd_setIndicatorStyle:(currentUser ? UIActivityIndicatorViewStyleWhite : UIActivityIndicatorViewStyleGray)];
+        SDWebImageOptions options = SDWebImageHighPriority | SDWebImageScaleDownLargeImages;
+        [_imageView sd_setImageWithURL:_chatMessage.imageURL placeholderImage:nil options:options];
+    } else {
+        _imageView.image = nil;
+        [_imageView sd_setImageWithURL:nil];
+    }
 
     [_avatarImageView setUserId:(currentUser ? nil : _chatMessage.sentById)];
 
