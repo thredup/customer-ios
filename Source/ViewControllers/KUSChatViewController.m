@@ -288,6 +288,12 @@
         cell.transform = tableView.transform;
     }
 
+    // Make sure that we've fetched all of the latest messages by loading the next page
+    static NSUInteger kPrefetchPadding = 20;
+    if (!_chatMessagesDataSource.didFetchAll && indexPath.row >= _chatMessagesDataSource.count - 1 - kPrefetchPadding) {
+        [_chatMessagesDataSource fetchNext];
+    }
+
     KUSChatMessage *chatMessage = [self messageForRow:indexPath.row];
     [cell setChatMessage:chatMessage];
 

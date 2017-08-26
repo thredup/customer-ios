@@ -151,8 +151,10 @@
 - (void)fetchNext
 {
     NSURL *URL;
-    if (_lastPaginatedResponse.nextPath) {
-        URL = [self.userSession.requestManager URLForEndpoint:_mostRecentPaginatedResponse.firstPath];
+    if (_lastPaginatedResponse) {
+        URL = [self.userSession.requestManager URLForEndpoint:_lastPaginatedResponse.nextPath];
+    } else if (_mostRecentPaginatedResponse) {
+        URL = [self.userSession.requestManager URLForEndpoint:_mostRecentPaginatedResponse.nextPath];
     }
     if (URL == nil) {
         return;
