@@ -17,6 +17,7 @@
 #import "KUSChatPlaceholderTableViewCell.h"
 #import "KUSChatSessionTableViewCell.h"
 #import "KUSFauxNavigationBar.h"
+#import "KUSGradientView.h"
 #import "KustomerWindow.h"
 
 @interface KUSSessionsViewController () <KUSPaginatedDataSourceListener, UITableViewDataSource, UITableViewDelegate> {
@@ -27,6 +28,7 @@
 }
 
 @property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) KUSGradientView *gradientView;
 @property (nonatomic, strong) UIButton *createSessionButton;
 @property (nonatomic, strong) KUSFauxNavigationBar *fauxNavigationBar;
 
@@ -74,6 +76,9 @@
     self.tableView.separatorInset = UIEdgeInsetsZero;
     self.tableView.separatorColor = [KUSColor grayColor];
     [self.view addSubview:self.tableView];
+
+    self.gradientView = [[KUSGradientView alloc] init];
+    [self.view addSubview:self.gradientView];
 
     self.fauxNavigationBar = [[KUSFauxNavigationBar alloc] initWithUserSession:_userSession];
     [self.fauxNavigationBar setShowsLabels:NO];
@@ -147,6 +152,19 @@
         .origin.x = (self.view.bounds.size.width - createSessionButtonSize.width) / 2.0,
         .origin.y = self.view.bounds.size.height - createSessionButtonSize.height - self.bottomLayoutGuide.length - 23.0,
         .size = createSessionButtonSize
+    };
+
+    CGFloat bottomPadding = self.view.bounds.size.height - CGRectGetMaxY(self.createSessionButton.frame);
+    CGFloat bottomButtonPadding = (bottomPadding * 2.0) + createSessionButtonSize.height;
+    self.tableView.contentInset = (UIEdgeInsets) {
+        .top = self.topLayoutGuide.length,
+        .bottom = self.bottomLayoutGuide.length + bottomButtonPadding
+    };
+
+    self.gradientView.frame = (CGRect) {
+        .origin.y = self.view.bounds.size.height - bottomButtonPadding,
+        .size.width = self.view.bounds.size.width,
+        .size.height = bottomButtonPadding
     };
 }
 
