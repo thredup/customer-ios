@@ -32,11 +32,13 @@
 
         self.infoLabel = [[UILabel alloc] init];
         self.infoLabel.text = @"Don't miss a response! Get notified by email:";
+        self.infoLabel.textAlignment = NSTextAlignmentCenter;
         self.infoLabel.textColor = [KUSColor darkGrayColor];
         self.infoLabel.font = [UIFont systemFontOfSize:13.0];
         [self addSubview:self.infoLabel];
 
         self.textField = [[UITextField alloc] init];
+        self.textField.textAlignment = NSTextAlignmentCenter;
         self.textField.delegate = self;
         self.textField.leftView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 10.0, 0.0)];
         self.textField.leftViewMode = UITextFieldViewModeAlways;

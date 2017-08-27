@@ -37,4 +37,8 @@
 // Request manager
 - (KUSRequestManager *)requestManager;
 
+// Email info
+- (void)submitEmail:(NSString *)emailAddress;
+- (BOOL)shouldCaptureEmail;
+
 @end

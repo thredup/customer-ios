@@ -153,4 +153,51 @@
     return _pushClient;
 }
 
+#pragma mark - Email info methods
+
+- (NSString *)_didCaptureEmailKey
+{
+    KUSTrackingToken *trackingToken = self.trackingTokenDataSource.object;
+    if (trackingToken.customerId.length) {
+        return [NSString stringWithFormat:@"%@_didCaptureEmail", trackingToken.customerId];
+    }
+    return nil;
+}
+
+- (void)submitEmail:(NSString *)emailAddress
+{
+    NSString *didCaptureEmailKey = [self _didCaptureEmailKey];
+    if (didCaptureEmailKey) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:didCaptureEmailKey];
+    }
+
+    __weak KUSUserSession *weakSelf = self;
+    [self.requestManager performRequestType:KUSRequestTypePatch
+                                   endpoint:@"/c/v1/customers/current"
+                                     params:@{ @"emails": @[ @{@"email": emailAddress} ] }
+                              authenticated:YES
+                                 completion:^(NSError *error, NSDictionary *response) {
+                                     if (error) {
+                                         NSLog(@"Error submitting email: %@", error);
+                                         return;
+                                     }
+                                     [weakSelf.trackingTokenDataSource fetch];
+                                 }];
+}
+
+- (BOOL)shouldCaptureEmail
+{
+    KUSTrackingToken *trackingToken = self.trackingTokenDataSource.object;
+    if (trackingToken) {
+        if (trackingToken.verified) {
+            return NO;
+        }
+        NSString *didCaptureEmailKey = [self _didCaptureEmailKey];
+        if (didCaptureEmailKey) {
+            return ![[NSUserDefaults standardUserDefaults] boolForKey:didCaptureEmailKey];
+        }
+    }
+    return NO;
+}
+
 @end

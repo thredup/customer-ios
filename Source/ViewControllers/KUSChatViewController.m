@@ -21,7 +21,8 @@
 #import "KUSFauxNavigationBar.h"
 #import "KustomerWindow.h"
 
-@interface KUSChatViewController () <KUSInputBarDelegate, KUSObjectDataSourceListener, KUSPaginatedDataSourceListener, UITableViewDataSource, UITableViewDelegate> {
+@interface KUSChatViewController () <KUSEmailInputViewDelegate, KUSInputBarDelegate, KUSObjectDataSourceListener,
+                                     KUSPaginatedDataSourceListener, UITableViewDataSource, UITableViewDelegate> {
     KUSUserSession *_userSession;
 
     BOOL _forNewChatSession;
@@ -108,11 +109,6 @@
     [self.fauxNavigationBar setShowsLabels:YES];
     [self.view addSubview:self.fauxNavigationBar];
 
-    /*
-    self.emailInputView = [[KUSEmailInputView alloc] init];
-    [self.view addSubview:self.emailInputView];
-    */
-
     self.inputBarView = [[KUSInputBar alloc] init];
     self.inputBarView.delegate = self;
     self.inputBarView.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth);
@@ -140,6 +136,8 @@
     }
 
     [_userSession.chatSettingsDataSource addListener:self];
+
+    [self _checkShouldShowEmailInput];
 
     // Force layout so that animated presentations start from the right state
     [self.view setNeedsLayout];
@@ -214,6 +212,25 @@
         [_inputBarView resignFirstResponder];
     }
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - Internal logic methods
+
+- (void)_checkShouldShowEmailInput
+{
+    BOOL shouldShowEmailInput = [_userSession shouldCaptureEmail] && _chatSession != nil;
+    if (shouldShowEmailInput) {
+        if (self.emailInputView == nil) {
+            self.emailInputView = [[KUSEmailInputView alloc] init];
+            self.emailInputView.delegate = self;
+            [self.view addSubview:self.emailInputView];
+            [self.view setNeedsLayout];
+        }
+    } else {
+        [self.emailInputView removeFromSuperview];
+        self.emailInputView = nil;
+        [self.view setNeedsLayout];
+    }
 }
 
 #pragma mark - KUSObjectDataSourceListener methods
@@ -379,6 +396,14 @@
     }
 }
 
+#pragma mark - KUSEmailInputViewDelegate methods
+
+- (void)emailInputView:(KUSEmailInputView *)inputView didSubmitEmail:(NSString *)email
+{
+    [_userSession submitEmail:email];
+    [self _checkShouldShowEmailInput];
+}
+
 #pragma mark - KUSInputBarDelegate methods
 
 - (void)inputBar:(KUSInputBar *)inputBar didEnterText:(NSString *)text
@@ -400,6 +425,7 @@
             _chatMessagesDataSource = [_userSession chatMessagesDataSourceForSessionId:_chatSession.oid];
             [_chatMessagesDataSource addListener:self];
             [_chatMessagesDataSource fetchLatest];
+            [self _checkShouldShowEmailInput];
             [self.view setNeedsLayout];
 
             [_chatMessagesDataSource sendTextMessage:text completion:^(NSError *error, KUSChatMessage *message) {
