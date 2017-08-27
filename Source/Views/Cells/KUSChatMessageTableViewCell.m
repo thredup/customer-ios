@@ -129,11 +129,15 @@ static const CGFloat kMinBubbleHeight = 38.0;
         _labelView.activeLinkAttributes = mutableActiveLinkAttributes;
 
         _imageView = [[UIImageView alloc] init];
+        _imageView.userInteractionEnabled = YES;
         _imageView.backgroundColor = [UIColor clearColor];
         _imageView.contentMode = UIViewContentModeScaleAspectFill;
         _imageView.layer.cornerRadius = 4.0;
         _imageView.layer.masksToBounds = YES;
         [_bubbleView addSubview:_imageView];
+
+        UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_didTapImage)];
+        [_imageView addGestureRecognizer:tapGestureRecognizer];
     }
     return self;
 }
@@ -274,6 +278,15 @@ static NSTimeInterval kOptimisticSendLoadingDelay = 0.5;
 {
     if ([self.delegate respondsToSelector:@selector(chatMessageTableViewCell:didTapLink:)]) {
         [self.delegate chatMessageTableViewCell:self didTapLink:url];
+    }
+}
+
+#pragma mark - UIGestureRecognizer methods
+
+- (void)_didTapImage
+{
+    if ([self.delegate respondsToSelector:@selector(chatMessageTableViewCellDidTapImage:forMessage:)]) {
+        [self.delegate chatMessageTableViewCellDidTapImage:self forMessage:_chatMessage];
     }
 }
 

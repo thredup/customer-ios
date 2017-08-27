@@ -8,6 +8,7 @@
 
 #import "KUSChatViewController.h"
 
+#import <NYTPhotoViewer/NYTPhotosViewController.h>
 #import <SafariServices/SafariServices.h>
 
 #import "KUSChatSession.h"
@@ -22,10 +23,11 @@
 #import "KUSInputBar.h"
 #import "KUSFauxNavigationBar.h"
 #import "KustomerWindow.h"
+#import "KUSNYTChatMessagePhoto.h"
 
 @interface KUSChatViewController () <KUSEmailInputViewDelegate, KUSInputBarDelegate, KUSObjectDataSourceListener,
                                      KUSPaginatedDataSourceListener, KUSChatMessageTableViewCellDelegate,
-                                     UITableViewDataSource, UITableViewDelegate> {
+                                     NYTPhotosViewControllerDelegate, UITableViewDataSource, UITableViewDelegate> {
     KUSUserSession *_userSession;
 
     BOOL _forNewChatSession;
@@ -417,6 +419,31 @@
     [self presentViewController:safariViewController animated:YES completion:nil];
 }
 
+- (void)chatMessageTableViewCellDidTapImage:(KUSChatMessageTableViewCell *)cell forMessage:(KUSChatMessage *)message
+{
+    NSLog(@"Did select image");
+
+    id<NYTPhoto> initialPhoto = nil;
+    NSMutableArray<id<NYTPhoto>> *photos = [[NSMutableArray alloc] init];
+
+    for (KUSChatMessage *chatMessage in [_chatMessagesDataSource.allObjects reverseObjectEnumerator]) {
+        if (chatMessage.type == KUSChatMessageTypeImage) {
+            KUSNYTChatMessagePhoto *messagePhoto = [[KUSNYTChatMessagePhoto alloc] initWithChatMessage:chatMessage];
+            [photos addObject:messagePhoto];
+
+            if ([chatMessage.oid isEqualToString:message.oid]) {
+                initialPhoto = messagePhoto;
+            }
+        }
+    }
+
+    [_inputBarView resignFirstResponder];
+
+    NYTPhotosViewController *photosViewController = [[NYTPhotosViewController alloc] initWithPhotos:photos initialPhoto:initialPhoto];
+    photosViewController.delegate = self;
+    [self presentViewController:photosViewController animated:YES completion:nil];
+}
+
 #pragma mark - KUSEmailInputViewDelegate methods
 
 - (void)emailInputView:(KUSEmailInputView *)inputView didSubmitEmail:(NSString *)email
@@ -472,6 +499,15 @@
 {
     [self.view setNeedsLayout];
     [self.view layoutIfNeeded];
+}
+
+#pragma mark - NYTPhotosViewControllerDelegate methods
+
+- (UIView *)photosViewController:(NYTPhotosViewController *)photosViewController loadingViewForPhoto:(id <NYTPhoto>)photo
+{
+    UIActivityIndicatorView *activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    [activityIndicatorView startAnimating];
+    return activityIndicatorView;
 }
 
 @end
