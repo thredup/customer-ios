@@ -43,6 +43,8 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
         _textView.placeholder = @"Type a message...";
         _textView.font = [UIFont systemFontOfSize:14.0];
         _textView.delegate = self;
+        _textView.returnKeyType = UIReturnKeySend;
+        _textView.enablesReturnKeyAutomatically = YES;
         [self addSubview:_textView];
 
         UIColor *blueColor = [KUSColor blueColor];
@@ -147,6 +149,17 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
 }
 
 #pragma mark - UITextViewDelegate methods
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    if ([text isEqualToString:@"\n"] && range.length == 0) {
+        if (_sendButton.userInteractionEnabled) {
+            [self _pressSend];
+        }
+        return NO;
+    }
+    return YES;
+}
 
 - (void)textViewDidChange:(UITextView *)textView
 {
