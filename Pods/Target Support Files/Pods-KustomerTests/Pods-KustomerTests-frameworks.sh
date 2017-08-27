@@ -89,6 +89,8 @@ strip_invalid_archs() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
+  install_framework "$BUILT_PRODUCTS_DIR/FLAnimatedImage/FLAnimatedImage.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/NYTPhotoViewer/NYTPhotoViewer.framework"
   install_framework "$BUILT_PRODUCTS_DIR/SDWebImage/SDWebImage.framework"
   install_framework "$BUILT_PRODUCTS_DIR/SocketRocket/SocketRocket.framework"
   install_framework "$BUILT_PRODUCTS_DIR/TSMarkdownParser/TSMarkdownParser.framework"
@@ -96,6 +98,8 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "$BUILT_PRODUCTS_DIR/libPusher/Pusher.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
+  install_framework "$BUILT_PRODUCTS_DIR/FLAnimatedImage/FLAnimatedImage.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/NYTPhotoViewer/NYTPhotoViewer.framework"
   install_framework "$BUILT_PRODUCTS_DIR/SDWebImage/SDWebImage.framework"
   install_framework "$BUILT_PRODUCTS_DIR/SocketRocket/SocketRocket.framework"
   install_framework "$BUILT_PRODUCTS_DIR/TSMarkdownParser/TSMarkdownParser.framework"
