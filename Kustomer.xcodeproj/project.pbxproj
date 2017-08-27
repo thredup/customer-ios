@@ -11,6 +11,9 @@
 		63035BDA1F2EBCD400FBBF66 /* KUSText.m in Sources */ = {isa = PBXBuildFile; fileRef = 63035BD81F2EBCD400FBBF66 /* KUSText.m */; };
 		631E3F311F520C6700FAA33F /* KUSGradientView.h in Headers */ = {isa = PBXBuildFile; fileRef = 631E3F2F1F520C6700FAA33F /* KUSGradientView.h */; };
 		631E3F321F520C6700FAA33F /* KUSGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 631E3F301F520C6700FAA33F /* KUSGradientView.m */; };
+		631E3F351F52497A00FAA33F /* KUSEmailInputView.h in Headers */ = {isa = PBXBuildFile; fileRef = 631E3F331F52497A00FAA33F /* KUSEmailInputView.h */; };
+		631E3F361F52497A00FAA33F /* KUSEmailInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 631E3F341F52497A00FAA33F /* KUSEmailInputView.m */; };
+		631E3F381F52561E00FAA33F /* checkmark_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 631E3F371F52561E00FAA33F /* checkmark_image@2x.png */; };
 		63270E951F4A1FA200E25BF5 /* KUSPushClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 63270E931F4A1FA200E25BF5 /* KUSPushClient.h */; };
 		63270E961F4A1FA200E25BF5 /* KUSPushClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 63270E941F4A1FA200E25BF5 /* KUSPushClient.m */; };
 		63270E991F4A717600E25BF5 /* KUSDate.h in Headers */ = {isa = PBXBuildFile; fileRef = 63270E971F4A717600E25BF5 /* KUSDate.h */; };
@@ -143,6 +146,9 @@
 		63035BD81F2EBCD400FBBF66 /* KUSText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSText.m; sourceTree = "<group>"; };
 		631E3F2F1F520C6700FAA33F /* KUSGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSGradientView.h; sourceTree = "<group>"; };
 		631E3F301F520C6700FAA33F /* KUSGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSGradientView.m; sourceTree = "<group>"; };
+		631E3F331F52497A00FAA33F /* KUSEmailInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSEmailInputView.h; sourceTree = "<group>"; };
+		631E3F341F52497A00FAA33F /* KUSEmailInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSEmailInputView.m; sourceTree = "<group>"; };
+		631E3F371F52561E00FAA33F /* checkmark_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkmark_image@2x.png"; sourceTree = "<group>"; };
 		63270E931F4A1FA200E25BF5 /* KUSPushClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSPushClient.h; sourceTree = "<group>"; };
 		63270E941F4A1FA200E25BF5 /* KUSPushClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSPushClient.m; sourceTree = "<group>"; };
 		63270E971F4A717600E25BF5 /* KUSDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSDate.h; sourceTree = "<group>"; };
@@ -354,6 +360,7 @@
 				63D9C1811F3046DA00999183 /* up_arrow@2x.png */,
 				63D9C1831F304A7600999183 /* pencil_image@2x.png */,
 				63270E9F1F4D386D00E25BF5 /* error_icon@2x.png */,
+				631E3F371F52561E00FAA33F /* checkmark_image@2x.png */,
 			);
 			path = Images;
 			sourceTree = "<group>";
@@ -368,6 +375,8 @@
 				637177A01F452B8F00A7F79C /* KUSFauxNavigationBar.m */,
 				6371779B1F43EDDC00A7F79C /* KUSAvatarImageView.h */,
 				6371779C1F43EDDC00A7F79C /* KUSAvatarImageView.m */,
+				631E3F331F52497A00FAA33F /* KUSEmailInputView.h */,
+				631E3F341F52497A00FAA33F /* KUSEmailInputView.m */,
 				631E3F2F1F520C6700FAA33F /* KUSGradientView.h */,
 				631E3F301F520C6700FAA33F /* KUSGradientView.m */,
 				633D8FDC1F22EDB800BAFAC9 /* KUSInputBar.h */,
@@ -516,6 +525,7 @@
 				63EB38571F2E1D880020F38B /* KUSObjectDataSource_Private.h in Headers */,
 				6334BE3A1F0C4B3D00258DAF /* KUSChatMessage.h in Headers */,
 				63EB38541F2D83430020F38B /* KUSObjectDataSource.h in Headers */,
+				631E3F351F52497A00FAA33F /* KUSEmailInputView.h in Headers */,
 				63D9C17D1F2F705100999183 /* KUSChatSettingsDataSource.h in Headers */,
 				633FADBC1F258C2E0060B4A6 /* KUSChatMessagesDataSource.h in Headers */,
 				63D9C18B1F31761B00999183 /* KUSBaseViewController.h in Headers */,
@@ -672,6 +682,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				631E3F381F52561E00FAA33F /* checkmark_image@2x.png in Resources */,
 				63270EA01F4D386D00E25BF5 /* error_icon@2x.png in Resources */,
 				63D9C1821F3046DA00999183 /* up_arrow@2x.png in Resources */,
 				63D9C1841F304A7600999183 /* pencil_image@2x.png in Resources */,
@@ -844,6 +855,7 @@
 				63035BDA1F2EBCD400FBBF66 /* KUSText.m in Sources */,
 				633FADC51F26E7630060B4A6 /* KUSTextView.m in Sources */,
 				63270E9E1F4BBA6A00E25BF5 /* KustomerWindow.m in Sources */,
+				631E3F361F52497A00FAA33F /* KUSEmailInputView.m in Sources */,
 				637177AA1F46A0DA00A7F79C /* KUSUserDataSource.m in Sources */,
 				63EDF3D61F414A67000345D8 /* KUSRequestManager.m in Sources */,
 				63D9C18C1F31761B00999183 /* KUSBaseViewController.m in Sources */,

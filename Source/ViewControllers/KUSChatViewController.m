@@ -16,6 +16,7 @@
 #import "KUSChatMessagesDataSource.h"
 #import "KUSChatMessageTableViewCell.h"
 #import "KUSChatSettingsDataSource.h"
+#import "KUSEmailInputView.h"
 #import "KUSInputBar.h"
 #import "KUSFauxNavigationBar.h"
 #import "KustomerWindow.h"
@@ -31,6 +32,7 @@
 }
 
 @property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) KUSEmailInputView *emailInputView;
 @property (nonatomic, strong) KUSInputBar *inputBarView;
 @property (nonatomic, strong) KUSFauxNavigationBar *fauxNavigationBar;
 
@@ -106,6 +108,11 @@
     [self.fauxNavigationBar setShowsLabels:YES];
     [self.view addSubview:self.fauxNavigationBar];
 
+    /*
+    self.emailInputView = [[KUSEmailInputView alloc] init];
+    [self.view addSubview:self.emailInputView];
+    */
+
     self.inputBarView = [[KUSInputBar alloc] init];
     self.inputBarView.delegate = self;
     self.inputBarView.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth);
@@ -165,6 +172,7 @@
     CGFloat navigationBarHeight = self.topLayoutGuide.length + extraNavigationBarHeight;
 
     CGFloat inputBarHeight = [self.inputBarView desiredHeight];
+    CGFloat keyboardHeightForInputBar = ([self.inputBarView isFirstResponder] ? _keyboardHeight : 0.0);
     CGFloat inputBarY = self.view.bounds.size.height - MAX(self.bottomLayoutGuide.length, _keyboardHeight) - inputBarHeight;
     self.inputBarView.frame = (CGRect) {
         .origin.y = inputBarY,
@@ -177,6 +185,12 @@
         .size.height = [self.fauxNavigationBar desiredHeightWithTopInset:self.topLayoutGuide.length]
     };
 
+    self.emailInputView.frame = (CGRect) {
+        .origin.y = self.fauxNavigationBar.frame.size.height,
+        .size.width = self.view.bounds.size.width,
+        .size.height = 80.0
+    };
+
     self.tableView.frame = (CGRect) {
         .size.width = self.view.bounds.size.width,
         .size.height = self.inputBarView.frame.origin.y
@@ -184,10 +198,10 @@
 
     self.tableView.contentInset = (UIEdgeInsets) {
         .top = 4.0,
-        .bottom = navigationBarHeight + 4.0
+        .bottom = navigationBarHeight + self.emailInputView.frame.size.height + 4.0
     };
     self.tableView.scrollIndicatorInsets = (UIEdgeInsets) {
-        .bottom = navigationBarHeight
+        .bottom = navigationBarHeight + self.emailInputView.frame.size.height
     };
 }
 

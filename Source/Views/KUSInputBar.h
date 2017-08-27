@@ -17,7 +17,7 @@
 
 @end
 
-@protocol KUSInputBarDelegate <UIToolbarDelegate>
+@protocol KUSInputBarDelegate <NSObject>
 
 @optional
 - (void)inputBar:(KUSInputBar *)inputBar didEnterText:(NSString *)text;
