@@ -38,6 +38,15 @@
     return self;
 }
 
+- (instancetype)initWithNavigationBarClass:(Class)navigationBarClass toolbarClass:(Class)toolbarClass
+{
+    self = [super initWithNavigationBarClass:navigationBarClass toolbarClass:toolbarClass];
+    if (self) {
+        [self _commonInit];
+    }
+    return self;
+}
+
 #pragma mark - Internal methods
 
 - (void)_commonInit

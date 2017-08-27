@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+#import "KnowledgeBaseViewController.h"
 #import "KustomerViewController.h"
 
 FOUNDATION_EXPORT double KustomerVersionNumber;

@@ -13,6 +13,7 @@
 
 @interface ViewController () {
     UIButton *_resetButton;
+    UIButton *_knowledgeButton;
     UIButton *_presentButton;
 
     UIButton *_supportButton;
@@ -44,12 +45,20 @@
            forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_resetButton];
 
+    _knowledgeButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [_knowledgeButton setBackgroundImage:buttonImage forState:UIControlStateNormal];
+    [_knowledgeButton setTitle:@"Present KnowledgeBase" forState:UIControlStateNormal];
+    [_knowledgeButton addTarget:self
+                       action:@selector(_presentKnowledgeBase)
+             forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:_knowledgeButton];
+
     _presentButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [_presentButton setBackgroundImage:buttonImage forState:UIControlStateNormal];
     [_presentButton setTitle:@"Manually Present Support" forState:UIControlStateNormal];
     [_presentButton addTarget:self
-                     action:@selector(_presentSupport)
-           forControlEvents:UIControlEventTouchUpInside];
+                       action:@selector(_presentSupport)
+             forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_presentButton];
 
     _supportButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -70,6 +79,12 @@
     [super viewWillLayoutSubviews];
 
     _resetButton.frame = (CGRect) {
+        .origin.x = 50.0,
+        .origin.y = 100.0,
+        .size.width = self.view.bounds.size.width - 100.0,
+        .size.height = 50.0
+    };
+    _knowledgeButton.frame = (CGRect) {
         .origin.x = 50.0,
         .origin.y = 200.0,
         .size.width = self.view.bounds.size.width - 100.0,
@@ -95,6 +110,12 @@
 - (void)_openSupport
 {
     [Kustomer presentSupportWindowFromPoint:_supportButton.center];
+}
+
+- (void)_presentKnowledgeBase
+{
+    KnowledgeBaseViewController *knowledgebaseViewController = [[KnowledgeBaseViewController alloc] init];
+    [self presentViewController:knowledgebaseViewController animated:YES completion:nil];
 }
 
 - (void)_presentSupport
