@@ -10,7 +10,10 @@
 
 @class KUSChatMessage;
 @class KUSUserSession;
+@protocol KUSChatMessageTableViewCellDelegate;
 @interface KUSChatMessageTableViewCell : UITableViewCell
+
+@property (nonatomic, weak) id<KUSChatMessageTableViewCellDelegate> delegate;
 
 + (CGFloat)heightForChatMessage:(KUSChatMessage *)chatMessage maxWidth:(CGFloat)maxWidth;
 
@@ -21,5 +24,13 @@
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier NS_UNAVAILABLE;
 - (instancetype)initWithCoder:(NSCoder *)aDecoder NS_UNAVAILABLE;
+
+@end
+
+@protocol KUSChatMessageTableViewCellDelegate <NSObject>
+
+@optional
+
+- (void)chatMessageTableViewCell:(KUSChatMessageTableViewCell *)cell didTapLink:(NSURL *)URL;
 
 @end

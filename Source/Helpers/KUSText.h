@@ -12,5 +12,6 @@
 @interface KUSText : NSObject
 
 + (NSAttributedString *)attributedStringFromText:(NSString *)text fontSize:(CGFloat)fontSize;
++ (NSAttributedString *)attributedStringFromText:(NSString *)text fontSize:(CGFloat)fontSize color:(UIColor *)color;
 
 @end

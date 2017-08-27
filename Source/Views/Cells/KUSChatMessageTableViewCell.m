@@ -10,6 +10,7 @@
 
 #import <SDWebImage/UIImageView+WebCache.h>
 #import <SDWebImage/UIView+WebCache.h>
+#import <TTTAttributedLabel/TTTAttributedLabel.h>
 
 #import "KUSChatMessage.h"
 #import "KUSColor.h"
@@ -27,7 +28,7 @@ static const CGFloat kRowTopPadding = 3.0;
 static const CGFloat kMaxBubbleWidth = 250.0;
 static const CGFloat kMinBubbleHeight = 38.0;
 
-@interface KUSChatMessageTableViewCell () {
+@interface KUSChatMessageTableViewCell () <TTTAttributedLabelDelegate> {
     KUSUserSession *_userSession;
     KUSChatMessage *_chatMessage;
     BOOL _showsAvatar;
@@ -35,7 +36,7 @@ static const CGFloat kMinBubbleHeight = 38.0;
 
     KUSAvatarImageView *_avatarImageView;
     UIView *_bubbleView;
-    UILabel *_labelView;
+    TTTAttributedLabel *_labelView;
     UIImageView *_imageView;
 }
 
@@ -114,11 +115,18 @@ static const CGFloat kMinBubbleHeight = 38.0;
         _bubbleView.layer.masksToBounds = YES;
         [self.contentView addSubview:_bubbleView];
 
-        _labelView = [[UILabel alloc] init];
+        _labelView = [[TTTAttributedLabel alloc] initWithFrame:self.bounds];
+        _labelView.delegate = self;
+        _labelView.enabledTextCheckingTypes = NSTextCheckingTypeLink;
         _labelView.textAlignment = NSTextAlignmentLeft;
         _labelView.font = [[self class] messageFont];
         _labelView.numberOfLines = 0;
         [_bubbleView addSubview:_labelView];
+
+        NSMutableDictionary *mutableActiveLinkAttributes = [_labelView.linkAttributes mutableCopy];
+        [mutableActiveLinkAttributes setObject:@NO forKey:NSUnderlineStyleAttributeName];
+        [mutableActiveLinkAttributes setObject:[UIColor colorWithWhite:0.0 alpha:0.2] forKey:NSBackgroundColorAttributeName];
+        _labelView.activeLinkAttributes = mutableActiveLinkAttributes;
 
         _imageView = [[UIImageView alloc] init];
         _imageView.backgroundColor = [UIColor clearColor];
@@ -128,6 +136,11 @@ static const CGFloat kMinBubbleHeight = 38.0;
         [_bubbleView addSubview:_imageView];
     }
     return self;
+}
+
+- (void)dealloc
+{
+    _labelView.delegate = nil;
 }
 
 #pragma mark - Layout methods
@@ -222,19 +235,25 @@ static NSTimeInterval kOptimisticSendLoadingDelay = 0.5;
     _imageView.backgroundColor = bubbleColor;
     _labelView.backgroundColor = bubbleColor;
     _labelView.textColor = textColor;
-    _labelView.attributedText = [KUSText attributedStringFromText:_chatMessage.body fontSize:[[self class] fontSize]];
 
     _labelView.hidden = _chatMessage.type != KUSChatMessageTypeText;
     _imageView.hidden = _chatMessage.type != KUSChatMessageTypeImage;
 
-    if (_chatMessage.type == KUSChatMessageTypeImage) {
-        [_imageView sd_setShowActivityIndicatorView:YES];
-        [_imageView sd_setIndicatorStyle:(currentUser ? UIActivityIndicatorViewStyleWhite : UIActivityIndicatorViewStyleGray)];
-        SDWebImageOptions options = SDWebImageHighPriority | SDWebImageScaleDownLargeImages;
-        [_imageView sd_setImageWithURL:_chatMessage.imageURL placeholderImage:nil options:options];
-    } else {
-        _imageView.image = nil;
-        [_imageView sd_setImageWithURL:nil];
+    switch (_chatMessage.type) {
+        case KUSChatMessageTypeText: {
+            _labelView.text = [KUSText attributedStringFromText:_chatMessage.body fontSize:[[self class] fontSize] color:textColor];
+
+            _imageView.image = nil;
+            [_imageView sd_setImageWithURL:nil];
+        }   break;
+        case KUSChatMessageTypeImage: {
+            _labelView.text = nil;
+
+            [_imageView sd_setShowActivityIndicatorView:YES];
+            [_imageView sd_setIndicatorStyle:(currentUser ? UIActivityIndicatorViewStyleWhite : UIActivityIndicatorViewStyleGray)];
+            SDWebImageOptions options = SDWebImageHighPriority | SDWebImageScaleDownLargeImages;
+            [_imageView sd_setImageWithURL:_chatMessage.imageURL placeholderImage:nil options:options];
+        }   break;
     }
 
     [_avatarImageView setUserId:(currentUser ? nil : _chatMessage.sentById)];
@@ -247,6 +266,15 @@ static NSTimeInterval kOptimisticSendLoadingDelay = 0.5;
 {
     _showsAvatar = showsAvatar;
     [self setNeedsLayout];
+}
+
+#pragma mark - TTTAttributedLabelDelegate methods
+
+- (void)attributedLabel:(TTTAttributedLabel *)label didSelectLinkWithURL:(NSURL *)url
+{
+    if ([self.delegate respondsToSelector:@selector(chatMessageTableViewCell:didTapLink:)]) {
+        [self.delegate chatMessageTableViewCell:self didTapLink:url];
+    }
 }
 
 @end

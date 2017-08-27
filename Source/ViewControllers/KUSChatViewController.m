@@ -8,6 +8,8 @@
 
 #import "KUSChatViewController.h"
 
+#import <SafariServices/SafariServices.h>
+
 #import "KUSChatSession.h"
 #import "KUSUserSession.h"
 
@@ -22,7 +24,8 @@
 #import "KustomerWindow.h"
 
 @interface KUSChatViewController () <KUSEmailInputViewDelegate, KUSInputBarDelegate, KUSObjectDataSourceListener,
-                                     KUSPaginatedDataSourceListener, UITableViewDataSource, UITableViewDelegate> {
+                                     KUSPaginatedDataSourceListener, KUSChatMessageTableViewCellDelegate,
+                                     UITableViewDataSource, UITableViewDelegate> {
     KUSUserSession *_userSession;
 
     BOOL _forNewChatSession;
@@ -148,7 +151,10 @@
 {
     [super viewDidAppear:animated];
 
-    [_inputBarView becomeFirstResponder];
+    // Only bring up the keyboard if the chat is being presented/pushed
+    if (self.isBeingPresented || self.isMovingToParentViewController) {
+        [_inputBarView becomeFirstResponder];
+    }
 
     [_userSession.chatSessionsDataSource updateLastSeenAtForSessionId:_chatSession.oid completion:nil];
 }
@@ -312,25 +318,30 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *kMessageCellIdentifier = @"MessageCell";
-    KUSChatMessageTableViewCell *cell = (KUSChatMessageTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kMessageCellIdentifier];
+    KUSChatMessage *chatMessage = [self messageForRow:indexPath.row];
+    KUSChatMessage *previousChatMessage = [self messageBeforeRow:indexPath.row];
+    BOOL currentUser = chatMessage.direction == KUSChatMessageDirectionIn;
+
+    NSString *messageCellIdentifier = (currentUser ? @"CurrentUserMessageCell" : @"OtherUserMessageCell");
+    KUSChatMessageTableViewCell *cell = (KUSChatMessageTableViewCell *)[tableView dequeueReusableCellWithIdentifier:messageCellIdentifier];
     if (cell == nil) {
-        cell = [[KUSChatMessageTableViewCell alloc] initWithReuseIdentifier:kMessageCellIdentifier userSession:_userSession];
+        cell = [[KUSChatMessageTableViewCell alloc] initWithReuseIdentifier:messageCellIdentifier userSession:_userSession];
         cell.transform = tableView.transform;
+        cell.delegate = self;
     }
+
+    [cell setChatMessage:chatMessage];
+
+    BOOL previousMessageDiffSender = ![previousChatMessage.sentById isEqualToString:chatMessage.sentById];
+    [cell setShowsAvatar:previousMessageDiffSender];
+
+
 
     // Make sure that we've fetched all of the latest messages by loading the next page
     static NSUInteger kPrefetchPadding = 20;
     if (!_chatMessagesDataSource.didFetchAll && indexPath.row >= _chatMessagesDataSource.count - 1 - kPrefetchPadding) {
         [_chatMessagesDataSource fetchNext];
     }
-
-    KUSChatMessage *chatMessage = [self messageForRow:indexPath.row];
-    [cell setChatMessage:chatMessage];
-
-    KUSChatMessage *previousChatMessage = [self messageBeforeRow:indexPath.row];
-    BOOL previousMessageDiffSender = ![previousChatMessage.sentById isEqualToString:chatMessage.sentById];
-    [cell setShowsAvatar:previousMessageDiffSender];
 
     return cell;
 }
@@ -394,6 +405,16 @@
     } else {
         return nil;
     }
+}
+
+#pragma mark - KUSChatMessageTableViewCellDelegate methods
+
+- (void)chatMessageTableViewCell:(KUSChatMessageTableViewCell *)cell didTapLink:(NSURL *)URL
+{
+    NSLog(@"Did select link with URL: %@", URL);
+
+    SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:URL];
+    [self presentViewController:safariViewController animated:YES completion:nil];
 }
 
 #pragma mark - KUSEmailInputViewDelegate methods
