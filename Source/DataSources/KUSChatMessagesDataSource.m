@@ -85,9 +85,9 @@
 
 - (void)sendTextMessage:(NSString *)text completion:(void(^)(NSError *error, KUSChatMessage *message))completion
 {
-    KUSChatMessage *temporaryMessage = [[KUSChatMessage alloc] initPlaceholderWithText:text];
-    if (temporaryMessage) {
-        [self prependObjects:@[ temporaryMessage ]];
+    NSArray<KUSChatMessage *> *temporaryMessages = [KUSChatMessage messagesWithPlaceholderText:text];
+    if (temporaryMessages.count) {
+        [self prependObjects:temporaryMessages];
     }
 
     __weak KUSChatMessagesDataSource *weakSelf = self;
@@ -97,8 +97,8 @@
      params:@{ @"body": text, @"session": _sessionId }
      authenticated:YES
      completion:^(NSError *error, NSDictionary *response) {
-         if (temporaryMessage) {
-             [self removeObjects:@[ temporaryMessage ]];
+         if (temporaryMessages.count) {
+             [self removeObjects:temporaryMessages];
          }
          if (error) {
              if (completion) {
@@ -107,10 +107,12 @@
              return;
          }
 
-         KUSChatMessage *message = [[KUSChatMessage alloc] initWithJSON:response[@"data"]];
-         if (message) {
-             [weakSelf prependObjects:@[ message ]];
+         NSArray<KUSChatMessage *> *temporaryMessages = [KUSChatMessage objectsWithJSON:response[@"data"]];
+         if (temporaryMessages.count) {
+             [weakSelf prependObjects:temporaryMessages];
          }
+
+         KUSChatMessage *message = [[KUSChatMessage alloc] initWithJSON:response[@"data"]];
          if (completion) {
              completion(nil, message);
          }

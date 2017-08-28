@@ -31,8 +31,8 @@ typedef NS_ENUM(NSInteger, KUSChatMessageType) {
 @property (nonatomic, assign, readonly) BOOL placeholder;
 @property (nonatomic, copy, readonly) NSDate *placeholderDate;
 
-- (instancetype)initWithAutoreply:(NSString *)autoreply;
++ (NSArray<KUSChatMessage *> *)messagesWithPlaceholderText:(NSString *)placeholderText;
 
-- (instancetype)initPlaceholderWithText:(NSString *)text;
+- (instancetype)initWithAutoreply:(NSString *)autoreply;
 
 @end
