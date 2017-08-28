@@ -72,8 +72,10 @@
 {
     [super layoutSubviews];
 
+    BOOL hasStatusBar = ![UIApplication sharedApplication].statusBarHidden && ![self.window isKindOfClass:[KustomerWindow class]];
+
     CGFloat avatarSize = 30.0;
-    CGFloat statusBarHeight = ([self.window isKindOfClass:[KustomerWindow class]] ? 0.0 : 20.0);
+    CGFloat statusBarHeight = (hasStatusBar ? 20.0 : 0.0);
     CGFloat labelSidePad = 10.0;
 
     if (self.showsLabels) {
