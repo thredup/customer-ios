@@ -8,6 +8,8 @@
 
 #import "KUSRequestManager.h"
 
+#import <UIKit/UIKit.h>
+
 #import "KUSUserSession.h"
 
 NSString *const kKustomerCORSHeaderKey = @"X-Kustomer";
@@ -18,6 +20,9 @@ typedef void (^KUSTrackingTokenCompletion)(NSError *error, NSString *trackingTok
 
 @interface KUSRequestManager () <KUSObjectDataSourceListener> {
     __weak KUSUserSession *_userSession;
+
+    NSString *_acceptLanguageHeaderValue;
+    NSString *_userAgentHeaderValue;
 }
 
 @property (nonatomic, strong, readonly) NSString *baseUrlString;
@@ -39,6 +44,8 @@ typedef void (^KUSTrackingTokenCompletion)(NSError *error, NSString *trackingTok
         _userSession = userSession;
 
         _baseUrlString = KUSBaseUrlStringFromOrgName(_userSession.orgName);
+        _acceptLanguageHeaderValue = KUSAcceptLanguageHeaderValue();
+        _userAgentHeaderValue = KUSUserAgentHeaderValue();
 
         _queue = dispatch_queue_create("com.kustomer.request-manager", nil);
 
@@ -124,7 +131,14 @@ typedef void (^KUSTrackingTokenCompletion)(NSError *error, NSString *trackingTok
         NSURL *finalURL = (type == KUSRequestTypeGet ? KUSURLFromURLAndQueryParams(URL, params) : URL);
         NSMutableURLRequest *urlRequest = [[NSMutableURLRequest alloc] initWithURL:finalURL];
         [urlRequest setHTTPMethod:KUSRequestTypeToString(type)];
+
+        // CORS Header
         [urlRequest setValue:kKustomerCORSHeaderValue forHTTPHeaderField:kKustomerCORSHeaderKey];
+        // Accept-Language Header
+        [urlRequest setValue:_acceptLanguageHeaderValue forHTTPHeaderField:@"Accept-Language"];
+        // User-Agent Header
+        [urlRequest setValue:_userAgentHeaderValue forHTTPHeaderField:@"User-Agent"];
+
         if (type != KUSRequestTypeGet) {
             KUSAttachJSONBodyToRequest(urlRequest, params);
         }
@@ -282,6 +296,30 @@ static void KUSAttachJSONBodyToRequest(NSMutableURLRequest *mutableURLRequest, N
         [mutableURLRequest setValue:contentLength forHTTPHeaderField:@"Content-Length"];
         [mutableURLRequest setHTTPBody:jsonData];
     }
+}
+
+static NSString *KUSAcceptLanguageHeaderValue()
+{
+    // See http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4
+    NSMutableArray<NSString *> *acceptLanguagesComponents = [[NSMutableArray alloc] init];
+    [[NSLocale preferredLanguages] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        float q = 1.0f - (idx * 0.1f);
+        [acceptLanguagesComponents addObject:[NSString stringWithFormat:@"%@;q=%0.1g", obj, q]];
+        *stop = q <= 0.5f;
+    }];
+    return [acceptLanguagesComponents componentsJoinedByString:@", "];
+}
+
+static NSString *KUSUserAgentHeaderValue()
+{
+    // See http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.43
+    NSDictionary<NSString *, id> *bundleInfo = [[NSBundle mainBundle] infoDictionary];
+    return [NSString stringWithFormat:@"%@/%@ (%@; iOS %@; Scale/%0.2f)",
+            bundleInfo[(__bridge NSString *)kCFBundleExecutableKey] ?: bundleInfo[(__bridge NSString *)kCFBundleIdentifierKey],
+            bundleInfo[@"CFBundleShortVersionString"] ?: bundleInfo[(__bridge NSString *)kCFBundleVersionKey],
+            [[UIDevice currentDevice] model],
+            [[UIDevice currentDevice] systemVersion],
+            [[UIScreen mainScreen] scale]];
 }
 
 @end
