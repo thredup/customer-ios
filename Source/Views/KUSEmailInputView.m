@@ -34,7 +34,9 @@
         self.infoLabel.text = @"Don't miss a response! Get notified by email:";
         self.infoLabel.textAlignment = NSTextAlignmentCenter;
         self.infoLabel.textColor = [KUSColor darkGrayColor];
-        self.infoLabel.font = [UIFont systemFontOfSize:13.0];
+        self.infoLabel.font = [UIFont systemFontOfSize:12.0];
+        self.infoLabel.adjustsFontSizeToFitWidth = YES;
+        self.infoLabel.minimumScaleFactor = 10.0 / 12.0;
         [self addSubview:self.infoLabel];
 
         self.textField = [[UITextField alloc] init];

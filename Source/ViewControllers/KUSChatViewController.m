@@ -178,8 +178,7 @@
     CGFloat navigationBarHeight = self.topLayoutGuide.length + extraNavigationBarHeight;
 
     CGFloat inputBarHeight = [self.inputBarView desiredHeight];
-    CGFloat keyboardHeightForInputBar = ([self.inputBarView isFirstResponder] ? _keyboardHeight : 0.0);
-    CGFloat inputBarY = self.view.bounds.size.height - MAX(self.bottomLayoutGuide.length, keyboardHeightForInputBar) - inputBarHeight;
+    CGFloat inputBarY = self.view.bounds.size.height - MAX(self.bottomLayoutGuide.length, _keyboardHeight) - inputBarHeight;
     self.inputBarView.frame = (CGRect) {
         .origin.y = inputBarY,
         .size.width = self.view.bounds.size.width,
