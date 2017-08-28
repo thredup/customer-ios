@@ -152,7 +152,7 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
-    if ([text isEqualToString:@"\n"] && range.length == 0) {
+    if ([text isEqualToString:@"\n"]) {
         if (_sendButton.userInteractionEnabled) {
             [self _pressSend];
         }
