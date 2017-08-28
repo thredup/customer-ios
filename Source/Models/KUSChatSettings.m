@@ -8,7 +8,11 @@
 
 #import "KUSChatSettings.h"
 
-@implementation KUSChatSettings
+#import "KUSChatMessage.h"
+
+@implementation KUSChatSettings {
+    KUSChatMessage *_autoreplyMessage;
+}
 
 #pragma mark - Class methods
 
@@ -30,6 +34,16 @@
         _enabled = BOOLFromKeyPath(json, @"attributes.enabled");
     }
     return self;
+}
+
+#pragma mark - Convenience methods
+
+- (KUSChatMessage *)autoreplyMessage
+{
+    if (_autoreplyMessage == nil) {
+        _autoreplyMessage = [[KUSChatMessage alloc] initWithAutoreply:self.autoreply];
+    }
+    return _autoreplyMessage;
 }
 
 @end

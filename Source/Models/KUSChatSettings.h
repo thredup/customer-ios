@@ -8,6 +8,7 @@
 
 #import "KUSModel.h"
 
+@class KUSChatMessage;
 @interface KUSChatSettings : KUSModel
 
 @property (nonatomic, copy, readonly) NSString *teamName;
@@ -17,5 +18,7 @@
 @property (nonatomic, assign, readonly) BOOL enabled;
 
 - (instancetype)initWithJSON:(NSDictionary *)json;
+
+- (KUSChatMessage *)autoreplyMessage;
 
 @end

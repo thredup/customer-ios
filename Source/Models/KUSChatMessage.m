@@ -121,6 +121,9 @@ static KUSChatMessageDirection KUSChatMessageDirectionFromString(NSString *strin
 
 - (instancetype)initWithAutoreply:(NSString *)autoreply
 {
+    if (autoreply.length == 0) {
+        return nil;
+    }
     NSDictionary *json = @{
         @"type": @"chat_message",
         @"id": @"__autoreply",

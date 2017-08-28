@@ -367,7 +367,7 @@
 {
     NSUInteger count = [_chatMessagesDataSource count];
     KUSChatSettings *chatSettings = _userSession.chatSettingsDataSource.object;
-    BOOL shouldShowAutoreply = chatSettings.autoreply.length > 0 && count > 0 && _chatMessagesDataSource.didFetchAll;
+    BOOL shouldShowAutoreply = chatSettings.autoreplyMessage && count > 0 && _chatMessagesDataSource.didFetchAll;
     return shouldShowAutoreply;
 }
 
@@ -388,8 +388,7 @@
 
     if ([self _shouldShowAutoreply] && row == numberOfRows - 2) {
         KUSChatSettings *chatSettings = _userSession.chatSettingsDataSource.object;
-        NSString *autoreplyText = chatSettings.autoreply;
-        chatMessage = [[KUSChatMessage alloc] initWithAutoreply:autoreplyText];
+        chatMessage = chatSettings.autoreplyMessage;
     } else if ([self _shouldShowAutoreply] && row >= numberOfRows - 1) {
         chatMessage = [_chatMessagesDataSource objectAtIndex:row - 1];
     } else {
