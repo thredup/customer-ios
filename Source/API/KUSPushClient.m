@@ -10,6 +10,7 @@
 
 #import <Pusher/Pusher.h>
 
+#import "KUSAudio.h"
 #import "KUSUserSession.h"
 
 @interface KUSPushClient () <KUSObjectDataSourceListener, PTPusherDelegate> {
@@ -118,6 +119,8 @@
         KUSChatMessagesDataSource *messagesDataSource = [_userSession chatMessagesDataSourceForSessionId:chatMessage.sessionId];
         [messagesDataSource upsertMessageReceivedFromPusher:chatMessage];
     }
+
+    [KUSAudio playMessageReceivedSound];
 }
 
 #pragma mark - KUSObjectDataSourceListener methods
