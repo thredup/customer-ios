@@ -10,4 +10,11 @@
 
 @interface KUSNewSessionButton : UIButton
 
+@property (nonatomic, strong) UIColor *color UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIImage *image UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) NSString *text UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIColor *textColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIFont *textFont UI_APPEARANCE_SELECTOR;
+@property (nonatomic, assign) BOOL hasShadow UI_APPEARANCE_SELECTOR;
+
 @end
