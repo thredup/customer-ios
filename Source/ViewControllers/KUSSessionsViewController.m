@@ -18,6 +18,7 @@
 #import "KUSChatSessionTableViewCell.h"
 #import "KUSFauxNavigationBar.h"
 #import "KUSGradientView.h"
+#import "KUSNewSessionButton.h"
 #import "KustomerWindow.h"
 
 @interface KUSSessionsViewController () <KUSPaginatedDataSourceListener, UITableViewDataSource, UITableViewDelegate> {
@@ -29,7 +30,7 @@
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) KUSGradientView *gradientView;
-@property (nonatomic, strong) UIButton *createSessionButton;
+@property (nonatomic, strong) KUSNewSessionButton *createSessionButton;
 @property (nonatomic, strong) KUSFauxNavigationBar *fauxNavigationBar;
 
 @end
@@ -84,32 +85,10 @@
     [self.fauxNavigationBar setShowsLabels:NO];
     [self.view addSubview:self.fauxNavigationBar];
 
-    CGFloat buttonRadius = 4.0;
-    CGSize size = CGSizeMake(buttonRadius * 2.0, buttonRadius * 2.0);
-    UIImage *circularImage = [KUSImage circularImageWithSize:size color:[KUSColor blueColor]];
-    UIEdgeInsets capInsets = UIEdgeInsetsMake(buttonRadius, buttonRadius, buttonRadius, buttonRadius);
-    UIImage *buttonImage = [circularImage resizableImageWithCapInsets:capInsets];
-
-    // TODO: Encapsulate into class
-    self.createSessionButton = [[UIButton alloc] init];
+    self.createSessionButton = [[KUSNewSessionButton alloc] init];
     self.createSessionButton.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin
                                                  | UIViewAutoresizingFlexibleLeftMargin
                                                  | UIViewAutoresizingFlexibleRightMargin);
-
-    UIImage *pencilImage = [KUSImage pencilImage];
-    [self.createSessionButton setImage:pencilImage forState:UIControlStateNormal];
-    [self.createSessionButton setImage:pencilImage forState:UIControlStateHighlighted];
-    [self.createSessionButton setTitleEdgeInsets:UIEdgeInsetsMake(0.0, 5.0, 0.0, 0.0)];
-    [self.createSessionButton setImageEdgeInsets:UIEdgeInsetsMake(0.0, 0.0, 0.0, 5.0)];
-
-    [self.createSessionButton setTitle:@"New Conversation" forState:UIControlStateNormal];
-    self.createSessionButton.titleLabel.textColor = [UIColor whiteColor];
-    self.createSessionButton.titleLabel.font = [UIFont systemFontOfSize:14.0];
-    [self.createSessionButton setBackgroundImage:buttonImage forState:UIControlStateNormal];
-    self.createSessionButton.layer.shadowColor = [UIColor darkGrayColor].CGColor;
-    self.createSessionButton.layer.shadowOffset = CGSizeMake(1.0, 1.0);
-    self.createSessionButton.layer.shadowRadius = 1.0;
-    self.createSessionButton.layer.shadowOpacity = 0.5;
     [self.createSessionButton addTarget:self
                                  action:@selector(_createSession)
                        forControlEvents:UIControlEventTouchUpInside];
@@ -146,8 +125,7 @@
         .size.height = [self.fauxNavigationBar desiredHeightWithTopInset:self.topLayoutGuide.length]
     };
 
-    // TODO: Extract layout constants
-    CGSize createSessionButtonSize = CGSizeMake(182.0, 44.0);
+    CGSize createSessionButtonSize = self.createSessionButton.intrinsicContentSize;
     self.createSessionButton.frame = (CGRect) {
         .origin.x = (self.view.bounds.size.width - createSessionButtonSize.width) / 2.0,
         .origin.y = self.view.bounds.size.height - createSessionButtonSize.height - self.bottomLayoutGuide.length - 23.0,

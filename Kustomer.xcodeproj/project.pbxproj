@@ -76,6 +76,8 @@
 		637177AA1F46A0DA00A7F79C /* KUSUserDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 637177A81F46A0DA00A7F79C /* KUSUserDataSource.m */; };
 		637177AD1F46A28300A7F79C /* KUSUser.h in Headers */ = {isa = PBXBuildFile; fileRef = 637177AB1F46A28300A7F79C /* KUSUser.h */; };
 		637177AE1F46A28300A7F79C /* KUSUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 637177AC1F46A28300A7F79C /* KUSUser.m */; };
+		639FBBBD1F5F98110065AB0B /* KUSNewSessionButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 639FBBBB1F5F98110065AB0B /* KUSNewSessionButton.h */; };
+		639FBBBE1F5F98110065AB0B /* KUSNewSessionButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 639FBBBC1F5F98110065AB0B /* KUSNewSessionButton.m */; };
 		63A4EDD71F097D8F00EA3852 /* Kustomer_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 63A4EDD61F097D8F00EA3852 /* Kustomer_Private.h */; };
 		63B9CD9B1F088E8800120F3E /* Kustomer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63B9CD911F088E8800120F3E /* Kustomer.framework */; };
 		63B9CDA01F088E8800120F3E /* KustomerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 63B9CD9F1F088E8800120F3E /* KustomerTests.m */; };
@@ -219,6 +221,8 @@
 		637177A81F46A0DA00A7F79C /* KUSUserDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSUserDataSource.m; sourceTree = "<group>"; };
 		637177AB1F46A28300A7F79C /* KUSUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSUser.h; sourceTree = "<group>"; };
 		637177AC1F46A28300A7F79C /* KUSUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSUser.m; sourceTree = "<group>"; };
+		639FBBBB1F5F98110065AB0B /* KUSNewSessionButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSNewSessionButton.h; sourceTree = "<group>"; };
+		639FBBBC1F5F98110065AB0B /* KUSNewSessionButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSNewSessionButton.m; sourceTree = "<group>"; };
 		63A4EDD61F097D8F00EA3852 /* Kustomer_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Kustomer_Private.h; sourceTree = "<group>"; };
 		63B9CD911F088E8800120F3E /* Kustomer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Kustomer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		63B9CD9A1F088E8800120F3E /* KustomerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KustomerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -394,6 +398,8 @@
 				637177A01F452B8F00A7F79C /* KUSFauxNavigationBar.m */,
 				6371779B1F43EDDC00A7F79C /* KUSAvatarImageView.h */,
 				6371779C1F43EDDC00A7F79C /* KUSAvatarImageView.m */,
+				639FBBBB1F5F98110065AB0B /* KUSNewSessionButton.h */,
+				639FBBBC1F5F98110065AB0B /* KUSNewSessionButton.m */,
 				631E3F331F52497A00FAA33F /* KUSEmailInputView.h */,
 				631E3F341F52497A00FAA33F /* KUSEmailInputView.m */,
 				631E3F2F1F520C6700FAA33F /* KUSGradientView.h */,
@@ -552,6 +558,7 @@
 				633FADBC1F258C2E0060B4A6 /* KUSChatMessagesDataSource.h in Headers */,
 				63D9C18B1F31761B00999183 /* KUSBaseViewController.h in Headers */,
 				633D8FDE1F22EDB800BAFAC9 /* KUSInputBar.h in Headers */,
+				639FBBBD1F5F98110065AB0B /* KUSNewSessionButton.h in Headers */,
 				63035BD91F2EBCD400FBBF66 /* KUSText.h in Headers */,
 				6334BE601F0C9B5100258DAF /* KUSPaginatedResponse.h in Headers */,
 				636531A51F1BBAA100433A50 /* KustomerViewController.h in Headers */,
@@ -868,6 +875,7 @@
 				63B9CDB31F0890B400120F3E /* Kustomer.m in Sources */,
 				6334BE2B1F0C3E8600258DAF /* KUSModel.m in Sources */,
 				6334BE4A1F0C5E3F00258DAF /* KUSNavigationController.m in Sources */,
+				639FBBBE1F5F98110065AB0B /* KUSNewSessionButton.m in Sources */,
 				636531A21F1BBA7C00433A50 /* KUSSessionsViewController.m in Sources */,
 				6334BE3F1F0C4EBE00258DAF /* KUSCustomer.m in Sources */,
 				6334BE611F0C9B5100258DAF /* KUSPaginatedResponse.m in Sources */,
