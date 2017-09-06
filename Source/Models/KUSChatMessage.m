@@ -15,6 +15,28 @@ static KUSChatMessageDirection KUSChatMessageDirectionFromString(NSString *strin
     return [string isEqualToString:@"in"] ? KUSChatMessageDirectionIn : KUSChatMessageDirectionOut;
 }
 
+static NSString *KUSUnescapeBackslashesFromString(NSString *string)
+{
+    NSMutableString *mutableString = [[NSMutableString alloc] init];
+
+    NSUInteger startingIndex = 0;
+    for (NSUInteger i = 0; i < string.length; i++) {
+        NSString *character = [string substringWithRange:NSMakeRange(i, 1)];
+        if ([character isEqualToString:@"\\"]) {
+            NSString *lastString = [string substringWithRange:NSMakeRange(startingIndex, i - startingIndex)];
+            [mutableString appendString:lastString];
+
+            i++;
+            startingIndex = i;
+        }
+    }
+
+    NSString *endingString = [string substringFromIndex:startingIndex];
+    [mutableString appendString:endingString];
+
+    return mutableString;
+}
+
 #pragma mark - Class methods
 
 + (NSString *)modelType
@@ -53,7 +75,7 @@ static KUSChatMessageDirection KUSChatMessageDirectionFromString(NSString *strin
                                                                             range:match.range];
          NSTextCheckingResult *linkMatch = linkMatches.firstObject;
          if (linkMatch) {
-             NSString *matchedText = [body substringWithRange:linkMatch.range];
+             NSString *matchedText = KUSUnescapeBackslashesFromString([body substringWithRange:linkMatch.range]);
              NSURL *matchedURL = [NSURL URLWithString:matchedText];
              if (matchedURL) {
                  NSMutableDictionary *mutablePreviousJSON = [json mutableCopy];
