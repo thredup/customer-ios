@@ -17,7 +17,6 @@
 #import "KUSChatPlaceholderTableViewCell.h"
 #import "KUSChatSessionTableViewCell.h"
 #import "KUSFauxNavigationBar.h"
-#import "KUSGradientView.h"
 #import "KUSNewSessionButton.h"
 #import "KustomerWindow.h"
 
@@ -29,7 +28,6 @@
 }
 
 @property (nonatomic, strong) UITableView *tableView;
-@property (nonatomic, strong) KUSGradientView *gradientView;
 @property (nonatomic, strong) KUSNewSessionButton *createSessionButton;
 @property (nonatomic, strong) KUSFauxNavigationBar *fauxNavigationBar;
 
@@ -77,9 +75,6 @@
     self.tableView.separatorInset = UIEdgeInsetsZero;
     self.tableView.separatorColor = [KUSColor grayColor];
     [self.view addSubview:self.tableView];
-
-    self.gradientView = [[KUSGradientView alloc] init];
-    [self.view addSubview:self.gradientView];
 
     self.fauxNavigationBar = [[KUSFauxNavigationBar alloc] initWithUserSession:_userSession];
     [self.fauxNavigationBar setShowsLabels:NO];
@@ -137,12 +132,6 @@
     self.tableView.contentInset = (UIEdgeInsets) {
         .top = self.topLayoutGuide.length,
         .bottom = self.bottomLayoutGuide.length + bottomButtonPadding
-    };
-
-    self.gradientView.frame = (CGRect) {
-        .origin.y = self.view.bounds.size.height - bottomButtonPadding,
-        .size.width = self.view.bounds.size.width,
-        .size.height = bottomButtonPadding
     };
 }
 

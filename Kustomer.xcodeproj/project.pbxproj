@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		63035BD91F2EBCD400FBBF66 /* KUSText.h in Headers */ = {isa = PBXBuildFile; fileRef = 63035BD71F2EBCD400FBBF66 /* KUSText.h */; };
 		63035BDA1F2EBCD400FBBF66 /* KUSText.m in Sources */ = {isa = PBXBuildFile; fileRef = 63035BD81F2EBCD400FBBF66 /* KUSText.m */; };
-		631E3F311F520C6700FAA33F /* KUSGradientView.h in Headers */ = {isa = PBXBuildFile; fileRef = 631E3F2F1F520C6700FAA33F /* KUSGradientView.h */; };
-		631E3F321F520C6700FAA33F /* KUSGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 631E3F301F520C6700FAA33F /* KUSGradientView.m */; };
 		631E3F351F52497A00FAA33F /* KUSEmailInputView.h in Headers */ = {isa = PBXBuildFile; fileRef = 631E3F331F52497A00FAA33F /* KUSEmailInputView.h */; };
 		631E3F361F52497A00FAA33F /* KUSEmailInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 631E3F341F52497A00FAA33F /* KUSEmailInputView.m */; };
 		631E3F381F52561E00FAA33F /* checkmark_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 631E3F371F52561E00FAA33F /* checkmark_image@2x.png */; };
@@ -153,8 +151,6 @@
 		479720192A1054576AB58BBA /* Pods-KustomerExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KustomerExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-KustomerExample/Pods-KustomerExample.debug.xcconfig"; sourceTree = "<group>"; };
 		63035BD71F2EBCD400FBBF66 /* KUSText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSText.h; sourceTree = "<group>"; };
 		63035BD81F2EBCD400FBBF66 /* KUSText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSText.m; sourceTree = "<group>"; };
-		631E3F2F1F520C6700FAA33F /* KUSGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSGradientView.h; sourceTree = "<group>"; };
-		631E3F301F520C6700FAA33F /* KUSGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSGradientView.m; sourceTree = "<group>"; };
 		631E3F331F52497A00FAA33F /* KUSEmailInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSEmailInputView.h; sourceTree = "<group>"; };
 		631E3F341F52497A00FAA33F /* KUSEmailInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSEmailInputView.m; sourceTree = "<group>"; };
 		631E3F371F52561E00FAA33F /* checkmark_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkmark_image@2x.png"; sourceTree = "<group>"; };
@@ -402,8 +398,6 @@
 				639FBBBC1F5F98110065AB0B /* KUSNewSessionButton.m */,
 				631E3F331F52497A00FAA33F /* KUSEmailInputView.h */,
 				631E3F341F52497A00FAA33F /* KUSEmailInputView.m */,
-				631E3F2F1F520C6700FAA33F /* KUSGradientView.h */,
-				631E3F301F520C6700FAA33F /* KUSGradientView.m */,
 				633D8FDC1F22EDB800BAFAC9 /* KUSInputBar.h */,
 				633D8FDD1F22EDB800BAFAC9 /* KUSInputBar.m */,
 				633FADC21F26E7630060B4A6 /* KUSTextView.h */,
@@ -588,7 +582,6 @@
 				636531A91F1BBCCD00433A50 /* KUSChatViewController.h in Headers */,
 				63EDF3D11F412503000345D8 /* KUSUserSession.h in Headers */,
 				6334BE2E1F0C43BE00258DAF /* KUSTrackingToken.h in Headers */,
-				631E3F311F520C6700FAA33F /* KUSGradientView.h in Headers */,
 				63270E991F4A717600E25BF5 /* KUSDate.h in Headers */,
 				63270E951F4A1FA200E25BF5 /* KUSPushClient.h in Headers */,
 				6334BE2A1F0C3E8600258DAF /* KUSModel.h in Headers */,
@@ -882,7 +875,6 @@
 				6334BE331F0C487400258DAF /* KUSChatSettings.m in Sources */,
 				63EDF3DA1F415797000345D8 /* KUSTrackingTokenDataSource.m in Sources */,
 				637177A21F452B8F00A7F79C /* KUSFauxNavigationBar.m in Sources */,
-				631E3F321F520C6700FAA33F /* KUSGradientView.m in Sources */,
 				6334BE4E1F0C600F00258DAF /* KUSAttributionToolbar.m in Sources */,
 				636531A61F1BBAA100433A50 /* KustomerViewController.m in Sources */,
 				6334BE551F0C66E200258DAF /* KUSImage.m in Sources */,
