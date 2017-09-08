@@ -22,19 +22,32 @@
 
 @implementation KUSEmailInputView
 
+#pragma mark - Class methods
+
++ (void)initialize
+{
+    if (self == [KUSEmailInputView class]) {
+        KUSEmailInputView *appearance = [KUSEmailInputView appearance];
+        [appearance setBackgroundColor:[KUSColor lightGrayColor]];
+        [appearance setPrompt:@"Don't miss a response! Get notified by email:"];
+        [appearance setPromptColor:[KUSColor darkGrayColor]];
+        [appearance setPromptFont:[UIFont systemFontOfSize:12.0]];
+        [appearance setPlaceholder:@"example@domain.com"];
+        [appearance setPlaceholderFont:[UIFont systemFontOfSize:14.0]];
+        [appearance setSeparatorColor:[KUSColor grayColor]];
+        [appearance setBorderColor:[KUSColor greenColor]];
+        [appearance setInputBackgroundColor:[UIColor whiteColor]];
+    }
+}
+
 #pragma mark - Lifecycle methods
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = [KUSColor lightGrayColor];
-
         self.infoLabel = [[UILabel alloc] init];
-        self.infoLabel.text = @"Don't miss a response! Get notified by email:";
         self.infoLabel.textAlignment = NSTextAlignmentCenter;
-        self.infoLabel.textColor = [KUSColor darkGrayColor];
-        self.infoLabel.font = [UIFont systemFontOfSize:12.0];
         self.infoLabel.adjustsFontSizeToFitWidth = YES;
         self.infoLabel.minimumScaleFactor = 10.0 / 12.0;
         [self addSubview:self.infoLabel];
@@ -49,12 +62,8 @@
         self.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
         self.textField.autocorrectionType = UITextAutocorrectionTypeNo;
         self.textField.returnKeyType = UIReturnKeySend;
-        self.textField.layer.borderColor = [KUSColor greenColor].CGColor;
         self.textField.layer.borderWidth = 1.0;
         self.textField.layer.masksToBounds = YES;
-        self.textField.backgroundColor = [UIColor whiteColor];
-        self.textField.placeholder = @"example@domain.com";
-        self.textField.font = [UIFont systemFontOfSize:14.0];
         [self addSubview:self.textField];
 
         [[NSNotificationCenter defaultCenter] addObserver:self
@@ -63,15 +72,12 @@
                                                    object:self.textField];
 
         self.submitButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        UIImage *submitImage = [KUSImage submitImageWithSize:CGSizeMake(24.0, 24.0) color:[KUSColor greenColor]];
-        [self.submitButton setImage:submitImage forState:UIControlStateNormal];
         [self.submitButton addTarget:self
                               action:@selector(_userWantsToSubmit)
                     forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:self.submitButton];
 
         self.separatorView = [[UIView alloc] init];
-        self.separatorView.backgroundColor = [KUSColor grayColor];
         [self addSubview:self.separatorView];
 
         [self _updateSubmitButton];
@@ -151,6 +157,59 @@
 {
     [self _userWantsToSubmit];
     return NO;
+}
+
+#pragma mark - UIAppearance methods
+
+- (void)setPrompt:(NSString *)prompt
+{
+    _prompt = prompt;
+    self.infoLabel.text = _prompt;
+}
+
+- (void)setPromptColor:(UIColor *)promptColor
+{
+    _promptColor = promptColor;
+    self.infoLabel.textColor = _promptColor;
+}
+
+- (void)setPromptFont:(UIFont *)promptFont
+{
+    _promptFont = promptFont;
+    self.infoLabel.font = _promptFont;
+}
+
+- (void)setPlaceholder:(NSString *)placeholder
+{
+    _placeholder = placeholder;
+    self.textField.placeholder = _placeholder;
+}
+
+- (void)setPlaceholderFont:(UIFont *)placeholderFont
+{
+    _placeholderFont = placeholderFont;
+    self.textField.font = _placeholderFont;
+}
+
+- (void)setSeparatorColor:(UIColor *)separatorColor
+{
+    _separatorColor = separatorColor;
+    self.separatorView.backgroundColor = _separatorColor;
+}
+
+- (void)setBorderColor:(UIColor *)borderColor
+{
+    _borderColor = borderColor;
+    self.textField.layer.borderColor = _borderColor.CGColor;
+
+    UIImage *submitImage = [KUSImage submitImageWithSize:CGSizeMake(24.0, 24.0) color:_borderColor];
+    [self.submitButton setImage:submitImage forState:UIControlStateNormal];
+}
+
+- (void)setInputBackgroundColor:(UIColor *)inputBackgroundColor
+{
+    _inputBackgroundColor = inputBackgroundColor;
+    self.textField.backgroundColor = _inputBackgroundColor;
 }
 
 @end
