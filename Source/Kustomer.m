@@ -92,6 +92,20 @@ static NSString *kKustomerOrgNameKey = @"orgName";
     NSLog(@"Kustomer initialized for organization: %@", self.orgName);
 }
 
+#pragma mark - Private class methods
+
+static NSString *_hostDomainOverride = nil;
+
++ (NSString *)hostDomain
+{
+    return _hostDomainOverride ?: @"kustomerapp.com";
+}
+
++ (void)setHostDomain:(NSString *)hostDomain
+{
+    _hostDomainOverride = [hostDomain copy];
+}
+
 #pragma mark - Private methods
 
 - (KUSUserSession *)userSession

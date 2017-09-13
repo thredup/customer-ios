@@ -11,6 +11,7 @@
 #import <UIKit/UIKit.h>
 
 #import "KUSUserSession.h"
+#import "Kustomer_Private.h"
 
 NSString *const kKustomerCORSHeaderKey = @"X-Kustomer";
 NSString *const kKustomerCORSHeaderValue = @"kustomer";
@@ -43,7 +44,8 @@ typedef void (^KUSTrackingTokenCompletion)(NSError *error, NSString *trackingTok
     if (self) {
         _userSession = userSession;
 
-        _baseUrlString = KUSBaseUrlStringFromOrgName(_userSession.orgName);
+        _baseUrlString = [NSString stringWithFormat:@"https://%@.api.%@",
+                          _userSession.orgName, [Kustomer hostDomain]];
         _acceptLanguageHeaderValue = KUSAcceptLanguageHeaderValue();
         _userAgentHeaderValue = KUSUserAgentHeaderValue();
 
@@ -255,13 +257,6 @@ static NSString *KUSRequestTypeToString(KUSRequestType type)
         case KUSRequestTypeDelete:
             return @"DELETE";
     }
-}
-
-static NSString *KUSBaseUrlStringFromOrgName(NSString *orgName)
-{
-    NSDictionary<NSString *, NSString *> *environment = [[NSProcessInfo processInfo] environment];
-    NSString *baseDomain = environment[@"KUSTOMER_BASE_DOMAIN"] ?: @"kustomerapp.com";
-    return [NSString stringWithFormat:@"https://%@.api.%@", orgName, baseDomain];
 }
 
 static NSURL *KUSURLFromURLAndQueryParams(NSURL *URL, NSDictionary<NSString *, id> *params)

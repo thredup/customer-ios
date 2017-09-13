@@ -13,6 +13,9 @@
 
 + (instancetype)sharedInstance;
 
++ (NSString *)hostDomain;
++ (void)setHostDomain:(NSString *)hostDomain;
+
 - (KUSUserSession *)userSession;
 
 @end
