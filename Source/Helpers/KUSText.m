@@ -42,6 +42,15 @@ NSDictionary<NSString *, id> *KUSAttributedFontWithSize(NSDictionary<NSString *,
     if (color) {
         [mutableAttributes setObject:color forKey:NSForegroundColorAttributeName];
     }
+
+    // Fix for emoji layout issue
+    // https://github.com/TTTAttributedLabel/TTTAttributedLabel/issues/405#issuecomment-135864151
+    NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+    paragraphStyle.lineHeightMultiple = 1.0;
+    paragraphStyle.minimumLineHeight = newFont.lineHeight;
+    paragraphStyle.maximumLineHeight = newFont.lineHeight;
+    [mutableAttributes setObject:paragraphStyle forKey:NSParagraphStyleAttributeName];
+
     return mutableAttributes;
 };
 
