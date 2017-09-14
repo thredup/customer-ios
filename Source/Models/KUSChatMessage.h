@@ -41,6 +41,6 @@ typedef NS_ENUM(NSInteger, KUSChatMessageState) {
 
 - (instancetype)initWithAutoreply:(NSString *)autoreply;
 
-- (void)updateState:(KUSChatMessageState)state;
+- (instancetype)initFailedWithText:(NSString *)text;
 
 @end

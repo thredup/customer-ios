@@ -20,6 +20,7 @@
 
 - (void)upsertMessageReceivedFromPusher:(KUSChatMessage *)chatMessage;
 
-- (void)sendTextMessage:(NSString *)text completion:(void(^)(NSError *error, KUSChatMessage *message))completion;
+- (void)sendTextMessage:(NSString *)text;
+- (void)resendMessage:(KUSChatMessage *)message;
 
 @end

@@ -157,6 +157,23 @@ static NSString *KUSUnescapeBackslashesFromString(NSString *string)
     return [self initWithJSON:json];
 }
 
+- (instancetype)initFailedWithText:(NSString *)text
+{
+    NSDictionary *json = @{
+        @"type": @"chat_message",
+        @"id": [[NSUUID UUID] UUIDString],
+        @"attributes": @{
+            @"body": text,
+            @"direction": @"in"
+        }
+    };
+    self = [self initWithJSON:json];
+    if (self) {
+        self->_state = KUSChatMessageStateFailed;
+    }
+    return self;
+}
+
 + (NSArray<KUSChatMessage *> *)messagesWithSendingText:(NSString *)sendingText
 {
     NSDictionary *json = @{
@@ -173,11 +190,6 @@ static NSString *KUSUnescapeBackslashesFromString(NSString *string)
         message->_sendingDate = [NSDate date];
     }
     return messages;
-}
-
-- (void)updateState:(KUSChatMessageState)state
-{
-    _state = state;
 }
 
 #pragma mark - NSObject methods

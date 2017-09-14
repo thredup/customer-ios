@@ -417,6 +417,14 @@
     [self presentViewController:safariViewController animated:YES completion:nil];
 }
 
+- (void)chatMessageTableViewCellDidTapError:(KUSChatMessageTableViewCell *)cell forMessage:(KUSChatMessage *)message
+{
+    NSLog(@"Did select message resend");
+
+    [_chatMessagesDataSource resendMessage:message];
+}
+
+
 - (void)chatMessageTableViewCellDidTapImage:(KUSChatMessageTableViewCell *)cell forMessage:(KUSChatMessage *)message
 {
     NSLog(@"Did select image");
@@ -474,22 +482,10 @@
             [self _checkShouldShowEmailInput];
             [self.view setNeedsLayout];
 
-            [_chatMessagesDataSource sendTextMessage:text completion:^(NSError *error, KUSChatMessage *message) {
-                if (error) {
-                    NSLog(@"Error sending message: %@", error);
-                    return;
-                }
-                NSLog(@"Successfully sent message: %@", message);
-            }];
+            [_chatMessagesDataSource sendTextMessage:text];
         }];
     } else {
-        [_chatMessagesDataSource sendTextMessage:text completion:^(NSError *error, KUSChatMessage *message) {
-            if (error) {
-                NSLog(@"Error sending message: %@", error);
-                return;
-            }
-            NSLog(@"Successfully sent message: %@", message);
-        }];
+        [_chatMessagesDataSource sendTextMessage:text];
     }
 }
 

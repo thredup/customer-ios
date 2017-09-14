@@ -83,7 +83,7 @@
     }
 }
 
-- (void)sendTextMessage:(NSString *)text completion:(void(^)(NSError *error, KUSChatMessage *message))completion
+- (void)sendTextMessage:(NSString *)text
 {
     NSArray<KUSChatMessage *> *temporaryMessages = [KUSChatMessage messagesWithSendingText:text];
     if (temporaryMessages.count) {
@@ -101,27 +101,27 @@
              [weakSelf removeObjects:temporaryMessages];
          }
          if (error) {
-             for (KUSChatMessage *message in temporaryMessages) {
-                 [message updateState:KUSChatMessageStateFailed];
-             }
-             [weakSelf prependObjects:temporaryMessages];
+             NSLog(@"Error sending message: %@", error);
 
-             if (completion) {
-                 completion(error, nil);
-             }
+             KUSChatMessage *failedMessage = [[KUSChatMessage alloc] initFailedWithText:text];
+             [weakSelf prependObjects:@[failedMessage]];
              return;
          }
+         NSLog(@"Successfully sent text message: %@", text);
 
          NSArray<KUSChatMessage *> *temporaryMessages = [KUSChatMessage objectsWithJSON:response[@"data"]];
          if (temporaryMessages.count) {
              [weakSelf prependObjects:temporaryMessages];
          }
-
-         KUSChatMessage *message = [[KUSChatMessage alloc] initWithJSON:response[@"data"]];
-         if (completion) {
-             completion(nil, message);
-         }
      }];
+}
+
+- (void)resendMessage:(KUSChatMessage *)message
+{
+    if (message) {
+        [self removeObjects:@[ message ]];
+        [self sendTextMessage:message.body];
+    }
 }
 
 @end

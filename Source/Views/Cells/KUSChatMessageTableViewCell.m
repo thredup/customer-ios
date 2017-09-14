@@ -14,6 +14,7 @@
 
 #import "KUSChatMessage.h"
 #import "KUSColor.h"
+#import "KUSImage.h"
 #import "KUSText.h"
 #import "KUSUserSession.h"
 
@@ -38,6 +39,7 @@ static const CGFloat kMinBubbleHeight = 38.0;
     UIView *_bubbleView;
     TTTAttributedLabel *_labelView;
     UIImageView *_imageView;
+    UIButton *_errorButton;
 }
 
 @end
@@ -193,6 +195,13 @@ static const CGFloat kMinBubbleHeight = 38.0;
             };
         }   break;
     }
+
+    _errorButton.frame = (CGRect) {
+        .origin.x = _bubbleView.frame.origin.x - kMinBubbleHeight - 5.0,
+        .origin.y = _bubbleView.frame.origin.y + (_bubbleView.frame.size.height - kMinBubbleHeight) / 2.0,
+        .size.width = kMinBubbleHeight,
+        .size.height = kMinBubbleHeight
+    };
 }
 
 #pragma mark - Internal logic methods
@@ -268,6 +277,20 @@ static NSTimeInterval kOptimisticSendLoadingDelay = 0.5;
 
     [_avatarImageView setUserId:(currentUser ? nil : _chatMessage.sentById)];
 
+    if (_chatMessage.state == KUSChatMessageStateFailed) {
+        if (_errorButton == nil) {
+            _errorButton = [UIButton buttonWithType:UIButtonTypeCustom];
+            [_errorButton setImage:[KUSImage errorImage] forState:UIControlStateNormal];
+            [_errorButton addTarget:self
+                             action:@selector(_didTapError)
+                   forControlEvents:UIControlEventTouchUpInside];
+            [self.contentView addSubview:_errorButton];
+        }
+        _errorButton.hidden = NO;
+    } else {
+        _errorButton.hidden = YES;
+    }
+
     [self _updateAlphaForState];
     [self setNeedsLayout];
 }
@@ -276,6 +299,15 @@ static NSTimeInterval kOptimisticSendLoadingDelay = 0.5;
 {
     _showsAvatar = showsAvatar;
     [self setNeedsLayout];
+}
+
+#pragma mark - Interface element methods
+
+- (void)_didTapError
+{
+    if ([self.delegate respondsToSelector:@selector(chatMessageTableViewCellDidTapError:forMessage:)]) {
+        [self.delegate chatMessageTableViewCellDidTapError:self forMessage:_chatMessage];
+    }
 }
 
 #pragma mark - TTTAttributedLabelDelegate methods
