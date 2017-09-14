@@ -239,6 +239,36 @@ static NSTimeInterval kOptimisticSendLoadingDelay = 0.5;
     }
 }
 
+- (void)_updateImageForMessage
+{
+    BOOL currentUser = _chatMessage.direction == KUSChatMessageDirectionIn;
+
+    [_imageView setContentMode:UIViewContentModeScaleAspectFill];
+    [_imageView sd_setShowActivityIndicatorView:YES];
+    [_imageView sd_setIndicatorStyle:(currentUser ? UIActivityIndicatorViewStyleWhite : UIActivityIndicatorViewStyleGray)];
+    SDWebImageOptions options = SDWebImageHighPriority | SDWebImageScaleDownLargeImages;
+
+    KUSChatMessage *startingChatMessage = _chatMessage;
+    __weak KUSChatMessageTableViewCell *weakSelf = self;
+    [_imageView
+     sd_setImageWithURL:_chatMessage.imageURL
+     placeholderImage:nil
+     options:options
+     completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+         __strong KUSChatMessageTableViewCell *strongSelf = weakSelf;
+         if (strongSelf == nil) {
+             return;
+         }
+         if (strongSelf->_chatMessage != startingChatMessage) {
+             return;
+         }
+         if (error) {
+             [strongSelf->_imageView setImage:[KUSImage errorImage]];
+             [strongSelf->_imageView setContentMode:UIViewContentModeCenter];
+         }
+     }];
+}
+
 #pragma mark - Property methods
 
 - (void)setChatMessage:(KUSChatMessage *)chatMessage
@@ -268,10 +298,7 @@ static NSTimeInterval kOptimisticSendLoadingDelay = 0.5;
         case KUSChatMessageTypeImage: {
             _labelView.text = nil;
 
-            [_imageView sd_setShowActivityIndicatorView:YES];
-            [_imageView sd_setIndicatorStyle:(currentUser ? UIActivityIndicatorViewStyleWhite : UIActivityIndicatorViewStyleGray)];
-            SDWebImageOptions options = SDWebImageHighPriority | SDWebImageScaleDownLargeImages;
-            [_imageView sd_setImageWithURL:_chatMessage.imageURL placeholderImage:nil options:options];
+            [self _updateImageForMessage];
         }   break;
     }
 
@@ -323,6 +350,11 @@ static NSTimeInterval kOptimisticSendLoadingDelay = 0.5;
 
 - (void)_didTapImage
 {
+    if ([_imageView.image isEqual:[KUSImage errorImage]]) {
+        [self _updateImageForMessage];
+        return;
+    }
+
     if ([self.delegate respondsToSelector:@selector(chatMessageTableViewCellDidTapImage:forMessage:)]) {
         [self.delegate chatMessageTableViewCellDidTapImage:self forMessage:_chatMessage];
     }
