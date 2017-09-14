@@ -34,6 +34,16 @@ static NSString *kKustomerOrgNameKey = @"orgName";
     [[self sharedInstance] setApiKey:apiKey];
 }
 
++ (void)describe:(NSDictionary<NSString *, NSString *> *)data
+{
+    [[self sharedInstance] describe:data];
+}
+
++ (void)identify:(NSString *)externalToken
+{
+    [[self sharedInstance] identify:externalToken];
+}
+
 + (void)resetTracking
 {
     [[self sharedInstance] resetTracking];
@@ -115,6 +125,48 @@ static NSString *_hostDomainOverride = nil;
 }
 
 #pragma mark - Internal methods
+
+- (void)describe:(NSDictionary<NSString *, NSString *> *)data
+{
+    NSMutableDictionary<NSString *, NSArray<NSDictionary<NSString *, NSString *> *> *> *formData = [[NSMutableDictionary alloc] init];
+
+    if (data[@"email"]) {
+        formData[@"emails"] = @[ @{ @"email" : data[@"email"] } ];
+    }
+    if (data[@"phone"]) {
+        formData[@"phones"] = @[ @{ @"phone" : data[@"phone"] } ];
+    }
+
+    NSMutableArray<NSDictionary<NSString *, NSString *> *> *socials = [[NSMutableArray alloc] init];
+    NSArray<NSString *> *socialNetworks = @[ @"twitter", @"facebook", @"instagram", @"linkedin" ];
+    for (NSString *socialNetwork in socialNetworks) {
+        if (data[socialNetwork]) {
+            [socials addObject:@{ @"username" : data[socialNetwork], @"type" : socialNetwork }];
+        }
+    }
+    if (socials.count) {
+        formData[@"socials"] = socials;
+    }
+
+    [self.userSession.requestManager
+     performRequestType:KUSRequestTypePatch
+     endpoint:@"/c/v1/customers/current"
+     params:formData
+     authenticated:YES
+     completion:nil];
+}
+
+- (void)identify:(NSString *)externalToken
+{
+    NSAssert(externalToken, @"Kustomer expects externalToken to be non-nil");
+
+    [self.userSession.requestManager
+     performRequestType:KUSRequestTypePost
+     endpoint:@"/c/v1/identity"
+     params:@{ @"externalToken" : externalToken }
+     authenticated:YES
+     completion:nil];
+}
 
 - (void)resetTracking
 {
