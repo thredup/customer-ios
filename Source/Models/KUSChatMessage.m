@@ -157,22 +157,27 @@ static NSString *KUSUnescapeBackslashesFromString(NSString *string)
     return [self initWithJSON:json];
 }
 
-+ (NSArray<KUSChatMessage *> *)messagesWithPlaceholderText:(NSString *)placeholderText
++ (NSArray<KUSChatMessage *> *)messagesWithSendingText:(NSString *)sendingText
 {
     NSDictionary *json = @{
         @"type": @"chat_message",
         @"id": [[NSUUID UUID] UUIDString],
         @"attributes": @{
-            @"body": placeholderText,
+            @"body": sendingText,
             @"direction": @"in"
         }
     };
     NSArray<KUSChatMessage *> *messages = [self objectsWithJSON:json];
     for (KUSChatMessage *message in messages) {
-        message->_placeholder = YES;
-        message->_placeholderDate = [NSDate date];
+        message->_state = KUSChatMessageStateSending;
+        message->_sendingDate = [NSDate date];
     }
     return messages;
+}
+
+- (void)updateState:(KUSChatMessageState)state
+{
+    _state = state;
 }
 
 #pragma mark - NSObject methods

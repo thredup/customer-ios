@@ -85,7 +85,7 @@
 
 - (void)sendTextMessage:(NSString *)text completion:(void(^)(NSError *error, KUSChatMessage *message))completion
 {
-    NSArray<KUSChatMessage *> *temporaryMessages = [KUSChatMessage messagesWithPlaceholderText:text];
+    NSArray<KUSChatMessage *> *temporaryMessages = [KUSChatMessage messagesWithSendingText:text];
     if (temporaryMessages.count) {
         [self prependObjects:temporaryMessages];
     }
@@ -98,9 +98,14 @@
      authenticated:YES
      completion:^(NSError *error, NSDictionary *response) {
          if (temporaryMessages.count) {
-             [self removeObjects:temporaryMessages];
+             [weakSelf removeObjects:temporaryMessages];
          }
          if (error) {
+             for (KUSChatMessage *message in temporaryMessages) {
+                 [message updateState:KUSChatMessageStateFailed];
+             }
+             [weakSelf prependObjects:temporaryMessages];
+
              if (completion) {
                  completion(error, nil);
              }

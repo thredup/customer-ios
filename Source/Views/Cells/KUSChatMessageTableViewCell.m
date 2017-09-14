@@ -32,7 +32,7 @@ static const CGFloat kMinBubbleHeight = 38.0;
     KUSUserSession *_userSession;
     KUSChatMessage *_chatMessage;
     BOOL _showsAvatar;
-    NSTimer *_placeholderFadeTimer;
+    NSTimer *_sendingFadeTimer;
 
     KUSAvatarImageView *_avatarImageView;
     UIView *_bubbleView;
@@ -200,27 +200,33 @@ static const CGFloat kMinBubbleHeight = 38.0;
 // If sending messages takes less than 500ms, we don't want to show the loading indicator
 static NSTimeInterval kOptimisticSendLoadingDelay = 0.5;
 
-- (void)_updateAlphaForPlaceholder
+- (void)_updateAlphaForState
 {
-    [_placeholderFadeTimer invalidate];
-    _placeholderFadeTimer = nil;
+    [_sendingFadeTimer invalidate];
+    _sendingFadeTimer = nil;
 
-    if (_chatMessage.placeholder) {
-        NSTimeInterval timeElapsed = -[_chatMessage.placeholderDate timeIntervalSinceNow];
-        if (timeElapsed >= kOptimisticSendLoadingDelay) {
-            _bubbleView.alpha = 0.5;
-        } else {
+    switch(_chatMessage.state) {
+        case KUSChatMessageStateSent: {
             _bubbleView.alpha = 1.0;
+        }   break;
+        case KUSChatMessageStateSending: {
+            NSTimeInterval timeElapsed = -[_chatMessage.sendingDate timeIntervalSinceNow];
+            if (timeElapsed >= kOptimisticSendLoadingDelay) {
+                _bubbleView.alpha = 0.5;
+            } else {
+                _bubbleView.alpha = 1.0;
 
-            NSTimeInterval timerInterval = kOptimisticSendLoadingDelay - timeElapsed;
-            _placeholderFadeTimer = [NSTimer scheduledTimerWithTimeInterval:timerInterval
+                NSTimeInterval timerInterval = kOptimisticSendLoadingDelay - timeElapsed;
+                _sendingFadeTimer = [NSTimer scheduledTimerWithTimeInterval:timerInterval
                                                                      target:self
                                                                    selector:_cmd
                                                                    userInfo:nil
                                                                     repeats:NO];
-        }
-    } else {
-        _bubbleView.alpha = 1.0;
+            }
+        }   break;
+        case KUSChatMessageStateFailed: {
+            _bubbleView.alpha = 0.5;
+        }   break;
     }
 }
 
@@ -262,7 +268,7 @@ static NSTimeInterval kOptimisticSendLoadingDelay = 0.5;
 
     [_avatarImageView setUserId:(currentUser ? nil : _chatMessage.sentById)];
 
-    [self _updateAlphaForPlaceholder];
+    [self _updateAlphaForState];
     [self setNeedsLayout];
 }
 

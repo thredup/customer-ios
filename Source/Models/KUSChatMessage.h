@@ -18,6 +18,12 @@ typedef NS_ENUM(NSInteger, KUSChatMessageType) {
     KUSChatMessageTypeImage
 };
 
+typedef NS_ENUM(NSInteger, KUSChatMessageState) {
+    KUSChatMessageStateSent,
+    KUSChatMessageStateSending,
+    KUSChatMessageStateFailed
+};
+
 @interface KUSChatMessage : KUSModel
 
 @property (nonatomic, copy, readonly) NSString *trackingId;
@@ -28,11 +34,13 @@ typedef NS_ENUM(NSInteger, KUSChatMessageType) {
 @property (nonatomic, assign, readonly) KUSChatMessageDirection direction;
 
 @property (nonatomic, assign, readonly) KUSChatMessageType type;
-@property (nonatomic, assign, readonly) BOOL placeholder;
-@property (nonatomic, copy, readonly) NSDate *placeholderDate;
+@property (nonatomic, assign, readonly) KUSChatMessageState state;
+@property (nonatomic, copy, readonly) NSDate *sendingDate;
 
-+ (NSArray<KUSChatMessage *> *)messagesWithPlaceholderText:(NSString *)placeholderText;
++ (NSArray<KUSChatMessage *> *)messagesWithSendingText:(NSString *)sendingText;
 
 - (instancetype)initWithAutoreply:(NSString *)autoreply;
+
+- (void)updateState:(KUSChatMessageState)state;
 
 @end
