@@ -32,6 +32,7 @@
         _greeting = NSStringFromKeyPath(json, @"attributes.greeting");
         _autoreply = NSStringFromKeyPath(json, @"attributes.autoreply");
         _enabled = BOOLFromKeyPath(json, @"attributes.enabled");
+        _pusherAccessKey = NSStringFromKeyPath(json, @"attributes.pusherAccessKey");
     }
     return self;
 }

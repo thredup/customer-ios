@@ -33,6 +33,7 @@
     if (self) {
         _userSession = userSession;
 
+        [_userSession.chatSettingsDataSource addListener:self];
         [_userSession.trackingTokenDataSource addListener:self];
         [self _connectToChannelsIfNecessary];
     }
@@ -74,12 +75,16 @@
 
 - (void)_connectToChannelsIfNecessary
 {
+    KUSChatSettings *chatSettings = _userSession.chatSettingsDataSource.object;
+    if (chatSettings.pusherAccessKey == nil) {
+        return;
+    }
     if (_userSession.trackingTokenDataSource.currentTrackingToken == nil) {
         return;
     }
 
     if (_pusherClient == nil) {
-        _pusherClient = [PTPusher pusherWithKey:@"YOUR_API_KEY" delegate:self encrypted:YES];
+        _pusherClient = [PTPusher pusherWithKey:chatSettings.pusherAccessKey delegate:self encrypted:YES];
         _pusherClient.authorizationURL = [self _pusherAuthURL];
         [_pusherClient connect];
     }
