@@ -22,7 +22,6 @@
 #import "KUSEmailInputView.h"
 #import "KUSInputBar.h"
 #import "KUSFauxNavigationBar.h"
-#import "KustomerWindow.h"
 #import "KUSNYTChatMessagePhoto.h"
 
 @interface KUSChatViewController () <KUSEmailInputViewDelegate, KUSInputBarDelegate, KUSObjectDataSourceListener,
@@ -214,10 +213,6 @@
 
 - (void)_dismiss
 {
-    if ([self.view.window isKindOfClass:[KustomerWindow class]]) {
-        [[KustomerWindow sharedInstance] hide];
-        [_inputBarView resignFirstResponder];
-    }
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

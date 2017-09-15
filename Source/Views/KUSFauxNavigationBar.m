@@ -11,7 +11,6 @@
 #import "KUSAvatarImageView.h"
 #import "KUSColor.h"
 #import "KUSUserSession.h"
-#import "KustomerWindow.h"
 
 @interface KUSFauxNavigationBar () <KUSObjectDataSourceListener, KUSPaginatedDataSourceListener> {
     KUSUserSession *_userSession;
@@ -72,7 +71,7 @@
 {
     [super layoutSubviews];
 
-    BOOL hasStatusBar = ![UIApplication sharedApplication].statusBarHidden && ![self.window isKindOfClass:[KustomerWindow class]];
+    BOOL hasStatusBar = ![UIApplication sharedApplication].statusBarHidden;
 
     CGFloat avatarSize = 30.0;
     CGFloat statusBarHeight = (hasStatusBar ? 20.0 : 0.0);

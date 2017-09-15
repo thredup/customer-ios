@@ -21,10 +21,6 @@ FOUNDATION_EXPORT const unsigned char KustomerVersionString[];
 + (void)identify:(NSString *)externalToken;
 + (void)resetTracking;
 
-+ (void)presentSupportWindow;
-+ (void)presentSupportWindowFromPoint:(CGPoint)point;
-+ (void)hideSupportWindow;
-
 - (instancetype)init NS_UNAVAILABLE;
 
 @end

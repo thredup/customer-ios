@@ -18,7 +18,6 @@
 #import "KUSChatSessionTableViewCell.h"
 #import "KUSFauxNavigationBar.h"
 #import "KUSNewSessionButton.h"
-#import "KustomerWindow.h"
 
 @interface KUSSessionsViewController () <KUSPaginatedDataSourceListener, UITableViewDataSource, UITableViewDelegate> {
     KUSUserSession *_userSession;
@@ -146,9 +145,6 @@
 
 - (void)_dismiss
 {
-    if ([self.view.window isKindOfClass:[KustomerWindow class]]) {
-        [[KustomerWindow sharedInstance] hide];
-    }
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

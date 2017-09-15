@@ -68,7 +68,7 @@
     _supportButton.layer.shadowRadius = 4.0;
     _supportButton.layer.shadowOpacity = 0.33;
     [_supportButton addTarget:self
-                       action:@selector(_openSupport)
+                       action:@selector(_presentSupport)
              forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_supportButton];
 
@@ -106,11 +106,6 @@
 }
 
 #pragma mark - Interface methods
-
-- (void)_openSupport
-{
-    [Kustomer presentSupportWindowFromPoint:_supportButton.center];
-}
 
 - (void)_presentKnowledgeBase
 {
