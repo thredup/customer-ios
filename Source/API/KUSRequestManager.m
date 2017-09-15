@@ -30,7 +30,7 @@ typedef void (^KUSTrackingTokenCompletion)(NSError *error, NSString *trackingTok
 @property (nonatomic, strong, readonly) NSURLSession *urlSession;
 @property (nonatomic, strong, readonly) dispatch_queue_t queue;
 
-@property (nonatomic, copy, null_resettable) NSMutableArray<KUSTrackingTokenCompletion> *pendingTrackingTokenCompletions;
+@property (nonatomic, strong, null_resettable) NSMutableArray<KUSTrackingTokenCompletion> *pendingTrackingTokenCompletions;
 
 @end
 

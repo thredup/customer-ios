@@ -119,6 +119,7 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
 
 - (BOOL)resignFirstResponder
 {
+    [super resignFirstResponder];
     return [_textView resignFirstResponder];
 }
 
