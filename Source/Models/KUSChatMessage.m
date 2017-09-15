@@ -79,7 +79,7 @@ static NSString *KUSUnescapeBackslashesFromString(NSString *string)
              NSURL *matchedURL = [NSURL URLWithString:matchedText];
              if (matchedURL) {
                  NSMutableDictionary *mutablePreviousJSON = [json mutableCopy];
-                 [mutablePreviousJSON setObject:[NSString stringWithFormat:@"%@_%lu", standardChatMessage.oid, lastId] forKey:@"id"];
+                 [mutablePreviousJSON setObject:[NSString stringWithFormat:@"%@_%lu", standardChatMessage.oid, (unsigned long)lastId] forKey:@"id"];
                  NSString *previousText = [body substringWithRange:NSMakeRange(lastLocation, match.range.location - lastLocation)];
                  previousText = [previousText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
                  if (previousText.length) {
@@ -92,7 +92,7 @@ static NSString *KUSUnescapeBackslashesFromString(NSString *string)
                  }
 
                  NSMutableDictionary *mutableImageJSON = [json mutableCopy];
-                 [mutableImageJSON setObject:[NSString stringWithFormat:@"%@_%lu", standardChatMessage.oid, lastId] forKey:@"id"];
+                 [mutableImageJSON setObject:[NSString stringWithFormat:@"%@_%lu", standardChatMessage.oid, (unsigned long)lastId] forKey:@"id"];
                  KUSChatMessage *imageMessage = [[KUSChatMessage alloc] initWithJSON:mutableImageJSON
                                                                                type:KUSChatMessageTypeImage
                                                                            imageURL:matchedURL];
@@ -106,7 +106,7 @@ static NSString *KUSUnescapeBackslashesFromString(NSString *string)
         [chatMessages addObject:standardChatMessage];
     } else {
         NSMutableDictionary *mutablePreviousJSON = [json mutableCopy];
-        [mutablePreviousJSON setObject:[NSString stringWithFormat:@"%@_%lu", standardChatMessage.oid, lastId] forKey:@"id"];
+        [mutablePreviousJSON setObject:[NSString stringWithFormat:@"%@_%lu", standardChatMessage.oid, (unsigned long)lastId] forKey:@"id"];
         NSString *previousText = [body substringWithRange:NSMakeRange(lastLocation, body.length - lastLocation)];
         previousText = [previousText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         if (previousText.length) {

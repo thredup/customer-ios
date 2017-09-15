@@ -144,7 +144,7 @@
     // Unread count (number of messages > the lastSeenAt)
     NSUInteger unreadCount = [_chatMessagesDataSource unreadCountAfterDate:_chatSession.lastSeenAt];
     if (unreadCount > 0) {
-        self.unreadCountLabel.text = [NSString stringWithFormat:@"%lu", unreadCount];
+        self.unreadCountLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)unreadCount];
         self.unreadCountLabel.hidden = NO;
     } else {
         self.unreadCountLabel.hidden = YES;
