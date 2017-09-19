@@ -11,6 +11,8 @@
 @class KUSUserSession;
 @interface KUSPushClient : NSObject
 
+@property (nonatomic, assign) BOOL supportViewControllerPresented;
+
 - (instancetype)initWithUserSession:(KUSUserSession *)userSession;
 - (instancetype)init NS_UNAVAILABLE;
 

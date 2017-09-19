@@ -11,6 +11,7 @@
 #import "Kustomer_Private.h"
 
 #import "KUSSessionsViewController.h"
+#import "KUSUserSession.h"
 
 @interface KustomerViewController ()
 
@@ -18,11 +19,33 @@
 
 @implementation KustomerViewController
 
+#pragma mark - Lifecycle methods
+
 - (instancetype)init
 {
     KUSUserSession *userSession = [Kustomer sharedInstance].userSession;
     KUSSessionsViewController *sessionsViewController = [[KUSSessionsViewController alloc] initWithUserSession:userSession];
     return [super initWithRootViewController:sessionsViewController];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    if (self.isBeingPresented || self.movingToParentViewController) {
+        KUSUserSession *userSession = [Kustomer sharedInstance].userSession;
+        [userSession.pushClient setSupportViewControllerPresented:YES];
+    }
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+
+    if (self.isBeingDismissed || self.movingFromParentViewController) {
+        KUSUserSession *userSession = [Kustomer sharedInstance].userSession;
+        [userSession.pushClient setSupportViewControllerPresented:NO];
+    }
 }
 
 @end

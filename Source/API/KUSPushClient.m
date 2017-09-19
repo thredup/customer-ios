@@ -128,10 +128,12 @@
 
     [KUSAudio playMessageReceivedSound];
 
-    KUSChatMessage *chatMessage = chatMessages.firstObject;
-    KUSChatSession *chatSession = [[_userSession chatSessionsDataSource] objectWithId:chatMessage.sessionId];
-    if (chatSession) {
-        [[KUSNotificationWindow sharedInstance] showChatSession:chatSession userSession:_userSession];
+    if (!self.supportViewControllerPresented) {
+        KUSChatMessage *chatMessage = chatMessages.firstObject;
+        KUSChatSession *chatSession = [[_userSession chatSessionsDataSource] objectWithId:chatMessage.sessionId];
+        if (chatSession) {
+            [[KUSNotificationWindow sharedInstance] showChatSession:chatSession userSession:_userSession];
+        }
     }
 }
 

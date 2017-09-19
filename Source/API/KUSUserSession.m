@@ -8,8 +8,6 @@
 
 #import "KUSUserSession.h"
 
-#import "KUSPushClient.h"
-
 @interface KUSUserSession ()
 
 @property (nonatomic, copy, readonly) NSString *orgId;
@@ -132,7 +130,7 @@
     return userDataSource;
 }
 
-#pragma mark - Request manager
+#pragma mark - Request manager & Push client
 
 - (KUSRequestManager *)requestManager
 {
@@ -141,9 +139,6 @@
     }
     return _requestManager;
 }
-
-#pragma mark - Push client
-
 
 - (KUSPushClient *)pushClient
 {
