@@ -54,6 +54,28 @@ static NSString *kKustomerOrgNameKey = @"orgName";
     [[self sharedInstance] resetTracking];
 }
 
++ (void)presentSupport
+{
+    UIViewController *topMostViewController = KUSTopMostViewController();
+    if (topMostViewController) {
+        KustomerViewController *kustomerViewController = [[KustomerViewController alloc] init];
+        [topMostViewController presentViewController:kustomerViewController animated:YES completion:nil];
+    } else {
+        NSLog(@"Kustomer Error: Could not find view controller to present on top of!");
+    }
+}
+
++ (void)presentKnowledgeBase
+{
+    UIViewController *topMostViewController = KUSTopMostViewController();
+    if (topMostViewController) {
+        KnowledgeBaseViewController *knowledgeBaseViewController = [[KnowledgeBaseViewController alloc] init];
+        [topMostViewController presentViewController:knowledgeBaseViewController animated:YES completion:nil];
+    } else {
+        NSLog(@"Kustomer Error: Could not find view controller to present on top of!");
+    }
+}
+
 #pragma mark - Lifecycle methods
 
 + (instancetype)sharedInstance
@@ -179,6 +201,16 @@ NS_INLINE NSString *paddedBase64String(NSString *base64String) {
 NS_INLINE NSDictionary *jsonFromBase64EncodedJsonString(NSString *base64EncodedJson) {
     NSData *decodedData = [[NSData alloc] initWithBase64EncodedString:base64EncodedJson options:kNilOptions];
     return [NSJSONSerialization JSONObjectWithData:decodedData options:kNilOptions error:NULL];
+}
+
+NS_INLINE UIViewController *KUSTopMostViewController() {
+    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+    UIViewController *rootViewController = keyWindow.rootViewController;
+    UIViewController *topMostViewController = rootViewController;
+    while (topMostViewController && topMostViewController.presentedViewController) {
+        topMostViewController = topMostViewController.presentedViewController;
+    }
+    return topMostViewController;
 }
 
 @end

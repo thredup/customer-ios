@@ -24,6 +24,12 @@ FOUNDATION_EXPORT const unsigned char KustomerVersionString[];
 + (void)identify:(NSString *)externalToken;
 + (void)resetTracking;
 
+// A convenience method that will present the support interface on the topmost view controller
++ (void)presentSupport;
+
+// A convenience method that will present the knowledgebase interface on the topmost view controller
++ (void)presentKnowledgeBase;
+
 - (instancetype)init NS_UNAVAILABLE;
 
 @end

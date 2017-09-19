@@ -109,14 +109,12 @@
 
 - (void)_presentKnowledgeBase
 {
-    KnowledgeBaseViewController *knowledgebaseViewController = [[KnowledgeBaseViewController alloc] init];
-    [self presentViewController:knowledgebaseViewController animated:YES completion:nil];
+    [Kustomer presentKnowledgeBase];
 }
 
 - (void)_presentSupport
 {
-    KustomerViewController *kustomerViewController = [[KustomerViewController alloc] init];
-    [self presentViewController:kustomerViewController animated:YES completion:nil];
+    [Kustomer presentSupport];
 }
 
 - (void)_resetTracking
