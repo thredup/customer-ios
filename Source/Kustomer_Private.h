@@ -18,6 +18,4 @@
 
 - (KUSUserSession *)userSession;
 
-- (void)userDidTapInAppNotification;
-
 @end

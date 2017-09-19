@@ -14,14 +14,31 @@
 FOUNDATION_EXPORT double KustomerVersionNumber;
 FOUNDATION_EXPORT const unsigned char KustomerVersionString[];
 
+@protocol KustomerDelegate;
 @interface Kustomer : NSObject
 
 + (void)initializeWithAPIKey:(NSString *)apiKey;
++ (void)setDelegate:(__weak id<KustomerDelegate>)delegate;
 
 + (void)describe:(NSDictionary<NSString *, NSString *> *)data;
 + (void)identify:(NSString *)externalToken;
 + (void)resetTracking;
 
 - (instancetype)init NS_UNAVAILABLE;
+
+@end
+
+@protocol KustomerDelegate <NSObject>
+
+@optional
+
+// Implement this method to allow or disallow Kustomer from showing in-app notifications
+// (for example if the user is currently viewing a screen that should be un-interrupted)
+// If unimplemented, will default to YES
+- (BOOL)kustomerShouldDisplayInAppNotification;
+
+// Implement to perform custom handling and presentation of the support user interface
+// If unimplemented, Kustomer will present the support interface on the topmost view controller
+- (void)kustomerDidTapOnInAppNotification;
 
 @end

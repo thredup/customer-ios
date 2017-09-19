@@ -126,12 +126,13 @@
         [messagesDataSource upsertMessageReceivedFromPusher:chatMessage];
     }
 
-    [KUSAudio playMessageReceivedSound];
-
-    if (!self.supportViewControllerPresented) {
+    if (self.supportViewControllerPresented) {
+        [KUSAudio playMessageReceivedSound];
+    } else {
         KUSChatMessage *chatMessage = chatMessages.firstObject;
         KUSChatSession *chatSession = [[_userSession chatSessionsDataSource] objectWithId:chatMessage.sessionId];
-        if (chatSession) {
+        if ([_userSession.delegateProxy shouldDisplayInAppNotification] && chatSession) {
+            [KUSAudio playMessageReceivedSound];
             [[KUSNotificationWindow sharedInstance] showChatSession:chatSession userSession:_userSession];
         }
     }

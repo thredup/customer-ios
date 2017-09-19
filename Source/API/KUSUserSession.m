@@ -24,6 +24,7 @@
 
 @property (nonatomic, strong, null_resettable) KUSRequestManager *requestManager;
 @property (nonatomic, strong, null_resettable) KUSPushClient *pushClient;
+@property (nonatomic, strong, null_resettable) KUSDelegateProxy *delegateProxy;
 
 @end
 
@@ -146,6 +147,14 @@
         _pushClient = [[KUSPushClient alloc] initWithUserSession:self];
     }
     return _pushClient;
+}
+
+- (KUSDelegateProxy *)delegateProxy
+{
+    if (_delegateProxy == nil) {
+        _delegateProxy = [[KUSDelegateProxy alloc] init];
+    }
+    return _delegateProxy;
 }
 
 #pragma mark - Email info methods

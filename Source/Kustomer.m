@@ -16,6 +16,7 @@ static NSString *kKustomerOrgNameKey = @"orgName";
 
 @interface Kustomer ()
 
+@property (nonatomic, weak) __weak id<KustomerDelegate> delegate;
 @property (nonatomic, strong) KUSUserSession *userSession;
 
 @property (nonatomic, copy, readwrite) NSString *apiKey;
@@ -31,6 +32,11 @@ static NSString *kKustomerOrgNameKey = @"orgName";
 + (void)initializeWithAPIKey:(NSString *)apiKey
 {
     [[self sharedInstance] setApiKey:apiKey];
+}
+
++ (void)setDelegate:(__weak id<KustomerDelegate>)delegate
+{
+    [[self sharedInstance] setDelegate:delegate];
 }
 
 + (void)describe:(NSDictionary<NSString *, NSString *> *)data
@@ -76,8 +82,15 @@ static NSString *kKustomerOrgNameKey = @"orgName";
     NSAssert(self.orgName.length > 0, @"Kustomer API key missing expected field: orgName");
 
     self.userSession = [[KUSUserSession alloc] initWithOrgName:self.orgName orgId:self.orgId];
+    [self.userSession.delegateProxy setDelegate:self.delegate];
 
     NSLog(@"Kustomer initialized for organization: %@", self.orgName);
+}
+
+- (void)setDelegate:(__weak id<KustomerDelegate>)delegate
+{
+    _delegate = delegate;
+    [self.userSession.delegateProxy setDelegate:self.delegate];
 }
 
 #pragma mark - Private class methods
@@ -100,17 +113,6 @@ static NSString *_hostDomainOverride = nil;
 {
     NSAssert(_userSession, @"Kustomer needs to be initialized before use");
     return _userSession;
-}
-
-- (void)userDidTapInAppNotification
-{
-    UIViewController *topMostViewController = KUSTopMostViewController();
-    if (topMostViewController) {
-        KustomerViewController *kustomerViewController = [[KustomerViewController alloc] init];
-        [topMostViewController presentViewController:kustomerViewController animated:YES completion:nil];
-    } else {
-        NSLog(@"Kustomer Error: Could not find view controller to present on top of!");
-    }
 }
 
 #pragma mark - Internal methods
@@ -161,6 +163,7 @@ static NSString *_hostDomainOverride = nil;
 {
     NSLog(@"Kustomer tracking being reset");
     self.userSession = [[KUSUserSession alloc] initWithOrgName:self.orgName orgId:self.orgId reset:YES];
+    [self.userSession.delegateProxy setDelegate:self.delegate];
 }
 
 #pragma mark - Helper functions
@@ -176,16 +179,6 @@ NS_INLINE NSString *paddedBase64String(NSString *base64String) {
 NS_INLINE NSDictionary *jsonFromBase64EncodedJsonString(NSString *base64EncodedJson) {
     NSData *decodedData = [[NSData alloc] initWithBase64EncodedString:base64EncodedJson options:kNilOptions];
     return [NSJSONSerialization JSONObjectWithData:decodedData options:kNilOptions error:NULL];
-}
-
-NS_INLINE UIViewController *KUSTopMostViewController() {
-    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
-    UIViewController *rootViewController = keyWindow.rootViewController;
-    UIViewController *topMostViewController = rootViewController;
-    while (topMostViewController && topMostViewController.presentedViewController) {
-        topMostViewController = topMostViewController.presentedViewController;
-    }
-    return topMostViewController;
 }
 
 @end

@@ -9,6 +9,7 @@
 #import "KUSNotificationWindow.h"
 
 #import "KUSChatSessionTableViewCell.h"
+#import "KUSUserSession.h"
 #import "Kustomer_Private.h"
 
 static const CGFloat KUSNotificationWindowShowDuration = 0.3;
@@ -88,7 +89,7 @@ static const CGFloat KUSNotificationWindowMaxWidth = 400.0;
 - (void)_didTap:(UITapGestureRecognizer *)tapGestureRecognizer
 {
     [self hide];
-    [[Kustomer sharedInstance] userDidTapInAppNotification];
+    [[Kustomer sharedInstance].userSession.delegateProxy didTapOnInAppNotification];
 }
 
 #pragma mark - Public methods

@@ -11,6 +11,7 @@
 #import "KUSChatMessagesDataSource.h"
 #import "KUSChatSessionsDataSource.h"
 #import "KUSChatSettingsDataSource.h"
+#import "KUSDelegateProxy.h"
 #import "KUSPushClient.h"
 #import "KUSRequestManager.h"
 #import "KUSTrackingTokenDataSource.h"
@@ -35,9 +36,10 @@
 - (KUSChatMessagesDataSource *)chatMessagesDataSourceForSessionId:(NSString *)sessionId;
 - (KUSUserDataSource *)userDataSourceForUserId:(NSString *)userId;
 
-// Request manager & Push client
+// Request manager & Push client & Delegate proxy
 - (KUSRequestManager *)requestManager;
 - (KUSPushClient *)pushClient;
+- (KUSDelegateProxy *)delegateProxy;
 
 // Email info
 - (void)submitEmail:(NSString *)emailAddress;
