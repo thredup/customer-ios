@@ -12,4 +12,6 @@
 
 @interface KustomerViewController : KUSNavigationController
 
+- (instancetype)init;
+
 @end

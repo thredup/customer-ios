@@ -9,6 +9,7 @@
 #import "KUSNotificationWindow.h"
 
 #import "KUSChatSessionTableViewCell.h"
+#import "Kustomer_Private.h"
 
 static const CGFloat KUSNotificationWindowShowDuration = 0.3;
 static const CGFloat KUSNotificationWindowHideDuration = 0.2;
@@ -18,6 +19,7 @@ static const CGFloat KUSNotificationWindowMaxWidth = 400.0;
 
 @interface KUSNotificationWindow () {
     KUSChatSessionTableViewCell *_sessionTableViewCell;
+    KUSChatSession *_chatSession;
     NSTimer *_hideTimer;
 }
 
@@ -59,6 +61,13 @@ static const CGFloat KUSNotificationWindowMaxWidth = 400.0;
         self.alpha = 0.0;
         self.hidden = NO;
         self.transform = CGAffineTransformMakeTranslation(0.0, -KUSChatSessionTableViewCellHeight);
+
+        UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_didTap:)];
+        [self addGestureRecognizer:tapGestureRecognizer];
+
+        UISwipeGestureRecognizer *swipeGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(hide)];
+        swipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionUp;
+        [self addGestureRecognizer:swipeGestureRecognizer];
     }
     return self;
 }
@@ -76,6 +85,12 @@ static const CGFloat KUSNotificationWindowMaxWidth = 400.0;
     };
 }
 
+- (void)_didTap:(UITapGestureRecognizer *)tapGestureRecognizer
+{
+    [self hide];
+    [[Kustomer sharedInstance] userDidTapInAppNotification];
+}
+
 #pragma mark - Public methods
 
 - (void)showChatSession:(KUSChatSession *)chatSession userSession:(KUSUserSession *)userSession;
@@ -84,10 +99,11 @@ static const CGFloat KUSNotificationWindowMaxWidth = 400.0;
 
     [_sessionTableViewCell removeFromSuperview];
 
+    _chatSession = chatSession;
     _sessionTableViewCell = [[KUSChatSessionTableViewCell alloc] initWithReuseIdentifier:nil userSession:userSession];
     _sessionTableViewCell.frame = self.bounds;
     _sessionTableViewCell.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    [_sessionTableViewCell setChatSession:chatSession];
+    [_sessionTableViewCell setChatSession:_chatSession];
     [self addSubview:_sessionTableViewCell];
 
     [UIView
@@ -123,6 +139,7 @@ static const CGFloat KUSNotificationWindowMaxWidth = 400.0;
          if (finished) {
              [_sessionTableViewCell removeFromSuperview];
              _sessionTableViewCell = nil;
+             _chatSession = nil;
          }
      }];
 }
