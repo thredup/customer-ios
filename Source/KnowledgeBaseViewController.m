@@ -23,7 +23,11 @@
 {
     KUSUserSession *userSession = [Kustomer sharedInstance].userSession;
     NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"https://%@.kustomer.help/", userSession.orgName]];
-    return [super initWithURL:URL];
+    self = [super initWithURL:URL];
+    if (self && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        self.modalPresentationStyle = UIModalPresentationFormSheet;
+    }
+    return self;
 }
 
 @end

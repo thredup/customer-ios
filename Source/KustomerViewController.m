@@ -25,7 +25,11 @@
 {
     KUSUserSession *userSession = [Kustomer sharedInstance].userSession;
     KUSSessionsViewController *sessionsViewController = [[KUSSessionsViewController alloc] initWithUserSession:userSession];
-    return [super initWithRootViewController:sessionsViewController];
+    self = [super initWithRootViewController:sessionsViewController];
+    if (self && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        self.modalPresentationStyle = UIModalPresentationFormSheet;
+    }
+    return self;
 }
 
 - (void)viewWillAppear:(BOOL)animated

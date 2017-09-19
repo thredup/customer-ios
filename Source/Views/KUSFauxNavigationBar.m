@@ -74,7 +74,7 @@
     BOOL hasStatusBar = ![UIApplication sharedApplication].statusBarHidden;
 
     CGFloat avatarSize = 30.0;
-    CGFloat statusBarHeight = (hasStatusBar ? 20.0 : 0.0);
+    CGFloat statusBarHeight = (hasStatusBar && UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPad ? 20.0 : 0.0);
     CGFloat labelSidePad = 10.0;
 
     if (self.showsLabels) {

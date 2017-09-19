@@ -130,7 +130,8 @@
     NSArray<NSString *> *keyboardNotificationNames = @[
         UIKeyboardWillShowNotification,
         UIKeyboardWillChangeFrameNotification,
-        UIKeyboardWillHideNotification
+        UIKeyboardWillHideNotification,
+        UIKeyboardDidChangeFrameNotification
     ];
     for (NSString *notificationName in keyboardNotificationNames) {
         [[NSNotificationCenter defaultCenter] addObserver:self
