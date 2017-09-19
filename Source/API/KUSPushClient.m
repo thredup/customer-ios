@@ -133,7 +133,7 @@
         KUSChatSession *chatSession = [[_userSession chatSessionsDataSource] objectWithId:chatMessage.sessionId];
         if ([_userSession.delegateProxy shouldDisplayInAppNotification] && chatSession) {
             [KUSAudio playMessageReceivedSound];
-            [[KUSNotificationWindow sharedInstance] showChatSession:chatSession userSession:_userSession];
+            [[KUSNotificationWindow sharedInstance] showChatSession:chatSession];
         }
     }
 }

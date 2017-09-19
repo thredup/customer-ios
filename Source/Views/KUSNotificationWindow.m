@@ -20,7 +20,6 @@ static const CGFloat KUSNotificationWindowMaxWidth = 400.0;
 
 @interface KUSNotificationWindow () {
     KUSChatSessionTableViewCell *_sessionTableViewCell;
-    KUSChatSession *_chatSession;
     NSTimer *_hideTimer;
 }
 
@@ -94,17 +93,17 @@ static const CGFloat KUSNotificationWindowMaxWidth = 400.0;
 
 #pragma mark - Public methods
 
-- (void)showChatSession:(KUSChatSession *)chatSession userSession:(KUSUserSession *)userSession;
+- (void)showChatSession:(KUSChatSession *)chatSession;
 {
     [self _layoutWindow];
 
     [_sessionTableViewCell removeFromSuperview];
 
-    _chatSession = chatSession;
+    KUSUserSession *userSession = [Kustomer sharedInstance].userSession;
     _sessionTableViewCell = [[KUSChatSessionTableViewCell alloc] initWithReuseIdentifier:nil userSession:userSession];
     _sessionTableViewCell.frame = self.bounds;
     _sessionTableViewCell.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    [_sessionTableViewCell setChatSession:_chatSession];
+    [_sessionTableViewCell setChatSession:chatSession];
     [self addSubview:_sessionTableViewCell];
 
     [UIView
@@ -140,7 +139,6 @@ static const CGFloat KUSNotificationWindowMaxWidth = 400.0;
          if (finished) {
              [_sessionTableViewCell removeFromSuperview];
              _sessionTableViewCell = nil;
-             _chatSession = nil;
          }
      }];
 }

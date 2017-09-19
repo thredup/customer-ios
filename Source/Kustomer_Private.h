@@ -11,10 +11,9 @@
 @class KUSUserSession;
 @interface Kustomer (Private)
 
-+ (instancetype)sharedInstance;
+@property (class, nonatomic, copy) NSString *hostDomain;
 
-+ (NSString *)hostDomain;
-+ (void)setHostDomain:(NSString *)hostDomain;
++ (instancetype)sharedInstance;
 
 - (KUSUserSession *)userSession;
 
