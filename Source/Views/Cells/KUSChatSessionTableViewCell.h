@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+extern CGFloat KUSChatSessionTableViewCellHeight;
+
 @class KUSChatSession;
 @class KUSUserSession;
 @interface KUSChatSessionTableViewCell : UITableViewCell

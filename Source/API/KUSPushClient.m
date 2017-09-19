@@ -11,6 +11,7 @@
 #import <Pusher/Pusher.h>
 
 #import "KUSAudio.h"
+#import "KUSNotificationWindow.h"
 #import "KUSUserSession.h"
 
 @interface KUSPushClient () <KUSObjectDataSourceListener, PTPusherDelegate> {
@@ -126,6 +127,12 @@
     }
 
     [KUSAudio playMessageReceivedSound];
+
+    KUSChatMessage *chatMessage = chatMessages.firstObject;
+    KUSChatSession *chatSession = [[_userSession chatSessionsDataSource] objectWithId:chatMessage.sessionId];
+    if (chatSession) {
+        [[KUSNotificationWindow sharedInstance] showChatSession:chatSession userSession:_userSession];
+    }
 }
 
 #pragma mark - KUSObjectDataSourceListener methods
@@ -133,6 +140,11 @@
 - (void)objectDataSourceDidLoad:(KUSObjectDataSource *)dataSource
 {
     [self _connectToChannelsIfNecessary];
+
+    KUSTrackingToken *trackingToken = _userSession.trackingTokenDataSource.object;
+    if (trackingToken.customerId.length && !_userSession.chatSessionsDataSource.didFetch) {
+        [_userSession.chatSessionsDataSource fetchLatest];
+    }
 }
 
 #pragma mark - PTPusherDelegate methods

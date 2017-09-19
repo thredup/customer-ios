@@ -17,6 +17,8 @@
 #import "KUSAvatarImageView.h"
 #import "KUSChatSettingsDataSource.h"
 
+CGFloat KUSChatSessionTableViewCellHeight = 88.0;
+
 @interface KUSChatSessionTableViewCell () <KUSObjectDataSourceListener, KUSPaginatedDataSourceListener> {
     KUSUserSession *_userSession;
 

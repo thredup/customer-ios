@@ -69,7 +69,7 @@
     self.tableView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    self.tableView.rowHeight = 88.0;
+    self.tableView.rowHeight = KUSChatSessionTableViewCellHeight;
     self.tableView.tableFooterView = [[UIView alloc] init];
     self.tableView.separatorInset = UIEdgeInsetsZero;
     self.tableView.separatorColor = [KUSColor grayColor];
