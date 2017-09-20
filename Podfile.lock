@@ -21,7 +21,7 @@ PODS:
 DEPENDENCIES:
   - libPusher (~> 1.6.3)
   - NYTPhotoViewer (~> 1.2.0)
-  - SDWebImage (~> 4.1.0)
+  - SDWebImage (~> 4.0)
   - TSMarkdownParser (~> 2.1.3)
   - TTTAttributedLabel (~> 2.0.0)
 
@@ -34,6 +34,6 @@ SPEC CHECKSUMS:
   TSMarkdownParser: 114779f14d46e7fc6d9880d4797e5abcc01f92c3
   TTTAttributedLabel: 8cffe8e127e4e82ff3af1e5386d4cd0ad000b656
 
-PODFILE CHECKSUM: d52af160022742cdbd2ea8660f0fe7e9f9bbd550
+PODFILE CHECKSUM: 43b7d6ee3d42f3663f3e654e914beea7d1d94f79
 
 COCOAPODS: 1.2.1

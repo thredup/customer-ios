@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
 
   s.dependency 'libPusher', '~> 1.6.3'
   s.dependency 'TSMarkdownParser', '~> 2.1.3'
-  s.dependency 'SDWebImage', '~> 4.1.0'
+  s.dependency 'SDWebImage', '~> 4.0'
   s.dependency 'TTTAttributedLabel', '~> 2.0.0'
   s.dependency 'NYTPhotoViewer', '~> 1.2.0'
 
