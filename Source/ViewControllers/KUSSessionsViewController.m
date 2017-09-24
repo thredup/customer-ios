@@ -75,6 +75,16 @@
     self.tableView.separatorColor = [KUSColor grayColor];
     [self.view addSubview:self.tableView];
 
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 110000
+    if (@available(ios 11.0, *)) {
+        self.tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+    } else {
+        self.automaticallyAdjustsScrollViewInsets = NO;
+    }
+#else
+    self.automaticallyAdjustsScrollViewInsets = NO;
+#endif
+
     self.fauxNavigationBar = [[KUSFauxNavigationBar alloc] initWithUserSession:_userSession];
     [self.fauxNavigationBar setShowsLabels:NO];
     [self.view addSubview:self.fauxNavigationBar];
