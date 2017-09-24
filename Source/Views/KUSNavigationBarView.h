@@ -11,6 +11,12 @@
 @class KUSUserSession;
 @interface KUSNavigationBarView : UIView
 
+@property (nonatomic, strong) UIColor *nameColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIFont *nameFont UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIColor *greetingColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIFont *greetingFont UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIColor *separatorColor UI_APPEARANCE_SELECTOR;
+
 @property (nonatomic, copy) NSString *sessionId;
 @property (nonatomic, assign) BOOL showsLabels;
 

@@ -27,6 +27,20 @@
 
 @implementation KUSNavigationBarView
 
+#pragma mark - Class methods
+
++ (void)initialize
+{
+    if (self == [KUSNavigationBarView class]) {
+        KUSNavigationBarView *appearance = [KUSNavigationBarView appearance];
+        [appearance setBackgroundColor:[KUSColor lightGrayColor]];
+        [appearance setNameColor:[UIColor darkGrayColor]];
+        [appearance setNameFont:[UIFont boldSystemFontOfSize:13.0]];
+        [appearance setGreetingColor:[KUSColor darkGrayColor]];
+        [appearance setGreetingFont:[UIFont systemFontOfSize:11.0]];
+        [appearance setSeparatorColor:[KUSColor grayColor]];
+    }
+}
 
 #pragma mark - Lifecycle methods
 
@@ -34,24 +48,19 @@
 {
     self = [super init];
     if (self) {
-        self.backgroundColor = [KUSColor lightGrayColor];
         _userSession = userSession;
 
         _avatarImageView = [[KUSAvatarImageView alloc] initWithUserSession:userSession];
         [self addSubview:_avatarImageView];
 
         _nameLabel = [[UILabel alloc] init];
-        _nameLabel.font = [UIFont boldSystemFontOfSize:13.0];
         _nameLabel.textAlignment = NSTextAlignmentCenter;
-        _nameLabel.textColor = [UIColor darkGrayColor];
         _nameLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         _nameLabel.numberOfLines = 1;
         [self addSubview:_nameLabel];
 
         _greetingLabel = [[UILabel alloc] init];
-        _greetingLabel.font = [UIFont systemFontOfSize:11.0];
         _greetingLabel.textAlignment = NSTextAlignmentCenter;
-        _greetingLabel.textColor = [KUSColor darkGrayColor];
         _greetingLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         _greetingLabel.numberOfLines = 1;
         _greetingLabel.adjustsFontSizeToFitWidth = YES;
@@ -59,7 +68,6 @@
         [self addSubview:_greetingLabel];
 
         _separatorView = [[UIView alloc] init];
-        _separatorView.backgroundColor = [KUSColor grayColor];
         [self addSubview:_separatorView];
 
         [_userSession.chatSettingsDataSource addListener:self];
@@ -209,6 +217,38 @@
 {
     [_avatarImageView setUserId:_chatMessagesDataSource.firstOtherUserId];
     [self _updateTextLabels];
+}
+
+#pragma mark - UIAppearance methods
+
+- (void)setNameColor:(UIColor *)nameColor
+{
+    _nameColor = nameColor;
+    _nameLabel.textColor = _nameColor;
+}
+
+- (void)setNameFont:(UIFont *)nameFont
+{
+    _nameFont = nameFont;
+    _nameLabel.font = _nameFont;
+}
+
+- (void)setGreetingColor:(UIColor *)greetingColor
+{
+    _greetingColor = greetingColor;
+    _greetingLabel.textColor = _greetingColor;
+}
+
+- (void)setGreetingFont:(UIFont *)greetingFont
+{
+    _greetingFont = greetingFont;
+    _greetingLabel.font = _greetingFont;
+}
+
+- (void)setSeparatorColor:(UIColor *)separatorColor
+{
+    _separatorColor = separatorColor;
+    _separatorView.backgroundColor = _separatorColor;
 }
 
 @end
