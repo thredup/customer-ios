@@ -11,12 +11,8 @@
 
 #import "Kustomer.h"
 
-// TODO:
+#error A valid API key is required
 static NSString *kKustomerAPIKey = @"API_KEY";
-
-@interface AppDelegate ()
-
-@end
 
 @implementation AppDelegate
 
