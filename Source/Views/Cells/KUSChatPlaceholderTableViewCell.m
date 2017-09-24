@@ -12,13 +12,23 @@
 
 @implementation KUSChatPlaceholderTableViewCell
 
+#pragma mark - Class methods
+
++ (void)initialize
+{
+    if (self == [KUSChatPlaceholderTableViewCell class]) {
+        KUSChatPlaceholderTableViewCell *appearance = [KUSChatPlaceholderTableViewCell appearance];
+        [appearance setBackgroundColor:[UIColor whiteColor]];
+        [appearance setLineColor:[KUSColor lightGrayColor]];
+    }
+}
+
 #pragma mark - Lifecycle methods
 
 - (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     if (self) {
-        self.backgroundColor = [UIColor whiteColor];
         self.userInteractionEnabled = NO;
     }
     return self;
@@ -28,8 +38,7 @@
 
 - (void)drawRect:(CGRect)rect
 {
-    UIColor *placeholderColor = [KUSColor lightGrayColor];
-    [placeholderColor setFill];
+    [self.lineColor setFill];
 
     CGFloat margins = 28.0;
     CGFloat barHeight = 10.0;
@@ -59,6 +68,14 @@
         .size.width = maxBarWidth * 0.8,
         .size.height = 10.0
     });
+}
+
+#pragma mark - UIAppearance methods
+
+- (void)setLineColor:(UIColor *)lineColor
+{
+    _lineColor = lineColor;
+    [self setNeedsDisplay];
 }
 
 @end

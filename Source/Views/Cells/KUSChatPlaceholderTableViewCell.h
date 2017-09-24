@@ -10,6 +10,8 @@
 
 @interface KUSChatPlaceholderTableViewCell : UITableViewCell
 
+@property (nonatomic, strong) UIColor *lineColor UI_APPEARANCE_SELECTOR;
+
 - (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier;
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier NS_UNAVAILABLE;
