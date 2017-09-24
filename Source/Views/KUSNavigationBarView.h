@@ -1,5 +1,5 @@
 //
-//  KUSFauxNavigationBar.h
+//  KUSNavigationBarView.h
 //  Kustomer
 //
 //  Created by Daniel Amitay on 8/16/17.
@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @class KUSUserSession;
-@interface KUSFauxNavigationBar : UIView
+@interface KUSNavigationBarView : UIView
 
 @property (nonatomic, copy) NSString *sessionId;
 @property (nonatomic, assign) BOOL showsLabels;

@@ -1,18 +1,18 @@
 //
-//  KUSFauxNavigationBar.m
+//  KUSNavigationBarView.m
 //  Kustomer
 //
 //  Created by Daniel Amitay on 8/16/17.
 //  Copyright © 2017 Kustomer. All rights reserved.
 //
 
-#import "KUSFauxNavigationBar.h"
+#import "KUSNavigationBarView.h"
 
 #import "KUSAvatarImageView.h"
 #import "KUSColor.h"
 #import "KUSUserSession.h"
 
-@interface KUSFauxNavigationBar () <KUSObjectDataSourceListener, KUSPaginatedDataSourceListener> {
+@interface KUSNavigationBarView () <KUSObjectDataSourceListener, KUSPaginatedDataSourceListener> {
     KUSUserSession *_userSession;
     KUSChatMessagesDataSource *_chatMessagesDataSource;
     KUSUserDataSource *_userDataSource;
@@ -25,7 +25,8 @@
 
 @end
 
-@implementation KUSFauxNavigationBar
+@implementation KUSNavigationBarView
+
 
 #pragma mark - Lifecycle methods
 

@@ -16,7 +16,7 @@
 #import "KUSImage.h"
 #import "KUSChatPlaceholderTableViewCell.h"
 #import "KUSChatSessionTableViewCell.h"
-#import "KUSFauxNavigationBar.h"
+#import "KUSNavigationBarView.h"
 #import "KUSNewSessionButton.h"
 
 @interface KUSSessionsViewController () <KUSPaginatedDataSourceListener, UITableViewDataSource, UITableViewDelegate> {
@@ -28,7 +28,7 @@
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) KUSNewSessionButton *createSessionButton;
-@property (nonatomic, strong) KUSFauxNavigationBar *fauxNavigationBar;
+@property (nonatomic, strong) KUSNavigationBarView *fauxNavigationBar;
 
 @end
 
@@ -85,7 +85,7 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
 #endif
 
-    self.fauxNavigationBar = [[KUSFauxNavigationBar alloc] initWithUserSession:_userSession];
+    self.fauxNavigationBar = [[KUSNavigationBarView alloc] initWithUserSession:_userSession];
     [self.fauxNavigationBar setShowsLabels:NO];
     [self.view addSubview:self.fauxNavigationBar];
 

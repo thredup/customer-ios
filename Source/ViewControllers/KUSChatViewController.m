@@ -21,7 +21,7 @@
 #import "KUSChatSettingsDataSource.h"
 #import "KUSEmailInputView.h"
 #import "KUSInputBar.h"
-#import "KUSFauxNavigationBar.h"
+#import "KUSNavigationBarView.h"
 #import "KUSNYTChatMessagePhoto.h"
 
 @interface KUSChatViewController () <KUSEmailInputViewDelegate, KUSInputBarDelegate, KUSObjectDataSourceListener,
@@ -39,7 +39,7 @@
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) KUSEmailInputView *emailInputView;
 @property (nonatomic, strong) KUSInputBar *inputBarView;
-@property (nonatomic, strong) KUSFauxNavigationBar *fauxNavigationBar;
+@property (nonatomic, strong) KUSNavigationBarView *fauxNavigationBar;
 
 @end
 
@@ -118,7 +118,7 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
 #endif
 
-    self.fauxNavigationBar = [[KUSFauxNavigationBar alloc] initWithUserSession:_userSession];
+    self.fauxNavigationBar = [[KUSNavigationBarView alloc] initWithUserSession:_userSession];
     [self.fauxNavigationBar setSessionId:_chatSession.oid];
     [self.fauxNavigationBar setShowsLabels:YES];
     [self.view addSubview:self.fauxNavigationBar];
