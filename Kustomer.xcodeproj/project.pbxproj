@@ -673,17 +673,14 @@
 				TargetAttributes = {
 					63B9CD901F088E8800120F3E = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = 4LAX75HPEJ;
 						ProvisioningStyle = Automatic;
 					};
 					63B9CD991F088E8800120F3E = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = 4LAX75HPEJ;
 						ProvisioningStyle = Automatic;
 					};
 					63B9CDB71F089BF000120F3E = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = 4LAX75HPEJ;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -1061,7 +1058,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 4LAX75HPEJ;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -1081,7 +1078,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 4LAX75HPEJ;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -1099,7 +1096,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = FAEBB4868A9AF9DB8C939E87 /* Pods-KustomerTests.debug.xcconfig */;
 			buildSettings = {
-				DEVELOPMENT_TEAM = 4LAX75HPEJ;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = KustomerTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.kustomer.KustomerTests;
@@ -1111,7 +1108,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A8B9C7F846CD493168479E0A /* Pods-KustomerTests.release.xcconfig */;
 			buildSettings = {
-				DEVELOPMENT_TEAM = 4LAX75HPEJ;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = KustomerTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.kustomer.KustomerTests;
@@ -1124,7 +1121,7 @@
 			baseConfigurationReference = 479720192A1054576AB58BBA /* Pods-KustomerExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 4LAX75HPEJ;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = KustomerExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1139,7 +1136,7 @@
 			baseConfigurationReference = 448086DB570B5537AB2DFA4E /* Pods-KustomerExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 4LAX75HPEJ;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = KustomerExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
