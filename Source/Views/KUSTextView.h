@@ -10,6 +10,8 @@
 
 @interface KUSTextView : UITextView
 
+@property (nonatomic, strong) UIColor *placeholderColor UI_APPEARANCE_SELECTOR;
+
 @property (nonatomic, copy) NSString *placeholder;
 
 - (NSUInteger)maxNumberOfLines;

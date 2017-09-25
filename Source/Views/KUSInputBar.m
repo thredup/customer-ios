@@ -25,34 +25,39 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
 
 @implementation KUSInputBar
 
+#pragma mark - Class methods
+
++ (void)initialize
+{
+    if (self == [KUSInputBar class]) {
+        KUSInputBar *appearance = [KUSInputBar appearance];
+        [appearance setBackgroundColor:[UIColor whiteColor]];
+        [appearance setSeparatorColor:[KUSColor lightGrayColor]];
+        [appearance setTextColor:[UIColor blackColor]];
+        [appearance setTextFont:[UIFont systemFontOfSize:14.0]];
+        [appearance setPlaceholder:@"Type a message..."];
+        [appearance setPlaceholderColor:[UIColor lightGrayColor]];
+        [appearance setSendButtonColor:[KUSColor blueColor]];
+    }
+}
+
 #pragma mark - Lifecycle methods
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = [UIColor whiteColor];
-
         _separatorView = [[UIView alloc] init];
         _separatorView.userInteractionEnabled = NO;
-        _separatorView.backgroundColor = [KUSColor lightGrayColor];
         [self addSubview:_separatorView];
 
         _textView = [[KUSTextView alloc] init];
-        _textView.backgroundColor = self.backgroundColor;
-        _textView.placeholder = @"Type a message...";
-        _textView.font = [UIFont systemFontOfSize:14.0];
         _textView.delegate = self;
         _textView.returnKeyType = UIReturnKeySend;
         _textView.enablesReturnKeyAutomatically = YES;
         [self addSubview:_textView];
 
-        UIColor *blueColor = [KUSColor blueColor];
-        CGSize size = CGSizeMake(30.0, 30.0);
-        UIImage *circularImage = [KUSImage sendImageWithSize:size color:blueColor];
-
         _sendButton = [[UIButton alloc] init];
-        [_sendButton setImage:circularImage forState:UIControlStateNormal];
         [_sendButton addTarget:self action:@selector(_pressSend) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_sendButton];
 
@@ -170,6 +175,51 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
     [self _updateSendButton];
     [self setNeedsLayout];
     [self layoutIfNeeded];
+}
+
+#pragma mark - UIAppearance methods
+
+- (void)setBackgroundColor:(UIColor *)backgroundColor
+{
+    [super setBackgroundColor:backgroundColor];
+    _textView.backgroundColor = self.backgroundColor;
+}
+
+- (void)setSeparatorColor:(UIColor *)separatorColor
+{
+    _separatorColor = separatorColor;
+    _separatorView.backgroundColor = _separatorColor;
+}
+
+- (void)setTextColor:(UIColor *)textColor
+{
+    _textColor = textColor;
+    _textView.textColor = _textColor;
+}
+
+- (void)setTextFont:(UIFont *)textFont
+{
+    _textFont = textFont;
+    _textView.font = _textFont;
+}
+
+- (void)setPlaceholder:(NSString *)placeholder
+{
+    _placeholder = placeholder;
+    _textView.placeholder = _placeholder;
+}
+
+- (void)setPlaceholderColor:(UIColor *)placeholderColor
+{
+    _placeholderColor = placeholderColor;
+    _textView.placeholderColor = _placeholderColor;
+}
+
+- (void)setSendButtonColor:(UIColor *)sendButtonColor
+{
+    _sendButtonColor = sendButtonColor;
+    UIImage *sendButtonImage = [KUSImage sendImageWithSize:CGSizeMake(30.0, 30.0) color:_sendButtonColor];
+    [_sendButton setImage:sendButtonImage forState:UIControlStateNormal];
 }
 
 @end

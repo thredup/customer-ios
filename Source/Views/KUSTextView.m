@@ -16,6 +16,16 @@
 
 @implementation KUSTextView
 
+#pragma mark - Class methods
+
++ (void)initialize
+{
+    if (self == [KUSTextView class]) {
+        KUSTextView *appearance = [KUSTextView appearance];
+        [appearance setPlaceholderColor:[UIColor lightGrayColor]];
+    }
+}
+
 #pragma mark - Lifecycle methods
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -35,7 +45,6 @@
         _placeholderLabel.autoresizesSubviews = NO;
         _placeholderLabel.font = self.font;
         _placeholderLabel.backgroundColor = [UIColor clearColor];
-        _placeholderLabel.textColor = [UIColor lightGrayColor];
         _placeholderLabel.hidden = YES;
         _placeholderLabel.isAccessibilityElement = NO;
         [self addSubview:_placeholderLabel];
@@ -176,6 +185,14 @@
     if (_placeholderLabel.hidden != [self _shouldHidePlaceholder]) {
         [self setNeedsLayout];
     }
+}
+
+#pragma mark - UIAppearance methods
+
+- (void)setPlaceholderColor:(UIColor *)placeholderColor
+{
+    _placeholderColor = placeholderColor;
+    _placeholderLabel.textColor = _placeholderColor;
 }
 
 @end
