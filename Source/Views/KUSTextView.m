@@ -69,13 +69,7 @@
     [super layoutSubviews];
 
     _placeholderLabel.hidden = [self _shouldHidePlaceholder];
-
-    if (!_placeholderLabel.hidden) {
-        [UIView performWithoutAnimation:^{
-            _placeholderLabel.frame = [self _placeholderRectThatFits:self.bounds];
-            [self sendSubviewToBack:_placeholderLabel];
-        }];
-    }
+    _placeholderLabel.frame = [self _placeholderRect];
 }
 
 - (CGSize)intrinsicContentSize
@@ -136,15 +130,16 @@
     return height + 1.0;
 }
 
-- (CGRect)_placeholderRectThatFits:(CGRect)bounds
+- (CGRect)_placeholderRect
 {
     CGFloat padding = self.textContainer.lineFragmentPadding;
-    CGRect rect = CGRectZero;
-    rect.size.height = [_placeholderLabel sizeThatFits:bounds.size].height;
-    rect.size.width = self.textContainer.size.width - padding * 2.0;
-    rect.origin = UIEdgeInsetsInsetRect(bounds, self.textContainerInset).origin;
-    rect.origin.x += padding;
-    return rect;
+    CGPoint containerOrigin = UIEdgeInsetsInsetRect(self.bounds, self.textContainerInset).origin;
+    return (CGRect) {
+        .origin.x = containerOrigin.x + padding,
+        .origin.y = containerOrigin.y,
+        .size.width = self.textContainer.size.width - padding * 2.0,
+        .size.height = [_placeholderLabel sizeThatFits:self.bounds.size].height
+    };
 }
 
 - (BOOL)_shouldHidePlaceholder

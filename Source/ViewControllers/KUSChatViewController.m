@@ -159,6 +159,13 @@
     [self.view layoutIfNeeded];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    [_inputBarView setNeedsLayout];
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
