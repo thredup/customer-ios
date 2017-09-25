@@ -38,6 +38,26 @@ CGFloat KUSChatSessionTableViewCellHeight = 88.0;
 
 @implementation KUSChatSessionTableViewCell
 
+#pragma mark - Class methods
+
++ (void)initialize
+{
+    if (self == [KUSChatSessionTableViewCell class]) {
+        KUSChatSessionTableViewCell *appearance = [KUSChatSessionTableViewCell appearance];
+        [appearance setBackgroundColor:[UIColor whiteColor]];
+        [appearance setSelectedBackgroundColor:[KUSColor lightGrayColor]];
+        [appearance setTitleColor:[UIColor blackColor]];
+        [appearance setTitleFont:[UIFont boldSystemFontOfSize:12.0]];
+        [appearance setSubtitleColor:[UIColor blackColor]];
+        [appearance setSubtitleFont:[UIFont systemFontOfSize:12.0]];
+        [appearance setDateColor:[UIColor lightGrayColor]];
+        [appearance setDateFont:[UIFont systemFontOfSize:12.0]];
+        [appearance setUnreadColor:[UIColor whiteColor]];
+        [appearance setUnreadBackgroundColor:[KUSColor redColor]];
+        [appearance setUnreadFont:[UIFont systemFontOfSize:10.0]];
+    }
+}
+
 #pragma mark - Lifecycle methods
 
 - (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier userSession:(KUSUserSession *)userSession
@@ -47,41 +67,28 @@ CGFloat KUSChatSessionTableViewCellHeight = 88.0;
         _userSession = userSession;
 
         self.selectedBackgroundView = [[UIView alloc] init];
-        self.selectedBackgroundView.backgroundColor = [KUSColor lightGrayColor];
 
         _avatarImageView = [[KUSAvatarImageView alloc] initWithUserSession:userSession];
         [self.contentView addSubview:_avatarImageView];
 
         _titleLabel = [[UILabel alloc] init];
-        _titleLabel.backgroundColor = [UIColor whiteColor];
-        _titleLabel.textColor = [UIColor blackColor];
         _titleLabel.textAlignment = NSTextAlignmentLeft;
-        _titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
         [self.contentView addSubview:_titleLabel];
 
         _subtitleLabel = [[UILabel alloc] init];
-        _subtitleLabel.backgroundColor = [UIColor whiteColor];
-        _subtitleLabel.textColor = [UIColor blackColor];
         _subtitleLabel.textAlignment = NSTextAlignmentLeft;
-        _subtitleLabel.font = [UIFont systemFontOfSize:12.0];
         [self.contentView addSubview:_subtitleLabel];
 
         _dateLabel = [[UILabel alloc] init];
-        _dateLabel.backgroundColor = [UIColor whiteColor];
-        _dateLabel.textColor = [UIColor lightGrayColor];
         _dateLabel.textAlignment = NSTextAlignmentRight;
-        _dateLabel.font = [UIFont systemFontOfSize:12.0];
         _dateLabel.adjustsFontSizeToFitWidth = YES;
         _dateLabel.minimumScaleFactor = 10.0 / 12.0;
         [self.contentView addSubview:_dateLabel];
 
         _unreadCountLabel = [[UILabel alloc] init];
-        _unreadCountLabel.textColor = [UIColor whiteColor];
         _unreadCountLabel.textAlignment = NSTextAlignmentCenter;
-        _unreadCountLabel.font = [UIFont systemFontOfSize:10.0];
         _unreadCountLabel.layer.masksToBounds = YES;
         _unreadCountLabel.layer.cornerRadius = 4.0;
-        _unreadCountLabel.layer.backgroundColor = [KUSColor redColor].CGColor;
         [self.contentView addSubview:_unreadCountLabel];
 
         [_userSession.chatSettingsDataSource addListener:self];
@@ -219,6 +226,68 @@ CGFloat KUSChatSessionTableViewCellHeight = 88.0;
 {
     [self _updateLabels];
     [self _updateAvatar];
+}
+
+#pragma mark - Appearance methods
+
+- (void)setSelectedBackgroundColor:(UIColor *)selectedBackgroundColor
+{
+    _selectedBackgroundColor = selectedBackgroundColor;
+    self.selectedBackgroundView.backgroundColor = _selectedBackgroundColor;
+}
+
+- (void)setTitleColor:(UIColor *)titleColor
+{
+    _titleColor = titleColor;
+    _titleLabel.textColor = _titleColor;
+}
+
+- (void)setTitleFont:(UIFont *)titleFont
+{
+    _titleFont = titleFont;
+    _titleLabel.font = _titleFont;
+}
+
+- (void)setSubtitleColor:(UIColor *)subtitleColor
+{
+    _subtitleColor = subtitleColor;
+    _subtitleLabel.textColor = _subtitleColor;
+}
+
+- (void)setSubtitleFont:(UIFont *)subtitleFont
+{
+    _subtitleFont = subtitleFont;
+    _subtitleLabel.font = _subtitleFont;
+}
+
+- (void)setDateColor:(UIColor *)dateColor
+{
+    _dateColor = dateColor;
+    _dateLabel.textColor = [UIColor lightGrayColor];
+}
+
+- (void)setDateFont:(UIFont *)dateFont
+{
+    _dateFont = dateFont;
+    _dateLabel.font = _dateFont;
+}
+
+- (void)setUnreadColor:(UIColor *)unreadColor
+{
+    _unreadColor = unreadColor;
+    _unreadCountLabel.textColor = [UIColor whiteColor];
+}
+
+- (void)setUnreadBackgroundColor:(UIColor *)unreadBackgroundColor
+{
+    _unreadBackgroundColor = unreadBackgroundColor;
+    _unreadCountLabel.layer.backgroundColor = _unreadBackgroundColor.CGColor;
+}
+
+- (void)setUnreadFont:(UIFont *)unreadFont
+{
+    _unreadFont = unreadFont;
+    _unreadCountLabel.font = _unreadFont;
 }
 
 @end

@@ -43,7 +43,6 @@ static const CGFloat KUSNotificationWindowMaxWidth = 400.0;
 {
     self = [super initWithFrame:CGRectZero];
     if (self) {
-        self.backgroundColor = [UIColor whiteColor];
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.windowLevel = UIWindowLevelStatusBar + 1.0;
         self.layer.shadowColor = [UIColor blackColor].CGColor;

@@ -14,6 +14,17 @@ extern CGFloat KUSChatSessionTableViewCellHeight;
 @class KUSUserSession;
 @interface KUSChatSessionTableViewCell : UITableViewCell
 
+@property (nonatomic, strong) UIColor *selectedBackgroundColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIColor *titleColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIFont *titleFont UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIColor *subtitleColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIFont *subtitleFont UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIColor *dateColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIFont *dateFont UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIColor *unreadColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIColor *unreadBackgroundColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIFont *unreadFont UI_APPEARANCE_SELECTOR;
+
 - (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier userSession:(KUSUserSession *)userSession;
 
 - (void)setChatSession:(KUSChatSession *)chatSession;
