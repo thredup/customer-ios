@@ -13,6 +13,12 @@
 @protocol KUSChatMessageTableViewCellDelegate;
 @interface KUSChatMessageTableViewCell : UITableViewCell
 
+@property (nonatomic, strong) UIFont *textFont UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIColor *userBubbleColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIColor *companyBubbleColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIColor *userTextColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIColor *companyTextColor UI_APPEARANCE_SELECTOR;
+
 @property (nonatomic, weak) id<KUSChatMessageTableViewCellDelegate> delegate;
 
 + (CGFloat)heightForChatMessage:(KUSChatMessage *)chatMessage maxWidth:(CGFloat)maxWidth;

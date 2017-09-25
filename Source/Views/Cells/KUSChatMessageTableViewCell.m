@@ -48,6 +48,18 @@ static const CGFloat kMinBubbleHeight = 38.0;
 
 #pragma mark - Class methods
 
++ (void)initialize
+{
+    if (self == [KUSChatMessageTableViewCell class]) {
+        KUSChatMessageTableViewCell *appearance = [KUSChatMessageTableViewCell appearance];
+        [appearance setTextFont:[UIFont systemFontOfSize:14.0]];
+        [appearance setUserBubbleColor:[KUSColor blueColor]];
+        [appearance setCompanyBubbleColor:[KUSColor lightGrayColor]];
+        [appearance setUserTextColor:[UIColor whiteColor]];
+        [appearance setCompanyTextColor:[UIColor blackColor]];
+    }
+}
+
 + (CGFloat)heightForChatMessage:(KUSChatMessage *)chatMessage maxWidth:(CGFloat)maxWidth
 {
     CGFloat height = [self boundingSizeForMessage:chatMessage maxWidth:maxWidth].height;
@@ -59,12 +71,13 @@ static const CGFloat kMinBubbleHeight = 38.0;
 
 + (CGFloat)fontSize
 {
-    return 14.0;
+    return [self messageFont].pointSize;
 }
 
 + (UIFont *)messageFont
 {
-    return [UIFont systemFontOfSize:14.0];
+    KUSChatMessageTableViewCell *appearance = [KUSChatMessageTableViewCell appearance];
+    return [appearance textFont];
 }
 
 + (CGSize)boundingSizeForMessage:(KUSChatMessage *)message maxWidth:(CGFloat)maxWidth
@@ -121,7 +134,6 @@ static const CGFloat kMinBubbleHeight = 38.0;
         _labelView.delegate = self;
         _labelView.enabledTextCheckingTypes = NSTextCheckingTypeLink;
         _labelView.textAlignment = NSTextAlignmentLeft;
-        _labelView.font = [[self class] messageFont];
         _labelView.numberOfLines = 0;
         [_bubbleView addSubview:_labelView];
 
@@ -277,8 +289,9 @@ static NSTimeInterval kOptimisticSendLoadingDelay = 0.5;
 
     BOOL currentUser = _chatMessage.direction == KUSChatMessageDirectionIn;
 
-    UIColor *bubbleColor = (currentUser ? [KUSColor blueColor] : [KUSColor lightGrayColor]);
-    UIColor *textColor = (currentUser ? [UIColor whiteColor] : [UIColor blackColor]);
+    KUSChatMessageTableViewCell *appearance = [KUSChatMessageTableViewCell appearance];
+    UIColor *bubbleColor = (currentUser ? appearance.userBubbleColor : appearance.companyBubbleColor);
+    UIColor *textColor = (currentUser ? appearance.userTextColor : appearance.companyTextColor);
 
     _bubbleView.backgroundColor = bubbleColor;
     _imageView.backgroundColor = bubbleColor;
