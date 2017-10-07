@@ -60,3 +60,45 @@ KustomerViewController *kustomerViewController = [[KustomerViewController alloc]
 // or
 [Kustomer presentSupport];
 ```
+
+### Additional API Reference
+
+```objective-c
+// Initialize the Kustomer iOS SDK with an API key, and start a user session.
+[Kustomer initializeWithAPIKey:@"API_KEY"];
+```
+
+```objective-c
+// Convenience method that will present the chat interface on the topmost view controller.
+[Kustomer presentSupport];
+```
+
+```objective-c
+// Convenience methods that will present a browser interface pointing to your KnowledgeBase.
+[Kustomer presentKnowledgeBase];
+```
+
+```objective-c
+// Resets the user session, clearing the user's access to any existing chats from the device.
+[Kustomer resetTracking];
+```
+
+```objective-c
+// Securely identify a customer. Requires a valid JSON Web Token.
+[Kustomer identify:@"SECURE_ID_HASH"];
+
+/*
+ Identifying users is the best way to ensure your users have a great chat experience because
+ it gives them access to all of the previous conversations across devices.
+ By default, users can see their conversation history only on a single device. By including a secure
+ hash with the ID of your user, you can securely identify that user and grant them access.
+*/
+
+/*
+ JSON Web Token:
+ The JWT used for secure identification must use HMAC SHA256 and include the following header and claims:
+ Header: @{ @"alg" : @"HS256", @"typ" : @"JWT" }
+ Claims: @{ @"externalId" : @"your_user_id", @"iat" : @"current_time_utc" }
+ NOTE: tokens with an @"iat" older than 15 minutes will be rejected
+*/
+```
