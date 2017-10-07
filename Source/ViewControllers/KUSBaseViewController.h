@@ -10,6 +10,12 @@
 
 @interface KUSBaseViewController : UIViewController
 
+// Layout logic
+
+- (UIEdgeInsets)edgeInsets;
+
+// State helpers
+
 - (void)showLoadingIndicatorWithText:(NSString *)text;
 - (void)showLoadingIndicator;
 - (void)hideLoadingIndicator;

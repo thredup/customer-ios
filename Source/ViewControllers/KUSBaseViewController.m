@@ -54,6 +54,35 @@
 
 #pragma mark - Public methods
 
+- (UIEdgeInsets)edgeInsets
+{
+    UIEdgeInsets insets = UIEdgeInsetsZero;
+
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 110000
+	if (@available(ios 11.0, *)) {
+        insets.top = self.view.safeAreaInsets.top;
+        insets.bottom = self.view.safeAreaInsets.bottom;
+    } else {
+        insets.top = self.topLayoutGuide.length;
+        insets.bottom = self.bottomLayoutGuide.length;
+    }
+#else
+    insets.top = self.topLayoutGuide.length;
+    insets.bottom = self.bottomLayoutGuide.length;
+#endif
+
+    // iOS 11 on iPhone X doesn't correctly set the bottom insets if there is a toolbar,
+    // unfortunately that means we need to special-case with the toolbar frame
+    UIToolbar *toolbar = self.navigationController.toolbar;
+    if (toolbar) {
+        CGRect toolbarFrame = [toolbar convertRect:toolbar.bounds toView:self.view];
+        CGFloat toolbarHeight = self.view.bounds.size.height - toolbarFrame.origin.y;
+        insets.bottom = MAX(insets.bottom, toolbarHeight);
+    }
+
+    return insets;
+}
+
 - (void)showLoadingIndicatorWithText:(NSString *)text
 {
     [self.loadingIndicatorView startAnimating];

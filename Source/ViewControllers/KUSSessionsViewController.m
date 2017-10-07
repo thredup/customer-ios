@@ -126,21 +126,21 @@
 
     self.fauxNavigationBar.frame = (CGRect) {
         .size.width = self.view.bounds.size.width,
-        .size.height = [self.fauxNavigationBar desiredHeightWithTopInset:self.topLayoutGuide.length]
+        .size.height = [self.fauxNavigationBar desiredHeightWithTopInset:self.edgeInsets.top]
     };
 
     CGSize createSessionButtonSize = self.createSessionButton.intrinsicContentSize;
     self.createSessionButton.frame = (CGRect) {
         .origin.x = (self.view.bounds.size.width - createSessionButtonSize.width) / 2.0,
-        .origin.y = self.view.bounds.size.height - createSessionButtonSize.height - self.bottomLayoutGuide.length - 23.0,
+        .origin.y = self.view.bounds.size.height - createSessionButtonSize.height - self.edgeInsets.bottom - 23.0,
         .size = createSessionButtonSize
     };
 
     CGFloat bottomPadding = self.view.bounds.size.height - CGRectGetMaxY(self.createSessionButton.frame);
     CGFloat bottomButtonPadding = (bottomPadding * 2.0) + createSessionButtonSize.height;
     self.tableView.contentInset = (UIEdgeInsets) {
-        .top = self.topLayoutGuide.length,
-        .bottom = self.bottomLayoutGuide.length + bottomButtonPadding
+        .top = self.edgeInsets.top,
+        .bottom = self.edgeInsets.bottom + bottomButtonPadding
     };
 }
 

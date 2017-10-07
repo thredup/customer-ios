@@ -164,6 +164,7 @@
     [super viewWillAppear:animated];
 
     [_inputBarView setNeedsLayout];
+    [self.view setNeedsLayout];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -192,10 +193,10 @@
     [super viewWillLayoutSubviews];
 
     CGFloat extraNavigationBarHeight = (_forNewChatSession ? 146.0 : 36.0);
-    CGFloat navigationBarHeight = self.topLayoutGuide.length + extraNavigationBarHeight;
+    CGFloat navigationBarHeight = self.edgeInsets.top + extraNavigationBarHeight;
 
     CGFloat inputBarHeight = [self.inputBarView desiredHeight];
-    CGFloat inputBarY = self.view.bounds.size.height - MAX(self.bottomLayoutGuide.length, _keyboardHeight) - inputBarHeight;
+    CGFloat inputBarY = self.view.bounds.size.height - MAX(self.edgeInsets.bottom, _keyboardHeight) - inputBarHeight;
     self.inputBarView.frame = (CGRect) {
         .origin.y = inputBarY,
         .size.width = self.view.bounds.size.width,
@@ -204,7 +205,7 @@
 
     self.fauxNavigationBar.frame = (CGRect) {
         .size.width = self.view.bounds.size.width,
-        .size.height = [self.fauxNavigationBar desiredHeightWithTopInset:self.topLayoutGuide.length]
+        .size.height = [self.fauxNavigationBar desiredHeightWithTopInset:self.edgeInsets.top]
     };
 
     self.emailInputView.frame = (CGRect) {
