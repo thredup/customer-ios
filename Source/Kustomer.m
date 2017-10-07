@@ -173,12 +173,15 @@ static NSString *_hostDomainOverride = nil;
 {
     NSAssert(externalToken, @"Kustomer expects externalToken to be non-nil");
 
+    __weak KUSUserSession *weakUserSession = self.userSession;
     [self.userSession.requestManager
      performRequestType:KUSRequestTypePost
      endpoint:@"/c/v1/identity"
      params:@{ @"externalToken" : externalToken }
      authenticated:YES
-     completion:nil];
+     completion:^(NSError *error, NSDictionary *response) {
+         [weakUserSession.trackingTokenDataSource fetch];
+     }];
 }
 
 - (void)resetTracking

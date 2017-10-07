@@ -173,20 +173,22 @@
     NSString *didCaptureEmailKey = [self _didCaptureEmailKey];
     if (didCaptureEmailKey) {
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:didCaptureEmailKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
     }
 
     __weak KUSUserSession *weakSelf = self;
-    [self.requestManager performRequestType:KUSRequestTypePatch
-                                   endpoint:@"/c/v1/customers/current"
-                                     params:@{ @"emails": @[ @{@"email": emailAddress} ] }
-                              authenticated:YES
-                                 completion:^(NSError *error, NSDictionary *response) {
-                                     if (error) {
-                                         NSLog(@"Error submitting email: %@", error);
-                                         return;
-                                     }
-                                     [weakSelf.trackingTokenDataSource fetch];
-                                 }];
+    [self.requestManager
+     performRequestType:KUSRequestTypePatch
+     endpoint:@"/c/v1/customers/current"
+     params:@{ @"emails": @[ @{@"email": emailAddress} ] }
+     authenticated:YES
+     completion:^(NSError *error, NSDictionary *response) {
+         if (error) {
+             NSLog(@"Error submitting email: %@", error);
+             return;
+         }
+         [weakSelf.trackingTokenDataSource fetch];
+     }];
 }
 
 - (BOOL)shouldCaptureEmail
