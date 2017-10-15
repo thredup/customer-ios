@@ -8,10 +8,13 @@
 
 #import "Kustomer.h"
 
+#import "KUSLog.h"
+
 @class KUSUserSession;
 @interface Kustomer (Private)
 
 @property (class, nonatomic, copy) NSString *hostDomain;
+@property (class, nonatomic, assign) KUSLogOptions logOptions;
 
 + (instancetype)sharedInstance;
 

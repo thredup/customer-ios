@@ -8,6 +8,7 @@
 
 #import "KUSChatMessagesDataSource.h"
 
+#import "KUSLog.h"
 #import "KUSPaginatedDataSource_Private.h"
 
 @interface KUSChatMessagesDataSource () {
@@ -101,13 +102,12 @@
              [weakSelf removeObjects:temporaryMessages];
          }
          if (error) {
-             NSLog(@"Error sending message: %@", error);
+             KUSLogError(@"Error sending message: %@", error);
 
              KUSChatMessage *failedMessage = [[KUSChatMessage alloc] initFailedWithText:text];
              [weakSelf prependObjects:@[failedMessage]];
              return;
          }
-         NSLog(@"Successfully sent text message: %@", text);
 
          NSArray<KUSChatMessage *> *temporaryMessages = [KUSChatMessage objectsWithJSON:response[@"data"]];
          if (temporaryMessages.count) {

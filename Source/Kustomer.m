@@ -9,6 +9,7 @@
 #import "Kustomer.h"
 #import "Kustomer_Private.h"
 
+#import "KUSLog.h"
 #import "KUSUserSession.h"
 
 static NSString *kKustomerOrgIdKey = @"org";
@@ -61,7 +62,7 @@ static NSString *kKustomerOrgNameKey = @"orgName";
         KustomerViewController *kustomerViewController = [[KustomerViewController alloc] init];
         [topMostViewController presentViewController:kustomerViewController animated:YES completion:nil];
     } else {
-        NSLog(@"Kustomer Error: Could not find view controller to present on top of!");
+        KUSLogError(@"Kustomer Error: Could not find view controller to present on top of!");
     }
 }
 
@@ -72,7 +73,7 @@ static NSString *kKustomerOrgNameKey = @"orgName";
         KnowledgeBaseViewController *knowledgeBaseViewController = [[KnowledgeBaseViewController alloc] init];
         [topMostViewController presentViewController:knowledgeBaseViewController animated:YES completion:nil];
     } else {
-        NSLog(@"Kustomer Error: Could not find view controller to present on top of!");
+        KUSLogError(@"Kustomer Error: Could not find view controller to present on top of!");
     }
 }
 
@@ -127,6 +128,18 @@ static NSString *_hostDomainOverride = nil;
 + (void)setHostDomain:(NSString *)hostDomain
 {
     _hostDomainOverride = [hostDomain copy];
+}
+
+static KUSLogOptions _logOptions = KUSLogOptionErrors;
+
++ (KUSLogOptions)logOptions
+{
+    return _logOptions;
+}
+
++ (void)setLogOptions:(KUSLogOptions)logOptions
+{
+    _logOptions = logOptions;
 }
 
 #pragma mark - Private methods
@@ -186,7 +199,6 @@ static NSString *_hostDomainOverride = nil;
 
 - (void)resetTracking
 {
-    NSLog(@"Kustomer tracking being reset");
     self.userSession = [[KUSUserSession alloc] initWithOrgName:self.orgName orgId:self.orgId reset:YES];
     [self.userSession.delegateProxy setDelegate:self.delegate];
 }

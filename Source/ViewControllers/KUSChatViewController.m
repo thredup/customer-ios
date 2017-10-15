@@ -21,6 +21,7 @@
 #import "KUSChatSettingsDataSource.h"
 #import "KUSEmailInputView.h"
 #import "KUSInputBar.h"
+#import "KUSLog.h"
 #import "KUSNavigationBarView.h"
 #import "KUSNYTChatMessagePhoto.h"
 
@@ -425,24 +426,17 @@
 
 - (void)chatMessageTableViewCell:(KUSChatMessageTableViewCell *)cell didTapLink:(NSURL *)URL
 {
-    NSLog(@"Did select link with URL: %@", URL);
-
     SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:URL];
     [self presentViewController:safariViewController animated:YES completion:nil];
 }
 
 - (void)chatMessageTableViewCellDidTapError:(KUSChatMessageTableViewCell *)cell forMessage:(KUSChatMessage *)message
 {
-    NSLog(@"Did select message resend");
-
     [_chatMessagesDataSource resendMessage:message];
 }
 
-
 - (void)chatMessageTableViewCellDidTapImage:(KUSChatMessageTableViewCell *)cell forMessage:(KUSChatMessage *)message
 {
-    NSLog(@"Did select image");
-
     id<NYTPhoto> initialPhoto = nil;
     NSMutableArray<id<NYTPhoto>> *photos = [[NSMutableArray alloc] init];
 
@@ -476,15 +470,12 @@
 
 - (void)inputBar:(KUSInputBar *)inputBar didEnterText:(NSString *)text
 {
-    NSLog(@"User wants to send message: %@", text);
-
     if (_forNewChatSession) {
         [_userSession.chatSessionsDataSource createSessionWithTitle:text completion:^(NSError *error, KUSChatSession *session) {
             if (error) {
-                NSLog(@"Error creating chat session: %@", error);
+                KUSLogError(@"Error creating chat session: %@", error);
                 return;
             }
-            NSLog(@"Successfully created chat session: %@", session);
 
             _forNewChatSession = NO;
             _chatSession = session;

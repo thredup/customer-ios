@@ -10,6 +10,7 @@
 
 #import <UIKit/UIKit.h>
 
+#import "KUSLog.h"
 #import "KUSUserSession.h"
 #import "Kustomer_Private.h"
 
@@ -130,7 +131,7 @@ typedef void (^KUSTrackingTokenCompletion)(NSError *error, NSString *trackingTok
     };
 
     void (^performRequestWithTrackingToken)(NSString *) = ^void(NSString *trackingToken) {
-        NSLog(@"Performing request: %@%@%@", URL.path, URL.query.length ? @"?" : @"", URL.query ?: @"");
+        KUSLogRequest(@"Performing request: %@%@%@", URL.path, URL.query.length ? @"?" : @"", URL.query ?: @"");
 
         NSURL *finalURL = (type == KUSRequestTypeGet ? KUSURLFromURLAndQueryParams(URL, params) : URL);
         NSMutableURLRequest *urlRequest = [[NSMutableURLRequest alloc] initWithURL:finalURL];

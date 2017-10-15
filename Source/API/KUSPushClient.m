@@ -12,6 +12,7 @@
 #import <Pusher/PTPusherConnection.h>
 
 #import "KUSAudio.h"
+#import "KUSLog.h"
 #import "KUSNotificationWindow.h"
 #import "KUSUserSession.h"
 
@@ -102,8 +103,11 @@ static const NSTimeInterval KUSPollingTimerInterval = 45.0;
     // Connect or disconnect from pusher and create or invalidate a polling timer accordingly
     if (_shouldBeConnectedToPusher) {
         // Stop polling
-        [_pollingTimer invalidate];
-        _pollingTimer = nil;
+        if (_pollingTimer) {
+            [_pollingTimer invalidate];
+            _pollingTimer = nil;
+            KUSLogPusher(@"Stopped polling timer");
+        }
 
         // Make sure we're connected
         [_pusherClient connect];
@@ -117,6 +121,7 @@ static const NSTimeInterval KUSPollingTimerInterval = 45.0;
                                                    repeats:YES];
             _pollingTimer.tolerance = KUSPollingTimerInterval / 10.0;
             [[NSRunLoop mainRunLoop] addTimer:_pollingTimer forMode:NSRunLoopCommonModes];
+            KUSLogPusher(@"Started polling timer");
 
             // Tick immediately
             [_pollingTimer fire];
@@ -177,14 +182,14 @@ static const NSTimeInterval KUSPollingTimerInterval = 45.0;
 
 - (void)_onPusherIdentityUpdate:(PTPusherEvent *)event
 {
-    NSLog(@"Received updated tracking token from Pusher");
+    KUSLogPusher(@"Received updated tracking token from Pusher");
 
     [_userSession.trackingTokenDataSource fetch];
 }
 
 - (void)_onPusherChatMessageSend:(PTPusherEvent *)event
 {
-    NSLog(@"Received chat message from Pusher");
+    KUSLogPusher(@"Received chat message from Pusher");
 
     NSArray<KUSChatMessage *> *chatMessages = [KUSChatMessage objectsWithJSON:event.data[@"data"]];
     for (KUSChatMessage *chatMessage in chatMessages) {
@@ -259,17 +264,21 @@ static const NSTimeInterval KUSPollingTimerInterval = 45.0;
 
 - (void)pusher:(PTPusher *)pusher connectionDidConnect:(PTPusherConnection *)connection
 {
-    NSLog(@"Pusher connection did connect");
+    KUSLogPusher(@"Pusher connection did connect");
 }
 
 - (void)pusher:(PTPusher *)pusher connection:(PTPusherConnection *)connection didDisconnectWithError:(NSError *)error willAttemptReconnect:(BOOL)willAttemptReconnect
 {
-    NSLog(@"Pusher connection did disconnect with errror: %@", error);
+    if (error) {
+        KUSLogPusherError(@"Pusher connection did disconnect with error: %@", error);
+    } else {
+        KUSLogPusher(@"Pusher connection did disconnect");
+    }
 }
 
 - (void)pusher:(PTPusher *)pusher connection:(PTPusherConnection *)connection failedWithError:(NSError *)error
 {
-    NSLog(@"Pusher connection failed with error: %@", error);
+    KUSLogPusherError(@"Pusher connection failed with error: %@", error);
 }
 
 - (void)pusher:(PTPusher *)pusher willAuthorizeChannel:(PTPusherChannel *)channel
@@ -282,12 +291,12 @@ withAuthOperation:(PTPusherChannelAuthorizationOperation *)operation
 
 - (void)pusher:(PTPusher *)pusher didSubscribeToChannel:(PTPusherChannel *)channel
 {
-    NSLog(@"Pusher did subscribe to channel: %@", channel.name);
+    KUSLogPusher(@"Pusher did subscribe to channel: %@", channel.name);
 }
 
 - (void)pusher:(PTPusher *)pusher didFailToSubscribeToChannel:(PTPusherChannel *)channel withError:(NSError *)error
 {
-    NSLog(@"Pusher did fail to subscribe to channel: %@ with error: %@", channel.name, error);
+    KUSLogPusherError(@"Pusher did fail to subscribe to channel: %@ with error: %@", channel.name, error);
 }
 
 @end

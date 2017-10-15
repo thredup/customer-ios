@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		624D7CBD1F7876440039BE90 /* KUSNavigationBarView.h in Headers */ = {isa = PBXBuildFile; fileRef = 624D7CBB1F7876440039BE90 /* KUSNavigationBarView.h */; };
 		624D7CBE1F7876440039BE90 /* KUSNavigationBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 624D7CBC1F7876440039BE90 /* KUSNavigationBarView.m */; };
+		63006E571F92F8AC00C2BC9D /* KUSLog.h in Headers */ = {isa = PBXBuildFile; fileRef = 63006E561F92F8AC00C2BC9D /* KUSLog.h */; };
 		63035BD91F2EBCD400FBBF66 /* KUSText.h in Headers */ = {isa = PBXBuildFile; fileRef = 63035BD71F2EBCD400FBBF66 /* KUSText.h */; };
 		63035BDA1F2EBCD400FBBF66 /* KUSText.m in Sources */ = {isa = PBXBuildFile; fileRef = 63035BD81F2EBCD400FBBF66 /* KUSText.m */; };
 		631E3F351F52497A00FAA33F /* KUSEmailInputView.h in Headers */ = {isa = PBXBuildFile; fileRef = 631E3F331F52497A00FAA33F /* KUSEmailInputView.h */; };
@@ -153,6 +154,7 @@
 		479720192A1054576AB58BBA /* Pods-KustomerExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KustomerExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-KustomerExample/Pods-KustomerExample.debug.xcconfig"; sourceTree = "<group>"; };
 		624D7CBB1F7876440039BE90 /* KUSNavigationBarView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KUSNavigationBarView.h; sourceTree = "<group>"; };
 		624D7CBC1F7876440039BE90 /* KUSNavigationBarView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KUSNavigationBarView.m; sourceTree = "<group>"; };
+		63006E561F92F8AC00C2BC9D /* KUSLog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KUSLog.h; sourceTree = "<group>"; };
 		63035BD71F2EBCD400FBBF66 /* KUSText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSText.h; sourceTree = "<group>"; };
 		63035BD81F2EBCD400FBBF66 /* KUSText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSText.m; sourceTree = "<group>"; };
 		631E3F331F52497A00FAA33F /* KUSEmailInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSEmailInputView.h; sourceTree = "<group>"; };
@@ -346,6 +348,7 @@
 				63270E981F4A717600E25BF5 /* KUSDate.m */,
 				6334BE521F0C66E200258DAF /* KUSImage.h */,
 				6334BE531F0C66E200258DAF /* KUSImage.m */,
+				63006E561F92F8AC00C2BC9D /* KUSLog.h */,
 				63035BD71F2EBCD400FBBF66 /* KUSText.h */,
 				63035BD81F2EBCD400FBBF66 /* KUSText.m */,
 				63DC73611F57B44900683DE8 /* message_received.m4a */,
@@ -577,6 +580,7 @@
 				63EDF3D91F415797000345D8 /* KUSTrackingTokenDataSource.h in Headers */,
 				6371779D1F43EDDC00A7F79C /* KUSAvatarImageView.h in Headers */,
 				63DC734D1F5336BA00683DE8 /* KUSNYTChatMessagePhoto.h in Headers */,
+				63006E571F92F8AC00C2BC9D /* KUSLog.h in Headers */,
 				633D8FF21F23E07E00BAFAC9 /* KUSChatSessionsDataSource.h in Headers */,
 				6334BE4D1F0C600F00258DAF /* KUSAttributionToolbar.h in Headers */,
 				636531B61F1DB73B00433A50 /* KUSColor.h in Headers */,

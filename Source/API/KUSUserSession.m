@@ -8,6 +8,8 @@
 
 #import "KUSUserSession.h"
 
+#import "KUSLog.h"
+
 @interface KUSUserSession ()
 
 @property (nonatomic, copy, readonly) NSString *orgId;
@@ -184,7 +186,7 @@
      authenticated:YES
      completion:^(NSError *error, NSDictionary *response) {
          if (error) {
-             NSLog(@"Error submitting email: %@", error);
+             KUSLogError(@"Error submitting email: %@", error);
              return;
          }
          [weakSelf.trackingTokenDataSource fetch];
