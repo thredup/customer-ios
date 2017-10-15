@@ -16,7 +16,8 @@
 #import "KUSNotificationWindow.h"
 #import "KUSUserSession.h"
 
-static const NSTimeInterval KUSPollingTimerInterval = 45.0;
+static const NSTimeInterval KUSLazyPollingTimerInterval = 45.0;
+static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
 
 @interface KUSPushClient () <KUSObjectDataSourceListener, KUSPaginatedDataSourceListener, PTPusherDelegate> {
     __weak KUSUserSession *_userSession;
@@ -100,36 +101,13 @@ static const NSTimeInterval KUSPollingTimerInterval = 45.0;
         _pusherClient.authorizationURL = [self _pusherAuthURL];
     }
 
-    // Connect or disconnect from pusher and create or invalidate a polling timer accordingly
+    // Connect or disconnect from pusher
     if (_shouldBeConnectedToPusher) {
-        // Stop polling
-        if (_pollingTimer) {
-            [_pollingTimer invalidate];
-            _pollingTimer = nil;
-            KUSLogPusher(@"Stopped polling timer");
-        }
-
-        // Make sure we're connected
         [_pusherClient connect];
     } else {
-        // Make sure we're polling
-        if (_pollingTimer == nil) {
-            _pollingTimer = [NSTimer timerWithTimeInterval:KUSPollingTimerInterval
-                                                    target:self
-                                                  selector:@selector(_onPollTick)
-                                                  userInfo:nil
-                                                   repeats:YES];
-            _pollingTimer.tolerance = KUSPollingTimerInterval / 10.0;
-            [[NSRunLoop mainRunLoop] addTimer:_pollingTimer forMode:NSRunLoopCommonModes];
-            KUSLogPusher(@"Started polling timer");
-
-            // Tick immediately
-            [_pollingTimer fire];
-        }
-
-        // Make sure we're disconnected
         [_pusherClient disconnect];
     }
+    [self _updatePollingTimer];
 
     NSString *pusherChannelName = [self _pusherChannelName];
     if (pusherChannelName && _pusherChannel == nil) {
@@ -145,6 +123,51 @@ static const NSTimeInterval KUSPollingTimerInterval = 45.0;
         [_pusherIdentifiedChannel bindToEventNamed:@"kustomer.app.chat.message.send"
                                             target:self
                                             action:@selector(_onPusherChatMessageSend:)];
+    }
+}
+
+- (void)_updatePollingTimer
+{
+    // Connect or disconnect from pusher
+    if (_shouldBeConnectedToPusher) {
+        if (_pusherClient.connection.connected) {
+            // Stop polling
+            if (_pollingTimer) {
+                [_pollingTimer invalidate];
+                _pollingTimer = nil;
+                KUSLogPusher(@"Stopped polling timer");
+            }
+        } else {
+            // We are not yet connected to pusher, setup an active polling timer
+            // (in the event that connecting to pusher fails)
+            if (_pollingTimer == nil || _pollingTimer.timeInterval != KUSActivePollingTimerInterval) {
+                [_pollingTimer invalidate];
+                _pollingTimer = [NSTimer timerWithTimeInterval:KUSActivePollingTimerInterval
+                                                        target:self
+                                                      selector:@selector(_onPollTick)
+                                                      userInfo:nil
+                                                       repeats:YES];
+                _pollingTimer.tolerance = _pollingTimer.timeInterval / 10.0;
+                [[NSRunLoop mainRunLoop] addTimer:_pollingTimer forMode:NSRunLoopCommonModes];
+                KUSLogPusher(@"Started active polling timer");
+            }
+        }
+    } else {
+        // Make sure we're polling lazily
+        if (_pollingTimer == nil || _pollingTimer.timeInterval != KUSLazyPollingTimerInterval) {
+            [_pollingTimer invalidate];
+            _pollingTimer = [NSTimer timerWithTimeInterval:KUSLazyPollingTimerInterval
+                                                    target:self
+                                                  selector:@selector(_onPollTick)
+                                                  userInfo:nil
+                                                   repeats:YES];
+            _pollingTimer.tolerance = _pollingTimer.timeInterval / 10.0;
+            [[NSRunLoop mainRunLoop] addTimer:_pollingTimer forMode:NSRunLoopCommonModes];
+            KUSLogPusher(@"Started lazy polling timer");
+
+            // Tick immediately
+            [_pollingTimer fire];
+        }
     }
 }
 
@@ -265,6 +288,8 @@ static const NSTimeInterval KUSPollingTimerInterval = 45.0;
 - (void)pusher:(PTPusher *)pusher connectionDidConnect:(PTPusherConnection *)connection
 {
     KUSLogPusher(@"Pusher connection did connect");
+
+    [self _updatePollingTimer];
 }
 
 - (void)pusher:(PTPusher *)pusher connection:(PTPusherConnection *)connection didDisconnectWithError:(NSError *)error willAttemptReconnect:(BOOL)willAttemptReconnect
@@ -274,11 +299,15 @@ static const NSTimeInterval KUSPollingTimerInterval = 45.0;
     } else {
         KUSLogPusher(@"Pusher connection did disconnect");
     }
+
+    [self _updatePollingTimer];
 }
 
 - (void)pusher:(PTPusher *)pusher connection:(PTPusherConnection *)connection failedWithError:(NSError *)error
 {
     KUSLogPusherError(@"Pusher connection failed with error: %@", error);
+
+    [self _updatePollingTimer];
 }
 
 - (void)pusher:(PTPusher *)pusher willAuthorizeChannel:(PTPusherChannel *)channel
