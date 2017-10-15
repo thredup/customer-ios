@@ -9,6 +9,7 @@
 #import "KUSPushClient.h"
 
 #import <Pusher/Pusher.h>
+#import <Pusher/PTPusherConnection.h>
 
 #import "KUSAudio.h"
 #import "KUSNotificationWindow.h"
@@ -16,6 +17,8 @@
 
 @interface KUSPushClient () <KUSObjectDataSourceListener, PTPusherDelegate> {
     __weak KUSUserSession *_userSession;
+
+    BOOL _shouldBeConnectedToPusher;
 
     PTPusher *_pusherClient;
     PTPusherChannel *_pusherChannel;
@@ -33,9 +36,11 @@
     self = [super init];
     if (self) {
         _userSession = userSession;
+        _shouldBeConnectedToPusher = NO;
 
         [_userSession.chatSettingsDataSource addListener:self];
         [_userSession.trackingTokenDataSource addListener:self];
+
         [self _connectToChannelsIfNecessary];
     }
     return self;
@@ -87,7 +92,13 @@
     if (_pusherClient == nil) {
         _pusherClient = [PTPusher pusherWithKey:chatSettings.pusherAccessKey delegate:self encrypted:YES];
         _pusherClient.authorizationURL = [self _pusherAuthURL];
+    }
+
+    // Connect or disconnect from pusher accordingly
+    if (!_pusherClient.connection.connected && _shouldBeConnectedToPusher) {
         [_pusherClient connect];
+    } else if (_pusherClient.connection.connected && !_shouldBeConnectedToPusher) {
+        [_pusherClient disconnect];
     }
 
     NSString *pusherChannelName = [self _pusherChannelName];
@@ -105,6 +116,16 @@
                                             target:self
                                             action:@selector(_onPusherChatMessageSend:)];
     }
+}
+
+#pragma mark - Property methods
+
+- (void)setSupportViewControllerPresented:(BOOL)supportViewControllerPresented
+{
+    _supportViewControllerPresented = supportViewControllerPresented;
+    _shouldBeConnectedToPusher = supportViewControllerPresented;
+
+    [self _connectToChannelsIfNecessary];
 }
 
 #pragma mark - Pusher event methods
