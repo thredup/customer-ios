@@ -153,7 +153,11 @@ static const NSTimeInterval KUSPollingTimerInterval = 45.0;
     if (_userSession.chatSessionsDataSource.didFetch) {
         for (KUSChatSession *session in _userSession.chatSessionsDataSource.allObjects) {
             KUSChatMessagesDataSource *messagesDataSource = [_userSession chatMessagesDataSourceForSessionId:session.oid];
-            [messagesDataSource addListener:self];
+            if (messagesDataSource.didFetch) {
+                // Only register as a listener after we have fetched once already,
+                // to avoid getting updates for messages that have already been received
+                [messagesDataSource addListener:self];
+            }
             [messagesDataSource fetchLatest];
         }
     }
@@ -220,18 +224,24 @@ static const NSTimeInterval KUSPollingTimerInterval = 45.0;
               forChangeType:(KUSPaginatedDataSourceChangeType)type
                    newIndex:(NSUInteger)newIndex
 {
+    // Only consider new messages here if we're actively polling
     if (_pollingTimer == nil) {
         return;
     }
-    if (![dataSource isKindOfClass:[KUSChatMessagesDataSource class]]) {
+    // Only respect datasources that have been fetched once already
+    if (!dataSource.didFetch) {
         return;
     }
+    // We only care about new objects
     if (type != KUSPaginatedDataSourceChangeInsert) {
         return;
     }
 
-    KUSChatMessage *chatMessage = (KUSChatMessage *)object;
-    _updatedSessionId = chatMessage.sessionId;
+    // If this is a chat message datasource, grab the session id
+    if ([object isKindOfClass:[KUSChatMessage class]]) {
+        KUSChatMessage *chatMessage = (KUSChatMessage *)object;
+        _updatedSessionId = chatMessage.sessionId;
+    }
 }
 
 - (void)paginatedDataSourceDidChangeContent:(KUSPaginatedDataSource *)dataSource
