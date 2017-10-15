@@ -15,10 +15,14 @@
 #import "KUSNotificationWindow.h"
 #import "KUSUserSession.h"
 
-@interface KUSPushClient () <KUSObjectDataSourceListener, PTPusherDelegate> {
+static const NSTimeInterval KUSPollingTimerInterval = 45.0;
+
+@interface KUSPushClient () <KUSObjectDataSourceListener, KUSPaginatedDataSourceListener, PTPusherDelegate> {
     __weak KUSUserSession *_userSession;
 
     BOOL _shouldBeConnectedToPusher;
+    NSTimer *_pollingTimer;
+    NSString *_updatedSessionId;
 
     PTPusher *_pusherClient;
     PTPusherChannel *_pusherChannel;
@@ -48,6 +52,7 @@
 
 - (void)dealloc
 {
+    [_pollingTimer invalidate];
     [_pusherClient unsubscribeAllChannels];
     [_pusherClient disconnect];
 }
@@ -94,10 +99,30 @@
         _pusherClient.authorizationURL = [self _pusherAuthURL];
     }
 
-    // Connect or disconnect from pusher accordingly
-    if (!_pusherClient.connection.connected && _shouldBeConnectedToPusher) {
+    // Connect or disconnect from pusher and create or invalidate a polling timer accordingly
+    if (_shouldBeConnectedToPusher) {
+        // Stop polling
+        [_pollingTimer invalidate];
+        _pollingTimer = nil;
+
+        // Make sure we're connected
         [_pusherClient connect];
-    } else if (_pusherClient.connection.connected && !_shouldBeConnectedToPusher) {
+    } else {
+        // Make sure we're polling
+        if (_pollingTimer == nil) {
+            _pollingTimer = [NSTimer timerWithTimeInterval:KUSPollingTimerInterval
+                                                    target:self
+                                                  selector:@selector(_onPollTick)
+                                                  userInfo:nil
+                                                   repeats:YES];
+            _pollingTimer.tolerance = KUSPollingTimerInterval / 10.0;
+            [[NSRunLoop mainRunLoop] addTimer:_pollingTimer forMode:NSRunLoopCommonModes];
+
+            // Tick immediately
+            [_pollingTimer fire];
+        }
+
+        // Make sure we're disconnected
         [_pusherClient disconnect];
     }
 
@@ -115,6 +140,22 @@
         [_pusherIdentifiedChannel bindToEventNamed:@"kustomer.app.chat.message.send"
                                             target:self
                                             action:@selector(_onPusherChatMessageSend:)];
+    }
+}
+
+- (void)_onPollTick
+{
+    KUSTrackingToken *trackingToken = _userSession.trackingTokenDataSource.object;
+    if (trackingToken.customerId.length && !_userSession.chatSessionsDataSource.didFetch) {
+        [_userSession.chatSessionsDataSource fetchLatest];
+    }
+
+    if (_userSession.chatSessionsDataSource.didFetch) {
+        for (KUSChatSession *session in _userSession.chatSessionsDataSource.allObjects) {
+            KUSChatMessagesDataSource *messagesDataSource = [_userSession chatMessagesDataSourceForSessionId:session.oid];
+            [messagesDataSource addListener:self];
+            [messagesDataSource fetchLatest];
+        }
     }
 }
 
@@ -168,6 +209,39 @@
     KUSTrackingToken *trackingToken = _userSession.trackingTokenDataSource.object;
     if (trackingToken.customerId.length && !_userSession.chatSessionsDataSource.didFetch) {
         [_userSession.chatSessionsDataSource fetchLatest];
+    }
+}
+
+#pragma mark - KUSPaginatedDataSourceListener methods
+
+- (void)paginatedDataSource:(KUSPaginatedDataSource *)dataSource
+            didChangeObject:(__kindof KUSModel *)object
+                    atIndex:(NSUInteger)oldIndex
+              forChangeType:(KUSPaginatedDataSourceChangeType)type
+                   newIndex:(NSUInteger)newIndex
+{
+    if (_pollingTimer == nil) {
+        return;
+    }
+    if (![dataSource isKindOfClass:[KUSChatMessagesDataSource class]]) {
+        return;
+    }
+    if (type != KUSPaginatedDataSourceChangeInsert) {
+        return;
+    }
+
+    KUSChatMessage *chatMessage = (KUSChatMessage *)object;
+    _updatedSessionId = chatMessage.sessionId;
+}
+
+- (void)paginatedDataSourceDidChangeContent:(KUSPaginatedDataSource *)dataSource
+{
+    if (_updatedSessionId) {
+        KUSChatSession *chatSession = [[_userSession chatSessionsDataSource] objectWithId:_updatedSessionId];
+        if ([_userSession.delegateProxy shouldDisplayInAppNotification] && chatSession) {
+            [KUSAudio playMessageReceivedSound];
+            [[KUSNotificationWindow sharedInstance] showChatSession:chatSession];
+        }
     }
 }
 
