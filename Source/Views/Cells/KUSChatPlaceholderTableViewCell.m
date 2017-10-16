@@ -48,26 +48,26 @@
     CGFloat totalBarHeight = barHeight * 3.0 + barPadding * 2.0;
     CGFloat yOffset = (rect.size.height - totalBarHeight) / 2.0;
 
-    UIRectFill((CGRect) {
+    UIRectFillUsingBlendMode((CGRect) {
         .origin.x = margins,
         .origin.y = yOffset,
         .size.width = maxBarWidth * 0.15,
         .size.height = 10.0
-    });
+    }, kCGBlendModeNormal);
 
-    UIRectFill((CGRect) {
+    UIRectFillUsingBlendMode((CGRect) {
         .origin.x = margins,
         .origin.y = yOffset + barHeight + barPadding,
         .size.width = maxBarWidth * 0.98,
         .size.height = 10.0
-    });
+    }, kCGBlendModeNormal);
 
-    UIRectFill((CGRect) {
+    UIRectFillUsingBlendMode((CGRect) {
         .origin.x = margins,
         .origin.y = yOffset + (barHeight + barPadding) * 2.0,
         .size.width = maxBarWidth * 0.8,
         .size.height = 10.0
-    });
+    }, kCGBlendModeNormal);
 }
 
 #pragma mark - UIAppearance methods
