@@ -17,6 +17,21 @@
 
 @implementation KUSNavigationController
 
+#pragma mark - Class methods
+
++ (void)initialize
+{
+    if (self == [KUSNavigationController class]) {
+        UINavigationBar *appearance = [UINavigationBar appearanceWhenContainedInInstancesOfClasses:@[self]];
+
+        UIImage *transparentImage = [UIImage new];
+        appearance.tintColor = [KUSColor darkGrayColor];
+        appearance.shadowImage = transparentImage;
+        appearance.translucent = YES;
+        [appearance setBackgroundImage:transparentImage forBarMetrics:UIBarMetricsDefault];
+    }
+}
+
 #pragma mark - Lifecycle methods
 
 - (instancetype)init
@@ -51,12 +66,6 @@
 
 - (void)_commonInit
 {
-    UIImage *transparentImage = [UIImage new];
-    self.navigationBar.tintColor = [KUSColor darkGrayColor];
-    self.navigationBar.shadowImage = transparentImage;
-    self.navigationBar.translucent = YES;
-    [self.navigationBar setBackgroundImage:transparentImage forBarMetrics:UIBarMetricsDefault];
-
     self.toolbarHidden = NO;
 }
 
