@@ -38,6 +38,7 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
         [appearance setPlaceholder:@"Type a message..."];
         [appearance setPlaceholderColor:[UIColor lightGrayColor]];
         [appearance setSendButtonColor:[KUSColor blueColor]];
+        [appearance setKeyboardAppearance:UIKeyboardAppearanceDefault];
     }
 }
 
@@ -220,6 +221,12 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
     _sendButtonColor = sendButtonColor;
     UIImage *sendButtonImage = [KUSImage sendImageWithSize:CGSizeMake(30.0, 30.0) color:_sendButtonColor];
     [_sendButton setImage:sendButtonImage forState:UIControlStateNormal];
+}
+
+- (void)setKeyboardAppearance:(UIKeyboardAppearance)keyboardAppearance
+{
+    _keyboardAppearance = keyboardAppearance;
+    _textView.keyboardAppearance = _keyboardAppearance;
 }
 
 @end

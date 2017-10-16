@@ -17,6 +17,7 @@
 @property (nonatomic, copy) NSString *placeholder UI_APPEARANCE_SELECTOR;
 @property (nonatomic, strong) UIColor *placeholderColor UI_APPEARANCE_SELECTOR;
 @property (nonatomic, strong) UIColor *sendButtonColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, assign) UIKeyboardAppearance keyboardAppearance UI_APPEARANCE_SELECTOR;
 
 @property (nonatomic, weak) id<KUSInputBarDelegate> delegate;
 
