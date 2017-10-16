@@ -263,7 +263,7 @@ CGFloat KUSChatSessionTableViewCellHeight = 88.0;
 - (void)setDateColor:(UIColor *)dateColor
 {
     _dateColor = dateColor;
-    _dateLabel.textColor = [UIColor lightGrayColor];
+    _dateLabel.textColor = _dateColor;
 }
 
 - (void)setDateFont:(UIFont *)dateFont
