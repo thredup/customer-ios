@@ -15,6 +15,7 @@
 #import "KUSUserSession.h"
 
 #import "KUSColor.h"
+#import "KUSChatTableView.h"
 #import "KUSAvatarImageView.h"
 #import "KUSChatMessagesDataSource.h"
 #import "KUSChatMessageTableViewCell.h"
@@ -97,14 +98,11 @@
     barButtonItem.style = UIBarButtonItemStyleDone;
     self.navigationItem.rightBarButtonItem = barButtonItem;
 
-    self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    self.tableView = [[KUSChatTableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     self.tableView.autoresizingMask = (UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth);
     self.tableView.scrollsToTop = YES;
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    self.tableView.separatorInset = UIEdgeInsetsZero;
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.tableView.separatorColor = nil;
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
     self.tableView.transform = CGAffineTransformMakeScale(1.0, -1.0);
     [self.view addSubview:self.tableView];

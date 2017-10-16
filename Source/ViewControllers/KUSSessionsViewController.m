@@ -18,6 +18,7 @@
 #import "KUSChatSessionTableViewCell.h"
 #import "KUSNavigationBarView.h"
 #import "KUSNewSessionButton.h"
+#import "KUSSessionsTableView.h"
 
 @interface KUSSessionsViewController () <KUSPaginatedDataSourceListener, UITableViewDataSource, UITableViewDelegate> {
     KUSUserSession *_userSession;
@@ -65,14 +66,12 @@
     barButtonItem.style = UIBarButtonItemStyleDone;
     self.navigationItem.rightBarButtonItem = barButtonItem;
 
-    self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    self.tableView = [[KUSSessionsTableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     self.tableView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.tableView.rowHeight = KUSChatSessionTableViewCellHeight;
     self.tableView.tableFooterView = [[UIView alloc] init];
-    self.tableView.separatorInset = UIEdgeInsetsZero;
-    self.tableView.separatorColor = [KUSColor grayColor];
     [self.view addSubview:self.tableView];
 
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 110000
