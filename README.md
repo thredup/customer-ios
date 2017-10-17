@@ -134,7 +134,11 @@ The majority of the user interface for the support screens can be configured usi
 
 Before and after:
 
-<img src="Assets/before_sessions.png"> <img src="Assets/after_sessions.png">
+<p align="center" >
+  Before and after:
+  <br><br>
+  <img src="Assets/before_sessions.png">&nbsp&nbsp&nbsp<img src="Assets/after_sessions.png">
+</p>
 
 ##### Chat screen:
 ```objective-c
@@ -165,6 +169,8 @@ Before and after:
 [[KUSInputBar appearance] setKeyboardAppearance:UIKeyboardAppearanceDark];
 ```
 
-Before and after:
-
-<img src="Assets/before_chat.png"> <img src="Assets/after_chat.png">
+<p align="center" >
+  Before and after:
+  <br><br>
+  <img src="Assets/before_chat.png">&nbsp&nbsp&nbsp<img src="Assets/after_chat.png">
+</p>
