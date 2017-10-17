@@ -11,7 +11,9 @@
 #import "KUSAttributionToolbar.h"
 #import "KUSColor.h"
 
-@interface KUSNavigationController ()
+@interface KUSNavigationController () {
+    UIStatusBarStyle _preferredStatusBarStyle;
+}
 
 @end
 
@@ -67,6 +69,20 @@
 - (void)_commonInit
 {
     self.toolbarHidden = NO;
+    _preferredStatusBarStyle = UIStatusBarStyleDefault;
+}
+
+#pragma mark - Status bar appearance methods
+
+- (void)setPreferredStatusBarStyle:(UIStatusBarStyle)preferredStatusBarStyle
+{
+    _preferredStatusBarStyle = preferredStatusBarStyle;
+    [self setNeedsStatusBarAppearanceUpdate];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return _preferredStatusBarStyle;
 }
 
 @end

@@ -10,4 +10,6 @@
 
 @interface KUSNavigationController : UINavigationController
 
+- (void)setPreferredStatusBarStyle:(UIStatusBarStyle)preferredStatusBarStyle;
+
 @end
