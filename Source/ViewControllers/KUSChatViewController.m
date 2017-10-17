@@ -370,7 +370,6 @@
 
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // TODO: Support highlighting/other
     return NO;
 }
 

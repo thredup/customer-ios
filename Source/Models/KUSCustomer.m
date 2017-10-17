@@ -17,15 +17,4 @@
     return @"customer";
 }
 
-#pragma mark - Lifecycle methods
-
-- (instancetype)initWithJSON:(NSDictionary *)json
-{
-    self = [super initWithJSON:json];
-    if (self) {
-        // TODO: Customer attributes?
-    }
-    return self;
-}
-
 @end

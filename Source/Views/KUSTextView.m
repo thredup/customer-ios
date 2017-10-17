@@ -93,8 +93,8 @@
 
 - (NSUInteger)maxNumberOfLines
 {
-    // TODO: Dynamic?
-    return 4;
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    return UIInterfaceOrientationIsPortrait(orientation) ? 4 : 3;
 }
 
 - (NSUInteger)numberOfLines

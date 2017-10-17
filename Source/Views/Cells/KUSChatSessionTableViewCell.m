@@ -168,7 +168,6 @@ CGFloat KUSChatSessionTableViewCellHeight = 88.0;
 {
     [super layoutSubviews];
 
-    // TODO: Extract layout constants
     CGSize avatarImageSize = CGSizeMake(40.0, 40.0);
     self.avatarImageView.frame = (CGRect) {
         .origin.x = 16.0,

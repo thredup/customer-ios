@@ -16,7 +16,8 @@
 
 - (instancetype _Nullable)initWithJSON:(NSDictionary * _Nonnull)json modelClass:(Class _Nonnull)modelClass
 {
-    // TODO: Assert that modelClass is a subclass of KUSModel
+    // Debug-only assert that modelClass is a subclass of KUSModel
+    NSAssert([modelClass isSubclassOfClass:[KUSModel class]], @"modelClass must be a subclass of KUSModel!");
 
     // There needs to be json to parse
     if (![json isKindOfClass:[NSDictionary class]]) {
