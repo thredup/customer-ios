@@ -1,5 +1,5 @@
 <p align="center" >
-  <img src="kustomer_logo.png" title="Kustomer logo" float=left>
+  <img src="Assets/kustomer_logo.png" title="Kustomer logo" float=left>
 </p>
 
 ----------------
@@ -102,3 +102,69 @@ KustomerViewController *kustomerViewController = [[KustomerViewController alloc]
  NOTE: tokens with an @"iat" older than 15 minutes will be rejected
 */
 ```
+
+### Appearance
+
+The majority of the user interface for the support screens can be configured using `UIAppearance`. As an example, if you are designing a Halloween-themed support interface, you could re-skin the Kustomer iOS support screens using the following:
+
+##### Sessions screen:
+```objective-c
+// Make the navigation bar have a dark gray background
+[[KUSNavigationBarView appearance] setBackgroundColor:[UIColor colorWithWhite:0.25 alpha:1.0]];
+// Make the navigation bar items orange
+[[UINavigationBar appearanceWhenContainedInInstancesOfClasses:@[[KUSNavigationController class]]] setTintColor:[KUSColor orangeColor]];
+
+// Make the session table view and cells light gray
+[[KUSSessionsTableView appearance] setBackgroundColor:[UIColor lightGrayColor]];
+[[KUSChatSessionTableViewCell appearance] setBackgroundColor:[UIColor lightGrayColor]];
+[[KUSChatSessionTableViewCell appearance] setSelectedBackgroundColor:[UIColor grayColor]];
+[[KUSChatPlaceholderTableViewCell appearance] setBackgroundColor:[UIColor lightGrayColor]];
+
+// Give the session table cell white text
+[[KUSChatSessionTableViewCell appearance] setTitleColor:[UIColor whiteColor]];
+[[KUSChatSessionTableViewCell appearance] setDateColor:[UIColor whiteColor]];
+[[KUSChatSessionTableViewCell appearance] setSubtitleColor:[UIColor whiteColor]];
+
+// Make the fake placeholder content lines semitransparent white
+[[KUSChatPlaceholderTableViewCell appearance] setLineColor:[UIColor colorWithWhite:1.0 alpha:0.2]];
+
+// Make the new conversation button orange
+[[KUSNewSessionButton appearance] setColor:[KUSColor orangeColor]];
+```
+
+Before and after:
+
+<img src="Assets/before_sessions.png"> <img src="Assets/after_sessions.png">
+
+##### Chat screen:
+```objective-c
+// Make the navigation bar text white
+[[KUSNavigationBarView appearance] setNameColor:[UIColor whiteColor]];
+[[KUSNavigationBarView appearance] setGreetingColor:[UIColor whiteColor]];
+
+// Make the email input view have an orange tint and dark gray background
+[[KUSEmailInputView appearance] setBackgroundColor:[UIColor colorWithWhite:0.25 alpha:1.0]];
+[[KUSEmailInputView appearance] setBorderColor:[KUSColor orangeColor]];
+[[KUSEmailInputView appearance] setPromptColor:[UIColor whiteColor]];
+
+// Give the messages table view and cells a light gray background
+// Make the bubbles orange for user message and dark gray for company messages
+[[KUSChatTableView appearance] setBackgroundColor:[UIColor lightGrayColor]];
+[[KUSChatMessageTableViewCell appearance] setBackgroundColor:[UIColor lightGrayColor]];
+[[KUSChatMessageTableViewCell appearance] setCompanyTextColor:[UIColor whiteColor]];
+[[KUSChatMessageTableViewCell appearance] setCompanyBubbleColor:[UIColor colorWithWhite:0.25 alpha:1.0]];
+[[KUSChatMessageTableViewCell appearance] setUserBubbleColor:[KUSColor orangeColor]];
+
+// Give the input bar an orange send button and cursor,
+// and a dark background and keyboard
+[[KUSInputBar appearance] setSendButtonColor:[KUSColor orangeColor]];
+[[KUSInputBar appearance] setTintColor:[KUSColor orangeColor]];
+[[KUSInputBar appearance] setPlaceholderColor:[UIColor colorWithWhite:0.9 alpha:1.0]];
+[[KUSInputBar appearance] setTextColor:[UIColor whiteColor]];
+[[KUSInputBar appearance] setBackgroundColor:[UIColor colorWithWhite:0.25 alpha:1.0]];
+[[KUSInputBar appearance] setKeyboardAppearance:UIKeyboardAppearanceDark];
+```
+
+Before and after:
+
+<img src="Assets/before_chat.png"> <img src="Assets/after_chat.png">
