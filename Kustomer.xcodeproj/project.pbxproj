@@ -71,6 +71,7 @@
 		636531B31F1C593D00433A50 /* KUSChatMessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 636531B11F1C593D00433A50 /* KUSChatMessageTableViewCell.m */; };
 		636531B61F1DB73B00433A50 /* KUSColor.h in Headers */ = {isa = PBXBuildFile; fileRef = 636531B41F1DB73B00433A50 /* KUSColor.h */; };
 		636531B71F1DB73B00433A50 /* KUSColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 636531B51F1DB73B00433A50 /* KUSColor.m */; };
+		636EA6271F9CF76100340B66 /* KUSRequestManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 636EA6261F9CF76100340B66 /* KUSRequestManagerTests.m */; };
 		6371779D1F43EDDC00A7F79C /* KUSAvatarImageView.h in Headers */ = {isa = PBXBuildFile; fileRef = 6371779B1F43EDDC00A7F79C /* KUSAvatarImageView.h */; };
 		6371779E1F43EDDC00A7F79C /* KUSAvatarImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6371779C1F43EDDC00A7F79C /* KUSAvatarImageView.m */; };
 		637177A91F46A0DA00A7F79C /* KUSUserDataSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 637177A71F46A0DA00A7F79C /* KUSUserDataSource.h */; };
@@ -221,6 +222,7 @@
 		636531B11F1C593D00433A50 /* KUSChatMessageTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSChatMessageTableViewCell.m; sourceTree = "<group>"; };
 		636531B41F1DB73B00433A50 /* KUSColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSColor.h; sourceTree = "<group>"; };
 		636531B51F1DB73B00433A50 /* KUSColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSColor.m; sourceTree = "<group>"; };
+		636EA6261F9CF76100340B66 /* KUSRequestManagerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KUSRequestManagerTests.m; sourceTree = "<group>"; };
 		6371779B1F43EDDC00A7F79C /* KUSAvatarImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSAvatarImageView.h; sourceTree = "<group>"; };
 		6371779C1F43EDDC00A7F79C /* KUSAvatarImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSAvatarImageView.m; sourceTree = "<group>"; };
 		637177A71F46A0DA00A7F79C /* KUSUserDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSUserDataSource.h; sourceTree = "<group>"; };
@@ -468,6 +470,7 @@
 			isa = PBXGroup;
 			children = (
 				63B9CD9F1F088E8800120F3E /* KustomerTests.m */,
+				636EA6261F9CF76100340B66 /* KUSRequestManagerTests.m */,
 				63B9CDA11F088E8800120F3E /* Info.plist */,
 			);
 			path = KustomerTests;
@@ -936,6 +939,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				63B9CDA01F088E8800120F3E /* KustomerTests.m in Sources */,
+				636EA6271F9CF76100340B66 /* KUSRequestManagerTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
