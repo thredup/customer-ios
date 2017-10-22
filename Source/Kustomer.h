@@ -31,6 +31,7 @@ FOUNDATION_EXPORT const unsigned char KustomerVersionString[];
 + (void)presentKnowledgeBase;
 
 - (instancetype)init NS_UNAVAILABLE;
++ (instancetype)new NS_UNAVAILABLE;
 
 @end
 

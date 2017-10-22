@@ -91,10 +91,16 @@ static NSString *kKustomerOrgNameKey = @"orgName";
 
 - (void)setApiKey:(NSString *)apiKey
 {
-    NSAssert(apiKey != nil, @"Kustomer requires a non-nil API key");
+    NSAssert(apiKey.length, @"Kustomer requires a valid API key");
+    if (apiKey.length == 0) {
+        return;
+    }
 
     NSArray<NSString *> *apiKeyParts = [apiKey componentsSeparatedByString:@"."];
     NSAssert(apiKeyParts.count > 2, @"Kustomer API key has unexpected format");
+    if (apiKeyParts.count <= 2) {
+        return;
+    }
 
     NSString *base64EncodedTokenJson = paddedBase64String(apiKeyParts[1]);
     NSDictionary *tokenPayload = jsonFromBase64EncodedJsonString(base64EncodedTokenJson);
@@ -103,6 +109,9 @@ static NSString *kKustomerOrgNameKey = @"orgName";
     self.orgId = tokenPayload[kKustomerOrgIdKey];
     self.orgName = tokenPayload[kKustomerOrgNameKey];
     NSAssert(self.orgName.length > 0, @"Kustomer API key missing expected field: orgName");
+    if (self.orgName.length == 0) {
+        return;
+    }
 
     NSLog(@"Kustomer initialized for organization: %@", self.orgName);
 
@@ -185,6 +194,9 @@ static KUSLogOptions _logOptions = KUSLogOptionErrors;
 - (void)identify:(NSString *)externalToken
 {
     NSAssert(externalToken, @"Kustomer expects externalToken to be non-nil");
+    if (externalToken == nil) {
+        return;
+    }
 
     __weak KUSUserSession *weakUserSession = self.userSession;
     [self.userSession.requestManager
