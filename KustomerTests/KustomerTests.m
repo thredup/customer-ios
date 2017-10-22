@@ -8,31 +8,50 @@
 
 #import <XCTest/XCTest.h>
 
+#import "Kustomer.h"
+#import "Kustomer_Private.h"
+#import "KUSUserSession.h"
+
+static NSString *KUSTestAPIKey = @"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJvcmdOYW1lIjoidGVzdCIsIm9yZyI6InRlc3QiLCJqdGkiOiIxNDkyYTM2Mi1kNzA2LTQzYTgtOWY5Ni01ZTcwODg0NjU0MmYiLCJpYXQiOjE1MDg2NDYzNDYsImV4cCI6MTUwODY0OTk0Nn0.829Y_s-fvslDJIQueqjjfBUkdxNXshJFFM5Hl7m4g8M";
+
 @interface KustomerTests : XCTestCase
 
 @end
 
 @implementation KustomerTests
 
-- (void)setUp {
-    [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
+- (void)testExpectsValidAPIKey
+{
+    XCTAssertThrows([Kustomer initializeWithAPIKey:nil]);
+    XCTAssertThrows([Kustomer initializeWithAPIKey:@""]);
+    XCTAssertThrows([Kustomer initializeWithAPIKey:@"key"]);
 }
 
-- (void)tearDown {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
+- (void)testValidAPIKeySuccess
+{
+    XCTAssertNoThrow([Kustomer initializeWithAPIKey:KUSTestAPIKey]);
 }
 
-- (void)testExample {
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
+- (void)testWasProperlySetup
+{
+    [Kustomer initializeWithAPIKey:KUSTestAPIKey];
+    XCTAssertNotNil([Kustomer sharedInstance]);
+    XCTAssertNotNil([Kustomer sharedInstance].userSession);
 }
 
-- (void)testPerformanceExample {
-    // This is an example of a performance test case.
+- (void)testUserSessionHasExpectedProperties
+{
+    [Kustomer initializeWithAPIKey:KUSTestAPIKey];
+    KUSUserSession *userSession = [Kustomer sharedInstance].userSession;
+    XCTAssertEqualObjects(userSession.orgId, @"test");
+    XCTAssertEqualObjects(userSession.orgName, @"test");
+    XCTAssertEqualObjects(userSession.organizationName, @"Test");
+}
+
+- (void)testInitializeWithAPIKeyPerformance
+{
     [self measureBlock:^{
-        // Put the code you want to measure the time of here.
+        [Kustomer initializeWithAPIKey:KUSTestAPIKey];
     }];
 }
 
