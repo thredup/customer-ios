@@ -223,6 +223,7 @@
 		636531B41F1DB73B00433A50 /* KUSColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSColor.h; sourceTree = "<group>"; };
 		636531B51F1DB73B00433A50 /* KUSColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSColor.m; sourceTree = "<group>"; };
 		636EA6261F9CF76100340B66 /* KUSRequestManagerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KUSRequestManagerTests.m; sourceTree = "<group>"; };
+		636EA6281F9D03BE00340B66 /* KustomerTestConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KustomerTestConstants.h; sourceTree = "<group>"; };
 		6371779B1F43EDDC00A7F79C /* KUSAvatarImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSAvatarImageView.h; sourceTree = "<group>"; };
 		6371779C1F43EDDC00A7F79C /* KUSAvatarImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSAvatarImageView.m; sourceTree = "<group>"; };
 		637177A71F46A0DA00A7F79C /* KUSUserDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSUserDataSource.h; sourceTree = "<group>"; };
@@ -469,6 +470,7 @@
 		63B9CD9E1F088E8800120F3E /* KustomerTests */ = {
 			isa = PBXGroup;
 			children = (
+				636EA6281F9D03BE00340B66 /* KustomerTestConstants.h */,
 				63B9CD9F1F088E8800120F3E /* KustomerTests.m */,
 				636EA6261F9CF76100340B66 /* KUSRequestManagerTests.m */,
 				63B9CDA11F088E8800120F3E /* Info.plist */,

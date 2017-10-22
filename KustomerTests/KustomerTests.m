@@ -8,11 +8,10 @@
 
 #import <XCTest/XCTest.h>
 
+#import "KustomerTestConstants.h"
 #import "Kustomer.h"
 #import "Kustomer_Private.h"
 #import "KUSUserSession.h"
-
-static NSString *KUSTestAPIKey = @"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJvcmdOYW1lIjoidGVzdCIsIm9yZyI6InRlc3QiLCJqdGkiOiIxNDkyYTM2Mi1kNzA2LTQzYTgtOWY5Ni01ZTcwODg0NjU0MmYiLCJpYXQiOjE1MDg2NDYzNDYsImV4cCI6MTUwODY0OTk0Nn0.829Y_s-fvslDJIQueqjjfBUkdxNXshJFFM5Hl7m4g8M";
 
 @interface KustomerTests : XCTestCase
 
@@ -49,9 +48,9 @@ static NSString *KUSTestAPIKey = @"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJvcmdO
 {
     [Kustomer initializeWithAPIKey:KUSTestAPIKey];
     KUSUserSession *userSession = [Kustomer sharedInstance].userSession;
-    XCTAssertEqualObjects(userSession.orgId, @"test");
-    XCTAssertEqualObjects(userSession.orgName, @"test");
-    XCTAssertEqualObjects(userSession.organizationName, @"Test");
+    XCTAssertEqualObjects(userSession.orgId, @"testOrgId");
+    XCTAssertEqualObjects(userSession.orgName, @"testOrgName");
+    XCTAssertEqualObjects(userSession.organizationName, @"TestOrgName");
 }
 
 - (void)testInitializeWithAPIKeyPerformance

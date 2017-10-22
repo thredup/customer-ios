@@ -8,11 +8,9 @@
 
 #import <XCTest/XCTest.h>
 
+#import "KustomerTestConstants.h"
 #import "KUSUserSession.h"
 #import "KUSRequestManager.h"
-
-static NSString *KUSTestOrgId = @"testOrgId";
-static NSString *KUSTestOrgName = @"testOrgName";
 
 @interface KUSRequestManagerTests : XCTestCase
 
