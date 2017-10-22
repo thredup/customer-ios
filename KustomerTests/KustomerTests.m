@@ -53,10 +53,12 @@
     XCTAssertEqualObjects(userSession.organizationName, @"TestOrgName");
 }
 
-- (void)testInitializeWithAPIKeyPerformance
+- (void)test100InitializeWithAPIKeyPerformance
 {
     [self measureBlock:^{
-        [Kustomer initializeWithAPIKey:KUSTestAPIKey];
+        for (int i = 0; i < 100; i++) {
+            [Kustomer initializeWithAPIKey:KUSTestAPIKey];
+        }
     }];
 }
 

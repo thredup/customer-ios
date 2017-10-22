@@ -74,6 +74,7 @@
 		636EA6271F9CF76100340B66 /* KUSRequestManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 636EA6261F9CF76100340B66 /* KUSRequestManagerTests.m */; };
 		636EA62A1F9D12BE00340B66 /* KUSDateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 636EA6291F9D12BE00340B66 /* KUSDateTests.m */; };
 		636EA62C1F9D309C00340B66 /* KUSChatMessageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 636EA62B1F9D309C00340B66 /* KUSChatMessageTests.m */; };
+		636EA62E1F9D3EC100340B66 /* KUSUserSessionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 636EA62D1F9D3EC100340B66 /* KUSUserSessionTests.m */; };
 		6371779D1F43EDDC00A7F79C /* KUSAvatarImageView.h in Headers */ = {isa = PBXBuildFile; fileRef = 6371779B1F43EDDC00A7F79C /* KUSAvatarImageView.h */; };
 		6371779E1F43EDDC00A7F79C /* KUSAvatarImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6371779C1F43EDDC00A7F79C /* KUSAvatarImageView.m */; };
 		637177A91F46A0DA00A7F79C /* KUSUserDataSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 637177A71F46A0DA00A7F79C /* KUSUserDataSource.h */; };
@@ -228,6 +229,7 @@
 		636EA6281F9D03BE00340B66 /* KustomerTestConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KustomerTestConstants.h; sourceTree = "<group>"; };
 		636EA6291F9D12BE00340B66 /* KUSDateTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KUSDateTests.m; sourceTree = "<group>"; };
 		636EA62B1F9D309C00340B66 /* KUSChatMessageTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KUSChatMessageTests.m; sourceTree = "<group>"; };
+		636EA62D1F9D3EC100340B66 /* KUSUserSessionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KUSUserSessionTests.m; sourceTree = "<group>"; };
 		6371779B1F43EDDC00A7F79C /* KUSAvatarImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSAvatarImageView.h; sourceTree = "<group>"; };
 		6371779C1F43EDDC00A7F79C /* KUSAvatarImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSAvatarImageView.m; sourceTree = "<group>"; };
 		637177A71F46A0DA00A7F79C /* KUSUserDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSUserDataSource.h; sourceTree = "<group>"; };
@@ -476,6 +478,7 @@
 			children = (
 				636EA6281F9D03BE00340B66 /* KustomerTestConstants.h */,
 				63B9CD9F1F088E8800120F3E /* KustomerTests.m */,
+				636EA62D1F9D3EC100340B66 /* KUSUserSessionTests.m */,
 				636EA6261F9CF76100340B66 /* KUSRequestManagerTests.m */,
 				636EA6291F9D12BE00340B66 /* KUSDateTests.m */,
 				636EA62B1F9D309C00340B66 /* KUSChatMessageTests.m */,
@@ -950,6 +953,7 @@
 				636EA62A1F9D12BE00340B66 /* KUSDateTests.m in Sources */,
 				636EA6271F9CF76100340B66 /* KUSRequestManagerTests.m in Sources */,
 				636EA62C1F9D309C00340B66 /* KUSChatMessageTests.m in Sources */,
+				636EA62E1F9D3EC100340B66 /* KUSUserSessionTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
