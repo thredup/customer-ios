@@ -9,9 +9,10 @@
 #import <Foundation/Foundation.h>
 
 typedef NS_OPTIONS(NSUInteger, KUSLogOptions) {
-    KUSLogOptionErrors              = 1 << 0,
-    KUSLogOptionRequests            = 1 << 1,
-    KUSLogOptionPusher              = 1 << 2,
+    KUSLogOptionInfo                = 1 << 0,
+    KUSLogOptionErrors              = 1 << 1,
+    KUSLogOptionRequests            = 1 << 2,
+    KUSLogOptionPusher              = 1 << 3,
     KUSLogOptionAll                 = 0xFFFFFF
 };
 
@@ -24,6 +25,7 @@ typedef NS_OPTIONS(NSUInteger, KUSLogOptions) {
         } \
     } while(0)
 
+#define KUSLogInfo(fmt, ...) KUSLog(KUSLogOptionInfo, fmt, ##__VA_ARGS__);
 #define KUSLogError(fmt, ...) KUSLog(KUSLogOptionErrors, fmt, ##__VA_ARGS__);
 #define KUSLogRequest(fmt, ...) KUSLog(KUSLogOptionRequests, fmt, ##__VA_ARGS__);
 #define KUSLogPusher(fmt, ...) KUSLog(KUSLogOptionPusher, fmt, ##__VA_ARGS__);

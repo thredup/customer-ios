@@ -20,6 +20,12 @@ static NSString *KUSTestAPIKey = @"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJvcmdO
 
 @implementation KustomerTests
 
+- (void)setUp
+{
+    [super setUp];
+    [Kustomer setLogOptions:kNilOptions];
+}
+
 - (void)testExpectsValidAPIKey
 {
     XCTAssertThrows([Kustomer initializeWithAPIKey:nil]);

@@ -113,7 +113,7 @@ static NSString *kKustomerOrgNameKey = @"orgName";
         return;
     }
 
-    NSLog(@"Kustomer initialized for organization: %@", self.orgName);
+    KUSLogInfo(@"Kustomer initialized for organization: %@", self.orgName);
 
     self.userSession = [[KUSUserSession alloc] initWithOrgName:self.orgName orgId:self.orgId];
     [self.userSession.delegateProxy setDelegate:self.delegate];
@@ -139,7 +139,7 @@ static NSString *_hostDomainOverride = nil;
     _hostDomainOverride = [hostDomain copy];
 }
 
-static KUSLogOptions _logOptions = KUSLogOptionErrors;
+static KUSLogOptions _logOptions = KUSLogOptionInfo | KUSLogOptionErrors;
 
 + (KUSLogOptions)logOptions
 {
