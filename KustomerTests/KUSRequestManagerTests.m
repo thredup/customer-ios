@@ -52,11 +52,13 @@
                           @"https://testOrgName.api.kustomerapp.com/c/v1/tracking/tokens/current");
 }
 
-- (void)testRequestManagerInitPerformance
+- (void)test100RequestManagerInitPerformance
 {
     KUSUserSession *userSession = [[KUSUserSession alloc] initWithOrgName:KUSTestOrgName orgId:KUSTestOrgId];
     [self measureBlock:^{
-        __unused KUSRequestManager *requestManager = [[KUSRequestManager alloc] initWithUserSession:userSession];
+        for (int i = 0; i < 100; i++) {
+            __unused KUSRequestManager *requestManager = [[KUSRequestManager alloc] initWithUserSession:userSession];
+        }
     }];
 }
 

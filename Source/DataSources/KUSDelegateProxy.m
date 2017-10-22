@@ -23,6 +23,7 @@
     }
     return YES;
 }
+
 - (void)didTapOnInAppNotification
 {
     if ([self.delegate respondsToSelector:@selector(kustomerDidTapOnInAppNotification)]) {
