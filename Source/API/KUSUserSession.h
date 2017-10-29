@@ -16,6 +16,7 @@
 #import "KUSRequestManager.h"
 #import "KUSTrackingTokenDataSource.h"
 #import "KUSUserDataSource.h"
+#import "KUSCustomerDescription.h"
 
 @interface KUSUserSession : NSObject
 
@@ -44,5 +45,7 @@
 // Email info
 - (void)submitEmail:(NSString *)emailAddress;
 - (BOOL)shouldCaptureEmail;
+
+- (void)describeCustomer:(KUSCustomerDescription *)customerDescription completion:(void(^)(BOOL, NSError *))completion;
 
 @end

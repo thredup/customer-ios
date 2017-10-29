@@ -179,18 +179,15 @@
     }
 
     __weak KUSUserSession *weakSelf = self;
-    [self.requestManager
-     performRequestType:KUSRequestTypePatch
-     endpoint:@"/c/v1/customers/current"
-     params:@{ @"emails": @[ @{@"email": emailAddress} ] }
-     authenticated:YES
-     completion:^(NSError *error, NSDictionary *response) {
-         if (error) {
-             KUSLogError(@"Error submitting email: %@", error);
-             return;
-         }
-         [weakSelf.trackingTokenDataSource fetch];
-     }];
+    KUSCustomerDescription *customerDescription = [[KUSCustomerDescription alloc] init];
+    customerDescription.email = emailAddress;
+    [self describeCustomer:customerDescription completion:^(BOOL success, NSError *error) {
+        if (error || !success) {
+            KUSLogError(@"Error submitting email: %@", error);
+            return;
+        }
+        [weakSelf.trackingTokenDataSource fetch];
+    }];
 }
 
 - (BOOL)shouldCaptureEmail
@@ -206,6 +203,26 @@
         }
     }
     return NO;
+}
+
+- (void)describeCustomer:(KUSCustomerDescription *)customerDescription completion:(void(^)(BOOL, NSError *))completion
+{
+    NSDictionary<NSString *, NSObject *> *formData = [customerDescription formData];
+    NSAssert(formData.count, @"Attempted to describe a customer with no attributes set");
+    if (formData.count == 0) {
+        return;
+    }
+
+    [self.requestManager
+     performRequestType:KUSRequestTypePatch
+     endpoint:@"/c/v1/customers/current"
+     params:formData
+     authenticated:YES
+     completion:^(NSError *error, NSDictionary *response) {
+         if (completion) {
+             completion(error == nil, error);
+         }
+     }];
 }
 
 @end

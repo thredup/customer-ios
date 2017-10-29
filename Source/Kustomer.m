@@ -187,18 +187,7 @@ static KUSLogOptions _logOptions = KUSLogOptionInfo | KUSLogOptionErrors;
 
 - (void)describeCustomer:(KUSCustomerDescription *)customerDescription
 {
-    NSDictionary<NSString *, NSObject *> *formData = [customerDescription formData];
-    NSAssert(formData.count, @"Attempted to describe a customer with no attributes set");
-    if (formData.count == 0) {
-        return;
-    }
-
-    [self.userSession.requestManager
-     performRequestType:KUSRequestTypePatch
-     endpoint:@"/c/v1/customers/current"
-     params:formData
-     authenticated:YES
-     completion:nil];
+    [self.userSession describeCustomer:customerDescription completion:nil];
 }
 
 - (void)identify:(NSString *)externalToken
