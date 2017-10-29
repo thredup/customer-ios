@@ -40,6 +40,11 @@ static NSString *kKustomerOrgNameKey = @"orgName";
     [[self sharedInstance] setDelegate:delegate];
 }
 
++ (void)describeConversation:(NSDictionary<NSString *, NSObject *> *)customAttributes
+{
+    [[self sharedInstance] describeConversation:customAttributes];
+}
+
 + (void)describeCustomer:(KUSCustomerDescription *)customerDescription
 {
     [[self sharedInstance] describeCustomer:customerDescription];
@@ -161,10 +166,29 @@ static KUSLogOptions _logOptions = KUSLogOptionInfo | KUSLogOptionErrors;
 
 #pragma mark - Internal methods
 
+- (void)describeConversation:(NSDictionary<NSString *, NSObject *> *)customAttributes
+{
+    NSAssert(customAttributes.count, @"Attempted to describe a conversation with no attributes set");
+    if (customAttributes.count == 0) {
+        return;
+    }
+
+    // TODO: Have it wait until there is an active conversation
+    NSDictionary<NSString *, NSObject *> *formData = @{ @"custom" : customAttributes };
+    NSString *conversationId = nil;
+    NSString *endpoint = [NSString stringWithFormat:@"/c/v1/conversations/%@", conversationId];
+    [self.userSession.requestManager
+     performRequestType:KUSRequestTypePatch
+     endpoint:endpoint
+     params:formData
+     authenticated:YES
+     completion:nil];
+}
+
 - (void)describeCustomer:(KUSCustomerDescription *)customerDescription
 {
     NSDictionary<NSString *, NSObject *> *formData = [customerDescription formData];
-    NSAssert(formData.count, @"Attempted to describe a customer with no fields set");
+    NSAssert(formData.count, @"Attempted to describe a customer with no attributes set");
     if (formData.count == 0) {
         return;
     }
