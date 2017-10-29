@@ -40,9 +40,9 @@ static NSString *kKustomerOrgNameKey = @"orgName";
     [[self sharedInstance] setDelegate:delegate];
 }
 
-+ (void)describe:(NSDictionary<NSString *, NSString *> *)data
++ (void)describeCustomer:(KUSCustomerDescription *)customerDescription
 {
-    [[self sharedInstance] describe:data];
+    [[self sharedInstance] describeCustomer:customerDescription];
 }
 
 + (void)identify:(NSString *)externalToken
@@ -161,26 +161,12 @@ static KUSLogOptions _logOptions = KUSLogOptionInfo | KUSLogOptionErrors;
 
 #pragma mark - Internal methods
 
-- (void)describe:(NSDictionary<NSString *, NSString *> *)data
+- (void)describeCustomer:(KUSCustomerDescription *)customerDescription
 {
-    NSMutableDictionary<NSString *, NSArray<NSDictionary<NSString *, NSString *> *> *> *formData = [[NSMutableDictionary alloc] init];
-
-    if (data[@"email"]) {
-        formData[@"emails"] = @[ @{ @"email" : data[@"email"] } ];
-    }
-    if (data[@"phone"]) {
-        formData[@"phones"] = @[ @{ @"phone" : data[@"phone"] } ];
-    }
-
-    NSMutableArray<NSDictionary<NSString *, NSString *> *> *socials = [[NSMutableArray alloc] init];
-    NSArray<NSString *> *socialNetworks = @[ @"twitter", @"facebook", @"instagram", @"linkedin" ];
-    for (NSString *socialNetwork in socialNetworks) {
-        if (data[socialNetwork]) {
-            [socials addObject:@{ @"username" : data[socialNetwork], @"type" : socialNetwork }];
-        }
-    }
-    if (socials.count) {
-        formData[@"socials"] = socials;
+    NSDictionary<NSString *, NSObject *> *formData = [customerDescription formData];
+    NSAssert(formData.count, @"Attempted to describe a customer with no fields set");
+    if (formData.count == 0) {
+        return;
     }
 
     [self.userSession.requestManager

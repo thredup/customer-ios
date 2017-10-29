@@ -10,6 +10,7 @@
 
 #import "KnowledgeBaseViewController.h"
 #import "KustomerViewController.h"
+#import "KUSCustomerDescription.h"
 
 FOUNDATION_EXPORT double KustomerVersionNumber;
 FOUNDATION_EXPORT const unsigned char KustomerVersionString[];
@@ -20,7 +21,7 @@ FOUNDATION_EXPORT const unsigned char KustomerVersionString[];
 + (void)initializeWithAPIKey:(NSString *)apiKey;
 + (void)setDelegate:(__weak id<KustomerDelegate>)delegate;
 
-+ (void)describe:(NSDictionary<NSString *, NSString *> *)data;
++ (void)describeCustomer:(KUSCustomerDescription *)customerDescription;
 + (void)identify:(NSString *)externalToken;
 + (void)resetTracking;
 

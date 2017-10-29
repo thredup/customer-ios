@@ -82,6 +82,8 @@
 		637177AA1F46A0DA00A7F79C /* KUSUserDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 637177A81F46A0DA00A7F79C /* KUSUserDataSource.m */; };
 		637177AD1F46A28300A7F79C /* KUSUser.h in Headers */ = {isa = PBXBuildFile; fileRef = 637177AB1F46A28300A7F79C /* KUSUser.h */; };
 		637177AE1F46A28300A7F79C /* KUSUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 637177AC1F46A28300A7F79C /* KUSUser.m */; };
+		6394DFF91FA57C21006F2899 /* KUSCustomerDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = 6394DFF71FA57C21006F2899 /* KUSCustomerDescription.h */; };
+		6394DFFA1FA57C21006F2899 /* KUSCustomerDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 6394DFF81FA57C21006F2899 /* KUSCustomerDescription.m */; };
 		639FBBBD1F5F98110065AB0B /* KUSNewSessionButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 639FBBBB1F5F98110065AB0B /* KUSNewSessionButton.h */; };
 		639FBBBE1F5F98110065AB0B /* KUSNewSessionButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 639FBBBC1F5F98110065AB0B /* KUSNewSessionButton.m */; };
 		63A4EDD71F097D8F00EA3852 /* Kustomer_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 63A4EDD61F097D8F00EA3852 /* Kustomer_Private.h */; };
@@ -238,6 +240,8 @@
 		637177A81F46A0DA00A7F79C /* KUSUserDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSUserDataSource.m; sourceTree = "<group>"; };
 		637177AB1F46A28300A7F79C /* KUSUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSUser.h; sourceTree = "<group>"; };
 		637177AC1F46A28300A7F79C /* KUSUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSUser.m; sourceTree = "<group>"; };
+		6394DFF71FA57C21006F2899 /* KUSCustomerDescription.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KUSCustomerDescription.h; sourceTree = "<group>"; };
+		6394DFF81FA57C21006F2899 /* KUSCustomerDescription.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KUSCustomerDescription.m; sourceTree = "<group>"; };
 		639FBBBB1F5F98110065AB0B /* KUSNewSessionButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSNewSessionButton.h; sourceTree = "<group>"; };
 		639FBBBC1F5F98110065AB0B /* KUSNewSessionButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSNewSessionButton.m; sourceTree = "<group>"; };
 		63A4EDD61F097D8F00EA3852 /* Kustomer_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Kustomer_Private.h; sourceTree = "<group>"; };
@@ -339,6 +343,8 @@
 				6334BE5F1F0C9B5100258DAF /* KUSPaginatedResponse.m */,
 				63DC734B1F5336BA00683DE8 /* KUSNYTChatMessagePhoto.h */,
 				63DC734C1F5336BA00683DE8 /* KUSNYTChatMessagePhoto.m */,
+				6394DFF71FA57C21006F2899 /* KUSCustomerDescription.h */,
+				6394DFF81FA57C21006F2899 /* KUSCustomerDescription.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -620,6 +626,7 @@
 				631E3F3B1F526C6000FAA33F /* KnowledgeBaseViewController.h in Headers */,
 				6334BE321F0C487400258DAF /* KUSChatSettings.h in Headers */,
 				6334BE3E1F0C4EBE00258DAF /* KUSCustomer.h in Headers */,
+				6394DFF91FA57C21006F2899 /* KUSCustomerDescription.h in Headers */,
 				636531A91F1BBCCD00433A50 /* KUSChatViewController.h in Headers */,
 				63EDF3D11F412503000345D8 /* KUSUserSession.h in Headers */,
 				6334BE2E1F0C43BE00258DAF /* KUSTrackingToken.h in Headers */,
@@ -942,6 +949,7 @@
 				63DC734E1F5336BA00683DE8 /* KUSNYTChatMessagePhoto.m in Sources */,
 				633D8FF31F23E07E00BAFAC9 /* KUSChatSessionsDataSource.m in Sources */,
 				624D7CBE1F7876440039BE90 /* KUSNavigationBarView.m in Sources */,
+				6394DFFA1FA57C21006F2899 /* KUSCustomerDescription.m in Sources */,
 				6334BE3B1F0C4B3D00258DAF /* KUSChatMessage.m in Sources */,
 				63EB38551F2D83430020F38B /* KUSObjectDataSource.m in Sources */,
 				6371779E1F43EDDC00A7F79C /* KUSAvatarImageView.m in Sources */,
