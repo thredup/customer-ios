@@ -15,4 +15,7 @@
 - (void)createSessionWithTitle:(NSString *)title completion:(void(^)(NSError *error, KUSChatSession *session))completion;
 - (void)updateLastSeenAtForSessionId:(NSString *)sessionId completion:(void(^)(NSError *error, KUSChatSession *session))completion;
 
+// Returns the latest date representing the last message received across all sessions
+- (NSDate *)lastMessageAt;
+
 @end

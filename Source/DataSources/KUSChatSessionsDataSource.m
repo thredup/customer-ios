@@ -90,4 +90,17 @@
      }];
 }
 
+- (NSDate *)lastMessageAt
+{
+    NSDate *allLastMessageAt = nil;
+    for (KUSChatSession *chatSession in self.allObjects) {
+        if (allLastMessageAt && chatSession.lastMessageAt) {
+            allLastMessageAt = [allLastMessageAt laterDate:chatSession.lastMessageAt];
+        } else if (allLastMessageAt == nil && chatSession.lastMessageAt) {
+            allLastMessageAt = chatSession.lastMessageAt;
+        }
+    }
+    return allLastMessageAt;
+}
+
 @end
