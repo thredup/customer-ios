@@ -529,7 +529,6 @@
 - (void)_presentImagePickerWithSourceType:(UIImagePickerControllerSourceType)sourceType
 {
     UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
-    imagePickerController.allowsEditing = YES;
     imagePickerController.delegate = self;
     imagePickerController.sourceType = sourceType;
 
