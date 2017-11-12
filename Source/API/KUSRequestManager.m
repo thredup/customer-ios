@@ -118,6 +118,23 @@ typedef void (^KUSTrackingTokenCompletion)(NSError *error, NSString *trackingTok
          additionalHeaders:(NSDictionary *)additionalHeaders
                 completion:(KUSRequestCompletion)completion
 {
+    [self performRequestType:type
+                         URL:URL
+                      params:params
+                    bodyData:nil
+               authenticated:authenticated
+           additionalHeaders:additionalHeaders
+                  completion:completion];
+}
+
+- (void)performRequestType:(KUSRequestType)type
+                       URL:(NSURL *)URL
+                    params:(NSDictionary<NSString *, id> *)params
+                  bodyData:(NSData *)bodyData
+             authenticated:(BOOL)authenticated
+         additionalHeaders:(NSDictionary *)additionalHeaders
+                completion:(KUSRequestCompletion)completion
+{
     void (^safeComplete)(NSError *, NSDictionary *) = ^void(NSError *error, NSDictionary *response) {
         if (completion) {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -144,8 +161,18 @@ typedef void (^KUSTrackingTokenCompletion)(NSError *error, NSString *trackingTok
         // User-Agent Header
         [urlRequest setValue:_userAgentHeaderValue forHTTPHeaderField:@"User-Agent"];
 
+        for (NSString *headerField in additionalHeaders) {
+            [urlRequest setValue:additionalHeaders[headerField] forHTTPHeaderField:headerField];
+        }
+
         if (type != KUSRequestTypeGet) {
-            KUSAttachJSONBodyToRequest(urlRequest, params);
+            if (bodyData) {
+                NSString *contentLength = [NSString stringWithFormat:@"%lu", (unsigned long)bodyData.length];
+                [urlRequest setValue:contentLength forHTTPHeaderField:@"Content-Length"];
+                [urlRequest setHTTPBody:bodyData];
+            } else {
+                KUSAttachJSONBodyToRequest(urlRequest, params);
+            }
         }
 
         if (authenticated && trackingToken) {

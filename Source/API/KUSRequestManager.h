@@ -57,4 +57,12 @@ typedef void (^KUSRequestCompletion)(NSError *error, NSDictionary *response);
          additionalHeaders:(NSDictionary *)additionalHeaders
                 completion:(KUSRequestCompletion)completion;
 
+- (void)performRequestType:(KUSRequestType)type
+                       URL:(NSURL *)URL
+                    params:(NSDictionary<NSString *, id> *)params
+                  bodyData:(NSData *)bodyData
+             authenticated:(BOOL)authenticated
+         additionalHeaders:(NSDictionary *)additionalHeaders
+                completion:(KUSRequestCompletion)completion;
+
 @end
