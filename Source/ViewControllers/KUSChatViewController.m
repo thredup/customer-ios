@@ -23,6 +23,7 @@
 #import "KUSEmailInputView.h"
 #import "KUSInputBar.h"
 #import "KUSLog.h"
+#import "KUSPermissions.h"
 #import "KUSNavigationBarView.h"
 #import "KUSNYTChatMessagePhoto.h"
 
@@ -499,20 +500,25 @@
     UIAlertController *actionController = [UIAlertController alertControllerWithTitle:nil
                                                                               message:nil
                                                                        preferredStyle:UIAlertControllerStyleActionSheet];
-    UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:@"Camera"
-                                                           style:UIAlertActionStyleDefault
-                                                         handler:^(UIAlertAction *action) {
-                                                             [self _presentImagePickerWithSourceType:UIImagePickerControllerSourceTypeCamera];
-                                                         }];
-    cameraAction.enabled = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera];
-    [actionController addAction:cameraAction];
-    UIAlertAction *photoAction = [UIAlertAction actionWithTitle:@"Photo Library"
-                                                          style:UIAlertActionStyleDefault
-                                                        handler:^(UIAlertAction *action) {
-                                                            [self _presentImagePickerWithSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
-                                                        }];
-    photoAction.enabled = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary];
-    [actionController addAction:photoAction];
+
+    if ([KUSPermissions cameraIsAvailable]) {
+        UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:@"Camera"
+                                                               style:UIAlertActionStyleDefault
+                                                             handler:^(UIAlertAction *action) {
+                                                                 [self _presentImagePickerWithSourceType:UIImagePickerControllerSourceTypeCamera];
+                                                             }];
+        [actionController addAction:cameraAction];
+    }
+
+    if ([KUSPermissions photoLibraryIsAvailable]) {
+        UIAlertAction *photoAction = [UIAlertAction actionWithTitle:@"Photo Library"
+                                                              style:UIAlertActionStyleDefault
+                                                            handler:^(UIAlertAction *action) {
+                                                                [self _presentImagePickerWithSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+                                                            }];
+        [actionController addAction:photoAction];
+    }
+
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
                                                            style:UIAlertActionStyleCancel
                                                          handler:nil];
@@ -537,10 +543,8 @@
     presentationController.sourceRect = self.inputBarView.attachmentButton.bounds;
     presentationController.permittedArrowDirections = UIPopoverArrowDirectionDown;
 
+    imagePickerController.view.backgroundColor = [UIColor whiteColor];
     [self presentViewController:imagePickerController animated:YES completion:nil];
-
-    // TODO: NSPhotoLibraryUsageDescription
-    // TODO: NSCameraUsageDescription
 }
 
 - (void)inputBarTextDidChange:(KUSInputBar *)inputBar

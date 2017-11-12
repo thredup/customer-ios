@@ -10,6 +10,7 @@
 
 #import "KUSColor.h"
 #import "KUSImage.h"
+#import "KUSPermissions.h"
 #import "KUSTextView.h"
 
 static const CGFloat kKUSInputBarMinimumHeight = 50.0;
@@ -55,6 +56,7 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
 
         _attachmentButton = [[UIButton alloc] init];
         [_attachmentButton addTarget:self action:@selector(_pressAttach) forControlEvents:UIControlEventTouchUpInside];
+        _attachmentButton.hidden = ![KUSPermissions cameraIsAvailable] && ![KUSPermissions photoLibraryIsAvailable];
         [self addSubview:_attachmentButton];
 
         _textView = [[KUSTextView alloc] init];
@@ -84,7 +86,7 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
     };
     self.attachmentButton.frame = (CGRect) {
         .origin.y = self.bounds.size.height - kKUSInputBarButtonSize,
-        .size.width = kKUSInputBarButtonSize,
+        .size.width = (self.attachmentButton.hidden ? 0.0 : kKUSInputBarButtonSize),
         .size.height = kKUSInputBarButtonSize
     };
 
@@ -97,9 +99,9 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
 
     CGFloat desiredTextHeight = [self.textView desiredHeight];
     self.textView.frame = (CGRect) {
-        .origin.x = kKUSInputBarButtonSize,
+        .origin.x = MAX(CGRectGetWidth(self.attachmentButton.frame), 10.0),
         .origin.y = (self.bounds.size.height - desiredTextHeight) / 2.0,
-        .size.width = self.bounds.size.width - (kKUSInputBarButtonSize * 2.0),
+        .size.width = self.bounds.size.width - CGRectGetWidth(self.sendButton.frame) - MAX(CGRectGetWidth(self.attachmentButton.frame), 10.0),
         .size.height = desiredTextHeight
     };
 }
