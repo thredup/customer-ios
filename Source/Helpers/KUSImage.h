@@ -24,4 +24,6 @@
 
 + (UIImage *)defaultAvatarImageForName:(NSString *)name;
 
++ (UIImage *)resizeImage:(UIImage *)image toFixedPixelCount:(CGFloat)maximumPixelCount;
+
 @end

@@ -21,6 +21,7 @@
 #import "KUSChatMessageTableViewCell.h"
 #import "KUSChatSettingsDataSource.h"
 #import "KUSEmailInputView.h"
+#import "KUSImage.h"
 #import "KUSInputBar.h"
 #import "KUSLog.h"
 #import "KUSPermissions.h"
@@ -570,7 +571,24 @@
     UIImage *originalImage = [info valueForKey:UIImagePickerControllerOriginalImage];
     UIImage *editedImage = [info valueForKey:UIImagePickerControllerEditedImage];
     UIImage *chosenImage = editedImage ?: originalImage;
-    // TODO: Upload image
+
+    UIImage *resizedImage = [KUSImage resizeImage:chosenImage toFixedPixelCount:1000000.0];
+    NSData *data = UIImageJPEGRepresentation(resizedImage, 0.8);
+    NSLog(@"data.length: %i", (int)data.length);
+
+    NSString *fileName = [NSString stringWithFormat:@"%@.jpg", [NSUUID UUID].UUIDString];
+    [_userSession.requestManager
+     performRequestType:KUSRequestTypePost
+     endpoint:@"/c/v1/chat/attachments"
+     params:@{
+         @"name": fileName,
+         @"contentLength": [NSNumber numberWithUnsignedInteger:data.length],
+         @"contentType": @"image/jpeg"
+     }
+     authenticated:YES
+     completion:^(NSError *error, NSDictionary *response) {
+         NSLog(@"response: %@", response);
+     }];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker

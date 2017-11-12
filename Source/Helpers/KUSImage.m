@@ -159,6 +159,26 @@
     return image;
 }
 
++ (UIImage *)resizeImage:(UIImage *)image toFixedPixelCount:(CGFloat)maximumPixelCount
+{
+    CGFloat imagePixelCount = image.size.width * image.size.height * image.scale;
+    if (imagePixelCount <= maximumPixelCount) {
+        return image;
+    }
+
+    CGFloat scaleDown = sqrt(maximumPixelCount / imagePixelCount);
+    CGSize scaledDownSize = (CGSize) {
+        .width = round(image.size.width * scaleDown),
+        .height = round(image.size.height * scaleDown)
+    };
+    UIGraphicsBeginImageContextWithOptions(scaledDownSize, YES, image.scale);
+    [image drawInRect:(CGRect) { .size = scaledDownSize }];
+    UIImage *resizedImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+
+    return resizedImage;
+}
+
 #pragma mark - Internal methods
 
 + (NSArray<NSString *> *)_initialsFromName:(NSString *)name
