@@ -11,11 +11,13 @@
 @interface KUSImage : NSObject
 
 + (UIImage *)kustyImage;
++ (UIImage *)attachImage;
 + (UIImage *)sendArrowImage;
 + (UIImage *)checkmarkImage;
 + (UIImage *)pencilImage;
 + (UIImage *)errorImage;
 
++ (UIImage *)attachImageWithSize:(CGSize)size color:(UIColor *)color;
 + (UIImage *)sendImageWithSize:(CGSize)size color:(UIColor *)color;
 + (UIImage *)submitImageWithSize:(CGSize)size color:(UIColor *)color;
 + (UIImage *)circularImageWithSize:(CGSize)size color:(UIColor *)color;

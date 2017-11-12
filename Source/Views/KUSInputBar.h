@@ -21,6 +21,9 @@
 
 @property (nonatomic, weak) id<KUSInputBarDelegate> delegate;
 
+@property (nonatomic, strong, readonly) UIButton *attachmentButton;
+@property (nonatomic, strong, readonly) UIButton *sendButton;
+
 - (CGFloat)desiredHeight;
 
 @end
@@ -29,6 +32,7 @@
 
 @optional
 - (void)inputBar:(KUSInputBar *)inputBar didEnterText:(NSString *)text;
+- (void)inputBarDidTapAttachment:(KUSInputBar *)inputBar;
 - (void)inputBarTextDidChange:(KUSInputBar *)inputBar;
 
 @end

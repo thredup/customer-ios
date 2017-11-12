@@ -18,8 +18,9 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
 @interface KUSInputBar () <UITextViewDelegate>
 
 @property (nonatomic, strong) UIView *separatorView;
-@property (nonatomic, strong) KUSTextView *textView;
-@property (nonatomic, strong) UIButton *sendButton;
+@property (nonatomic, strong, readwrite) UIButton *attachmentButton;
+@property (nonatomic, strong, readwrite) KUSTextView *textView;
+@property (nonatomic, strong, readwrite) UIButton *sendButton;
 
 @end
 
@@ -52,6 +53,10 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
         _separatorView.userInteractionEnabled = NO;
         [self addSubview:_separatorView];
 
+        _attachmentButton = [[UIButton alloc] init];
+        [_attachmentButton addTarget:self action:@selector(_pressAttach) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:_attachmentButton];
+
         _textView = [[KUSTextView alloc] init];
         _textView.delegate = self;
         _textView.returnKeyType = UIReturnKeySend;
@@ -77,6 +82,12 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
         .size.width = self.bounds.size.width,
         .size.height = 1.0
     };
+    self.attachmentButton.frame = (CGRect) {
+        .origin.y = self.bounds.size.height - kKUSInputBarButtonSize,
+        .size.width = kKUSInputBarButtonSize,
+        .size.height = kKUSInputBarButtonSize
+    };
+
     self.sendButton.frame = (CGRect) {
         .origin.x = self.bounds.size.width - kKUSInputBarButtonSize,
         .origin.y = self.bounds.size.height - kKUSInputBarButtonSize,
@@ -86,9 +97,9 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
 
     CGFloat desiredTextHeight = [self.textView desiredHeight];
     self.textView.frame = (CGRect) {
-        .origin.x = 10.0,
+        .origin.x = kKUSInputBarButtonSize,
         .origin.y = (self.bounds.size.height - desiredTextHeight) / 2.0,
-        .size.width = self.bounds.size.width - CGRectGetWidth(self.sendButton.frame) - 10.0,
+        .size.width = self.bounds.size.width - (kKUSInputBarButtonSize * 2.0),
         .size.height = desiredTextHeight
     };
 }
@@ -134,6 +145,13 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
 - (NSString *)_actualText
 {
     return [_textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+}
+
+- (void)_pressAttach
+{
+    if ([self.delegate respondsToSelector:@selector(inputBarDidTapAttachment:)]) {
+        [self.delegate inputBarDidTapAttachment:self];
+    }
 }
 
 - (void)_pressSend
@@ -184,6 +202,10 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
 {
     [super setBackgroundColor:backgroundColor];
     _textView.backgroundColor = self.backgroundColor;
+
+    UIImage *attachmentButtonImage = [KUSImage attachImageWithSize:CGSizeMake(35.0, 35.0) color:self.backgroundColor];
+    [_attachmentButton setImage:attachmentButtonImage forState:UIControlStateNormal];
+    _attachmentButton.imageView.tintColor = [UIColor redColor];
 }
 
 - (void)setSeparatorColor:(UIColor *)separatorColor

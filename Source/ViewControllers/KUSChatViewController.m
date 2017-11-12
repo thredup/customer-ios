@@ -28,7 +28,8 @@
 
 @interface KUSChatViewController () <KUSEmailInputViewDelegate, KUSInputBarDelegate, KUSObjectDataSourceListener,
                                      KUSPaginatedDataSourceListener, KUSChatMessageTableViewCellDelegate,
-                                     NYTPhotosViewControllerDelegate, UITableViewDataSource, UITableViewDelegate> {
+                                     NYTPhotosViewControllerDelegate, UITableViewDataSource, UITableViewDelegate,
+                                     UINavigationControllerDelegate, UIImagePickerControllerDelegate> {
     KUSUserSession *_userSession;
 
     BOOL _forNewChatSession;
@@ -491,6 +492,57 @@
     }
 }
 
+- (void)inputBarDidTapAttachment:(KUSInputBar *)inputBar
+{
+    [self.view endEditing:YES];
+
+    UIAlertController *actionController = [UIAlertController alertControllerWithTitle:nil
+                                                                              message:nil
+                                                                       preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:@"Camera"
+                                                           style:UIAlertActionStyleDefault
+                                                         handler:^(UIAlertAction *action) {
+                                                             [self _presentImagePickerWithSourceType:UIImagePickerControllerSourceTypeCamera];
+                                                         }];
+    cameraAction.enabled = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera];
+    [actionController addAction:cameraAction];
+    UIAlertAction *photoAction = [UIAlertAction actionWithTitle:@"Photo Library"
+                                                          style:UIAlertActionStyleDefault
+                                                        handler:^(UIAlertAction *action) {
+                                                            [self _presentImagePickerWithSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+                                                        }];
+    photoAction.enabled = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary];
+    [actionController addAction:photoAction];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
+                                                           style:UIAlertActionStyleCancel
+                                                         handler:nil];
+    [actionController addAction:cancelAction];
+    [self presentViewController:actionController animated:YES completion:nil];
+}
+
+- (void)_presentImagePickerWithSourceType:(UIImagePickerControllerSourceType)sourceType
+{
+    UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+    imagePickerController.allowsEditing = YES;
+    imagePickerController.delegate = self;
+    imagePickerController.sourceType = sourceType;
+
+    UIModalPresentationStyle presentationStyle = (sourceType == UIImagePickerControllerSourceTypeCamera
+                                                  ? UIModalPresentationFullScreen
+                                                  : UIModalPresentationPopover);
+    imagePickerController.modalPresentationStyle = presentationStyle;
+
+    UIPopoverPresentationController *presentationController = imagePickerController.popoverPresentationController;
+    presentationController.sourceView = self.inputBarView.attachmentButton;
+    presentationController.sourceRect = self.inputBarView.attachmentButton.bounds;
+    presentationController.permittedArrowDirections = UIPopoverArrowDirectionDown;
+
+    [self presentViewController:imagePickerController animated:YES completion:nil];
+
+    // TODO: NSPhotoLibraryUsageDescription
+    // TODO: NSCameraUsageDescription
+}
+
 - (void)inputBarTextDidChange:(KUSInputBar *)inputBar
 {
     [self.view setNeedsLayout];
@@ -504,6 +556,23 @@
     UIActivityIndicatorView *activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     [activityIndicatorView startAnimating];
     return activityIndicatorView;
+}
+
+#pragma mark - UIImagePickerControllerDelegate methods
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+
+    UIImage *originalImage = [info valueForKey:UIImagePickerControllerOriginalImage];
+    UIImage *editedImage = [info valueForKey:UIImagePickerControllerEditedImage];
+    UIImage *chosenImage = editedImage ?: originalImage;
+    // TODO: Upload image
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

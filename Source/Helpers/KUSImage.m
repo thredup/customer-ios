@@ -24,6 +24,11 @@
 
 #pragma mark - Public methods
 
++ (UIImage *)attachImage
+{
+    return [self imageNamed:@"paperclip_icon"];
+}
+
 + (UIImage *)kustyImage
 {
     return [self imageNamed:@"kusty"];
@@ -47,6 +52,23 @@
 + (UIImage *)errorImage
 {
     return [self imageNamed:@"error_icon"];
+}
+
++ (UIImage *)attachImageWithSize:(CGSize)size color:(UIColor *)color
+{
+    UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, color.CGColor);
+    CGContextFillEllipseInRect(context, (CGRect) { .size = size });
+    CGSize paperclipSize = CGSizeMake(ceil(size.width * 0.7), ceil(size.height * 0.7));
+    [[self attachImage] drawInRect:(CGRect) {
+        .origin.x = (size.width - paperclipSize.width) / 2.0,
+        .origin.y = (size.height - paperclipSize.height) / 2.0,
+        .size = paperclipSize
+    } blendMode:kCGBlendModeNormal alpha:0.5];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image;
 }
 
 + (UIImage *)sendImageWithSize:(CGSize)size color:(UIColor *)color
