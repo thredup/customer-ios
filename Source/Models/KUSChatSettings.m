@@ -30,7 +30,7 @@
         _teamName = NSStringFromKeyPath(json, @"attributes.teamName");
         _teamIconURL = NSURLFromKeyPath(json, @"attributes.teamIconUrl");
         _greeting = NSStringFromKeyPath(json, @"attributes.greeting");
-        _autoreply = NSStringFromKeyPath(json, @"attributes.autoreply");
+        _autoreply = NSStringSanitizedAutoreply(NSStringFromKeyPath(json, @"attributes.autoreply"));
         _enabled = BOOLFromKeyPath(json, @"attributes.enabled");
         _pusherAccessKey = NSStringFromKeyPath(json, @"attributes.pusherAccessKey");
     }
@@ -45,6 +45,16 @@
         _autoreplyMessage = [[KUSChatMessage alloc] initWithAutoreply:self.autoreply];
     }
     return _autoreplyMessage;
+}
+
+NSString *_Nullable NSStringSanitizedAutoreply(NSString * _Nullable autoreply)
+{
+    NSCharacterSet *whitespaceAndNewlineCharacterSet = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+    NSString *trimmedAutoreply = [autoreply stringByTrimmingCharactersInSet:whitespaceAndNewlineCharacterSet];
+    if (trimmedAutoreply.length > 0) {
+        return trimmedAutoreply;
+    }
+    return nil;
 }
 
 @end
