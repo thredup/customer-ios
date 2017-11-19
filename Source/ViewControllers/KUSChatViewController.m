@@ -592,7 +592,7 @@
          NSURL *uploadURL = [NSURL URLWithString:[response valueForKeyPath:@"meta.upload.url"]];
          NSDictionary<NSString *, NSString *> *uploadFields = [response valueForKeyPath:@"meta.upload.fields"];
 
-         NSString *boundary = @"----BOUNDARY----";
+         NSString *boundary = @"----FormBoundary";
          NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
          NSData *bodyData = KUSUploadBodyDataFromImageAndFileNameAndFieldsAndBoundary(imageData, fileName, uploadFields, boundary);
 
@@ -639,9 +639,9 @@ static NSData *KUSUploadBodyDataFromImageAndFileNameAndFieldsAndBoundary(NSData 
     }
 
     [bodyData appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"file\"; filename=\"%@\"\r\n", fileName] dataUsingEncoding:NSUTF8StringEncoding]];
-    [bodyData appendData:[@"Content-Type: application/octet-stream\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+    [bodyData appendData:[@"Content-Type: image/jpeg\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
     [bodyData appendData:[NSData dataWithData:imageData]];
-    [bodyData appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+    [bodyData appendData:[[NSString stringWithFormat:@"\r\n--%@--", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
 
     return bodyData;
 }
