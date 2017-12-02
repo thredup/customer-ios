@@ -30,7 +30,9 @@
 
 @end
 
-@implementation KUSUserSession
+@implementation KUSUserSession {
+    NSUserDefaults *_userDefaults;
+}
 
 #pragma mark - Lifecycle methods
 
@@ -45,8 +47,14 @@
             NSString *firstLetter = [[_orgName substringToIndex:1] uppercaseString];
             _organizationName = [firstLetter stringByAppendingString:[_orgName substringFromIndex:1]];
         }
+        NSString *suiteName = [NSString stringWithFormat:@"%@_kustomer_defaults", _orgName];
+        _userDefaults = [[NSUserDefaults alloc] initWithSuiteName:suiteName];
 
         if (reset) {
+            NSArray<NSString *> *allUserDefaultsKeys = _userDefaults.dictionaryRepresentation.allKeys;
+            for (NSString *userDefaultsKey in allUserDefaultsKeys) {
+                [_userDefaults removeObjectForKey:userDefaultsKey];
+            }
             [self.trackingTokenDataSource reset];
         }
 
@@ -172,11 +180,7 @@
 
 - (void)submitEmail:(NSString *)emailAddress
 {
-    NSString *didCaptureEmailKey = [self _didCaptureEmailKey];
-    if (didCaptureEmailKey) {
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:didCaptureEmailKey];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    }
+    [_userDefaults setBool:YES forKey:@"didCaptureEmail"];
 
     __weak KUSUserSession *weakSelf = self;
     KUSCustomerDescription *customerDescription = [[KUSCustomerDescription alloc] init];
@@ -197,10 +201,7 @@
         if (trackingToken.verified) {
             return NO;
         }
-        NSString *didCaptureEmailKey = [self _didCaptureEmailKey];
-        if (didCaptureEmailKey) {
-            return ![[NSUserDefaults standardUserDefaults] boolForKey:didCaptureEmailKey];
-        }
+        return ![_userDefaults boolForKey:@"didCaptureEmail"];
     }
     return NO;
 }
