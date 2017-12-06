@@ -16,6 +16,7 @@
 #import "KUSRequestManager.h"
 #import "KUSTrackingTokenDataSource.h"
 #import "KUSUserDataSource.h"
+#import "KUSUserDefaults.h"
 #import "KUSCustomerDescription.h"
 
 @interface KUSUserSession : NSObject
@@ -41,6 +42,8 @@
 - (KUSRequestManager *)requestManager;
 - (KUSPushClient *)pushClient;
 - (KUSDelegateProxy *)delegateProxy;
+
+- (KUSUserDefaults *)userDefaults;
 
 // Email info
 - (void)submitEmail:(NSString *)emailAddress;

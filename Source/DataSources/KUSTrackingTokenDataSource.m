@@ -75,7 +75,7 @@
             kKustomerTrackingTokenHeaderKey: currentTrackingToken
         };
     }
-    NSString *cachedTrackingToken = [[NSUserDefaults standardUserDefaults] stringForKey:kKustomerTrackingTokenHeaderKey];
+    NSString *cachedTrackingToken = [self.userSession.userDefaults trackingToken];
     if (cachedTrackingToken) {
         return @{
             kKustomerTrackingTokenHeaderKey: cachedTrackingToken
@@ -91,7 +91,9 @@
     _wantsReset = NO;
 
     NSString *currentTrackingToken = self.currentTrackingToken;
-    [[NSUserDefaults standardUserDefaults] setObject:currentTrackingToken forKey:kKustomerTrackingTokenHeaderKey];
+    if (currentTrackingToken) {
+        [self.userSession.userDefaults setTrackingToken:currentTrackingToken];
+    }
 }
 
 @end

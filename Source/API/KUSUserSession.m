@@ -28,11 +28,11 @@
 @property (nonatomic, strong, null_resettable) KUSPushClient *pushClient;
 @property (nonatomic, strong, null_resettable) KUSDelegateProxy *delegateProxy;
 
+@property (nonatomic, strong, null_resettable) KUSUserDefaults *userDefaults;
+
 @end
 
-@implementation KUSUserSession {
-    NSUserDefaults *_userDefaults;
-}
+@implementation KUSUserSession
 
 #pragma mark - Lifecycle methods
 
@@ -47,15 +47,10 @@
             NSString *firstLetter = [[_orgName substringToIndex:1] uppercaseString];
             _organizationName = [firstLetter stringByAppendingString:[_orgName substringFromIndex:1]];
         }
-        NSString *suiteName = [NSString stringWithFormat:@"%@_kustomer_defaults", _orgName];
-        _userDefaults = [[NSUserDefaults alloc] initWithSuiteName:suiteName];
 
         if (reset) {
-            NSArray<NSString *> *allUserDefaultsKeys = _userDefaults.dictionaryRepresentation.allKeys;
-            for (NSString *userDefaultsKey in allUserDefaultsKeys) {
-                [_userDefaults removeObjectForKey:userDefaultsKey];
-            }
             [self.trackingTokenDataSource reset];
+            [self.userDefaults reset];
         }
 
         [self.chatSettingsDataSource fetch];
@@ -167,20 +162,19 @@
     return _delegateProxy;
 }
 
-#pragma mark - Email info methods
-
-- (NSString *)_didCaptureEmailKey
+- (KUSUserDefaults *)userDefaults
 {
-    KUSTrackingToken *trackingToken = self.trackingTokenDataSource.object;
-    if (trackingToken.customerId.length) {
-        return [NSString stringWithFormat:@"%@_didCaptureEmail", trackingToken.customerId];
+    if (_userDefaults == nil) {
+        _userDefaults = [[KUSUserDefaults alloc] initWithUserSession:self];
     }
-    return nil;
+    return _userDefaults;
 }
+
+#pragma mark - Email info methods
 
 - (void)submitEmail:(NSString *)emailAddress
 {
-    [_userDefaults setBool:YES forKey:@"didCaptureEmail"];
+    [self.userDefaults setDidCaptureEmail:YES];
 
     __weak KUSUserSession *weakSelf = self;
     KUSCustomerDescription *customerDescription = [[KUSCustomerDescription alloc] init];
@@ -201,7 +195,7 @@
         if (trackingToken.verified) {
             return NO;
         }
-        return ![_userDefaults boolForKey:@"didCaptureEmail"];
+        return ![self.userDefaults didCaptureEmail];
     }
     return NO;
 }
