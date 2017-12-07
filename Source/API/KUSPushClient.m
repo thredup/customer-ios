@@ -28,7 +28,6 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
 
     PTPusher *_pusherClient;
     PTPusherChannel *_pusherChannel;
-    PTPusherChannel *_pusherIdentifiedChannel;
 }
 
 @end
@@ -75,15 +74,6 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
     return nil;
 }
 
-- (NSString *)_pusherIdentifiedChannelName
-{
-    KUSTrackingToken *trackingTokenObj = _userSession.trackingTokenDataSource.object;
-    if (trackingTokenObj.customerId) {
-        return [NSString stringWithFormat:@"presence-external-%@-customer-%@", _userSession.orgId, trackingTokenObj.customerId];
-    }
-    return nil;
-}
-
 #pragma mark - Internal methods
 
 - (void)_connectToChannelsIfNecessary
@@ -113,17 +103,6 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
     if (pusherChannelName && _pusherChannel == nil) {
         _pusherChannel = [_pusherClient subscribeToChannelNamed:pusherChannelName];
         [_pusherChannel bindToEventNamed:@"kustomer.app.chat.message.send"
-                                            target:self
-                                            action:@selector(_onPusherChatMessageSend:)];
-        [_pusherChannel bindToEventNamed:@"kustomer.tracking.identity.update"
-                                  target:self
-                                  action:@selector(_onPusherIdentityUpdate:)];
-    }
-
-    NSString *pusherIdentifiedChannelName = [self _pusherIdentifiedChannelName];
-    if (pusherIdentifiedChannelName && _pusherIdentifiedChannel == nil) {
-        _pusherIdentifiedChannel = [_pusherClient subscribeToChannelNamed:pusherIdentifiedChannelName];
-        [_pusherIdentifiedChannel bindToEventNamed:@"kustomer.app.chat.message.send"
                                             target:self
                                             action:@selector(_onPusherChatMessageSend:)];
     }
@@ -205,13 +184,6 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
 }
 
 #pragma mark - Pusher event methods
-
-- (void)_onPusherIdentityUpdate:(PTPusherEvent *)event
-{
-    KUSLogPusher(@"Received updated tracking token from Pusher");
-
-    [_userSession.trackingTokenDataSource fetch];
-}
 
 - (void)_onPusherChatMessageSend:(PTPusherEvent *)event
 {
