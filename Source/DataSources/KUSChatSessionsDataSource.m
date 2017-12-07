@@ -11,8 +11,26 @@
 #import "KUSPaginatedDataSource_Private.h"
 
 #import "KUSDate.h"
+#import "KUSLog.h"
+
+@interface KUSChatSessionsDataSource () <KUSPaginatedDataSourceListener> {
+    NSDictionary<NSString *, NSObject *> *_pendingCustomChatSessionAttributes;
+}
+
+@end
 
 @implementation KUSChatSessionsDataSource
+
+#pragma mark - Lifecycle methods
+
+- (instancetype)initWithUserSession:(KUSUserSession *)userSession
+{
+    self = [super initWithUserSession:userSession];
+    if (self) {
+        [self addListener:self];
+    }
+    return self;
+}
 
 #pragma mark - KUSPaginatedDataSource methods
 
@@ -90,26 +108,43 @@
      }];
 }
 
-- (void)describeActiveConversation:(NSDictionary<NSString *, NSObject *> *)customAttributes completion:(void(^)(BOOL, NSError *))completion
+- (void)describeActiveConversation:(NSDictionary<NSString *, NSObject *> *)customAttributes
 {
     KUSChatSession *mostRecentChatSession = [self _mostRecentChatSession];
-    if (mostRecentChatSession) {
-        NSDictionary<NSString *, NSObject *> *formData = @{ @"custom" : customAttributes };
-        NSString *endpoint = [NSString stringWithFormat:@"/c/v1/conversations/%@", mostRecentChatSession.sessionId];
-        [self.userSession.requestManager
-         performRequestType:KUSRequestTypePatch
-         endpoint:endpoint
-         params:formData
-         authenticated:YES
-         completion:^(NSError *error, NSDictionary *response) {
-             if (completion) {
-                 completion(error == nil, error);
-             }
-         }];
+    NSString *mostRecentChatSessionId = mostRecentChatSession.oid;
+    if (mostRecentChatSessionId) {
+        [self _flushCustomAttributes:customAttributes toChatSessionId:mostRecentChatSessionId];
     } else {
-        // TODO: Queue up conversation describe commands
+        // Merge previously queued custom attributes with the latest custom attributes
+        NSMutableDictionary<NSString *, NSObject *> *pendingCustomChatSessionAttributes = [[NSMutableDictionary alloc] init];
+        if (_pendingCustomChatSessionAttributes) {
+            [pendingCustomChatSessionAttributes addEntriesFromDictionary:_pendingCustomChatSessionAttributes];
+        }
+        [pendingCustomChatSessionAttributes addEntriesFromDictionary:customAttributes];
+        _pendingCustomChatSessionAttributes = pendingCustomChatSessionAttributes;
+
+        [self fetchLatest];
     }
 }
+
+#pragma mark - Internal methods
+
+- (void)_flushCustomAttributes:(NSDictionary<NSString *, NSObject *> *)customAttributes toChatSessionId:(NSString *)chatSessionId
+{
+    NSDictionary<NSString *, NSObject *> *formData = @{ @"custom" : customAttributes };
+    NSString *endpoint = [NSString stringWithFormat:@"/c/v1/conversations/%@", chatSessionId];
+    [self.userSession.requestManager
+     performRequestType:KUSRequestTypePatch
+     endpoint:endpoint
+     params:formData
+     authenticated:YES
+     completion:^(NSError *error, NSDictionary *response) {
+         if (error) {
+             KUSLogError(@"Error updating chat attributes: %@", error);
+         }
+     }];
+}
+
 
 #pragma mark - Helper methods
 
@@ -132,6 +167,20 @@
 - (NSDate * _Nullable)lastMessageAt
 {
     return [self _mostRecentChatSession].lastMessageAt;
+}
+
+#pragma mark - KUSPaginatedDataSourceListener methods
+
+- (void)paginatedDataSourceDidChangeContent:(KUSPaginatedDataSource *)dataSource
+{
+    if (_pendingCustomChatSessionAttributes) {
+        KUSChatSession *mostRecentChatSession = [self _mostRecentChatSession];
+        NSString *mostRecentChatSessionId = mostRecentChatSession.oid;
+        if (mostRecentChatSessionId) {
+            [self _flushCustomAttributes:_pendingCustomChatSessionAttributes toChatSessionId:mostRecentChatSessionId];
+            _pendingCustomChatSessionAttributes = nil;
+        }
+    }
 }
 
 @end

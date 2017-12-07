@@ -172,7 +172,7 @@ static KUSLogOptions _logOptions = KUSLogOptionInfo | KUSLogOptionErrors;
     if (customAttributes.count == 0) {
         return;
     }
-    [self.userSession.chatSessionsDataSource describeActiveConversation:customAttributes completion:nil];
+    [self.userSession.chatSessionsDataSource describeActiveConversation:customAttributes];
 }
 
 - (void)describeCustomer:(KUSCustomerDescription *)customerDescription

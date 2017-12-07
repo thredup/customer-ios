@@ -16,7 +16,7 @@
 - (void)updateLastSeenAtForSessionId:(NSString *)sessionId completion:(void(^)(NSError *error, KUSChatSession *session))completion;
 
 // Sends custom attributes to the most active conversation, or the first conversation created
-- (void)describeActiveConversation:(NSDictionary<NSString *, NSObject *> *)customAttributes completion:(void(^)(BOOL, NSError *))completion;
+- (void)describeActiveConversation:(NSDictionary<NSString *, NSObject *> *)customAttributes;
 
 // Returns the latest date representing the last message received across all sessions
 - (NSDate *)lastMessageAt;
