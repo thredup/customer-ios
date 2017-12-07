@@ -172,17 +172,7 @@ static KUSLogOptions _logOptions = KUSLogOptionInfo | KUSLogOptionErrors;
     if (customAttributes.count == 0) {
         return;
     }
-
-    // TODO: Have it wait until there is an active conversation
-    NSDictionary<NSString *, NSObject *> *formData = @{ @"custom" : customAttributes };
-    NSString *conversationId = nil;
-    NSString *endpoint = [NSString stringWithFormat:@"/c/v1/conversations/%@", conversationId];
-    [self.userSession.requestManager
-     performRequestType:KUSRequestTypePatch
-     endpoint:endpoint
-     params:formData
-     authenticated:YES
-     completion:nil];
+    [self.userSession.chatSessionsDataSource describeActiveConversation:customAttributes completion:nil];
 }
 
 - (void)describeCustomer:(KUSCustomerDescription *)customerDescription

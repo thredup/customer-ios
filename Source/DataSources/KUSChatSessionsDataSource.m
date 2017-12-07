@@ -90,17 +90,48 @@
      }];
 }
 
-- (NSDate *)lastMessageAt
+- (void)describeActiveConversation:(NSDictionary<NSString *, NSObject *> *)customAttributes completion:(void(^)(BOOL, NSError *))completion
 {
-    NSDate *allLastMessageAt = nil;
+    KUSChatSession *mostRecentChatSession = [self _mostRecentChatSession];
+    if (mostRecentChatSession) {
+        NSDictionary<NSString *, NSObject *> *formData = @{ @"custom" : customAttributes };
+        NSString *endpoint = [NSString stringWithFormat:@"/c/v1/conversations/%@", mostRecentChatSession.sessionId];
+        [self.userSession.requestManager
+         performRequestType:KUSRequestTypePatch
+         endpoint:endpoint
+         params:formData
+         authenticated:YES
+         completion:^(NSError *error, NSDictionary *response) {
+             if (completion) {
+                 completion(error == nil, error);
+             }
+         }];
+    } else {
+        // TODO: Queue up conversation describe commands
+    }
+}
+
+#pragma mark - Helper methods
+
+- (KUSChatSession * _Nullable)_mostRecentChatSession
+{
+    NSDate *mostRecentMessageAt = nil;
+    KUSChatSession *mostRecentChatSession = nil;
     for (KUSChatSession *chatSession in self.allObjects) {
-        if (allLastMessageAt && chatSession.lastMessageAt) {
-            allLastMessageAt = [allLastMessageAt laterDate:chatSession.lastMessageAt];
-        } else if (allLastMessageAt == nil && chatSession.lastMessageAt) {
-            allLastMessageAt = chatSession.lastMessageAt;
+        if (mostRecentMessageAt == nil) {
+            mostRecentMessageAt = chatSession.lastMessageAt;
+            mostRecentChatSession = chatSession;
+        } else if ([mostRecentMessageAt earlierDate:chatSession.lastMessageAt] == mostRecentMessageAt) {
+            mostRecentMessageAt = chatSession.lastMessageAt;
+            mostRecentChatSession = chatSession;
         }
     }
-    return allLastMessageAt;
+    return mostRecentChatSession;
+}
+
+- (NSDate * _Nullable)lastMessageAt
+{
+    return [self _mostRecentChatSession].lastMessageAt;
 }
 
 @end
