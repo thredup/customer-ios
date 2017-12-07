@@ -112,6 +112,9 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
     NSString *pusherChannelName = [self _pusherChannelName];
     if (pusherChannelName && _pusherChannel == nil) {
         _pusherChannel = [_pusherClient subscribeToChannelNamed:pusherChannelName];
+        [_pusherChannel bindToEventNamed:@"kustomer.app.chat.message.send"
+                                            target:self
+                                            action:@selector(_onPusherChatMessageSend:)];
         [_pusherChannel bindToEventNamed:@"kustomer.tracking.identity.update"
                                   target:self
                                   action:@selector(_onPusherIdentityUpdate:)];
