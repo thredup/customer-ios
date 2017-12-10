@@ -129,6 +129,7 @@ static NSString *KUSUnescapeBackslashesFromString(NSString *string)
         _body = NSStringFromKeyPath(json, @"attributes.body");
         _type = type;
         _imageURL = URL;
+        _attachmentIds = [json valueForKeyPath:@"relationships.attachments.data.@unionOfObjects.id"];
 
         _createdAt = DateFromKeyPath(json, @"attributes.createdAt");
         _direction = KUSChatMessageDirectionFromString(NSStringFromKeyPath(json, @"attributes.direction"));
