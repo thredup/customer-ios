@@ -162,11 +162,7 @@
 + (UIImage *)resizeImage:(UIImage *)image toFixedPixelCount:(CGFloat)maximumPixelCount
 {
     CGFloat imagePixelCount = image.size.width * image.size.height * image.scale;
-    if (imagePixelCount <= maximumPixelCount) {
-        return image;
-    }
-
-    CGFloat scaleDown = sqrt(maximumPixelCount / imagePixelCount);
+    CGFloat scaleDown = MIN(sqrt(maximumPixelCount / imagePixelCount), 1.0);
     CGSize scaledDownSize = (CGSize) {
         .width = round(image.size.width * scaleDown),
         .height = round(image.size.height * scaleDown)

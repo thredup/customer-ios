@@ -8,6 +8,8 @@
 
 #import "KUSTextView.h"
 
+#import <MobileCoreServices/UTCoreTypes.h>
+
 @interface KUSTextView () {
     UILabel *_placeholderLabel;
 }
@@ -15,6 +17,7 @@
 @end
 
 @implementation KUSTextView
+@dynamic delegate;
 
 #pragma mark - Class methods
 
@@ -188,6 +191,37 @@
 {
     _placeholderColor = placeholderColor;
     _placeholderLabel.textColor = _placeholderColor;
+}
+
+#pragma mark - Image pasting support
+
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender
+{
+    if (action == @selector(paste:)
+        && [self.delegate respondsToSelector:@selector(textViewCanPasteImage:)]
+        && [self.delegate textViewCanPasteImage:self]
+        && [self _imageFromPasteboard]) {
+        return YES;
+    }
+    return [super canPerformAction:action withSender:sender];
+}
+
+- (void)paste:(id)sender
+{
+    if ([self.delegate respondsToSelector:@selector(textView:didPasteImage:)]) {
+        UIImage *pastedImage = [self _imageFromPasteboard];
+        if (pastedImage) {
+            [self.delegate textView:self didPasteImage:pastedImage];
+            return;
+        }
+    }
+    [super paste:sender];
+}
+
+- (UIImage *)_imageFromPasteboard
+{
+    NSData *pasteboardData = [[UIPasteboard generalPasteboard] dataForPasteboardType:(NSString *)kUTTypeImage];
+    return [UIImage imageWithData:pasteboardData];
 }
 
 @end

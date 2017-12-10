@@ -553,26 +553,16 @@
     [self.view layoutIfNeeded];
 }
 
-#pragma mark - NYTPhotosViewControllerDelegate methods
-
-- (UIView *)photosViewController:(NYTPhotosViewController *)photosViewController loadingViewForPhoto:(id <NYTPhoto>)photo
+- (void)inputBar:(KUSInputBar *)inputBar didPasteImage:(UIImage *)image
 {
-    UIActivityIndicatorView *activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-    [activityIndicatorView startAnimating];
-    return activityIndicatorView;
+    [self _attachImage:image];
 }
 
-#pragma mark - UIImagePickerControllerDelegate methods
+#pragma mark - Attachment logic methods
 
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
+- (void)_attachImage:(UIImage *)image
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
-
-    UIImage *originalImage = [info valueForKey:UIImagePickerControllerOriginalImage];
-    UIImage *editedImage = [info valueForKey:UIImagePickerControllerEditedImage];
-    UIImage *chosenImage = editedImage ?: originalImage;
-
-    UIImage *resizedImage = [KUSImage resizeImage:chosenImage toFixedPixelCount:1000000.0];
+    UIImage *resizedImage = [KUSImage resizeImage:image toFixedPixelCount:1000000.0];
     NSData *imageData = UIImageJPEGRepresentation(resizedImage, 0.8);
     NSLog(@"imageData.length: %i", (int)imageData.length);
 
@@ -581,13 +571,15 @@
      performRequestType:KUSRequestTypePost
      endpoint:@"/c/v1/chat/attachments"
      params:@{
-         @"name": fileName,
-         @"contentLength": [NSNumber numberWithUnsignedInteger:imageData.length],
-         @"contentType": @"image/jpeg"
-     }
+              @"name": fileName,
+              @"contentLength": [NSNumber numberWithUnsignedInteger:imageData.length],
+              @"contentType": @"image/jpeg"
+              }
      authenticated:YES
      completion:^(NSError *error, NSDictionary *response) {
          NSLog(@"response: %@", response);
+
+         KUSChatAttachment *chatAttachment = [[KUSChatAttachment alloc] initWithJSON:response[@"data"]];
 
          NSURL *uploadURL = [NSURL URLWithString:[response valueForKeyPath:@"meta.upload.url"]];
          NSDictionary<NSString *, NSString *> *uploadFields = [response valueForKeyPath:@"meta.upload.fields"];
@@ -608,6 +600,28 @@
               NSLog(@"response: %@", response);
           }];
      }];
+}
+
+#pragma mark - NYTPhotosViewControllerDelegate methods
+
+- (UIView *)photosViewController:(NYTPhotosViewController *)photosViewController loadingViewForPhoto:(id <NYTPhoto>)photo
+{
+    UIActivityIndicatorView *activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    [activityIndicatorView startAnimating];
+    return activityIndicatorView;
+}
+
+#pragma mark - UIImagePickerControllerDelegate methods
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+
+    UIImage *originalImage = [info valueForKey:UIImagePickerControllerOriginalImage];
+    UIImage *editedImage = [info valueForKey:UIImagePickerControllerEditedImage];
+    UIImage *chosenImage = editedImage ?: originalImage;
+
+    [self _attachImage:chosenImage];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker

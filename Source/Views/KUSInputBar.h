@@ -32,6 +32,7 @@
 
 @optional
 - (void)inputBar:(KUSInputBar *)inputBar didEnterText:(NSString *)text;
+- (void)inputBar:(KUSInputBar *)inputBar didPasteImage:(UIImage *)image;
 - (void)inputBarDidTapAttachment:(KUSInputBar *)inputBar;
 - (void)inputBarTextDidChange:(KUSInputBar *)inputBar;
 

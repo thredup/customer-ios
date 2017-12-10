@@ -16,7 +16,7 @@
 static const CGFloat kKUSInputBarMinimumHeight = 50.0;
 static const CGFloat kKUSInputBarButtonSize = 50.0;
 
-@interface KUSInputBar () <UITextViewDelegate>
+@interface KUSInputBar () <KUSTextViewDelegate>
 
 @property (nonatomic, strong) UIView *separatorView;
 @property (nonatomic, strong, readwrite) UIButton *attachmentButton;
@@ -177,7 +177,7 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
     _sendButton.alpha = ([self _actualText].length ? 1.0 : 0.5);
 }
 
-#pragma mark - UITextViewDelegate methods
+#pragma mark - KUSTextViewDelegate methods
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
@@ -198,6 +198,18 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
     [self _updateSendButton];
     [self setNeedsLayout];
     [self layoutIfNeeded];
+}
+
+- (BOOL)textViewCanPasteImage:(KUSTextView *)textView
+{
+    return [self.delegate respondsToSelector:@selector(inputBar:didPasteImage:)];
+}
+
+- (void)textView:(KUSTextView *)textView didPasteImage:(UIImage *)image
+{
+    if ([self.delegate respondsToSelector:@selector(inputBar:didPasteImage:)]) {
+        [self.delegate inputBar:self didPasteImage:image];
+    }
 }
 
 #pragma mark - UIAppearance methods
