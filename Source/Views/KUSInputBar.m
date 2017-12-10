@@ -37,7 +37,7 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
         [appearance setSeparatorColor:[KUSColor lightGrayColor]];
         [appearance setTextColor:[UIColor blackColor]];
         [appearance setTextFont:[UIFont systemFontOfSize:14.0]];
-        [appearance setPlaceholder:@"Type a message..."];
+        [appearance setPlaceholder:NSLocalizedString(@"Type a message...", nil)];
         [appearance setPlaceholderColor:[UIColor lightGrayColor]];
         [appearance setSendButtonColor:[KUSColor blueColor]];
         [appearance setKeyboardAppearance:UIKeyboardAppearanceDefault];

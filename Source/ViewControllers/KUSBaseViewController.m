@@ -174,7 +174,7 @@
         UIImage *buttonImage = [circularImage resizableImageWithCapInsets:capInsets];
 
         _retryButton = [[UIButton alloc] init];
-        [_retryButton setTitle:@"Try Again" forState:UIControlStateNormal];
+        [_retryButton setTitle:NSLocalizedString(@"Try Again", nil) forState:UIControlStateNormal];
         _retryButton.titleLabel.textColor = [UIColor whiteColor];
         _retryButton.titleLabel.font = [UIFont systemFontOfSize:12.0];
         [_retryButton setBackgroundImage:buttonImage forState:UIControlStateNormal];

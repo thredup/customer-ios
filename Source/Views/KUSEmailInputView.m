@@ -29,10 +29,10 @@
     if (self == [KUSEmailInputView class]) {
         KUSEmailInputView *appearance = [KUSEmailInputView appearance];
         [appearance setBackgroundColor:[KUSColor lightGrayColor]];
-        [appearance setPrompt:@"Don't miss a response! Get notified by email:"];
+        [appearance setPrompt:NSLocalizedString(@"Don't miss a response! Get notified by email:", nil)];
         [appearance setPromptColor:[KUSColor darkGrayColor]];
         [appearance setPromptFont:[UIFont systemFontOfSize:12.0]];
-        [appearance setPlaceholder:@"example@domain.com"];
+        [appearance setPlaceholder:NSLocalizedString(@"example@domain.com", nil)];
         [appearance setPlaceholderFont:[UIFont systemFontOfSize:14.0]];
         [appearance setSeparatorColor:[KUSColor grayColor]];
         [appearance setBorderColor:[KUSColor greenColor]];

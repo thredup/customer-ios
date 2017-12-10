@@ -28,7 +28,7 @@ static const CGFloat kSessionButtonHeight = 44.0;
         [appearance setTextColor:[UIColor whiteColor]];
         [appearance setTextFont:[UIFont systemFontOfSize:14.0]];
         [appearance setHasShadow:YES];
-        [appearance setText:@"New Conversation"];
+        [appearance setText:NSLocalizedString(@"New Conversation", nil)];
     }
 }
 

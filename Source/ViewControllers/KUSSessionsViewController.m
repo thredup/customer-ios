@@ -203,7 +203,7 @@
 
 - (void)paginatedDataSource:(KUSPaginatedDataSource *)dataSource didReceiveError:(NSError *)error
 {
-    NSString *errorText = error.localizedDescription ?: @"Something went wrong. Please try again.";
+    NSString *errorText = error.localizedDescription ?: NSLocalizedString(@"Something went wrong. Please try again.", nil);
     [self showErrorWithText:errorText];
     self.tableView.hidden = YES;
     self.createSessionButton.hidden = YES;

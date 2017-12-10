@@ -502,8 +502,8 @@
                                                                               message:nil
                                                                        preferredStyle:UIAlertControllerStyleActionSheet];
 
-        UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:@"Camera"
     if ([KUSPermissions cameraAccessIsAvailable]) {
+        UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Camera", nil)
                                                                style:UIAlertActionStyleDefault
                                                              handler:^(UIAlertAction *action) {
                                                                  [self _presentImagePickerWithSourceType:UIImagePickerControllerSourceTypeCamera];
@@ -511,8 +511,8 @@
         [actionController addAction:cameraAction];
     }
 
-        UIAlertAction *photoAction = [UIAlertAction actionWithTitle:@"Photo Library"
     if ([KUSPermissions photoLibraryAccessIsAvailable]) {
+        UIAlertAction *photoAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Photo Library", nil)
                                                               style:UIAlertActionStyleDefault
                                                             handler:^(UIAlertAction *action) {
                                                                 [self _presentImagePickerWithSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
@@ -520,7 +520,7 @@
         [actionController addAction:photoAction];
     }
 
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
                                                            style:UIAlertActionStyleCancel
                                                          handler:nil];
     [actionController addAction:cancelAction];

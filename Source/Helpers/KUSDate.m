@@ -24,18 +24,18 @@ const NSTimeInterval kDaysPerWeek = 7.0;
     NSTimeInterval timeAgo = -[date timeIntervalSinceNow];
     if (timeAgo >= kSecondsPerMinute * kMinutesPerHour * kHoursPerDay * kDaysPerWeek) {
         NSTimeInterval count = timeAgo / (kSecondsPerMinute * kMinutesPerHour * kHoursPerDay * kDaysPerWeek);
-        return _AgoTextWithCountAndUnit(count, @"week");
+        return _AgoTextWithCountAndUnit(count, NSLocalizedString(@"week", nil));
     } else if (timeAgo >= kSecondsPerMinute * kMinutesPerHour * kHoursPerDay) {
         NSTimeInterval count = timeAgo / (kSecondsPerMinute * kMinutesPerHour * kHoursPerDay);
-        return _AgoTextWithCountAndUnit(count, @"day");
+        return _AgoTextWithCountAndUnit(count, NSLocalizedString(@"day", nil));
     } else if (timeAgo >= kSecondsPerMinute * kMinutesPerHour) {
         NSTimeInterval count = timeAgo / (kSecondsPerMinute * kMinutesPerHour);
-        return _AgoTextWithCountAndUnit(count, @"hour");
+        return _AgoTextWithCountAndUnit(count, NSLocalizedString(@"hour", nil));
     } else if (timeAgo >= kSecondsPerMinute) {
         NSTimeInterval count = timeAgo / (kSecondsPerMinute);
-        return _AgoTextWithCountAndUnit(count, @"minute");
+        return _AgoTextWithCountAndUnit(count, NSLocalizedString(@"minute", nil));
     } else {
-        return @"Just now";
+        return NSLocalizedString(@"Just now", nil);
     }
 }
 
