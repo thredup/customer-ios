@@ -12,13 +12,13 @@
 
 @implementation KUSPermissions
 
-+ (BOOL)cameraIsAvailable
++ (BOOL)cameraAccessIsAvailable
 {
     return ([[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSCameraUsageDescription"]
             && [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]);
 }
 
-+ (BOOL)photoLibraryIsAvailable
++ (BOOL)photoLibraryAccessIsAvailable
 {
     return ([[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSPhotoLibraryUsageDescription"]
             && [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]);

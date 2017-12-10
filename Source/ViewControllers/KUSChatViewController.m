@@ -502,8 +502,8 @@
                                                                               message:nil
                                                                        preferredStyle:UIAlertControllerStyleActionSheet];
 
-    if ([KUSPermissions cameraIsAvailable]) {
         UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:@"Camera"
+    if ([KUSPermissions cameraAccessIsAvailable]) {
                                                                style:UIAlertActionStyleDefault
                                                              handler:^(UIAlertAction *action) {
                                                                  [self _presentImagePickerWithSourceType:UIImagePickerControllerSourceTypeCamera];
@@ -511,8 +511,8 @@
         [actionController addAction:cameraAction];
     }
 
-    if ([KUSPermissions photoLibraryIsAvailable]) {
         UIAlertAction *photoAction = [UIAlertAction actionWithTitle:@"Photo Library"
+    if ([KUSPermissions photoLibraryAccessIsAvailable]) {
                                                               style:UIAlertActionStyleDefault
                                                             handler:^(UIAlertAction *action) {
                                                                 [self _presentImagePickerWithSourceType:UIImagePickerControllerSourceTypePhotoLibrary];

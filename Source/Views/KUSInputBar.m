@@ -56,7 +56,9 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
 
         _attachmentButton = [[UIButton alloc] init];
         [_attachmentButton addTarget:self action:@selector(_pressAttach) forControlEvents:UIControlEventTouchUpInside];
-        _attachmentButton.hidden = ![KUSPermissions cameraIsAvailable] && ![KUSPermissions photoLibraryIsAvailable];
+        _attachmentButton.hidden = ![KUSPermissions cameraAccessIsAvailable] && ![KUSPermissions photoLibraryAccessIsAvailable];
+        // Disable the attachment button until end-to-end works
+        _attachmentButton.hidden = YES;
         [self addSubview:_attachmentButton];
 
         _textView = [[KUSTextView alloc] init];

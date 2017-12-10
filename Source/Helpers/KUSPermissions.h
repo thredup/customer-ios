@@ -10,7 +10,7 @@
 
 @interface KUSPermissions : NSObject
 
-+ (BOOL)cameraIsAvailable;
-+ (BOOL)photoLibraryIsAvailable;
++ (BOOL)cameraAccessIsAvailable;
++ (BOOL)photoLibraryAccessIsAvailable;
 
 @end
