@@ -173,6 +173,19 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
     }
 }
 
+- (void)_notifyForUpdatedChatSession:(NSString *)chatSessionId
+{
+    if (self.supportViewControllerPresented) {
+        [KUSAudio playMessageReceivedSound];
+    } else {
+        KUSChatSession *chatSession = [[_userSession chatSessionsDataSource] objectWithId:chatSessionId];
+        if ([_userSession.delegateProxy shouldDisplayInAppNotification] && chatSession) {
+            [KUSAudio playMessageReceivedSound];
+            [[KUSNotificationWindow sharedInstance] showChatSession:chatSession];
+        }
+    }
+}
+
 #pragma mark - Property methods
 
 - (void)setSupportViewControllerPresented:(BOOL)supportViewControllerPresented
@@ -195,16 +208,8 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
         [messagesDataSource upsertMessageReceivedFromPusher:chatMessage];
     }
 
-    if (self.supportViewControllerPresented) {
-        [KUSAudio playMessageReceivedSound];
-    } else {
-        KUSChatMessage *chatMessage = chatMessages.firstObject;
-        KUSChatSession *chatSession = [[_userSession chatSessionsDataSource] objectWithId:chatMessage.sessionId];
-        if ([_userSession.delegateProxy shouldDisplayInAppNotification] && chatSession) {
-            [KUSAudio playMessageReceivedSound];
-            [[KUSNotificationWindow sharedInstance] showChatSession:chatSession];
-        }
-    }
+    KUSChatMessage *chatMessage = chatMessages.firstObject;
+    [self _notifyForUpdatedChatSession:chatMessage.sessionId];
 }
 
 #pragma mark - KUSObjectDataSourceListener methods
@@ -250,11 +255,8 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
 - (void)paginatedDataSourceDidChangeContent:(KUSPaginatedDataSource *)dataSource
 {
     if (_updatedSessionId) {
-        KUSChatSession *chatSession = [[_userSession chatSessionsDataSource] objectWithId:_updatedSessionId];
-        if ([_userSession.delegateProxy shouldDisplayInAppNotification] && chatSession) {
-            [KUSAudio playMessageReceivedSound];
-            [[KUSNotificationWindow sharedInstance] showChatSession:chatSession];
-        }
+        [self _notifyForUpdatedChatSession:_updatedSessionId];
+        _updatedSessionId = nil;
     }
 }
 
