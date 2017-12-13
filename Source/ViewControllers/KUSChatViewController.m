@@ -611,6 +611,11 @@
     return activityIndicatorView;
 }
 
+- (void)photosViewControllerWillDismiss:(NYTPhotosViewController *)photosViewController
+{
+    [self.view setNeedsLayout];
+}
+
 #pragma mark - UIImagePickerControllerDelegate methods
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
