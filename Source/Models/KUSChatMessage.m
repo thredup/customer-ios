@@ -8,6 +8,9 @@
 
 #import "KUSChatMessage.h"
 
+#import "KUSUserSession.h"
+#import "Kustomer_Private.h"
+
 @implementation KUSChatMessage
 
 static KUSChatMessageDirection KUSChatMessageDirectionFromString(NSString *string)
@@ -102,6 +105,7 @@ static NSString *KUSUnescapeBackslashesFromString(NSString *string)
              }
          }
      }];
+
     if (chatMessages.count == 0) {
         [chatMessages addObject:standardChatMessage];
     } else {
@@ -118,6 +122,22 @@ static NSString *KUSUnescapeBackslashesFromString(NSString *string)
             }
         }
     }
+
+    for (NSString *attachmentId in standardChatMessage.attachmentIds) {
+        NSString *imageUrlString = [NSString stringWithFormat:@"https://%@.api.%@/c/v1/chat/messages/%@/attachments/%@?redirect=true",
+                                    [Kustomer sharedInstance].userSession.orgName, [Kustomer hostDomain], standardChatMessage.oid, attachmentId];
+        NSURL *imageURL = [NSURL URLWithString:imageUrlString];
+
+        NSMutableDictionary *mutableImageJSON = [json mutableCopy];
+        [mutableImageJSON setObject:[NSString stringWithFormat:@"%@_%lu", standardChatMessage.oid, (unsigned long)lastId] forKey:@"id"];
+        KUSChatMessage *imageMessage = [[KUSChatMessage alloc] initWithJSON:mutableImageJSON
+                                                                       type:KUSChatMessageTypeImage
+                                                                   imageURL:imageURL];
+        imageMessage->_body = NSLocalizedString(@"Attachment", nil);
+        [chatMessages addObject:imageMessage];
+        lastId++;
+    }
+
     return chatMessages;
 }
 
