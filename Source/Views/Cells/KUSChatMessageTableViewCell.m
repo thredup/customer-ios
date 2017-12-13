@@ -258,7 +258,7 @@ static NSTimeInterval kOptimisticSendLoadingDelay = 0.5;
     [_imageView setContentMode:UIViewContentModeScaleAspectFill];
     [_imageView sd_setShowActivityIndicatorView:YES];
     [_imageView sd_setIndicatorStyle:(currentUser ? UIActivityIndicatorViewStyleWhite : UIActivityIndicatorViewStyleGray)];
-    SDWebImageOptions options = SDWebImageHighPriority | SDWebImageScaleDownLargeImages;
+    SDWebImageOptions options = SDWebImageHighPriority | SDWebImageScaleDownLargeImages | SDWebImageRetryFailed;
 
     KUSChatMessage *startingChatMessage = _chatMessage;
     __weak KUSChatMessageTableViewCell *weakSelf = self;
