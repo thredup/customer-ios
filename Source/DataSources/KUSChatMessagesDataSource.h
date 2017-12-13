@@ -18,7 +18,7 @@
 - (NSString *)firstOtherUserId;
 - (NSUInteger)unreadCountAfterDate:(NSDate *)date;
 
-- (void)upsertMessageReceivedFromPusher:(KUSChatMessage *)chatMessage;
+- (void)upsertNewMessages:(NSArray<KUSChatMessage *> *)chatMessages;
 
 - (void)sendTextMessage:(NSString *)text;
 - (void)resendMessage:(KUSChatMessage *)message;

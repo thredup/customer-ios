@@ -77,10 +77,16 @@
     return count;
 }
 
-- (void)upsertMessageReceivedFromPusher:(KUSChatMessage *)chatMessage
+- (void)upsertNewMessages:(NSArray<KUSChatMessage *> *)chatMessages
 {
-    if (chatMessage) {
-        [self prependObjects:@[ chatMessage ]];
+    if (chatMessages.count == 1) {
+        [self prependObjects:chatMessages];
+    } else if (chatMessages.count > 1) {
+        NSMutableArray<KUSChatMessage *> *reversedMessages = [[NSMutableArray alloc] initWithCapacity:chatMessages.count];
+        for (KUSChatMessage *chatMessage in chatMessages.reverseObjectEnumerator) {
+            [reversedMessages addObject:chatMessage];
+        }
+        [self prependObjects:reversedMessages];
     }
 }
 
@@ -88,7 +94,7 @@
 {
     NSArray<KUSChatMessage *> *temporaryMessages = [KUSChatMessage messagesWithSendingText:text];
     if (temporaryMessages.count) {
-        [self prependObjects:temporaryMessages];
+        [self upsertNewMessages:temporaryMessages];
     }
 
     __weak KUSChatMessagesDataSource *weakSelf = self;
@@ -105,13 +111,13 @@
              KUSLogError(@"Error sending message: %@", error);
 
              KUSChatMessage *failedMessage = [[KUSChatMessage alloc] initFailedWithText:text];
-             [weakSelf prependObjects:@[failedMessage]];
+             [weakSelf upsertNewMessages:@[failedMessage]];
              return;
          }
 
          NSArray<KUSChatMessage *> *temporaryMessages = [KUSChatMessage objectsWithJSON:response[@"data"]];
          if (temporaryMessages.count) {
-             [weakSelf prependObjects:temporaryMessages];
+             [weakSelf upsertNewMessages:temporaryMessages];
          }
      }];
 }

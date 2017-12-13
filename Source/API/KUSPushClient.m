@@ -203,12 +203,10 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
     KUSLogPusher(@"Received chat message from Pusher");
 
     NSArray<KUSChatMessage *> *chatMessages = [KUSChatMessage objectsWithJSON:event.data[@"data"]];
-    for (KUSChatMessage *chatMessage in chatMessages) {
-        KUSChatMessagesDataSource *messagesDataSource = [_userSession chatMessagesDataSourceForSessionId:chatMessage.sessionId];
-        [messagesDataSource upsertMessageReceivedFromPusher:chatMessage];
-    }
-
     KUSChatMessage *chatMessage = chatMessages.firstObject;
+    KUSChatMessagesDataSource *messagesDataSource = [_userSession chatMessagesDataSourceForSessionId:chatMessage.sessionId];
+    [messagesDataSource upsertNewMessages:chatMessages];
+
     [self _notifyForUpdatedChatSession:chatMessage.sessionId];
 }
 
