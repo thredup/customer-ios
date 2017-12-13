@@ -8,6 +8,7 @@
 
 #import "KUSRequestManager.h"
 
+#import <SDWebImage/SDWebImageDownloader.h>
 #import <UIKit/UIKit.h>
 
 #import "KUSLog.h"
@@ -59,6 +60,8 @@ typedef void (^KUSTrackingTokenCompletion)(NSError *error, NSString *trackingTok
         _urlSession = [NSURLSession sessionWithConfiguration:configuration delegate:nil delegateQueue:operationQueue];
 
         [_userSession.trackingTokenDataSource addListener:self];
+
+        [[SDWebImageDownloader sharedDownloader] setHeadersFilter:[self _sdWebImageHeadersFilter]];
     }
     return self;
 }
@@ -244,6 +247,39 @@ typedef void (^KUSTrackingTokenCompletion)(NSError *error, NSString *trackingTok
             }
         });
     }
+}
+
+- (SDHTTPHeadersDictionary *(^)(NSURL *url, SDHTTPHeadersDictionary *headers))_sdWebImageHeadersFilter
+{
+    __weak KUSRequestManager *weakSelf = self;
+    return ^SDHTTPHeadersDictionary *(NSURL * url, SDHTTPHeadersDictionary *headers) {
+        __strong KUSRequestManager *strongSelf = weakSelf;
+        if (strongSelf == nil) {
+            return headers;
+        }
+
+        // Only attach auth headers to Kustomer requests
+        BOOL isKustomer = [url.absoluteString hasPrefix:self->_baseUrlString];
+        if (isKustomer) {
+            NSMutableDictionary<NSString *, NSString *> *responseHeaders = [(headers ?: @{}) mutableCopy];
+
+            // Tracking token
+            NSString *trackingToken = strongSelf->_userSession.trackingTokenDataSource.currentTrackingToken;
+            if (trackingToken) {
+                [responseHeaders setObject:trackingToken forKey:kKustomerTrackingTokenHeaderKey];
+            }
+            // CORS Header
+            [responseHeaders setObject:kKustomerCORSHeaderValue forKey:kKustomerCORSHeaderKey];
+            // Accept-Language Header
+            [responseHeaders setObject:strongSelf->_acceptLanguageHeaderValue forKey:@"Accept-Language"];
+            // User-Agent Header
+            [responseHeaders setObject:strongSelf->_userAgentHeaderValue forKey:@"User-Agent"];
+
+            return responseHeaders;
+        }
+
+        return headers;
+    };
 }
 
 #pragma mark - KUSObjectDataSourceListener methods
