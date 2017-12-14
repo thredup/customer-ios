@@ -14,9 +14,9 @@
 @property (nonatomic, assign) BOOL didCaptureEmail;
 @property (nonatomic, copy, nullable) NSString *trackingToken;
 
-- (instancetype)initWithUserSession:(KUSUserSession *)userSession;
-- (instancetype)init NS_UNAVAILABLE;
-+ (instancetype)new NS_UNAVAILABLE;
+- (instancetype _Nonnull)initWithUserSession:(KUSUserSession *)userSession;
+- (instancetype _Nonnull)init NS_UNAVAILABLE;
++ (instancetype _Nonnull)new NS_UNAVAILABLE;
 
 - (void)reset;
 

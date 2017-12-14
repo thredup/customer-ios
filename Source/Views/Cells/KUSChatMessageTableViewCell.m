@@ -137,7 +137,7 @@ static const CGFloat kMinBubbleHeight = 38.0;
         _labelView.numberOfLines = 0;
         [_bubbleView addSubview:_labelView];
 
-        NSMutableDictionary *mutableActiveLinkAttributes = [_labelView.linkAttributes mutableCopy];
+        NSMutableDictionary<NSAttributedStringKey, id> *mutableActiveLinkAttributes = [_labelView.linkAttributes mutableCopy];
         [mutableActiveLinkAttributes setObject:@NO forKey:NSUnderlineStyleAttributeName];
         [mutableActiveLinkAttributes setObject:[UIColor colorWithWhite:0.0 alpha:0.2] forKey:NSBackgroundColorAttributeName];
         _labelView.activeLinkAttributes = mutableActiveLinkAttributes;

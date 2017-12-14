@@ -108,7 +108,7 @@ static NSString *kKustomerOrgNameKey = @"orgName";
     }
 
     NSString *base64EncodedTokenJson = paddedBase64String(apiKeyParts[1]);
-    NSDictionary *tokenPayload = jsonFromBase64EncodedJsonString(base64EncodedTokenJson);
+    NSDictionary<NSString *, NSString *> *tokenPayload = jsonFromBase64EncodedJsonString(base64EncodedTokenJson);
 
     _apiKey = [apiKey copy];
     self.orgId = tokenPayload[kKustomerOrgIdKey];
@@ -214,7 +214,7 @@ NS_INLINE NSString *paddedBase64String(NSString *base64String) {
     return base64String;
 }
 
-NS_INLINE NSDictionary *jsonFromBase64EncodedJsonString(NSString *base64EncodedJson) {
+NS_INLINE NSDictionary<NSString *, NSString *> *jsonFromBase64EncodedJsonString(NSString *base64EncodedJson) {
     NSData *decodedData = [[NSData alloc] initWithBase64EncodedString:base64EncodedJson options:kNilOptions];
     return [NSJSONSerialization JSONObjectWithData:decodedData options:kNilOptions error:NULL];
 }
