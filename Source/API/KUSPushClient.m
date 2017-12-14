@@ -24,10 +24,11 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
 
     BOOL _shouldBeConnectedToPusher;
     NSTimer *_pollingTimer;
-    NSString *_updatedSessionId;
 
     PTPusher *_pusherClient;
     PTPusherChannel *_pusherChannel;
+
+    NSMutableDictionary<NSString *, KUSChatSession *> *_previousChatSessions;
 }
 
 @end
@@ -43,6 +44,7 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
         _userSession = userSession;
         _shouldBeConnectedToPusher = NO;
 
+        [_userSession.chatSessionsDataSource addListener:self];
         [_userSession.chatSettingsDataSource addListener:self];
         [_userSession.trackingTokenDataSource addListener:self];
 
@@ -156,21 +158,11 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
 - (void)_onPollTick
 {
     KUSTrackingToken *trackingToken = _userSession.trackingTokenDataSource.object;
-    if (trackingToken.customerId.length && !_userSession.chatSessionsDataSource.didFetch) {
-        [_userSession.chatSessionsDataSource fetchLatest];
+    if (trackingToken.customerId.length == 0 || !_userSession.chatSessionsDataSource.didFetch) {
+        return;
     }
 
-    if (_userSession.chatSessionsDataSource.didFetch) {
-        for (KUSChatSession *session in _userSession.chatSessionsDataSource.allObjects) {
-            KUSChatMessagesDataSource *messagesDataSource = [_userSession chatMessagesDataSourceForSessionId:session.oid];
-            if (messagesDataSource.didFetch) {
-                // Only register as a listener after we have fetched once already,
-                // to avoid getting updates for messages that have already been received
-                [messagesDataSource addListener:self];
-            }
-            [messagesDataSource fetchLatest];
-        }
-    }
+    [_userSession.chatSessionsDataSource fetchLatest];
 }
 
 - (void)_notifyForUpdatedChatSession:(NSString *)chatSessionId
@@ -224,38 +216,40 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
 
 #pragma mark - KUSPaginatedDataSourceListener methods
 
-- (void)paginatedDataSource:(KUSPaginatedDataSource *)dataSource
-            didChangeObject:(__kindof KUSModel *)object
-                    atIndex:(NSUInteger)oldIndex
-              forChangeType:(KUSPaginatedDataSourceChangeType)type
-                   newIndex:(NSUInteger)newIndex
+- (void)paginatedDataSourceDidLoad:(KUSPaginatedDataSource *)dataSource
 {
-    // Only consider new messages here if we're actively polling
-    if (_pollingTimer == nil) {
-        return;
-    }
-    // Only respect datasources that have been fetched once already
-    if (!dataSource.didFetch) {
-        return;
-    }
-    // We only care about new objects
-    if (type != KUSPaginatedDataSourceChangeInsert) {
-        return;
+    if (dataSource == _userSession.chatSessionsDataSource) {
+        // Only consider new messages here if we're actively polling
+        if (_pollingTimer == nil) {
+            return;
+        }
+
+        NSString *updatedSessionId = nil;
+        NSArray<KUSChatSession *> *newChatSessions = _userSession.chatSessionsDataSource.allObjects;
+        for (KUSChatSession *chatSession in newChatSessions) {
+            KUSChatSession *previousChatSession = [_previousChatSessions objectForKey:chatSession.oid];
+            if (previousChatSession) {
+                BOOL isUpdatedSession = [chatSession.lastMessageAt compare:previousChatSession.lastMessageAt] == NSOrderedDescending;
+                BOOL lastSeenBeforeMessage = [chatSession.lastMessageAt compare:chatSession.lastSeenAt] == NSOrderedDescending;
+                if (isUpdatedSession && lastSeenBeforeMessage) {
+                    updatedSessionId = chatSession.oid;
+                    KUSChatMessagesDataSource *dataSource = [_userSession chatMessagesDataSourceForSessionId:chatSession.oid];
+                    [dataSource fetchLatest];
+                }
+            }
+        }
+
+        _previousChatSessions = [[NSMutableDictionary alloc] init];
+        for (KUSChatSession *chatSession in newChatSessions) {
+            [_previousChatSessions setObject:chatSession forKey:chatSession.oid];
+        }
+
+        if (updatedSessionId) {
+            [self _notifyForUpdatedChatSession:updatedSessionId];
+            updatedSessionId = nil;
+        }
     }
 
-    // If this is a chat message datasource, grab the session id
-    if ([object isKindOfClass:[KUSChatMessage class]]) {
-        KUSChatMessage *chatMessage = (KUSChatMessage *)object;
-        _updatedSessionId = chatMessage.sessionId;
-    }
-}
-
-- (void)paginatedDataSourceDidChangeContent:(KUSPaginatedDataSource *)dataSource
-{
-    if (_updatedSessionId) {
-        [self _notifyForUpdatedChatSession:_updatedSessionId];
-        _updatedSessionId = nil;
-    }
 }
 
 #pragma mark - PTPusherDelegate methods
