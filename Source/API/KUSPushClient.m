@@ -229,12 +229,14 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
         for (KUSChatSession *chatSession in newChatSessions) {
             KUSChatSession *previousChatSession = [_previousChatSessions objectForKey:chatSession.oid];
             if (previousChatSession) {
+                KUSChatMessagesDataSource *messagesDataSource = [_userSession chatMessagesDataSourceForSessionId:chatSession.oid];
+                KUSChatMessage *latestChatMessage = messagesDataSource.allObjects.firstObject;
                 BOOL isUpdatedSession = [chatSession.lastMessageAt compare:previousChatSession.lastMessageAt] == NSOrderedDescending;
                 BOOL lastSeenBeforeMessage = [chatSession.lastMessageAt compare:chatSession.lastSeenAt] == NSOrderedDescending;
-                if (isUpdatedSession && lastSeenBeforeMessage) {
+                BOOL lastMessageAtNewerThanLocalLastMessage = latestChatMessage == nil || [chatSession.lastMessageAt compare:latestChatMessage.createdAt] == NSOrderedDescending;
+                if (isUpdatedSession && lastSeenBeforeMessage && lastMessageAtNewerThanLocalLastMessage) {
                     updatedSessionId = chatSession.oid;
-                    KUSChatMessagesDataSource *dataSource = [_userSession chatMessagesDataSourceForSessionId:chatSession.oid];
-                    [dataSource fetchLatest];
+                    [messagesDataSource fetchLatest];
                 }
             }
         }
