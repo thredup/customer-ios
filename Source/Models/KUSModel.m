@@ -69,6 +69,11 @@
             NSStringFromClass([self class]), self, self.oid];
 }
 
+- (NSUInteger)hash
+{
+    return [self.oid hash];
+}
+
 #pragma mark - Helper methods
 
 NSURL *_Nullable NSURLFromKeyPath(NSDictionary * _Nullable dict, NSString * _Nonnull keyPath)

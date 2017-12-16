@@ -41,4 +41,34 @@
             NSStringFromClass([self class]), self, self.oid, self.preview];
 }
 
+- (BOOL)isEqual:(id)object
+{
+    if (object == self) {
+        return YES;
+    }
+    if (![object isKindOfClass:[self class]]) {
+        return NO;
+    }
+
+    KUSChatSession *chatSession = (KUSChatSession *)object;
+
+    if (![chatSession.oid isEqual:self.oid]) {
+        return NO;
+    }
+    if ((chatSession.preview || self.preview) && ![chatSession.preview isEqual:self.preview]) {
+        return NO;
+    }
+    if (![chatSession.lastSeenAt isEqual:self.lastSeenAt]) {
+        return NO;
+    }
+    if (![chatSession.lastMessageAt isEqual:self.lastMessageAt]) {
+        return NO;
+    }
+    if (![chatSession.createdAt isEqual:self.createdAt]) {
+        return NO;
+    }
+
+    return YES;
+}
+
 @end

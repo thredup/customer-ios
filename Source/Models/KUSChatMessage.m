@@ -221,4 +221,40 @@ static NSString *KUSUnescapeBackslashesFromString(NSString *string)
             NSStringFromClass([self class]), self, self.oid, self.body];
 }
 
+- (BOOL)isEqual:(id)object
+{
+    if (object == self) {
+        return YES;
+    }
+    if (![object isKindOfClass:[self class]]) {
+        return NO;
+    }
+
+    KUSChatMessage *chatMessage = (KUSChatMessage *)object;
+
+    if (chatMessage.state != self.state) {
+        return NO;
+    }
+    if (chatMessage.direction != self.direction) {
+        return NO;
+    }
+    if (chatMessage.type != self.type) {
+        return NO;
+    }
+    if ((chatMessage.attachmentIds || self.attachmentIds) && ![chatMessage.attachmentIds isEqual:self.attachmentIds]) {
+        return NO;
+    }
+    if (![chatMessage.oid isEqual:self.oid]) {
+        return NO;
+    }
+    if (![chatMessage.createdAt isEqual:self.createdAt]) {
+        return NO;
+    }
+    if (![chatMessage.body isEqual:self.body]) {
+        return NO;
+    }
+
+    return YES;
+}
+
 @end
