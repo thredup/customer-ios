@@ -53,13 +53,6 @@ typedef NS_ENUM(NSUInteger, KUSPaginatedDataSourceChangeType) {
 - (void)paginatedDataSourceDidLoad:(KUSPaginatedDataSource *)dataSource;
 - (void)paginatedDataSource:(KUSPaginatedDataSource *)dataSource didReceiveError:(NSError *)error;
 
-- (void)paginatedDataSource:(KUSPaginatedDataSource *)dataSource
-            didChangeObject:(__kindof KUSModel *)object
-                    atIndex:(NSUInteger)oldIndex
-              forChangeType:(KUSPaginatedDataSourceChangeType)type
-                   newIndex:(NSUInteger)newIndex;
-
-- (void)paginatedDataSourceWillChangeContent:(KUSPaginatedDataSource *)dataSource;
 - (void)paginatedDataSourceDidChangeContent:(KUSPaginatedDataSource *)dataSource;
 
 @end

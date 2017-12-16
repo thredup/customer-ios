@@ -241,18 +241,13 @@
         [_fetchedModelsById setObject:object forKey:object.oid];
     }
 
-    BOOL didNotifyWillChange = NO;
+    BOOL didChange = NO;
     for (NSString *objectId in objectIdToPrevious) {
         NSUInteger previousIndex = [objectIdToPrevious[objectId] unsignedIntegerValue];
         NSUInteger indexOfObject = [self _indexOfObjectId:objectId];
         if (previousIndex != indexOfObject) {
-            if (!didNotifyWillChange) {
-                [self notifyAnnouncersWillChangeContent];
-                didNotifyWillChange = YES;
-            }
-
-            KUSModel *object = [self objectWithId:objectId];
-            [self notifyAnnouncersForObject:object previousIndex:previousIndex newIndex:indexOfObject];
+            didChange = YES;
+            break;
         }
     }
 
@@ -260,7 +255,7 @@
     self.didFetch = YES;
     self.didFetchAll = (self.didFetchAll || response.nextPath == nil);
 
-    if (didNotifyWillChange) {
+    if (didChange) {
         [self notifyAnnouncersDidChangeContent];
     }
     [self notifyAnnouncersDidLoad];
@@ -307,22 +302,17 @@
         [_fetchedModelsById setObject:object forKey:object.oid];
     }
 
-    BOOL didNotifyWillChange = NO;
+    BOOL didChange = NO;
     for (NSString *objectId in objectIdToPrevious) {
         NSUInteger previousIndex = [objectIdToPrevious[objectId] unsignedIntegerValue];
         NSUInteger indexOfObject = [self _indexOfObjectId:objectId];
         if (previousIndex != indexOfObject) {
-            if (!didNotifyWillChange) {
-                [self notifyAnnouncersWillChangeContent];
-                didNotifyWillChange = YES;
-            }
-
-            KUSModel *object = [self objectWithId:objectId];
-            [self notifyAnnouncersForObject:object previousIndex:previousIndex newIndex:indexOfObject];
+            didChange = YES;
+            break;
         }
     }
 
-    if (didNotifyWillChange) {
+    if (didChange) {
         [self notifyAnnouncersDidChangeContent];
     }
 }
@@ -333,21 +323,17 @@
         return;
     }
 
-    BOOL didNotifyWillChange = NO;
+    BOOL didChange = NO;
     for (KUSModel *object in objects) {
         NSUInteger indexOfObject = [self indexOfObject:object];
         if (indexOfObject != NSNotFound) {
-            if (!didNotifyWillChange) {
-                [self notifyAnnouncersWillChangeContent];
-                didNotifyWillChange = YES;
-            }
+            didChange = YES;
             [_fetchedModels replaceObjectAtIndex:indexOfObject withObject:object];
             [_fetchedModelsById setObject:object forKey:object.oid];
-            [self notifyAnnouncersForObject:object previousIndex:indexOfObject newIndex:indexOfObject];
         }
     }
 
-    if (didNotifyWillChange) {
+    if (didChange) {
         [self notifyAnnouncersDidChangeContent];
     }
 }
@@ -358,62 +344,28 @@
         return;
     }
 
-    BOOL didNotifyWillChange = NO;
+    BOOL didChange = NO;
     for (KUSModel *object in objects) {
         NSUInteger indexOfObject = [self indexOfObject:object];
         if (indexOfObject != NSNotFound) {
-            if (!didNotifyWillChange) {
-                [self notifyAnnouncersWillChangeContent];
-                didNotifyWillChange = YES;
-            }
+            didChange = YES;
             [_fetchedModels removeObjectAtIndex:indexOfObject];
             [_fetchedModelsById removeObjectForKey:object.oid];
-            [self notifyAnnouncersForObject:object previousIndex:indexOfObject newIndex:NSNotFound];
         }
     }
 
-    if (didNotifyWillChange) {
+    if (didChange) {
         [self notifyAnnouncersDidChangeContent];
     }
 }
 
 #pragma mark - Internal listener methods
 
-- (void)notifyAnnouncersWillChangeContent
-{
-    for (id<KUSPaginatedDataSourceListener> listener in [_listeners copy]) {
-        if ([listener respondsToSelector:@selector(paginatedDataSourceWillChangeContent:)]) {
-            [listener paginatedDataSourceWillChangeContent:self];
-        }
-    }
-}
-
 - (void)notifyAnnouncersDidChangeContent
 {
     for (id<KUSPaginatedDataSourceListener> listener in [_listeners copy]) {
         if ([listener respondsToSelector:@selector(paginatedDataSourceDidChangeContent:)]) {
             [listener paginatedDataSourceDidChangeContent:self];
-        }
-    }
-}
-
-- (void)notifyAnnouncersForObject:(__kindof KUSModel *)object previousIndex:(NSUInteger)prevIndex newIndex:(NSUInteger)newIndex
-{
-    KUSPaginatedDataSourceChangeType changeType = KUSPaginatedDataSourceChangeUpdate;
-    if (prevIndex == NSNotFound) {
-        changeType = KUSPaginatedDataSourceChangeInsert;
-    } else if (newIndex == NSNotFound) {
-        changeType = KUSPaginatedDataSourceChangeDelete;
-    } else if (prevIndex != newIndex) {
-        changeType = KUSPaginatedDataSourceChangeMove;
-    }
-    for (id<KUSPaginatedDataSourceListener> listener in [_listeners copy]) {
-        if ([listener respondsToSelector:@selector(paginatedDataSource:didChangeObject:atIndex:forChangeType:newIndex:)]) {
-            [listener paginatedDataSource:self
-                          didChangeObject:object
-                                  atIndex:prevIndex
-                            forChangeType:changeType
-                                 newIndex:newIndex];
         }
     }
 }
