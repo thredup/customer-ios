@@ -351,8 +351,6 @@
     BOOL previousMessageDiffSender = ![previousChatMessage.sentById isEqualToString:chatMessage.sentById];
     [cell setShowsAvatar:previousMessageDiffSender];
 
-
-
     // Make sure that we've fetched all of the latest messages by loading the next page
     static NSUInteger kPrefetchPadding = 20;
     if (!_chatMessagesDataSource.didFetchAll && indexPath.row >= _chatMessagesDataSource.count - 1 - kPrefetchPadding) {
@@ -540,44 +538,9 @@
 
 - (void)_attachImage:(UIImage *)image
 {
+    // TODO: Stage image for upload but don't upload immediately
     UIImage *resizedImage = [KUSImage resizeImage:image toFixedPixelCount:1000000.0];
-    NSData *imageData = UIImageJPEGRepresentation(resizedImage, 0.8);
-    NSLog(@"imageData.length: %i", (int)imageData.length);
-
-    NSString *fileName = [NSString stringWithFormat:@"%@.jpg", [NSUUID UUID].UUIDString];
-    [_userSession.requestManager
-     performRequestType:KUSRequestTypePost
-     endpoint:@"/c/v1/chat/attachments"
-     params:@{
-              @"name": fileName,
-              @"contentLength": [NSNumber numberWithUnsignedInteger:imageData.length],
-              @"contentType": @"image/jpeg"
-              }
-     authenticated:YES
-     completion:^(NSError *error, NSDictionary *response) {
-         NSLog(@"response: %@", response);
-
-         KUSChatAttachment *chatAttachment = [[KUSChatAttachment alloc] initWithJSON:response[@"data"]];
-
-         NSURL *uploadURL = [NSURL URLWithString:[response valueForKeyPath:@"meta.upload.url"]];
-         NSDictionary<NSString *, NSString *> *uploadFields = [response valueForKeyPath:@"meta.upload.fields"];
-
-         NSString *boundary = @"----FormBoundary";
-         NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
-         NSData *bodyData = KUSUploadBodyDataFromImageAndFileNameAndFieldsAndBoundary(imageData, fileName, uploadFields, boundary);
-
-         [_userSession.requestManager
-          performRequestType:KUSRequestTypePost
-          URL:uploadURL
-          params:nil
-          bodyData:bodyData
-          authenticated:NO
-          additionalHeaders:@{ @"Content-Type" : contentType }
-          completion:^(NSError *error, NSDictionary *response) {
-              NSLog(@"error: %@", error);
-              NSLog(@"response: %@", response);
-          }];
-     }];
+    [_chatMessagesDataSource sendMessageWithText:@"Image:" attachments:@[ resizedImage ]];
 }
 
 #pragma mark - NYTPhotosViewControllerDelegate methods
@@ -610,37 +573,6 @@
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
     [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-#pragma mark - Helpers
-
-static NSData *KUSUploadBodyDataFromImageAndFileNameAndFieldsAndBoundary(NSData *imageData,
-                                                                         NSString *fileName,
-                                                                         NSDictionary<NSString *, NSString *> *uploadFields,
-                                                                         NSString *boundary)
-{
-    NSMutableData *bodyData = [[NSMutableData alloc] init];
-
-    // Make sure to insert the "key" field first
-    NSMutableArray<NSString *> *fieldKeys = [uploadFields.allKeys mutableCopy];
-    if ([fieldKeys containsObject:@"key"]) {
-        [fieldKeys removeObject:@"key"];
-        [fieldKeys insertObject:@"key" atIndex:0];
-    }
-
-    [bodyData appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-    for (NSString *field in fieldKeys) {
-        NSString *value = uploadFields[field];
-        [bodyData appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n\r\n%@", field, value] dataUsingEncoding:NSUTF8StringEncoding]];
-        [bodyData appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-    }
-
-    [bodyData appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"file\"; filename=\"%@\"\r\n", fileName] dataUsingEncoding:NSUTF8StringEncoding]];
-    [bodyData appendData:[@"Content-Type: image/jpeg\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
-    [bodyData appendData:[NSData dataWithData:imageData]];
-    [bodyData appendData:[[NSString stringWithFormat:@"\r\n--%@--", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-
-    return bodyData;
 }
 
 @end
