@@ -127,11 +127,11 @@
 
 - (void)sendMessageWithText:(NSString *)text attachments:(NSArray<UIImage *> *)attachments
 {
-    NSString *messageId = [[NSUUID UUID] UUIDString];
+    NSString *tempMessageId = [[NSUUID UUID] UUIDString];
     NSMutableArray<NSDictionary<NSString *, NSString *> *> *attachmentObjects = [[NSMutableArray alloc] init];
     for (UIImage *attachment in attachments) {
         NSString *attachmentId = [[NSUUID UUID] UUIDString];
-        NSURL *attachmentURL = [KUSChatMessage attachmentURLForMessageId:messageId attachmentId:attachmentId];
+        NSURL *attachmentURL = [KUSChatMessage attachmentURLForMessageId:tempMessageId attachmentId:attachmentId];
         [[SDImageCache sharedImageCache] storeImage:attachment
                                              forKey:attachmentURL.absoluteString
                                              toDisk:NO
@@ -141,7 +141,7 @@
 
     NSDictionary *json = @{
         @"type": @"chat_message",
-        @"id": messageId,
+        @"id": tempMessageId,
         @"attributes": @{
             @"body": text,
             @"direction": @"in",
@@ -174,27 +174,48 @@
     void(^handleMessageSend)(NSDictionary *) = ^void(NSDictionary *response) {
         [self removeObjects:temporaryMessages];
 
-        NSArray<KUSChatMessage *> *temporaryMessages = [KUSChatMessage objectsWithJSON:response[@"data"]];
-        [self upsertNewMessages:temporaryMessages];
+        NSArray<KUSChatMessage *> *finalMessages = [KUSChatMessage objectsWithJSON:response[@"data"]];
+
+        KUSChatMessage *firstMessage = finalMessages.firstObject;
+        for (NSUInteger i = 0; i < firstMessage.attachmentIds.count; i++) {
+            UIImage *attachment = [attachments objectAtIndex:i];
+            NSString *attachmentId = [firstMessage.attachmentIds objectAtIndex:i];
+            NSURL *attachmentURL = [KUSChatMessage attachmentURLForMessageId:firstMessage.oid attachmentId:attachmentId];
+            [[SDImageCache sharedImageCache] storeImage:attachment
+                                                 forKey:attachmentURL.absoluteString
+                                                 toDisk:YES
+                                             completion:nil];
+        }
+
+        [self upsertNewMessages:finalMessages];
     };
 
     // Logic to actually send a message
     void (^sendMessage)(void) = ^void() {
-        [self.userSession.requestManager
-         performRequestType:KUSRequestTypePost
-         endpoint:@"/c/v1/chat/messages"
-         params:@{ @"body": text, @"session": _sessionId }
-         authenticated:YES
-         completion:^(NSError *error, NSDictionary *response) {
+        [self
+         _uploadImages:attachments
+         completion:^(NSError *error, NSArray<NSString *> *attachmentIds) {
              if (error) {
-                 KUSLogError(@"Error sending message: %@", error);
+                 KUSLogError(@"Error uploading attachments: %@", error);
                  handleError();
                  return;
              }
 
-             handleMessageSend(response);
-         }];
+             [self.userSession.requestManager
+              performRequestType:KUSRequestTypePost
+              endpoint:@"/c/v1/chat/messages"
+              params:@{ @"body": text, @"session": _sessionId, @"attachments": attachmentIds }
+              authenticated:YES
+              completion:^(NSError *error, NSDictionary *response) {
+                  if (error) {
+                      KUSLogError(@"Error sending message: %@", error);
+                      handleError();
+                      return;
+                  }
 
+                  handleMessageSend(response);
+              }];
+         }];
     };
 
     if (_sessionId) {
@@ -227,12 +248,131 @@
     }
 }
 
+- (void)_uploadImages:(NSArray<UIImage *> *)images completion:(void(^)(NSError *error, NSArray<NSString *> *attachmentIds))completion
+{
+    if (images.count == 0) {
+        if (completion) {
+            completion(nil, @[]);
+        }
+        return;
+    }
+
+    __block BOOL didSendCompletion = NO;
+    __block NSUInteger uploadedCount = 0;
+    __block NSMutableArray<NSString *> *attachmentIds = [[NSMutableArray alloc] init];
+
+    void(^onUploadComplete)(NSUInteger, NSError *, NSString *) = ^void(NSUInteger index, NSError *error, NSString *attachmentId) {
+        if (error) {
+            if (completion && !didSendCompletion) {
+                didSendCompletion = YES;
+                completion(error, nil);
+            }
+            return;
+        }
+
+        uploadedCount++;
+        [attachmentIds replaceObjectAtIndex:index withObject:attachmentId];
+        if (uploadedCount == images.count) {
+            if (completion && !didSendCompletion) {
+                didSendCompletion = YES;
+                completion(nil, attachmentIds);
+            }
+            return;
+        }
+    };
+
+    for (NSUInteger i = 0; i < images.count; i++) {
+        [attachmentIds addObject:@""];
+        UIImage *image = [images objectAtIndex:i];
+
+        NSUInteger index = i;
+        [self
+         _uploadImage:image
+         completion:^(NSError *error, KUSChatAttachment *attachment) {
+             onUploadComplete(index, error, attachment.oid);
+         }];
+    }
+}
+
+- (void)_uploadImage:(UIImage *)image completion:(void(^)(NSError *error, KUSChatAttachment *attachment))completion
+{
+    NSData *imageData = UIImageJPEGRepresentation(image, 0.8);
+    NSString *fileName = [NSString stringWithFormat:@"%@.jpg", [NSUUID UUID].UUIDString];
+    [self.userSession.requestManager
+     performRequestType:KUSRequestTypePost
+     endpoint:@"/c/v1/chat/attachments"
+     params:@{
+              @"name": fileName,
+              @"contentLength": @(imageData.length),
+              @"contentType": @"image/jpeg"
+              }
+     authenticated:YES
+     completion:^(NSError *error, NSDictionary *response) {
+         if (error) {
+             if (completion) {
+                 completion(error, nil);
+             }
+             return;
+         }
+
+         KUSChatAttachment *chatAttachment = [[KUSChatAttachment alloc] initWithJSON:response[@"data"]];
+         NSURL *uploadURL = [NSURL URLWithString:[response valueForKeyPath:@"meta.upload.url"]];
+         NSDictionary<NSString *, NSString *> *uploadFields = [response valueForKeyPath:@"meta.upload.fields"];
+
+         NSString *boundary = @"----FormBoundary";
+         NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
+         NSData *bodyData = KUSUploadBodyDataFromImageAndFileNameAndFieldsAndBoundary(imageData, fileName, uploadFields, boundary);
+
+         [self.userSession.requestManager
+          performRequestType:KUSRequestTypePost
+          URL:uploadURL
+          params:nil
+          bodyData:bodyData
+          authenticated:NO
+          additionalHeaders:@{ @"Content-Type" : contentType }
+          completion:^(NSError *error, NSDictionary *response) {
+              if (completion) {
+                  completion(nil, chatAttachment);
+              }
+          }];
+     }];
+}
+
 - (void)resendMessage:(KUSChatMessage *)message
 {
     if (message) {
         [self removeObjects:@[ message ]];
         // [self sendTextMessage:message.body];
     }
+}
+
+static NSData *KUSUploadBodyDataFromImageAndFileNameAndFieldsAndBoundary(NSData *imageData,
+                                                                         NSString *fileName,
+                                                                         NSDictionary<NSString *, NSString *> *uploadFields,
+                                                                         NSString *boundary)
+{
+    NSMutableData *bodyData = [[NSMutableData alloc] init];
+
+    // Make sure to insert the "key" field first
+    NSMutableArray<NSString *> *fieldKeys = [uploadFields.allKeys mutableCopy];
+    if ([fieldKeys containsObject:@"key"]) {
+        [fieldKeys removeObject:@"key"];
+        [fieldKeys insertObject:@"key" atIndex:0];
+    }
+
+    [bodyData appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+    for (NSString *field in fieldKeys) {
+        NSString *value = uploadFields[field];
+        [bodyData appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n\r\n%@", field, value] dataUsingEncoding:NSUTF8StringEncoding]];
+        [bodyData appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+    }
+
+    [bodyData appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"file\"; filename=\"%@\"\r\n", fileName] dataUsingEncoding:NSUTF8StringEncoding]];
+    [bodyData appendData:[@"Content-Type: image/jpeg\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+    [bodyData appendData:[NSData dataWithData:imageData]];
+    [bodyData appendData:[[NSString stringWithFormat:@"\r\n--%@--", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+
+    return bodyData;
 }
 
 @end
