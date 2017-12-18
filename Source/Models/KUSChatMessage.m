@@ -183,40 +183,6 @@ static NSString *KUSUnescapeBackslashesFromString(NSString *string)
     return [self initWithJSON:json];
 }
 
-- (instancetype)initFailedWithText:(NSString *)text
-{
-    NSDictionary *json = @{
-        @"type": @"chat_message",
-        @"id": [[NSUUID UUID] UUIDString],
-        @"attributes": @{
-            @"body": text,
-            @"direction": @"in"
-        }
-    };
-    self = [self initWithJSON:json];
-    if (self) {
-        self->_state = KUSChatMessageStateFailed;
-    }
-    return self;
-}
-
-+ (NSArray<KUSChatMessage *> *)messagesWithSendingText:(NSString *)sendingText
-{
-    NSDictionary *json = @{
-        @"type": @"chat_message",
-        @"id": [[NSUUID UUID] UUIDString],
-        @"attributes": @{
-            @"body": sendingText,
-            @"direction": @"in"
-        }
-    };
-    NSArray<KUSChatMessage *> *messages = [self objectsWithJSON:json];
-    for (KUSChatMessage *message in messages) {
-        message->_state = KUSChatMessageStateSending;
-    }
-    return messages;
-}
-
 #pragma mark - NSObject methods
 
 - (NSString *)description

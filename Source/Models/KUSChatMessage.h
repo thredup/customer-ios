@@ -38,11 +38,8 @@ typedef NS_ENUM(NSInteger, KUSChatMessageState) {
 @property (nonatomic, assign, readonly) KUSChatMessageType type;
 @property (nonatomic, assign, readwrite) KUSChatMessageState state;
 
-+ (NSArray<KUSChatMessage *> *)messagesWithSendingText:(NSString *)sendingText;
 + (NSURL *)attachmentURLForMessageId:(NSString *)messageId attachmentId:(NSString *)attachmentId;
 
 - (instancetype)initWithAutoreply:(NSString *)autoreply;
-
-- (instancetype)initFailedWithText:(NSString *)text;
 
 @end
