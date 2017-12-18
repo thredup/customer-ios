@@ -128,15 +128,18 @@
 - (void)sendMessageWithText:(NSString *)text attachments:(NSArray<UIImage *> *)attachments
 {
     NSString *tempMessageId = [[NSUUID UUID] UUIDString];
-    NSMutableArray<NSDictionary<NSString *, NSString *> *> *attachmentObjects = [[NSMutableArray alloc] init];
+    NSMutableArray<NSDictionary<NSString *, NSString *> *> *attachmentObjects = [[NSMutableArray alloc] initWithCapacity:attachments.count];
+    NSMutableArray<NSString *> *cachedImageKeys = [[NSMutableArray alloc] initWithCapacity:attachments.count];
     for (UIImage *attachment in attachments) {
         NSString *attachmentId = [[NSUUID UUID] UUIDString];
         NSURL *attachmentURL = [KUSChatMessage attachmentURLForMessageId:tempMessageId attachmentId:attachmentId];
+        NSString *imageKey = attachmentURL.absoluteString;
         [[SDImageCache sharedImageCache] storeImage:attachment
-                                             forKey:attachmentURL.absoluteString
+                                             forKey:imageKey
                                              toDisk:NO
                                          completion:nil];
         [attachmentObjects addObject:@{ @"id": attachmentId }];
+        [cachedImageKeys addObject:imageKey];
     }
 
     NSDictionary *json = @{
@@ -188,6 +191,11 @@
         }
 
         [self upsertNewMessages:finalMessages];
+
+        // Remove the temporary images from the cache
+        for (NSString *imageKey in cachedImageKeys) {
+            [[SDImageCache sharedImageCache] removeImageForKey:imageKey fromDisk:NO withCompletion:nil];
+        }
     };
 
     // Logic to actually send a message
