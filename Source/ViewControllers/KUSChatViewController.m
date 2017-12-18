@@ -29,13 +29,12 @@
 #import "KUSNYTChatMessagePhoto.h"
 
 @interface KUSChatViewController () <KUSEmailInputViewDelegate, KUSInputBarDelegate, KUSObjectDataSourceListener,
-                                     KUSPaginatedDataSourceListener, KUSChatMessageTableViewCellDelegate,
+                                     KUSChatMessagesDataSourceListener, KUSChatMessageTableViewCellDelegate,
                                      NYTPhotosViewControllerDelegate, UITableViewDataSource, UITableViewDelegate,
                                      UINavigationControllerDelegate, UIImagePickerControllerDelegate> {
     KUSUserSession *_userSession;
 
-    BOOL _forNewChatSession;
-    KUSChatSession *_chatSession;
+    NSString *_chatSessionId;
     KUSChatMessagesDataSource *_chatMessagesDataSource;
 
     CGFloat _keyboardHeight;
@@ -52,29 +51,23 @@
 
 #pragma mark - Lifecycle methods
 
-- (instancetype)initWithUserSession:(KUSUserSession *)userSession
+- (instancetype)initWithUserSession:(KUSUserSession *)userSession forChatSession:(KUSChatSession *)session
 {
     self = [super init];
     if (self) {
         _userSession = userSession;
-    }
-    return self;
-}
-
-- (instancetype)initWithUserSession:(KUSUserSession *)userSession forChatSession:(KUSChatSession *)session
-{
-    self = [self initWithUserSession:userSession];
-    if (self) {
-        _chatSession = session;
+        _chatSessionId = session.oid;
+        _chatMessagesDataSource = [_userSession chatMessagesDataSourceForSessionId:_chatSessionId];
     }
     return self;
 }
 
 - (instancetype)initWithUserSession:(KUSUserSession *)userSession forNewSessionWithBackButton:(BOOL)showBackButton
 {
-    self = [self initWithUserSession:userSession];
+    self = [super init];
     if (self) {
-        _forNewChatSession = YES;
+        _userSession = userSession;
+        _chatMessagesDataSource = [[KUSChatMessagesDataSource alloc] initForNewConversationWithUserSession:_userSession];
 
         [self.navigationItem setHidesBackButton:!showBackButton animated:NO];
     }
@@ -121,7 +114,7 @@
 #endif
 
     self.fauxNavigationBar = [[KUSNavigationBarView alloc] initWithUserSession:_userSession];
-    [self.fauxNavigationBar setSessionId:_chatSession.oid];
+    [self.fauxNavigationBar setSessionId:_chatSessionId];
     [self.fauxNavigationBar setShowsLabels:YES];
     [self.view addSubview:self.fauxNavigationBar];
 
@@ -130,13 +123,10 @@
     self.inputBarView.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth);
     [self.view addSubview:self.inputBarView];
 
-    if (_chatSession) {
-        _chatMessagesDataSource = [_userSession chatMessagesDataSourceForSessionId:_chatSession.oid];
-        [_chatMessagesDataSource addListener:self];
-        [_chatMessagesDataSource fetchLatest];
-        if (!_chatMessagesDataSource.didFetch) {
-            [self showLoadingIndicator];
-        }
+    [_chatMessagesDataSource addListener:self];
+    [_chatMessagesDataSource fetchLatest];
+    if (!_chatMessagesDataSource.didFetch) {
+        [self showLoadingIndicator];
     }
 
     NSArray<NSString *> *keyboardNotificationNames = @[
@@ -178,7 +168,7 @@
         [_inputBarView becomeFirstResponder];
     }
 
-    [_userSession.chatSessionsDataSource updateLastSeenAtForSessionId:_chatSession.oid completion:nil];
+    [_userSession.chatSessionsDataSource updateLastSeenAtForSessionId:_chatSessionId completion:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -187,14 +177,14 @@
 
     [_inputBarView resignFirstResponder];
 
-    [_userSession.chatSessionsDataSource updateLastSeenAtForSessionId:_chatSession.oid completion:nil];
+    [_userSession.chatSessionsDataSource updateLastSeenAtForSessionId:_chatSessionId completion:nil];
 }
 
 - (void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
 
-    CGFloat extraNavigationBarHeight = (_forNewChatSession ? 146.0 : 36.0);
+    CGFloat extraNavigationBarHeight = (_chatSessionId ? 36.0 : 146.0);
     CGFloat navigationBarHeight = self.edgeInsets.top + extraNavigationBarHeight;
 
     CGFloat inputBarHeight = [self.inputBarView desiredHeight];
@@ -241,7 +231,7 @@
 
 - (void)_checkShouldShowEmailInput
 {
-    BOOL shouldShowEmailInput = [_userSession shouldCaptureEmail] && _chatSession != nil;
+    BOOL shouldShowEmailInput = [_userSession shouldCaptureEmail] && _chatSessionId != nil;
     if (shouldShowEmailInput) {
         if (self.emailInputView == nil) {
             self.emailInputView = [[KUSEmailInputView alloc] init];
@@ -263,7 +253,7 @@
     [self.tableView reloadData];
 }
 
-#pragma mark - KUSPaginatedDataSourceListener methods
+#pragma mark - KUSChatMessagesDataSourceListener methods
 
 - (void)paginatedDataSourceDidLoad:(KUSPaginatedDataSource *)dataSource
 {
@@ -282,6 +272,15 @@
             [_chatMessagesDataSource fetchLatest];
         });
     }
+}
+
+- (void)chatMessagesDataSource:(KUSChatMessagesDataSource *)dataSource didCreateSessionId:(NSString *)sessionId
+{
+    _chatSessionId = sessionId;
+    [self.navigationItem setHidesBackButton:NO animated:YES];
+    [self.fauxNavigationBar setSessionId:_chatSessionId];
+    [self _checkShouldShowEmailInput];
+    [self.view setNeedsLayout];
 }
 
 #pragma mark - NSNotification methods
@@ -470,28 +469,7 @@
 
 - (void)inputBar:(KUSInputBar *)inputBar didEnterText:(NSString *)text
 {
-    if (_forNewChatSession) {
-        [_userSession.chatSessionsDataSource createSessionWithTitle:text completion:^(NSError *error, KUSChatSession *session) {
-            if (error) {
-                KUSLogError(@"Error creating chat session: %@", error);
-                return;
-            }
-
-            _forNewChatSession = NO;
-            _chatSession = session;
-            [self.navigationItem setHidesBackButton:NO animated:YES];
-            [self.fauxNavigationBar setSessionId:_chatSession.oid];
-            _chatMessagesDataSource = [_userSession chatMessagesDataSourceForSessionId:_chatSession.oid];
-            [_chatMessagesDataSource addListener:self];
-            [_chatMessagesDataSource fetchLatest];
-            [self _checkShouldShowEmailInput];
-            [self.view setNeedsLayout];
-
-            [_chatMessagesDataSource sendTextMessage:text];
-        }];
-    } else {
-        [_chatMessagesDataSource sendTextMessage:text];
-    }
+    [_chatMessagesDataSource sendTextMessage:text];
 }
 
 - (void)inputBarDidTapAttachment:(KUSInputBar *)inputBar

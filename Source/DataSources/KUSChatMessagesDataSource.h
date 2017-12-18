@@ -10,10 +10,21 @@
 
 #import "KUSChatMessage.h"
 
+@class KUSChatMessagesDataSource;
+@protocol KUSChatMessagesDataSourceListener <KUSPaginatedDataSourceListener>
+
+@optional
+- (void)chatMessagesDataSource:(KUSChatMessagesDataSource *)dataSource didCreateSessionId:(NSString *)sessionId;
+
+@end
+
 @interface KUSChatMessagesDataSource : KUSPaginatedDataSource
 
+- (instancetype)initForNewConversationWithUserSession:(KUSUserSession *)userSession;
 - (instancetype)initWithUserSession:(KUSUserSession *)userSession sessionId:(NSString *)sessionId;
 - (instancetype)initWithUserSession:(KUSUserSession *)userSession NS_UNAVAILABLE;
+
+- (void)addListener:(id<KUSChatMessagesDataSourceListener>)listener;
 
 - (NSString *)firstOtherUserId;
 - (NSUInteger)unreadCountAfterDate:(NSDate *)date;

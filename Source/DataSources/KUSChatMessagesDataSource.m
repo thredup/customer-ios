@@ -10,9 +10,11 @@
 
 #import "KUSLog.h"
 #import "KUSPaginatedDataSource_Private.h"
+#import "KUSUserSession_Private.h"
 
 @interface KUSChatMessagesDataSource () {
     NSString *_sessionId;
+    BOOL _createdLocally;
 }
 
 @end
@@ -20,6 +22,15 @@
 @implementation KUSChatMessagesDataSource
 
 #pragma mark - Lifecycle methods
+
+- (instancetype)initForNewConversationWithUserSession:(KUSUserSession *)userSession
+{
+    self = [super initWithUserSession:userSession];
+    if (self) {
+        _createdLocally = YES;
+    }
+    return self;
+}
 
 - (instancetype)initWithUserSession:(KUSUserSession *)userSession sessionId:(NSString *)sessionId;
 {
@@ -31,6 +42,11 @@
 }
 
 #pragma mark - KUSPaginatedDataSource methods
+
+- (void)addListener:(id<KUSChatMessagesDataSourceListener>)listener
+{
+    [super addListener:listener];
+}
 
 - (NSURL *)firstURL
 {
@@ -44,6 +60,22 @@
 - (Class)modelClass
 {
     return [KUSChatMessage class];
+}
+
+- (BOOL)didFetch
+{
+    if (_createdLocally) {
+        return YES;
+    }
+    return [super didFetch];
+}
+
+- (BOOL)didFetchAll
+{
+    if (_createdLocally) {
+        return YES;
+    }
+    return [super didFetchAll];
 }
 
 #pragma mark - Public methods
@@ -92,34 +124,75 @@
 
 - (void)sendTextMessage:(NSString *)text
 {
+    // Insert placeholder "sending" messages
     NSArray<KUSChatMessage *> *temporaryMessages = [KUSChatMessage messagesWithSendingText:text];
     if (temporaryMessages.count) {
         [self upsertNewMessages:temporaryMessages];
     }
 
-    __weak KUSChatMessagesDataSource *weakSelf = self;
-    [self.userSession.requestManager
-     performRequestType:KUSRequestTypePost
-     endpoint:@"/c/v1/chat/messages"
-     params:@{ @"body": text, @"session": _sessionId }
-     authenticated:YES
-     completion:^(NSError *error, NSDictionary *response) {
-         if (temporaryMessages.count) {
-             [weakSelf removeObjects:temporaryMessages];
-         }
-         if (error) {
-             KUSLogError(@"Error sending message: %@", error);
+    // Logic to handle a chat session error or a message send error
+    void(^handleError)(void) = ^void() {
+        [self removeObjects:temporaryMessages];
 
-             KUSChatMessage *failedMessage = [[KUSChatMessage alloc] initFailedWithText:text];
-             [weakSelf upsertNewMessages:@[failedMessage]];
-             return;
-         }
+        KUSChatMessage *failedMessage = [[KUSChatMessage alloc] initFailedWithText:text];
+        [self upsertNewMessages:@[failedMessage]];
+    };
 
-         NSArray<KUSChatMessage *> *temporaryMessages = [KUSChatMessage objectsWithJSON:response[@"data"]];
-         if (temporaryMessages.count) {
-             [weakSelf upsertNewMessages:temporaryMessages];
-         }
-     }];
+    // Logic to handle a successful message send
+    void(^handleMessageSend)(NSDictionary *) = ^void(NSDictionary *response) {
+        [self removeObjects:temporaryMessages];
+
+        NSArray<KUSChatMessage *> *temporaryMessages = [KUSChatMessage objectsWithJSON:response[@"data"]];
+        [self upsertNewMessages:temporaryMessages];
+    };
+
+    // Logic to actually send a message
+    void (^sendMessage)(void) = ^void() {
+        [self.userSession.requestManager
+         performRequestType:KUSRequestTypePost
+         endpoint:@"/c/v1/chat/messages"
+         params:@{ @"body": text, @"session": _sessionId }
+         authenticated:YES
+         completion:^(NSError *error, NSDictionary *response) {
+             if (error) {
+                 KUSLogError(@"Error sending message: %@", error);
+                 handleError();
+                 return;
+             }
+
+             handleMessageSend(response);
+         }];
+
+    };
+
+    if (_sessionId) {
+        sendMessage();
+    } else {
+        [self.userSession.chatSessionsDataSource
+         createSessionWithTitle:text
+         completion:^(NSError *error, KUSChatSession *session) {
+             if (error) {
+                 KUSLogError(@"Error creating session: %@", error);
+                 handleError();
+                 return;
+             }
+
+             // Grab the session id
+             _sessionId = session.oid;
+
+             // Insert the current messages data source into the userSession's lookup table
+             [self.userSession.chatMessagesDataSources setObject:self forKey:session.oid];
+
+             // Notify listeners
+             for (id<KUSChatMessagesDataSourceListener> listener in [self.listeners copy]) {
+                 if ([listener respondsToSelector:@selector(chatMessagesDataSource:didCreateSessionId:)]) {
+                     [listener chatMessagesDataSource:self didCreateSessionId:session.oid];
+                 }
+             }
+
+             sendMessage();
+         }];
+    }
 }
 
 - (void)resendMessage:(KUSChatMessage *)message

@@ -12,8 +12,6 @@
 #import "KUSPaginatedResponse.h"
 
 @interface KUSPaginatedDataSource () {
-    NSHashTable<id<KUSPaginatedDataSourceListener>> *_listeners;
-
     NSMutableArray<KUSModel *> *_fetchedModels;
     NSMutableDictionary<NSString *, KUSModel *> *_fetchedModelsById;
 
@@ -22,6 +20,7 @@
 }
 
 @property (nonatomic, weak, readwrite) KUSUserSession *userSession;
+@property (nonatomic, strong, readwrite) NSHashTable<id<KUSPaginatedDataSourceListener>> *listeners;
 
 @property (nonatomic, readwrite) BOOL isFetching;
 @property (nonatomic, readwrite) BOOL didFetch;
@@ -98,12 +97,12 @@
 
 - (void)addListener:(id<KUSPaginatedDataSourceListener>)listener
 {
-    [_listeners addObject:listener];
+    [self.listeners addObject:listener];
 }
 
 - (void)removeListener:(id<KUSPaginatedDataSourceListener>)listener
 {
-    [_listeners removeObject:listener];
+    [self.listeners removeObject:listener];
 }
 
 #pragma mark - Fetch methods
@@ -363,7 +362,7 @@
 
 - (void)notifyAnnouncersDidChangeContent
 {
-    for (id<KUSPaginatedDataSourceListener> listener in [_listeners copy]) {
+    for (id<KUSPaginatedDataSourceListener> listener in [self.listeners copy]) {
         if ([listener respondsToSelector:@selector(paginatedDataSourceDidChangeContent:)]) {
             [listener paginatedDataSourceDidChangeContent:self];
         }
@@ -372,7 +371,7 @@
 
 - (void)notifyAnnouncersDidError:(NSError *)error
 {
-    for (id<KUSPaginatedDataSourceListener> listener in [_listeners copy]) {
+    for (id<KUSPaginatedDataSourceListener> listener in [self.listeners copy]) {
         if ([listener respondsToSelector:@selector(paginatedDataSource:didReceiveError:)]) {
             [listener paginatedDataSource:self didReceiveError:error];
         }
@@ -381,7 +380,7 @@
 
 - (void)notifyAnnouncersDidLoad
 {
-    for (id<KUSPaginatedDataSourceListener> listener in [_listeners copy]) {
+    for (id<KUSPaginatedDataSourceListener> listener in [self.listeners copy]) {
         if ([listener respondsToSelector:@selector(paginatedDataSourceDidLoad:)]) {
             [listener paginatedDataSourceDidLoad:self];
         }

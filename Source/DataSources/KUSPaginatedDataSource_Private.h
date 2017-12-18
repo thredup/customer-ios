@@ -13,6 +13,7 @@
 @interface KUSPaginatedDataSource (Private)
 
 @property (nonatomic, weak, readonly) KUSUserSession *userSession;
+@property (nonatomic, strong, readonly) NSHashTable<id<KUSPaginatedDataSourceListener>> *listeners;
 
 // Methods to subclass
 - (NSURL *)firstURL;

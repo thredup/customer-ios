@@ -19,6 +19,10 @@
 
 + (NSAttributedString *)attributedStringFromText:(NSString *)text fontSize:(CGFloat)fontSize color:(UIColor *)color
 {
+    if (text == nil) {
+        return nil;
+    }
+
     TSMarkdownParser *parser = [TSMarkdownParser standardParser];
 
     parser.defaultAttributes = KUSAttributedFontWithSize(parser.defaultAttributes, fontSize, color);
