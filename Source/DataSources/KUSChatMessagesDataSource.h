@@ -10,6 +10,8 @@
 
 #import "KUSChatMessage.h"
 
+#import <UIKit/UIKit.h>
+
 @class KUSChatMessagesDataSource;
 @protocol KUSChatMessagesDataSourceListener <KUSPaginatedDataSourceListener>
 
@@ -31,7 +33,7 @@
 
 - (void)upsertNewMessages:(NSArray<KUSChatMessage *> *)chatMessages;
 
-- (void)sendTextMessage:(NSString *)text;
+- (void)sendMessageWithText:(NSString *)text attachments:(NSArray<UIImage *> *)attachments;
 - (void)resendMessage:(KUSChatMessage *)message;
 
 @end

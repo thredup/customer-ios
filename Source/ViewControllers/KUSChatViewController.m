@@ -469,7 +469,7 @@
 
 - (void)inputBar:(KUSInputBar *)inputBar didEnterText:(NSString *)text
 {
-    [_chatMessagesDataSource sendTextMessage:text];
+    [_chatMessagesDataSource sendMessageWithText:text attachments:nil];
 }
 
 - (void)inputBarDidTapAttachment:(KUSInputBar *)inputBar

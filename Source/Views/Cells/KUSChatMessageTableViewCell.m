@@ -231,7 +231,7 @@ static NSTimeInterval kOptimisticSendLoadingDelay = 0.5;
             _bubbleView.alpha = 1.0;
         }   break;
         case KUSChatMessageStateSending: {
-            NSTimeInterval timeElapsed = -[_chatMessage.sendingDate timeIntervalSinceNow];
+            NSTimeInterval timeElapsed = -[_chatMessage.createdAt timeIntervalSinceNow];
             if (timeElapsed >= kOptimisticSendLoadingDelay) {
                 _bubbleView.alpha = 0.5;
             } else {

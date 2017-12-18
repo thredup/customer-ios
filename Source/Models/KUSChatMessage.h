@@ -36,10 +36,10 @@ typedef NS_ENUM(NSInteger, KUSChatMessageState) {
 @property (nonatomic, assign, readonly) KUSChatMessageDirection direction;
 
 @property (nonatomic, assign, readonly) KUSChatMessageType type;
-@property (nonatomic, assign, readonly) KUSChatMessageState state;
-@property (nonatomic, copy, readonly) NSDate *sendingDate;
+@property (nonatomic, assign, readwrite) KUSChatMessageState state;
 
 + (NSArray<KUSChatMessage *> *)messagesWithSendingText:(NSString *)sendingText;
++ (NSURL *)attachmentURLForMessageId:(NSString *)messageId attachmentId:(NSString *)attachmentId;
 
 - (instancetype)initWithAutoreply:(NSString *)autoreply;
 

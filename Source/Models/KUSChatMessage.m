@@ -49,6 +49,13 @@ static NSString *KUSUnescapeBackslashesFromString(NSString *string)
 
 #pragma mark - Lifecycle methods
 
++ (NSURL *)attachmentURLForMessageId:(NSString *)messageId attachmentId:(NSString *)attachmentId
+{
+    NSString *imageUrlString = [NSString stringWithFormat:@"https://%@.api.%@/c/v1/chat/messages/%@/attachments/%@?redirect=true",
+                                [Kustomer sharedInstance].userSession.orgName, [Kustomer hostDomain], messageId, attachmentId];
+    return [NSURL URLWithString:imageUrlString];
+}
+
 + (NSArray<__kindof KUSModel *> *_Nullable)objectsWithJSON:(NSDictionary * _Nonnull)json
 {
     KUSChatMessage *standardChatMessage = [[KUSChatMessage alloc] initWithJSON:json];
@@ -124,9 +131,7 @@ static NSString *KUSUnescapeBackslashesFromString(NSString *string)
     }
 
     for (NSString *attachmentId in standardChatMessage.attachmentIds) {
-        NSString *imageUrlString = [NSString stringWithFormat:@"https://%@.api.%@/c/v1/chat/messages/%@/attachments/%@?redirect=true",
-                                    [Kustomer sharedInstance].userSession.orgName, [Kustomer hostDomain], standardChatMessage.oid, attachmentId];
-        NSURL *imageURL = [NSURL URLWithString:imageUrlString];
+        NSURL *imageURL = [self attachmentURLForMessageId:standardChatMessage.oid attachmentId:attachmentId];
 
         NSMutableDictionary *mutableImageJSON = [json mutableCopy];
         [mutableImageJSON setObject:[NSString stringWithFormat:@"%@_%lu", standardChatMessage.oid, (unsigned long)lastId] forKey:@"id"];
@@ -208,7 +213,6 @@ static NSString *KUSUnescapeBackslashesFromString(NSString *string)
     NSArray<KUSChatMessage *> *messages = [self objectsWithJSON:json];
     for (KUSChatMessage *message in messages) {
         message->_state = KUSChatMessageStateSending;
-        message->_sendingDate = [NSDate date];
     }
     return messages;
 }

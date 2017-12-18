@@ -11,6 +11,9 @@
 #import "KUSLog.h"
 #import "KUSPaginatedDataSource_Private.h"
 #import "KUSUserSession_Private.h"
+#import "KUSDate.h"
+
+#import <SDWebImage/SDImageCache.h>
 
 @interface KUSChatMessagesDataSource () {
     NSString *_sessionId;
@@ -122,20 +125,49 @@
     }
 }
 
-- (void)sendTextMessage:(NSString *)text
+- (void)sendMessageWithText:(NSString *)text attachments:(NSArray<UIImage *> *)attachments
 {
-    // Insert placeholder "sending" messages
-    NSArray<KUSChatMessage *> *temporaryMessages = [KUSChatMessage messagesWithSendingText:text];
-    if (temporaryMessages.count) {
-        [self upsertNewMessages:temporaryMessages];
+    NSString *messageId = [[NSUUID UUID] UUIDString];
+    NSMutableArray<NSDictionary<NSString *, NSString *> *> *attachmentObjects = [[NSMutableArray alloc] init];
+    for (UIImage *attachment in attachments) {
+        NSString *attachmentId = [[NSUUID UUID] UUIDString];
+        NSURL *attachmentURL = [KUSChatMessage attachmentURLForMessageId:messageId attachmentId:attachmentId];
+        [[SDImageCache sharedImageCache] storeImage:attachment
+                                             forKey:attachmentURL.absoluteString
+                                             toDisk:NO
+                                         completion:nil];
+        [attachmentObjects addObject:@{ @"id": attachmentId }];
     }
+
+    NSDictionary *json = @{
+        @"type": @"chat_message",
+        @"id": messageId,
+        @"attributes": @{
+            @"body": text,
+            @"direction": @"in",
+            @"createdAt": [KUSDate stringFromDate:[NSDate date]]
+        },
+        @"relationships": @{
+            @"attachments" : @{
+                @"data": attachmentObjects
+            }
+        }
+    };
+
+    NSArray<KUSChatMessage *> *temporaryMessages = [KUSChatMessage objectsWithJSON:json];
+    for (KUSChatMessage *message in temporaryMessages) {
+        message.state = KUSChatMessageStateSending;
+    }
+    [self upsertNewMessages:temporaryMessages];
 
     // Logic to handle a chat session error or a message send error
     void(^handleError)(void) = ^void() {
         [self removeObjects:temporaryMessages];
 
-        KUSChatMessage *failedMessage = [[KUSChatMessage alloc] initFailedWithText:text];
-        [self upsertNewMessages:@[failedMessage]];
+        for (KUSChatMessage *message in temporaryMessages) {
+            message.state = KUSChatMessageStateSending;
+        }
+        [self upsertNewMessages:temporaryMessages];
     };
 
     // Logic to handle a successful message send
@@ -199,7 +231,7 @@
 {
     if (message) {
         [self removeObjects:@[ message ]];
-        [self sendTextMessage:message.body];
+        // [self sendTextMessage:message.body];
     }
 }
 
