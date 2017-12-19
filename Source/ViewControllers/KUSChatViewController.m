@@ -329,7 +329,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self numberOfChatMessages];
+    return [_chatMessagesDataSource count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -375,44 +375,14 @@
 
 #pragma mark - UITableView high-level helpers
 
-- (BOOL)_shouldShowAutoreply
-{
-    NSUInteger count = [_chatMessagesDataSource count];
-    KUSChatSettings *chatSettings = _userSession.chatSettingsDataSource.object;
-    BOOL shouldShowAutoreply = chatSettings.autoreplyMessage && count > 0 && _chatMessagesDataSource.didFetchAll;
-    return shouldShowAutoreply;
-}
-
-- (NSUInteger)numberOfChatMessages
-{
-    NSUInteger count = [_chatMessagesDataSource count];
-    if ([self _shouldShowAutoreply]) {
-        return count + 1;
-    } else {
-        return count;
-    }
-}
-
 - (KUSChatMessage *)messageForRow:(NSInteger)row
 {
-    NSInteger numberOfRows = [self numberOfChatMessages];
-    KUSChatMessage *chatMessage;
-
-    if ([self _shouldShowAutoreply] && row == numberOfRows - 2) {
-        KUSChatSettings *chatSettings = _userSession.chatSettingsDataSource.object;
-        chatMessage = chatSettings.autoreplyMessage;
-    } else if ([self _shouldShowAutoreply] && row >= numberOfRows - 1) {
-        chatMessage = [_chatMessagesDataSource objectAtIndex:row - 1];
-    } else {
-        chatMessage = [_chatMessagesDataSource objectAtIndex:row];
-    }
-    return chatMessage;
+    return [_chatMessagesDataSource objectAtIndex:row];
 }
 
 - (KUSChatMessage *)messageBeforeRow:(NSInteger)row
 {
-    NSInteger numberOfRows = [self numberOfChatMessages];
-    if (row < numberOfRows - 1) {
+    if (row < [_chatMessagesDataSource count] - 1) {
         return [self messageForRow:row + 1];
     } else {
         return nil;

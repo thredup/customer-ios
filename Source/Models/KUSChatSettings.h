@@ -17,7 +17,6 @@
 @property (nonatomic, copy, readonly) NSString *autoreply;
 @property (nonatomic, copy, readonly) NSString *activeFormId;
 @property (nonatomic, copy, readonly) NSString *pusherAccessKey;
-- (KUSChatMessage *)autoreplyMessage;
 @property (nonatomic, assign, readonly) BOOL enabled;
 
 @end

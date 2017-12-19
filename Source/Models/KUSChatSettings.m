@@ -10,9 +10,7 @@
 
 #import "KUSChatMessage.h"
 
-@implementation KUSChatSettings {
-    KUSChatMessage *_autoreplyMessage;
-}
+@implementation KUSChatSettings
 
 #pragma mark - Class methods
 
@@ -39,14 +37,6 @@
 }
 
 #pragma mark - Convenience methods
-
-- (KUSChatMessage *)autoreplyMessage
-{
-    if (_autoreplyMessage == nil) {
-        _autoreplyMessage = [[KUSChatMessage alloc] initWithAutoreply:self.autoreply];
-    }
-    return _autoreplyMessage;
-}
 
 NSString *_Nullable NSStringSanitizedAutoreply(NSString * _Nullable autoreply)
 {

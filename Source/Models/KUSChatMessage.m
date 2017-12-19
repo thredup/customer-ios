@@ -167,22 +167,6 @@ static NSString *KUSUnescapeBackslashesFromString(NSString *string)
     return [self initWithJSON:json type:KUSChatMessageTypeText imageURL:nil];
 }
 
-- (instancetype)initWithAutoreply:(NSString *)autoreply
-{
-    if (autoreply.length == 0) {
-        return nil;
-    }
-    NSDictionary *json = @{
-        @"type": @"chat_message",
-        @"id": @"__autoreply",
-        @"attributes": @{
-            @"body": autoreply,
-            @"direction": @"out"
-        }
-    };
-    return [self initWithJSON:json];
-}
-
 #pragma mark - NSObject methods
 
 - (NSString *)description

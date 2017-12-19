@@ -40,6 +40,4 @@ typedef NS_ENUM(NSInteger, KUSChatMessageState) {
 
 + (NSURL *)attachmentURLForMessageId:(NSString *)messageId attachmentId:(NSString *)attachmentId;
 
-- (instancetype)initWithAutoreply:(NSString *)autoreply;
-
 @end
