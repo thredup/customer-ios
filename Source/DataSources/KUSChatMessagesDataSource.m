@@ -15,7 +15,7 @@
 
 #import <SDWebImage/SDImageCache.h>
 
-@interface KUSChatMessagesDataSource () {
+@interface KUSChatMessagesDataSource () <KUSChatMessagesDataSourceListener> {
     NSString *_sessionId;
     BOOL _createdLocally;
 }
@@ -31,6 +31,7 @@
     self = [super initWithUserSession:userSession];
     if (self) {
         _createdLocally = YES;
+        [self addListener:self];
     }
     return self;
 }
@@ -40,6 +41,7 @@
     self = [super initWithUserSession:userSession];
     if (self) {
         _sessionId = sessionId;
+        [self addListener:self];
     }
     return self;
 }
@@ -361,6 +363,54 @@
         // [self sendTextMessage:message.body];
     }
 }
+
+#pragma mark - KUSChatMessagesDataSourceListener methods
+
+- (void)paginatedDataSourceDidChangeContent:(KUSPaginatedDataSource *)dataSource
+{
+    [self _insertAutoreplyIfNecessary];
+}
+
+- (void)chatMessagesDataSource:(KUSChatMessagesDataSource *)dataSource didCreateSessionId:(NSString *)sessionId
+{
+    [self _insertAutoreplyIfNecessary];
+}
+
+- (void)_insertAutoreplyIfNecessary
+{
+    KUSChatMessage *firstMessage = self.allObjects.lastObject;
+    KUSChatSettings *chatSettings = self.userSession.chatSettingsDataSource.object;
+    BOOL shouldShowAutoreply = (chatSettings.autoreply.length > 0
+                                && [self count] > 0
+                                && self.didFetchAll
+                                && _sessionId.length > 0
+                                && firstMessage.state == KUSChatMessageStateSent);
+
+    if (shouldShowAutoreply) {
+        NSString *autoreplyId = [NSString stringWithFormat:@"_autoreply_%@", _sessionId];
+        // Early escape if we already have an autoreply
+        if ([self objectWithId:autoreplyId]) {
+            return;
+        }
+
+        KUSChatMessage *firstMessage = self.allObjects.lastObject;
+        NSDate *createdAt = [firstMessage.createdAt dateByAddingTimeInterval:0.001];
+        NSDictionary *json = @{
+            @"type": @"chat_message",
+            @"id": autoreplyId,
+            @"attributes": @{
+                @"body": chatSettings.autoreply,
+                @"direction": @"out",
+                @"createdAt": [KUSDate stringFromDate:createdAt]
+            }
+        };
+        KUSChatMessage *autoreplyMessage = [[KUSChatMessage alloc] initWithJSON:json];
+        [self upsertObjects:@[ autoreplyMessage ]];
+    }
+
+}
+
+#pragma mark - Helper methods
 
 static NSData *KUSUploadBodyDataFromImageAndFileNameAndFieldsAndBoundary(NSData *imageData,
                                                                          NSString *fileName,
