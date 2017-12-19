@@ -64,7 +64,7 @@
 
          KUSChatSession *session = [[KUSChatSession alloc] initWithJSON:response[@"data"]];
          if (session) {
-             [weakSelf prependObjects:@[ session ]];
+             [weakSelf upsertObjects:@[ session ]];
          }
          if (completion) {
              completion(nil, session);
@@ -100,7 +100,7 @@
 
          KUSChatSession *session = [[KUSChatSession alloc] initWithJSON:response[@"data"]];
          if (session) {
-             [weakSelf updateObjects:@[ session ]];
+             [weakSelf upsertObjects:@[ session ]];
          }
          if (completion) {
              completion(nil, session);

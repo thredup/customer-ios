@@ -18,9 +18,9 @@
 // Methods to subclass
 - (NSURL *)firstURL;
 - (Class)modelClass;
+- (NSArray<NSSortDescriptor *> *)sortDescriptors;
 
-- (void)prependObjects:(NSArray<KUSModel *> *)objects;
-- (void)updateObjects:(NSArray<KUSModel *> *)objects;
 - (void)removeObjects:(NSArray<KUSModel *> *)objects;
+- (void)upsertObjects:(NSArray<KUSModel *> *)objects;
 
 @end

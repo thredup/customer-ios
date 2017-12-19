@@ -207,6 +207,13 @@
     return [KUSModel class];
 }
 
+- (NSArray<NSSortDescriptor *> *)sortDescriptors
+{
+    return @[
+        [NSSortDescriptor sortDescriptorWithKey:@"oid" ascending:NO]
+    ];
+}
+
 #pragma mark - Internal methods
 
 - (void)_appendResponse:(KUSPaginatedResponse *)response error:(NSError *)error
@@ -221,42 +228,12 @@
     _lastPaginatedResponse = response;
     _mostRecentPaginatedResponse = response;
 
-    NSMutableDictionary<NSString *, NSNumber *> *objectIdToPrevious = [[NSMutableDictionary alloc] init];
-
-    for (KUSModel *object in response.objects) {
-        NSUInteger indexOfObject = [self indexOfObject:object];
-        [objectIdToPrevious setObject:@(indexOfObject) forKey:object.oid];
-    }
-    for (KUSModel *object in response.objects) {
-        NSUInteger indexOfObject = [self indexOfObject:object];
-        if (indexOfObject == NSNotFound) {
-            // New object
-            [_fetchedModels addObject:object];
-        } else {
-            // Updated/moved object
-            [_fetchedModels removeObjectAtIndex:indexOfObject];
-            [_fetchedModels addObject:object];
-        }
-        [_fetchedModelsById setObject:object forKey:object.oid];
-    }
-
-    BOOL didChange = NO;
-    for (NSString *objectId in objectIdToPrevious) {
-        NSUInteger previousIndex = [objectIdToPrevious[objectId] unsignedIntegerValue];
-        NSUInteger indexOfObject = [self _indexOfObjectId:objectId];
-        if (previousIndex != indexOfObject) {
-            didChange = YES;
-            break;
-        }
-    }
-
     self.isFetching = NO;
     self.didFetch = YES;
     self.didFetchAll = (self.didFetchAll || response.nextPath == nil);
 
-    if (didChange) {
-        [self notifyAnnouncersDidChangeContent];
-    }
+    [self upsertObjects:response.objects];
+
     [self notifyAnnouncersDidLoad];
 }
 
@@ -275,66 +252,14 @@
     self.didFetch = YES;
     self.didFetchAll = (self.didFetchAll || response.nextPath == nil);
 
-    [self prependObjects:response.objects];
+    [self upsertObjects:response.objects];
 
     [self notifyAnnouncersDidLoad];
 }
 
-- (void)prependObjects:(NSArray<KUSModel *> *)objects
+- (void)_sortMessages
 {
-    NSMutableDictionary<NSString *, NSNumber *> *objectIdToPrevious = [[NSMutableDictionary alloc] init];
-
-    for (KUSModel *object in objects.reverseObjectEnumerator) {
-        NSUInteger indexOfObject = [self indexOfObject:object];
-        [objectIdToPrevious setObject:@(indexOfObject) forKey:object.oid];
-    }
-    for (KUSModel *object in objects.reverseObjectEnumerator) {
-        NSUInteger indexOfObject = [self indexOfObject:object];
-        if (indexOfObject == NSNotFound) {
-            // New object
-            [_fetchedModels insertObject:object atIndex:0];
-        } else {
-            // Updated/moved object
-            [_fetchedModels removeObjectAtIndex:indexOfObject];
-            [_fetchedModels insertObject:object atIndex:0];
-        }
-        [_fetchedModelsById setObject:object forKey:object.oid];
-    }
-
-    BOOL didChange = NO;
-    for (NSString *objectId in objectIdToPrevious) {
-        NSUInteger previousIndex = [objectIdToPrevious[objectId] unsignedIntegerValue];
-        NSUInteger indexOfObject = [self _indexOfObjectId:objectId];
-        if (previousIndex != indexOfObject) {
-            didChange = YES;
-            break;
-        }
-    }
-
-    if (didChange) {
-        [self notifyAnnouncersDidChangeContent];
-    }
-}
-
-- (void)updateObjects:(NSArray<KUSModel *> *)objects
-{
-    if (objects.count == 0) {
-        return;
-    }
-
-    BOOL didChange = NO;
-    for (KUSModel *object in objects) {
-        NSUInteger indexOfObject = [self indexOfObject:object];
-        if (indexOfObject != NSNotFound) {
-            didChange = YES;
-            [_fetchedModels replaceObjectAtIndex:indexOfObject withObject:object];
-            [_fetchedModelsById setObject:object forKey:object.oid];
-        }
-    }
-
-    if (didChange) {
-        [self notifyAnnouncersDidChangeContent];
-    }
+    [_fetchedModels sortUsingDescriptors:[self sortDescriptors]];
 }
 
 - (void)removeObjects:(NSArray<KUSModel *> *)objects
@@ -352,6 +277,36 @@
             [_fetchedModelsById removeObjectForKey:object.oid];
         }
     }
+
+    if (didChange) {
+        [self notifyAnnouncersDidChangeContent];
+    }
+}
+
+- (void)upsertObjects:(NSArray<KUSModel *> *)objects
+{
+    if (objects.count == 0) {
+        return;
+    }
+
+    BOOL didChange = NO;
+    for (KUSModel *object in objects) {
+        NSUInteger indexOfObject = [self indexOfObject:object];
+        if (indexOfObject != NSNotFound) {
+            KUSModel *currentObject = [self objectWithId:object.oid];
+            if (![object isEqual:currentObject]) {
+                didChange = YES;
+            }
+            [_fetchedModels replaceObjectAtIndex:indexOfObject withObject:object];
+            [_fetchedModelsById setObject:object forKey:object.oid];
+        } else {
+            didChange = YES;
+            [_fetchedModels addObject:object];
+            [_fetchedModelsById setObject:object forKey:object.oid];
+        }
+    }
+
+    [self _sortMessages];
 
     if (didChange) {
         [self notifyAnnouncersDidChangeContent];

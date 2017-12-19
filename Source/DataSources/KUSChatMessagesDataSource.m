@@ -115,13 +115,13 @@
 - (void)upsertNewMessages:(NSArray<KUSChatMessage *> *)chatMessages
 {
     if (chatMessages.count == 1) {
-        [self prependObjects:chatMessages];
+        [self upsertObjects:chatMessages];
     } else if (chatMessages.count > 1) {
         NSMutableArray<KUSChatMessage *> *reversedMessages = [[NSMutableArray alloc] initWithCapacity:chatMessages.count];
         for (KUSChatMessage *chatMessage in chatMessages.reverseObjectEnumerator) {
             [reversedMessages addObject:chatMessage];
         }
-        [self prependObjects:reversedMessages];
+        [self upsertObjects:reversedMessages];
     }
 }
 
