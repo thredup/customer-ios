@@ -44,6 +44,15 @@
     return [KUSChatSession class];
 }
 
+- (NSArray<NSSortDescriptor *> *)sortDescriptors
+{
+    return @[
+        [NSSortDescriptor sortDescriptorWithKey:@"lastMessageAt" ascending:NO],
+        [NSSortDescriptor sortDescriptorWithKey:@"createdAt" ascending:NO],
+        [NSSortDescriptor sortDescriptorWithKey:@"oid" ascending:NO]
+    ];
+}
+
 #pragma mark - Public methods
 
 - (void)createSessionWithTitle:(NSString *)title completion:(void(^)(NSError *error, KUSChatSession *session))completion

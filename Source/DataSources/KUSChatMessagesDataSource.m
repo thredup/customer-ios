@@ -65,6 +65,14 @@
     return [KUSChatMessage class];
 }
 
+- (NSArray<NSSortDescriptor *> *)sortDescriptors
+{
+    return @[
+        [NSSortDescriptor sortDescriptorWithKey:@"createdAt" ascending:NO],
+        [NSSortDescriptor sortDescriptorWithKey:@"oid" ascending:NO]
+    ];
+}
+
 - (BOOL)didFetch
 {
     if (_createdLocally) {

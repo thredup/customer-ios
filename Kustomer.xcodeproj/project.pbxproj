@@ -274,6 +274,7 @@
 		63B9CDC61F089BF000120F3E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		63B9CDC91F089BF000120F3E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		63B9CDCB1F089BF000120F3E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		63BF9C611FE7772200E30C73 /* KUSUserSession_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KUSUserSession_Private.h; sourceTree = "<group>"; };
 		63D4728F1F70AACC00C947F2 /* KUSNotificationWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSNotificationWindow.h; sourceTree = "<group>"; };
 		63D472901F70AACC00C947F2 /* KUSNotificationWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSNotificationWindow.m; sourceTree = "<group>"; };
 		63D472931F71561100C947F2 /* KUSDelegateProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSDelegateProxy.h; sourceTree = "<group>"; };
@@ -375,6 +376,7 @@
 				63EDF3D31F414A67000345D8 /* KUSRequestManager.h */,
 				63EDF3D41F414A67000345D8 /* KUSRequestManager.m */,
 				63EDF3CF1F412503000345D8 /* KUSUserSession.h */,
+				63BF9C611FE7772200E30C73 /* KUSUserSession_Private.h */,
 				63EDF3D01F412503000345D8 /* KUSUserSession.m */,
 			);
 			path = API;
