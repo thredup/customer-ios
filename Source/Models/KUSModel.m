@@ -19,12 +19,29 @@
     return nil;
 }
 
++ (BOOL)enforcesModelType
+{
+    return YES;
+}
+
 #pragma mark - Lifecycle methods
 
 + (NSArray<__kindof KUSModel *> *_Nullable)objectsWithJSON:(NSDictionary * _Nonnull)json
 {
     KUSModel *model = [[self alloc] initWithJSON:json];
     return (model ? @[ model ] : nil);
+}
+
++ (NSArray<__kindof KUSModel *> *_Nullable)objectsWithJSONs:(NSArray<NSDictionary *> * _Nullable)jsons
+{
+    NSMutableArray<__kindof KUSModel *> *objects = [[NSMutableArray alloc] initWithCapacity:jsons.count];
+    for (NSDictionary *json in jsons) {
+        KUSModel *object = [[self alloc] initWithJSON:json];
+        if (object) {
+            [objects addObject:object];
+        }
+    }
+    return objects;
 }
 
 - (instancetype _Nullable)initWithJSON:(NSDictionary * _Nonnull)json
@@ -34,10 +51,10 @@
         return nil;
     }
 
-    // Reject any objects where the model type doesn't match
+    // Reject any objects where the model type doesn't match, if enforced
     NSString *type = json[@"type"];
     NSString *classType = [[self class] modelType];
-    if (![type isEqual:classType]) {
+    if ([[self class] enforcesModelType] && ![type isEqual:classType]) {
         return nil;
     }
 
@@ -86,6 +103,12 @@ NSString *_Nullable NSStringFromKeyPath(NSDictionary * _Nullable dict, NSString 
 {
     NSString *value = [dict valueForKeyPath:keyPath];
     return ([value isKindOfClass:[NSString class]] ? value : nil);
+}
+
+NSArray *_Nullable NSArrayFromKeyPath(NSDictionary * _Nullable dict, NSString * _Nonnull keyPath)
+{
+    NSArray *value = [dict valueForKeyPath:keyPath];
+    return ([value isKindOfClass:[NSArray class]] ? value : nil);
 }
 
 BOOL BOOLFromKeyPath(NSDictionary * _Nullable dict, NSString * _Nonnull keyPath)
