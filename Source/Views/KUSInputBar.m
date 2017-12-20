@@ -63,6 +63,9 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
         _textView.delegate = self;
         _textView.returnKeyType = UIReturnKeySend;
         _textView.enablesReturnKeyAutomatically = YES;
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+            self.textView.autocorrectionType = UITextAutocorrectionTypeNo;
+        }
         [self addSubview:_textView];
 
         _sendButton = [[UIButton alloc] init];
