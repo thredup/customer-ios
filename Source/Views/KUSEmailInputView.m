@@ -46,6 +46,8 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        self.clipsToBounds = YES;
+
         self.infoLabel = [[UILabel alloc] init];
         self.infoLabel.textAlignment = NSTextAlignmentCenter;
         self.infoLabel.adjustsFontSizeToFitWidth = YES;

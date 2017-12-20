@@ -200,10 +200,14 @@
         .size.height = [self.fauxNavigationBar desiredHeightWithTopInset:self.edgeInsets.top]
     };
 
+    // Hide the email input view in landscape to save space on iPhones
+    BOOL isIphone = [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone;
+    BOOL isLandscape = UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation);
+    CGFloat emailInputHeight = (isIphone && isLandscape ? 0.0 : 80.0);
     self.emailInputView.frame = (CGRect) {
         .origin.y = self.fauxNavigationBar.frame.size.height,
         .size.width = self.view.bounds.size.width,
-        .size.height = 80.0
+        .size.height = emailInputHeight
     };
 
     self.tableView.frame = (CGRect) {
