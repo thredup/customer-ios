@@ -129,7 +129,20 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 
 - (BOOL)shouldPreventSendingMessage
 {
-    return _delayedChatMessageIds.count > 0;
+    // If we are about to insert an artificial message, prevent input
+    if (_delayedChatMessageIds.count > 0) {
+        return YES;
+    }
+
+    // If the user sent their first message and it is not yet sent, prevent input
+    KUSChatMessage *firstMessage = self.allObjects.lastObject;
+    if (_createdLocally
+        && [self count] == 1
+        && firstMessage.state != KUSChatMessageStateSent) {
+        return YES;
+    }
+
+    return NO;
 }
 
 - (void)upsertNewMessages:(NSArray<KUSChatMessage *> *)chatMessages

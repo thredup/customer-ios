@@ -20,6 +20,9 @@
 
 #import "KUSAvatarImageView.h"
 
+// If sending messages takes less than 750ms, we don't want to show the loading indicator
+static NSTimeInterval kOptimisticSendLoadingDelay = 0.75;
+
 static const CGFloat kBubbleTopPadding = 10.0;
 static const CGFloat kBubbleSidePadding = 12.0;
 
@@ -217,9 +220,6 @@ static const CGFloat kMinBubbleHeight = 38.0;
 }
 
 #pragma mark - Internal logic methods
-
-// If sending messages takes less than 500ms, we don't want to show the loading indicator
-static NSTimeInterval kOptimisticSendLoadingDelay = 0.5;
 
 - (void)_updateAlphaForState
 {
