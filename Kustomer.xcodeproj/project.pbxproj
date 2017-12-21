@@ -109,6 +109,10 @@
 		63BF9C6A1FE9565200E30C73 /* KUSFormQuestion.m in Sources */ = {isa = PBXBuildFile; fileRef = 63BF9C681FE9565200E30C73 /* KUSFormQuestion.m */; };
 		63BF9C6D1FE95DCA00E30C73 /* KUSTeam.h in Headers */ = {isa = PBXBuildFile; fileRef = 63BF9C6B1FE95DCA00E30C73 /* KUSTeam.h */; };
 		63BF9C6E1FE95DCA00E30C73 /* KUSTeam.m in Sources */ = {isa = PBXBuildFile; fileRef = 63BF9C6C1FE95DCA00E30C73 /* KUSTeam.m */; };
+		63BF9C711FEB57B400E30C73 /* KUSFormDataSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 63BF9C6F1FEB57B400E30C73 /* KUSFormDataSource.h */; };
+		63BF9C721FEB57B400E30C73 /* KUSFormDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 63BF9C701FEB57B400E30C73 /* KUSFormDataSource.m */; };
+		63BF9C751FEB5C3900E30C73 /* KUSTeamsDataSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 63BF9C731FEB5C3900E30C73 /* KUSTeamsDataSource.h */; };
+		63BF9C761FEB5C3900E30C73 /* KUSTeamsDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 63BF9C741FEB5C3900E30C73 /* KUSTeamsDataSource.m */; };
 		63D472911F70AACC00C947F2 /* KUSNotificationWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 63D4728F1F70AACC00C947F2 /* KUSNotificationWindow.h */; };
 		63D472921F70AACC00C947F2 /* KUSNotificationWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 63D472901F70AACC00C947F2 /* KUSNotificationWindow.m */; };
 		63D472951F71561100C947F2 /* KUSDelegateProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = 63D472931F71561100C947F2 /* KUSDelegateProxy.h */; };
@@ -287,6 +291,10 @@
 		63BF9C681FE9565200E30C73 /* KUSFormQuestion.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KUSFormQuestion.m; sourceTree = "<group>"; };
 		63BF9C6B1FE95DCA00E30C73 /* KUSTeam.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KUSTeam.h; sourceTree = "<group>"; };
 		63BF9C6C1FE95DCA00E30C73 /* KUSTeam.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KUSTeam.m; sourceTree = "<group>"; };
+		63BF9C6F1FEB57B400E30C73 /* KUSFormDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KUSFormDataSource.h; sourceTree = "<group>"; };
+		63BF9C701FEB57B400E30C73 /* KUSFormDataSource.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KUSFormDataSource.m; sourceTree = "<group>"; };
+		63BF9C731FEB5C3900E30C73 /* KUSTeamsDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KUSTeamsDataSource.h; sourceTree = "<group>"; };
+		63BF9C741FEB5C3900E30C73 /* KUSTeamsDataSource.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KUSTeamsDataSource.m; sourceTree = "<group>"; };
 		63D4728F1F70AACC00C947F2 /* KUSNotificationWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSNotificationWindow.h; sourceTree = "<group>"; };
 		63D472901F70AACC00C947F2 /* KUSNotificationWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSNotificationWindow.m; sourceTree = "<group>"; };
 		63D472931F71561100C947F2 /* KUSDelegateProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSDelegateProxy.h; sourceTree = "<group>"; };
@@ -440,6 +448,10 @@
 				63D9C17C1F2F705100999183 /* KUSChatSettingsDataSource.m */,
 				63EDF3D71F415797000345D8 /* KUSTrackingTokenDataSource.h */,
 				63EDF3D81F415797000345D8 /* KUSTrackingTokenDataSource.m */,
+				63BF9C6F1FEB57B400E30C73 /* KUSFormDataSource.h */,
+				63BF9C701FEB57B400E30C73 /* KUSFormDataSource.m */,
+				63BF9C731FEB5C3900E30C73 /* KUSTeamsDataSource.h */,
+				63BF9C741FEB5C3900E30C73 /* KUSTeamsDataSource.m */,
 				637177A71F46A0DA00A7F79C /* KUSUserDataSource.h */,
 				637177A81F46A0DA00A7F79C /* KUSUserDataSource.m */,
 				63D472931F71561100C947F2 /* KUSDelegateProxy.h */,
@@ -639,6 +651,7 @@
 				63EB38541F2D83430020F38B /* KUSObjectDataSource.h in Headers */,
 				631E3F351F52497A00FAA33F /* KUSEmailInputView.h in Headers */,
 				63D9C17D1F2F705100999183 /* KUSChatSettingsDataSource.h in Headers */,
+				63BF9C751FEB5C3900E30C73 /* KUSTeamsDataSource.h in Headers */,
 				633FADBC1F258C2E0060B4A6 /* KUSChatMessagesDataSource.h in Headers */,
 				636F75F61FDD89A30043B821 /* KUSChatAttachment.h in Headers */,
 				63D529881FB7F0A500B1B004 /* KUSPermissions.h in Headers */,
@@ -649,6 +662,7 @@
 				624D7CBD1F7876440039BE90 /* KUSNavigationBarView.h in Headers */,
 				6334BE601F0C9B5100258DAF /* KUSPaginatedResponse.h in Headers */,
 				636531A51F1BBAA100433A50 /* KustomerViewController.h in Headers */,
+				63BF9C711FEB57B400E30C73 /* KUSFormDataSource.h in Headers */,
 				63D472951F71561100C947F2 /* KUSDelegateProxy.h in Headers */,
 				633D8FE61F239F9500BAFAC9 /* KUSChatPlaceholderTableViewCell.h in Headers */,
 				63B9CDB21F0890B400120F3E /* Kustomer.h in Headers */,
@@ -966,6 +980,7 @@
 				63B9CDB31F0890B400120F3E /* Kustomer.m in Sources */,
 				630236CA1FD84107008B4EA8 /* KUSUserDefaults.m in Sources */,
 				6334BE2B1F0C3E8600258DAF /* KUSModel.m in Sources */,
+				63BF9C721FEB57B400E30C73 /* KUSFormDataSource.m in Sources */,
 				6334BE4A1F0C5E3F00258DAF /* KUSNavigationController.m in Sources */,
 				639FBBBE1F5F98110065AB0B /* KUSNewSessionButton.m in Sources */,
 				636531A21F1BBA7C00433A50 /* KUSSessionsViewController.m in Sources */,
@@ -976,6 +991,7 @@
 				632665DE1F945DB800ED1AB2 /* KUSSessionsTableView.m in Sources */,
 				6334BE4E1F0C600F00258DAF /* KUSAttributionToolbar.m in Sources */,
 				636531A61F1BBAA100433A50 /* KustomerViewController.m in Sources */,
+				63BF9C761FEB5C3900E30C73 /* KUSTeamsDataSource.m in Sources */,
 				63BF9C6E1FE95DCA00E30C73 /* KUSTeam.m in Sources */,
 				6334BE551F0C66E200258DAF /* KUSImage.m in Sources */,
 				63035BDA1F2EBCD400FBBF66 /* KUSText.m in Sources */,
