@@ -64,15 +64,16 @@
         }
         strongSelf.requestMarker = nil;
 
-        KUSModel *model = [[[self modelClass] alloc] initWithJSON:response[@"data"]];
+        KUSModel *model = [[[strongSelf modelClass] alloc] initWithJSON:response[@"data"]];
 
-        self.isFetching = NO;
+        strongSelf.isFetching = NO;
         if (error || model == nil) {
             strongSelf.error = error;
-            [self notifyAnnouncersDidError:error];
+            [strongSelf notifyAnnouncersDidError:error];
         } else {
             strongSelf.object = model;
-            [self notifyAnnouncersDidLoad];
+            strongSelf.didFetch = YES;
+            [strongSelf notifyAnnouncersDidLoad];
         }
     }];
 }
