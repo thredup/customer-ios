@@ -441,6 +441,11 @@
 
 - (void)inputBar:(KUSInputBar *)inputBar didEnterText:(NSString *)text
 {
+    // Disallow message sending while autoreply/form messages are being delayed
+    if ([_chatMessagesDataSource shouldPreventSendingMessage]) {
+        return;
+    }
+
     [_chatMessagesDataSource sendMessageWithText:text attachments:nil];
     [_inputBarView setText:nil];
 }

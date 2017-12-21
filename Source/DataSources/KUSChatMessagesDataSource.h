@@ -30,6 +30,7 @@
 
 - (NSString *)firstOtherUserId;
 - (NSUInteger)unreadCountAfterDate:(NSDate *)date;
+- (BOOL)shouldPreventSendingMessage;
 
 - (void)upsertNewMessages:(NSArray<KUSChatMessage *> *)chatMessages;
 

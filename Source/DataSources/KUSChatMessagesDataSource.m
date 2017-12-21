@@ -15,9 +15,13 @@
 
 #import <SDWebImage/SDImageCache.h>
 
+static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
+
 @interface KUSChatMessagesDataSource () <KUSChatMessagesDataSourceListener> {
     NSString *_sessionId;
     BOOL _createdLocally;
+
+    NSMutableSet<NSString *> *_delayedChatMessageIds;
 }
 
 @end
@@ -31,6 +35,7 @@
     self = [super initWithUserSession:userSession];
     if (self) {
         _createdLocally = YES;
+        _delayedChatMessageIds = [[NSMutableSet alloc] init];
         [self addListener:self];
     }
     return self;
@@ -120,6 +125,11 @@
         }
     }
     return count;
+}
+
+- (BOOL)shouldPreventSendingMessage
+{
+    return _delayedChatMessageIds.count > 0;
 }
 
 - (void)upsertNewMessages:(NSArray<KUSChatMessage *> *)chatMessages
@@ -394,7 +404,7 @@
         }
 
         KUSChatMessage *firstMessage = self.allObjects.lastObject;
-        NSDate *createdAt = [firstMessage.createdAt dateByAddingTimeInterval:0.001];
+        NSDate *createdAt = [firstMessage.createdAt dateByAddingTimeInterval:KUSChatAutoreplyDelay];
         NSDictionary *json = @{
             @"type": @"chat_message",
             @"id": autoreplyId,
@@ -405,9 +415,36 @@
             }
         };
         KUSChatMessage *autoreplyMessage = [[KUSChatMessage alloc] initWithJSON:json];
-        [self upsertObjects:@[ autoreplyMessage ]];
+        [self _insertDelayedMessage:autoreplyMessage];
+    }
+}
+
+- (void)_insertDelayedMessage:(KUSChatMessage *)chatMessage
+{
+    // Sanity check
+    if (chatMessage.oid.length == 0) {
+        return;
     }
 
+    // Only insert the message if it doesn't exist already
+    if ([self objectWithId:chatMessage.oid]) {
+        return;
+    }
+
+    // Get the desired delay, capped to 3 seconds maximum
+    NSTimeInterval delay = MIN([chatMessage.createdAt timeIntervalSinceNow], 3.0);
+
+    // Immediately add it if desired
+    if (delay <= 0.0) {
+        [self upsertObjects:@[ chatMessage ]];
+        return;
+    }
+
+    [_delayedChatMessageIds addObject:chatMessage.oid];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [_delayedChatMessageIds removeObject:chatMessage.oid];
+        [self upsertObjects:@[ chatMessage ]];
+    });
 }
 
 #pragma mark - Helper methods
