@@ -46,6 +46,8 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     if (self) {
         _createdLocally = YES;
         _delayedChatMessageIds = [[NSMutableSet alloc] init];
+        [self.userSession.formDataSource addListener:self];
+        [self.userSession.formDataSource fetch];
     }
     return self;
 }

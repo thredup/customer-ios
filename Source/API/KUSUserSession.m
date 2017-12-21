@@ -20,6 +20,7 @@
 @property (nonatomic, strong, null_resettable) KUSChatSessionsDataSource *chatSessionsDataSource;
 @property (nonatomic, strong, null_resettable) KUSChatSettingsDataSource *chatSettingsDataSource;
 @property (nonatomic, strong, null_resettable) KUSTrackingTokenDataSource *trackingTokenDataSource;
+@property (nonatomic, strong, null_resettable) KUSFormDataSource *formDataSource;
 
 @property (nonatomic, strong, null_resettable) NSMutableDictionary<NSString *, KUSUserDataSource *> *userDataSources;
 @property (nonatomic, strong, null_resettable) NSMutableDictionary<NSString *, KUSChatMessagesDataSource *> *chatMessagesDataSources;
@@ -88,6 +89,14 @@
         _trackingTokenDataSource = [[KUSTrackingTokenDataSource alloc] initWithUserSession:self];
     }
     return _trackingTokenDataSource;
+}
+
+- (KUSFormDataSource *)formDataSource
+{
+    if (_formDataSource == nil) {
+        _formDataSource = [[KUSFormDataSource alloc] initWithUserSession:self];
+    }
+    return _formDataSource;
 }
 
 - (NSMutableDictionary<NSString *, KUSUserDataSource *> *)userDataSources

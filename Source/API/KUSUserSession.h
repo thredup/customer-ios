@@ -12,6 +12,7 @@
 #import "KUSChatSessionsDataSource.h"
 #import "KUSChatSettingsDataSource.h"
 #import "KUSDelegateProxy.h"
+#import "KUSFormDataSource.h"
 #import "KUSPushClient.h"
 #import "KUSRequestManager.h"
 #import "KUSTrackingTokenDataSource.h"
@@ -34,6 +35,7 @@
 - (KUSChatSessionsDataSource *)chatSessionsDataSource;
 - (KUSChatSettingsDataSource *)chatSettingsDataSource;
 - (KUSTrackingTokenDataSource *)trackingTokenDataSource;
+- (KUSFormDataSource *)formDataSource;
 
 - (KUSChatMessagesDataSource *)chatMessagesDataSourceForSessionId:(NSString *)sessionId;
 - (KUSUserDataSource *)userDataSourceForUserId:(NSString *)userId;

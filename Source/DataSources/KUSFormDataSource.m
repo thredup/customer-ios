@@ -9,9 +9,7 @@
 #import "KUSFormDataSource.h"
 #import "KUSObjectDataSource_Private.h"
 
-@interface KUSFormDataSource () {
-    NSString *_formId;
-}
+@interface KUSFormDataSource () <KUSObjectDataSourceListener>
 
 @end
 
@@ -19,11 +17,11 @@
 
 #pragma mark - Lifecycle methods
 
-- (instancetype)initWithUserSession:(KUSUserSession *)userSession formId:(NSString *)formId
+- (instancetype)initWithUserSession:(KUSUserSession *)userSession
 {
     self = [super initWithUserSession:userSession];
     if (self) {
-        _formId = [formId copy];
+        [self.userSession.chatSettingsDataSource addListener:self];
     }
     return self;
 }
@@ -32,7 +30,8 @@
 
 - (void)performRequestWithCompletion:(KUSRequestCompletion)completion
 {
-    [self.userSession.requestManager getEndpoint:[NSString stringWithFormat:@"/c/v1/chat/forms/%@", _formId]
+    KUSChatSettings *chatSettings = self.userSession.chatSettingsDataSource.object;
+    [self.userSession.requestManager getEndpoint:[NSString stringWithFormat:@"/c/v1/chat/forms/%@", chatSettings.activeFormId]
                                    authenticated:YES
                                       completion:completion];
 }
@@ -41,5 +40,58 @@
 {
     return [KUSForm class];
 }
+
+#pragma mark - KUSObjectDataSource overrides
+
+- (void)fetch
+{
+    if (!self.userSession.chatSettingsDataSource.didFetch) {
+        [self.userSession.chatSettingsDataSource fetch];
+        return;
+    }
+    [super fetch];
+}
+
+- (BOOL)isFetching
+{
+    if ([self.userSession.chatSettingsDataSource isFetching]) {
+        return [self.userSession.chatSettingsDataSource isFetching];
+    }
+    return [super isFetching];
+}
+
+- (BOOL)didFetch
+{
+    KUSChatSettings *chatSettings = self.userSession.chatSettingsDataSource.object;
+    if (chatSettings && chatSettings.activeFormId == nil) {
+        return YES;
+    }
+    return [super didFetch];
+}
+
+- (NSError *)error
+{
+    if (self.userSession.chatSettingsDataSource.error) {
+        return self.userSession.chatSettingsDataSource.error;
+    }
+    return [super error];
+}
+
+#pragma mark - KUSObjectDataSourceListener methods
+
+- (void)objectDataSourceDidLoad:(KUSObjectDataSource *)dataSource
+{
+    [self fetch];
+}
+
+- (void)objectDataSource:(KUSObjectDataSource *)dataSource didReceiveError:(NSError *)error
+{
+    if (!dataSource.didFetch) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [dataSource fetch];
+        });
+    }
+}
+
 
 @end
