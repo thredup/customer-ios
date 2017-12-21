@@ -153,6 +153,11 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 
 - (BOOL)shouldPreventSendingMessage
 {
+    // If we haven't loaded the chat settings data source, prevent input
+    if (!self.userSession.chatSettingsDataSource.didFetch) {
+        return YES;
+    }
+
     // If we are about to insert an artificial message, prevent input
     if (_delayedChatMessageIds.count > 0) {
         return YES;
@@ -183,6 +188,17 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 }
 
 - (void)sendMessageWithText:(NSString *)text attachments:(NSArray<UIImage *> *)attachments
+{
+    KUSChatSettings *chatSettings = self.userSession.chatSettingsDataSource.object;
+    if (_createdLocally && _sessionId == nil && chatSettings.activeFormId) {
+
+        return;
+    }
+
+    [self _actuallySendMessageWithText:text attachments:attachments];
+}
+
+- (void)_actuallySendMessageWithText:(NSString *)text attachments:(NSArray<UIImage *> *)attachments
 {
     NSString *tempMessageId = [[NSUUID UUID] UUIDString];
     NSMutableArray<NSDictionary<NSString *, NSString *> *> *attachmentObjects = [[NSMutableArray alloc] initWithCapacity:attachments.count];
@@ -423,17 +439,21 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     [self _insertAutoreplyIfNecessary];
 }
 
-- (void)_insertAutoreplyIfNecessary
+- (BOOL)_shouldShowAutoreply
 {
     KUSChatMessage *firstMessage = self.allObjects.lastObject;
     KUSChatSettings *chatSettings = self.userSession.chatSettingsDataSource.object;
-    BOOL shouldShowAutoreply = (chatSettings.autoreply.length > 0
-                                && [self count] > 0
-                                && self.didFetchAll
-                                && _sessionId.length > 0
-                                && firstMessage.state == KUSChatMessageStateSent);
+    return (chatSettings.activeFormId.length == 0
+            && chatSettings.autoreply.length > 0
+            && [self count] > 0
+            && self.didFetchAll
+            && _sessionId.length > 0
+            && firstMessage.state == KUSChatMessageStateSent);
+}
 
-    if (shouldShowAutoreply) {
+- (void)_insertAutoreplyIfNecessary
+{
+    if ([self _shouldShowAutoreply]) {
         NSString *autoreplyId = [NSString stringWithFormat:@"_autoreply_%@", _sessionId];
         // Early escape if we already have an autoreply
         if ([self objectWithId:autoreplyId]) {
@@ -441,6 +461,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
         }
 
         KUSChatMessage *firstMessage = self.allObjects.lastObject;
+        KUSChatSettings *chatSettings = self.userSession.chatSettingsDataSource.object;
         NSDate *createdAt = [firstMessage.createdAt dateByAddingTimeInterval:KUSChatAutoreplyDelay];
         NSDictionary *json = @{
             @"type": @"chat_message",
