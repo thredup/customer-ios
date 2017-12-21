@@ -117,6 +117,17 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
     return MAX(height, kKUSInputBarMinimumHeight);
 }
 
+- (void)setText:(NSString *)text
+{
+    _textView.text = text;
+    [self textViewDidChange:_textView];
+}
+
+- (NSString *)text
+{
+    return [self _actualText];
+}
+
 #pragma mark - UIResponder methods
 
 - (BOOL)isFirstResponder
@@ -168,8 +179,6 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
     if ([self.delegate respondsToSelector:@selector(inputBar:didEnterText:)]) {
         [self.delegate inputBar:self didEnterText:actualText];
     }
-    _textView.text = nil;
-    [self textViewDidChange:_textView];
 }
 
 - (void)_updateSendButton

@@ -24,6 +24,8 @@
 @property (nonatomic, strong, readonly) UIButton *attachmentButton;
 @property (nonatomic, strong, readonly) UIButton *sendButton;
 
+@property (nonatomic, copy) NSString *text;
+
 - (CGFloat)desiredHeight;
 
 @end
