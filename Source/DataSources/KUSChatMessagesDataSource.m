@@ -17,7 +17,7 @@
 
 static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 
-@interface KUSChatMessagesDataSource () <KUSChatMessagesDataSourceListener> {
+@interface KUSChatMessagesDataSource () <KUSChatMessagesDataSourceListener, KUSObjectDataSourceListener> {
     NSString *_sessionId;
     BOOL _createdLocally;
 
@@ -30,25 +30,47 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 
 #pragma mark - Lifecycle methods
 
-- (instancetype)initForNewConversationWithUserSession:(KUSUserSession *)userSession
+- (instancetype)_initWithUserSession:(KUSUserSession *)userSession
 {
     self = [super initWithUserSession:userSession];
     if (self) {
+        [self.userSession.chatSettingsDataSource addListener:self];
+        [self addListener:self];
+    }
+    return self;
+}
+
+- (instancetype)initForNewConversationWithUserSession:(KUSUserSession *)userSession
+{
+    self = [self _initWithUserSession:userSession];
+    if (self) {
         _createdLocally = YES;
         _delayedChatMessageIds = [[NSMutableSet alloc] init];
-        [self addListener:self];
     }
     return self;
 }
 
 - (instancetype)initWithUserSession:(KUSUserSession *)userSession sessionId:(NSString *)sessionId;
 {
-    self = [super initWithUserSession:userSession];
+    self = [self _initWithUserSession:userSession];
     if (self) {
         _sessionId = sessionId;
-        [self addListener:self];
     }
     return self;
+}
+
+#pragma mark - KUSObjectDataSourceListener methods
+
+- (void)objectDataSourceDidLoad:(KUSObjectDataSource *)dataSource
+{
+    [self _insertAutoreplyIfNecessary];
+}
+
+- (void)objectDataSource:(KUSObjectDataSource *)dataSource didReceiveError:(NSError *)error
+{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [dataSource fetch];
+    });
 }
 
 #pragma mark - KUSPaginatedDataSource methods

@@ -19,7 +19,6 @@
 #import "KUSAvatarImageView.h"
 #import "KUSChatMessagesDataSource.h"
 #import "KUSChatMessageTableViewCell.h"
-#import "KUSChatSettingsDataSource.h"
 #import "KUSEmailInputView.h"
 #import "KUSImage.h"
 #import "KUSInputBar.h"
@@ -28,7 +27,7 @@
 #import "KUSNavigationBarView.h"
 #import "KUSNYTChatMessagePhoto.h"
 
-@interface KUSChatViewController () <KUSEmailInputViewDelegate, KUSInputBarDelegate, KUSObjectDataSourceListener,
+@interface KUSChatViewController () <KUSEmailInputViewDelegate, KUSInputBarDelegate,
                                      KUSChatMessagesDataSourceListener, KUSChatMessageTableViewCellDelegate,
                                      NYTPhotosViewControllerDelegate, UITableViewDataSource, UITableViewDelegate,
                                      UINavigationControllerDelegate, UIImagePickerControllerDelegate> {
@@ -142,8 +141,6 @@
                                                    object:nil];
     }
 
-    [_userSession.chatSettingsDataSource addListener:self];
-
     [self _checkShouldShowEmailInput];
 
     // Force layout so that animated presentations start from the right state
@@ -248,13 +245,6 @@
         self.emailInputView = nil;
         [self.view setNeedsLayout];
     }
-}
-
-#pragma mark - KUSObjectDataSourceListener methods
-
-- (void)objectDataSourceDidLoad:(KUSObjectDataSource *)dataSource
-{
-    [self.tableView reloadData];
 }
 
 #pragma mark - KUSChatMessagesDataSourceListener methods
