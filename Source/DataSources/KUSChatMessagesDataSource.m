@@ -66,6 +66,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 - (void)objectDataSourceDidLoad:(KUSObjectDataSource *)dataSource
 {
     [self _insertAutoreplyIfNecessary];
+    [self _insertFormMessageIfNecessary];
 }
 
 - (void)objectDataSource:(KUSObjectDataSource *)dataSource didReceiveError:(NSError *)error
@@ -191,6 +192,39 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 {
     KUSChatSettings *chatSettings = self.userSession.chatSettingsDataSource.object;
     if (_createdLocally && _sessionId == nil && chatSettings.activeFormId) {
+
+        NSString *tempMessageId = [[NSUUID UUID] UUIDString];
+        NSMutableArray<NSDictionary<NSString *, NSString *> *> *attachmentObjects = [[NSMutableArray alloc] initWithCapacity:attachments.count];
+        NSMutableArray<NSString *> *cachedImageKeys = [[NSMutableArray alloc] initWithCapacity:attachments.count];
+        for (UIImage *attachment in attachments) {
+            NSString *attachmentId = [[NSUUID UUID] UUIDString];
+            NSURL *attachmentURL = [KUSChatMessage attachmentURLForMessageId:tempMessageId attachmentId:attachmentId];
+            NSString *imageKey = attachmentURL.absoluteString;
+            [[SDImageCache sharedImageCache] storeImage:attachment
+                                                 forKey:imageKey
+                                                 toDisk:NO
+                                             completion:nil];
+            [attachmentObjects addObject:@{ @"id": attachmentId }];
+            [cachedImageKeys addObject:imageKey];
+        }
+
+        NSDictionary *json = @{
+                               @"type": @"chat_message",
+                               @"id": tempMessageId,
+                               @"attributes": @{
+                                       @"body": text,
+                                       @"direction": @"in",
+                                       @"createdAt": [KUSDate stringFromDate:[NSDate date]]
+                                       },
+                               @"relationships": @{
+                                       @"attachments" : @{
+                                               @"data": attachmentObjects
+                                               }
+                                       }
+                               };
+
+        NSArray<KUSChatMessage *> *temporaryMessages = [KUSChatMessage objectsWithJSON:json];
+        [self upsertNewMessages:temporaryMessages];
 
         return;
     }
@@ -432,6 +466,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 - (void)paginatedDataSourceDidChangeContent:(KUSPaginatedDataSource *)dataSource
 {
     [self _insertAutoreplyIfNecessary];
+    [self _insertFormMessageIfNecessary];
 }
 
 - (void)chatMessagesDataSource:(KUSChatMessagesDataSource *)dataSource didCreateSessionId:(NSString *)sessionId
@@ -470,10 +505,93 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
                 @"body": chatSettings.autoreply,
                 @"direction": @"out",
                 @"createdAt": [KUSDate stringFromDate:createdAt]
+            },
+            @"relationships": @{
+                @"sentBy": @{
+                    @"data": @{
+                        @"id": @"__team"
+                    }
+                }
             }
         };
         KUSChatMessage *autoreplyMessage = [[KUSChatMessage alloc] initWithJSON:json];
         [self _insertDelayedMessage:autoreplyMessage];
+    }
+}
+
+- (void)_insertFormMessageIfNecessary
+{
+    KUSChatSettings *chatSettings = self.userSession.chatSettingsDataSource.object;
+    if (chatSettings.activeFormId == nil) {
+        return;
+    }
+    if ([self count] == 0) {
+        return;
+    }
+
+    KUSForm *form = self.userSession.formDataSource.object;
+    if (form == nil) {
+        return;
+    }
+
+    NSMutableArray<KUSChatMessage *> *userMessages = [[NSMutableArray alloc] init];
+    for (KUSChatMessage *message in self.allObjects.reverseObjectEnumerator) {
+        BOOL currentUser = message.direction == KUSChatMessageDirectionIn;
+        if (currentUser) {
+            [userMessages addObject:message];
+        }
+    }
+
+    NSMutableArray<NSArray *> *groupedFormQuestions = [[NSMutableArray alloc] init];
+
+    NSMutableArray<KUSFormQuestion *> *currentGroup = nil;
+    for (KUSFormQuestion *question in form.questions) {
+        if (question.type == KUSFormQuestionTypeUnknown) {
+            continue;
+        }
+        if (currentGroup == nil) {
+            currentGroup = [[NSMutableArray alloc] init];
+        }
+        [currentGroup addObject:question];
+
+        BOOL requiresResponse = question.type == KUSFormQuestionTypeProperty;
+        if (requiresResponse) {
+            [groupedFormQuestions addObject:currentGroup];
+            currentGroup = nil;
+        }
+    }
+
+    NSUInteger questionIndex = userMessages.count - 1;
+    if (questionIndex >= groupedFormQuestions.count) {
+        return;
+    }
+
+    NSArray<KUSFormQuestion *> *questionsToInsert = groupedFormQuestions[questionIndex];
+    KUSChatMessage *lastUserMessage = userMessages.lastObject;
+    NSTimeInterval additionalDelay = 0;
+    for (KUSFormQuestion *question in questionsToInsert) {
+        NSDate *createdAt = [lastUserMessage.createdAt dateByAddingTimeInterval:KUSChatAutoreplyDelay + additionalDelay];
+        NSString *questionId = [NSString stringWithFormat:@"_question_%@", question.oid];
+
+        NSDictionary *json = @{
+            @"type": @"chat_message",
+            @"id": questionId,
+            @"attributes": @{
+                @"body": question.prompt,
+                @"direction": @"out",
+                @"createdAt": [KUSDate stringFromDate:createdAt]
+            },
+            @"relationships": @{
+                @"sentBy": @{
+                    @"data": @{
+                        @"id": @"__team"
+                    }
+                }
+            }
+        };
+        KUSChatMessage *formMessage = [[KUSChatMessage alloc] initWithJSON:json];
+        [self _insertDelayedMessage:formMessage];
+        additionalDelay += KUSChatAutoreplyDelay;
     }
 }
 
@@ -489,8 +607,8 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
         return;
     }
 
-    // Get the desired delay, capped to 3 seconds maximum
-    NSTimeInterval delay = MIN([chatMessage.createdAt timeIntervalSinceNow], 3.0);
+    // Get the desired delay
+    NSTimeInterval delay = [chatMessage.createdAt timeIntervalSinceNow];
 
     // Immediately add it if desired
     if (delay <= 0.0) {
