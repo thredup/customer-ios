@@ -18,8 +18,7 @@
 static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 
 @interface KUSChatMessagesDataSource () <KUSChatMessagesDataSourceListener, KUSObjectDataSourceListener> {
-    NSString *_sessionId;
-    BOOL _createdLocally;
+    NSString *_Nullable _sessionId;
 
     NSMutableSet<NSString *> *_delayedChatMessageIds;
 }
@@ -34,6 +33,8 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 {
     self = [super initWithUserSession:userSession];
     if (self) {
+        _delayedChatMessageIds = [[NSMutableSet alloc] init];
+
         [self.userSession.chatSettingsDataSource addListener:self];
         [self addListener:self];
     }
@@ -44,8 +45,6 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 {
     self = [self _initWithUserSession:userSession];
     if (self) {
-        _createdLocally = YES;
-        _delayedChatMessageIds = [[NSMutableSet alloc] init];
         [self.userSession.formDataSource addListener:self];
         [self.userSession.formDataSource fetch];
     }
@@ -54,6 +53,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 
 - (instancetype)initWithUserSession:(KUSUserSession *)userSession sessionId:(NSString *)sessionId;
 {
+    NSAssert(sessionId.length, @"Cannot create messages datasource without valid sessionId");
     self = [self _initWithUserSession:userSession];
     if (self) {
         _sessionId = sessionId;
@@ -107,7 +107,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 
 - (BOOL)didFetch
 {
-    if (_createdLocally) {
+    if (_sessionId == nil) {
         return YES;
     }
     return [super didFetch];
@@ -115,7 +115,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 
 - (BOOL)didFetchAll
 {
-    if (_createdLocally) {
+    if (_sessionId == nil) {
         return YES;
     }
     return [super didFetchAll];
@@ -166,7 +166,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 
     // If the user sent their first message and it is not yet sent, prevent input
     KUSChatMessage *firstMessage = self.allObjects.lastObject;
-    if (_createdLocally
+    if (_sessionId == nil
         && [self count] == 1
         && firstMessage.state != KUSChatMessageStateSent) {
         return YES;
@@ -191,7 +191,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 - (void)sendMessageWithText:(NSString *)text attachments:(NSArray<UIImage *> *)attachments
 {
     KUSChatSettings *chatSettings = self.userSession.chatSettingsDataSource.object;
-    if (_createdLocally && _sessionId == nil && chatSettings.activeFormId) {
+    if (_sessionId == nil && chatSettings.activeFormId) {
 
         NSString *tempMessageId = [[NSUUID UUID] UUIDString];
         NSMutableArray<NSDictionary<NSString *, NSString *> *> *attachmentObjects = [[NSMutableArray alloc] initWithCapacity:attachments.count];
