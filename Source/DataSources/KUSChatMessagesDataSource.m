@@ -129,8 +129,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 - (NSString *)firstOtherUserId
 {
     for (KUSChatMessage *message in self.allObjects) {
-        BOOL currentUser = message.direction == KUSChatMessageDirectionIn;
-        if (!currentUser) {
+        if (!KUSChatMessageSentByUser(message)) {
             return message.sentById;
         }
     }
@@ -141,8 +140,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 {
     NSUInteger count = 0;
     for (KUSChatMessage *message in self.allObjects) {
-        BOOL currentUser = message.direction == KUSChatMessageDirectionIn;
-        if (currentUser) {
+        if (KUSChatMessageSentByUser(message)) {
             return count;
         }
         if (message.createdAt) {
@@ -513,13 +511,6 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
                 @"body": chatSettings.autoreply,
                 @"direction": @"out",
                 @"createdAt": [KUSDate stringFromDate:createdAt]
-            },
-            @"relationships": @{
-                @"sentBy": @{
-                    @"data": @{
-                        @"id": @"__team"
-                    }
-                }
             }
         };
         KUSChatMessage *autoreplyMessage = [[KUSChatMessage alloc] initWithJSON:json];
@@ -546,8 +537,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 
     NSMutableArray<KUSChatMessage *> *userMessages = [[NSMutableArray alloc] init];
     for (KUSChatMessage *message in self.allObjects.reverseObjectEnumerator) {
-        BOOL currentUser = message.direction == KUSChatMessageDirectionIn;
-        if (currentUser) {
+        if (KUSChatMessageSentByUser(message)) {
             [userMessages addObject:message];
         }
     }
@@ -594,13 +584,6 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
                 @"body": question.prompt,
                 @"direction": @"out",
                 @"createdAt": [KUSDate stringFromDate:createdAt]
-            },
-            @"relationships": @{
-                @"sentBy": @{
-                    @"data": @{
-                        @"id": @"__team"
-                    }
-                }
             }
         };
         KUSChatMessage *formMessage = [[KUSChatMessage alloc] initWithJSON:json];

@@ -73,7 +73,6 @@
         _orgId = NSStringFromKeyPath(json, @"relationships.org.data.id");
         _customerId = NSStringFromKeyPath(json, @"relationships.customer.data.id");
         _sessionId = NSStringFromKeyPath(json, @"relationships.session.data.id");
-        _sentById = NSStringFromKeyPath(json, @"relationships.sentBy.data.id");
     }
     return self;
 }

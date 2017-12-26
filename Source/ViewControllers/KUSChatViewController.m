@@ -338,7 +338,7 @@
 {
     KUSChatMessage *chatMessage = [self messageForRow:indexPath.row];
     KUSChatMessage *previousChatMessage = [self messageBeforeRow:indexPath.row];
-    BOOL currentUser = chatMessage.direction == KUSChatMessageDirectionIn;
+    BOOL currentUser = KUSChatMessageSentByUser(chatMessage);
 
     NSString *messageCellIdentifier = (currentUser ? @"CurrentUserMessageCell" : @"OtherUserMessageCell");
     KUSChatMessageTableViewCell *cell = (KUSChatMessageTableViewCell *)[tableView dequeueReusableCellWithIdentifier:messageCellIdentifier];
@@ -350,7 +350,7 @@
 
     [cell setChatMessage:chatMessage];
 
-    BOOL previousMessageDiffSender = ![previousChatMessage.sentById isEqualToString:chatMessage.sentById];
+    BOOL previousMessageDiffSender = !KUSChatMessagesSameSender(previousChatMessage, chatMessage);
     [cell setShowsAvatar:previousMessageDiffSender];
 
     // Make sure that we've fetched all of the latest messages by loading the next page

@@ -16,7 +16,6 @@
 @property (nonatomic, copy, readonly, nullable) NSString *orgId;
 @property (nonatomic, copy, readonly, nullable) NSString *customerId;
 @property (nonatomic, copy, readonly, nullable) NSString *sessionId;
-@property (nonatomic, copy, readonly, nullable) NSString *sentById;
 
 + (NSString * _Nullable)modelType;
 + (BOOL)enforcesModelType;

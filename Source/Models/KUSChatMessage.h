@@ -25,6 +25,8 @@ typedef NS_ENUM(NSInteger, KUSChatMessageState) {
     KUSChatMessageStateFailed
 };
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface KUSChatMessage : KUSModel
 
 @property (nonatomic, copy, readonly) NSString *trackingId;
@@ -34,6 +36,7 @@ typedef NS_ENUM(NSInteger, KUSChatMessageState) {
 
 @property (nonatomic, copy, readonly) NSDate *createdAt;
 @property (nonatomic, assign, readonly) KUSChatMessageDirection direction;
+@property (nonatomic, copy, readonly, nullable) NSString *sentById;
 
 @property (nonatomic, assign, readonly) KUSChatMessageType type;
 @property (nonatomic, assign, readwrite) KUSChatMessageState state;
@@ -41,3 +44,15 @@ typedef NS_ENUM(NSInteger, KUSChatMessageState) {
 + (NSURL *)attachmentURLForMessageId:(NSString *)messageId attachmentId:(NSString *)attachmentId;
 
 @end
+
+static inline BOOL KUSChatMessageSentByUser(KUSChatMessage *message)
+{
+    return message.direction == KUSChatMessageDirectionIn;
+}
+
+static inline BOOL KUSChatMessagesSameSender(KUSChatMessage *message1, KUSChatMessage *message2)
+{
+    return message1.sentById == message2.sentById || [message1.sentById isEqualToString:message2.sentById];
+}
+
+NS_ASSUME_NONNULL_END

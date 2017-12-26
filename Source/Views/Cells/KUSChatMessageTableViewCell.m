@@ -170,7 +170,7 @@ static const CGFloat kMinBubbleHeight = 38.0;
 {
     [super layoutSubviews];
 
-    BOOL currentUser = _chatMessage.direction == KUSChatMessageDirectionIn;
+    BOOL currentUser = KUSChatMessageSentByUser(_chatMessage);
 
     _avatarImageView.hidden = currentUser || !_showsAvatar;
     _avatarImageView.frame = (CGRect) {
@@ -253,7 +253,7 @@ static const CGFloat kMinBubbleHeight = 38.0;
 
 - (void)_updateImageForMessage
 {
-    BOOL currentUser = _chatMessage.direction == KUSChatMessageDirectionIn;
+    BOOL currentUser = KUSChatMessageSentByUser(_chatMessage);
 
     [_imageView setContentMode:UIViewContentModeScaleAspectFill];
     [_imageView sd_setShowActivityIndicatorView:YES];
@@ -287,7 +287,7 @@ static const CGFloat kMinBubbleHeight = 38.0;
 {
     _chatMessage = chatMessage;
 
-    BOOL currentUser = _chatMessage.direction == KUSChatMessageDirectionIn;
+    BOOL currentUser = KUSChatMessageSentByUser(_chatMessage);
 
     KUSChatMessageTableViewCell *appearance = [KUSChatMessageTableViewCell appearance];
     UIColor *bubbleColor = (currentUser ? appearance.userBubbleColor : appearance.companyBubbleColor);
