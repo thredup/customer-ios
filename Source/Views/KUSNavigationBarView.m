@@ -12,7 +12,7 @@
 #import "KUSColor.h"
 #import "KUSUserSession.h"
 
-@interface KUSNavigationBarView () <KUSObjectDataSourceListener, KUSPaginatedDataSourceListener> {
+@interface KUSNavigationBarView () <KUSObjectDataSourceListener, KUSChatMessagesDataSourceListener> {
     KUSUserSession *_userSession;
     KUSChatMessagesDataSource *_chatMessagesDataSource;
     KUSUserDataSource *_userDataSource;

@@ -19,7 +19,7 @@
 
 CGFloat KUSChatSessionTableViewCellHeight = 88.0;
 
-@interface KUSChatSessionTableViewCell () <KUSObjectDataSourceListener, KUSPaginatedDataSourceListener> {
+@interface KUSChatSessionTableViewCell () <KUSObjectDataSourceListener, KUSChatMessagesDataSourceListener> {
     KUSUserSession *_userSession;
 
     KUSChatSession *_chatSession;
