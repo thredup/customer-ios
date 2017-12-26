@@ -197,9 +197,13 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
     NSArray<KUSChatMessage *> *chatMessages = [KUSChatMessage objectsWithJSON:event.data[@"data"]];
     KUSChatMessage *chatMessage = chatMessages.firstObject;
     KUSChatMessagesDataSource *messagesDataSource = [_userSession chatMessagesDataSourceForSessionId:chatMessage.sessionId];
-    [messagesDataSource upsertNewMessages:chatMessages];
 
-    [self _notifyForUpdatedChatSession:chatMessage.sessionId];
+    // Upsert the messages, but don't notify if we already have the objects
+    BOOL doesNotAlreadyContainMessage = ![messagesDataSource objectWithId:chatMessage.oid];
+    [messagesDataSource upsertNewMessages:chatMessages];
+    if (doesNotAlreadyContainMessage) {
+        [self _notifyForUpdatedChatSession:chatMessage.sessionId];
+    }
 }
 
 #pragma mark - KUSObjectDataSourceListener methods

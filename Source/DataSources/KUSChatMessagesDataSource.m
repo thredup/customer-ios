@@ -8,6 +8,7 @@
 
 #import "KUSChatMessagesDataSource.h"
 
+#import "KUSAudio.h"
 #import "KUSLog.h"
 #import "KUSPaginatedDataSource_Private.h"
 #import "KUSUserSession_Private.h"
@@ -713,6 +714,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [_delayedChatMessageIds removeObject:chatMessage.oid];
         [self upsertObjects:@[ chatMessage ]];
+        [KUSAudio playMessageReceivedSound];
     });
 }
 
