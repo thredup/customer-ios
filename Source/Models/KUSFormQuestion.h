@@ -31,3 +31,9 @@ typedef NS_ENUM(NSInteger, KUSFormQuestionProperty) {
 @property (nonatomic, assign, readonly) BOOL skipIfSatisfied;
 
 @end
+
+static inline BOOL KUSFormQuestionRequiresResponse(KUSFormQuestion *question)
+{
+    return question.type == KUSFormQuestionTypeProperty;
+}
+

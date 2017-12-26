@@ -21,6 +21,8 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     NSString *_Nullable _sessionId;
 
     NSMutableSet<NSString *> *_delayedChatMessageIds;
+
+    BOOL _submittingForm;
 }
 
 @end
@@ -161,6 +163,11 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 
     // If we are about to insert an artificial message, prevent input
     if (_delayedChatMessageIds.count > 0) {
+        return YES;
+    }
+
+    // When submitting the form, prevent sending more responses
+    if (_submittingForm) {
         return YES;
     }
 
@@ -554,11 +561,15 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
         }
         [currentGroup addObject:question];
 
-        BOOL requiresResponse = question.type == KUSFormQuestionTypeProperty;
-        if (requiresResponse) {
+        if (KUSFormQuestionRequiresResponse(question)) {
             [groupedFormQuestions addObject:currentGroup];
             currentGroup = nil;
         }
+    }
+
+    if (userMessages.count == groupedFormQuestions.count + 1) {
+        [self _submitFormResponses];
+        return;
     }
 
     NSUInteger questionIndex = userMessages.count - 1;
@@ -593,6 +604,56 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
         [self _insertDelayedMessage:formMessage];
         additionalDelay += KUSChatAutoreplyDelay;
     }
+}
+
+- (void)_submitFormResponses
+{
+    NSMutableArray<NSDictionary *> *messagesJSON = [[NSMutableArray alloc] init];
+
+    NSUInteger currentMessageIndex = self.count - 1;
+    KUSChatMessage *firstUserMessage = [self objectAtIndex:currentMessageIndex];
+    currentMessageIndex--;
+
+    [messagesJSON addObject:@{
+        @"input": firstUserMessage.body,
+        @"inputAt": [KUSDate stringFromDate:firstUserMessage.createdAt]
+    }];
+
+    KUSForm *form = self.userSession.formDataSource.object;
+    for (KUSFormQuestion *question in form.questions) {
+        NSMutableDictionary<NSString *, NSObject *> *formMessage = [[NSMutableDictionary alloc] init];
+
+        KUSChatMessage *questionMessage = [self objectAtIndex:currentMessageIndex];
+        currentMessageIndex--;
+
+        [formMessage setObject:question.oid forKey:@"id"];
+        [formMessage setObject:question.prompt forKey:@"prompt"];
+        [formMessage setObject:[KUSDate stringFromDate:questionMessage.createdAt] forKey:@"promptAt"];
+
+        if (KUSFormQuestionRequiresResponse(question)) {
+            KUSChatMessage *responseMessage = [self objectAtIndex:currentMessageIndex];
+            currentMessageIndex--;
+
+            [formMessage setObject:responseMessage.body forKey:@"input"];
+            [formMessage setObject:[KUSDate stringFromDate:responseMessage.createdAt] forKey:@"inputAt"];
+        }
+        [messagesJSON addObject:formMessage];
+    }
+
+    _submittingForm = YES;
+    [self.userSession.requestManager
+     performRequestType:KUSRequestTypePost
+     endpoint:[NSString stringWithFormat:@"/c/v1/chat/forms/%@/responses", form.oid]
+     params:@{ @"messages": messagesJSON }
+     authenticated:YES
+     completion:^(NSError *error, NSDictionary *response) {
+         if (error) {
+             KUSLogError(@"Error submitting form: %@", error);
+             return;
+         }
+         _submittingForm = YES;
+         NSLog(@"responses: %@", response);
+     }];
 }
 
 - (void)_insertDelayedMessage:(KUSChatMessage *)chatMessage
