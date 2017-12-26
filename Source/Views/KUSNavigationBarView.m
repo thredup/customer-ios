@@ -87,7 +87,7 @@
     CGFloat labelSidePad = 10.0;
 
     if (self.showsLabels) {
-        if (_sessionId.length) {
+        if (!self.extraLarge) {
             _nameLabel.font = [UIFont boldSystemFontOfSize:13.0];
             _greetingLabel.font = [UIFont systemFontOfSize:11.0];
 
@@ -152,7 +152,7 @@
 
 - (CGFloat)_extraNavigationBarHeight
 {
-    return (_sessionId.length == 0 ? 146.0 : 36.0);
+    return (self.extraLarge ? 146.0 : 36.0);
 }
 
 - (void)_updateTextLabels

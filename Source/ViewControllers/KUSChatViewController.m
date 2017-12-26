@@ -181,8 +181,8 @@
 {
     [super viewWillLayoutSubviews];
 
-    CGFloat extraNavigationBarHeight = (_chatSessionId ? 36.0 : 146.0);
-    CGFloat navigationBarHeight = self.edgeInsets.top + extraNavigationBarHeight;
+    [self.fauxNavigationBar setExtraLarge:_chatMessagesDataSource.count == 0];
+    CGFloat navigationBarHeight = [self.fauxNavigationBar desiredHeightWithTopInset:self.edgeInsets.top];
 
     CGFloat inputBarHeight = [self.inputBarView desiredHeight];
     CGFloat inputBarY = self.view.bounds.size.height - MAX(self.edgeInsets.bottom, _keyboardHeight) - inputBarHeight;
@@ -194,7 +194,7 @@
 
     self.fauxNavigationBar.frame = (CGRect) {
         .size.width = self.view.bounds.size.width,
-        .size.height = [self.fauxNavigationBar desiredHeightWithTopInset:self.edgeInsets.top]
+        .size.height = navigationBarHeight
     };
 
     // Hide the email input view in landscape to save space on iPhones
@@ -256,6 +256,14 @@
 
 - (void)paginatedDataSourceDidChangeContent:(KUSPaginatedDataSource *)dataSource
 {
+    if (dataSource.count == 1) {
+        [UIView animateWithDuration:0.2 animations:^{
+            [self.view setNeedsLayout];
+            [self.view layoutIfNeeded];
+        }];
+    } else {
+        [self.view setNeedsLayout];
+    }
     [self.tableView reloadData];
 }
 

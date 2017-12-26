@@ -713,8 +713,11 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     [_delayedChatMessageIds addObject:chatMessage.oid];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [_delayedChatMessageIds removeObject:chatMessage.oid];
+        BOOL doesNotAlreadyContainMessage = ![self objectWithId:chatMessage.oid];
         [self upsertObjects:@[ chatMessage ]];
-        [KUSAudio playMessageReceivedSound];
+        if (doesNotAlreadyContainMessage) {
+            [KUSAudio playMessageReceivedSound];
+        }
     });
 }
 

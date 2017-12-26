@@ -19,6 +19,7 @@
 
 @property (nonatomic, copy) NSString *sessionId;
 @property (nonatomic, assign) BOOL showsLabels;
+@property (nonatomic, assign) BOOL extraLarge;
 
 - (instancetype)initWithUserSession:(KUSUserSession *)userSession;
 - (instancetype)initWithFrame:(CGRect)frame NS_UNAVAILABLE;
