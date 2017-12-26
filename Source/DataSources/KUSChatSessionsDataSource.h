@@ -10,10 +10,14 @@
 
 #import "KUSChatSession.h"
 
+@class KUSChatMessage;
 @interface KUSChatSessionsDataSource : KUSPaginatedDataSource
 
 - (void)createSessionWithTitle:(NSString *)title completion:(void(^)(NSError *error, KUSChatSession *session))completion;
 - (void)updateLastSeenAtForSessionId:(NSString *)sessionId completion:(void(^)(NSError *error, KUSChatSession *session))completion;
+- (void)submitFormMessages:(NSArray<NSDictionary *> *)messages
+                    formId:(NSString *)formId
+                completion:(void(^)(NSError *error, KUSChatSession *session, NSArray<KUSChatMessage *> *messages))completion;
 
 // Sends custom attributes to the most active conversation, or the first conversation created
 - (void)describeActiveConversation:(NSDictionary<NSString *, NSObject *> *)customAttributes;

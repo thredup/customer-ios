@@ -627,46 +627,30 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     }
 
     _submittingForm = YES;
-    [self.userSession.requestManager
-     performRequestType:KUSRequestTypePost
-     endpoint:[NSString stringWithFormat:@"/c/v1/chat/forms/%@/responses", form.oid]
-     params:@{ @"messages": messagesJSON }
-     authenticated:YES
-     completion:^(NSError *error, NSDictionary *response) {
+
+    [self.userSession.chatSessionsDataSource
+     submitFormMessages:messagesJSON
+     formId:form.oid
+     completion:^(NSError *error, KUSChatSession *session, NSArray<KUSChatMessage *> *messages) {
          if (error) {
              KUSLogError(@"Error submitting form: %@", error);
              return;
          }
 
-         NSMutableArray<KUSChatMessage *> *chatMessages = [[NSMutableArray alloc] init];
-         KUSChatSession *chatSession = nil;
-
-         NSArray<NSDictionary *> *includedModelsJSON = response[@"included"];
-         for (NSDictionary *includedModelJSON in includedModelsJSON) {
-             NSString *type = includedModelJSON[@"type"];
-             if ([type isEqualToString:@"chat_message"]) {
-                 KUSChatMessage *chatMessage = [[KUSChatMessage alloc] initWithJSON:includedModelJSON];
-                 [chatMessages addObject:chatMessage];
-             } else if ([type isEqualToString:@"chat_session"]) {
-                 chatSession = [[KUSChatSession alloc] initWithJSON:includedModelJSON];
-             }
-         }
-
-
          // Grab the session id
-         _sessionId = chatSession.oid;
+         _sessionId = session.oid;
          _submittingForm = NO;
 
          [self removeObjects:self.allObjects];
-         [self upsertNewMessages:chatMessages];
+         [self upsertNewMessages:messages];
 
          // Insert the current messages data source into the userSession's lookup table
-         [self.userSession.chatMessagesDataSources setObject:self forKey:chatSession.oid];
+         [self.userSession.chatMessagesDataSources setObject:self forKey:_sessionId];
 
          // Notify listeners
          for (id<KUSChatMessagesDataSourceListener> listener in [self.listeners copy]) {
              if ([listener respondsToSelector:@selector(chatMessagesDataSource:didCreateSessionId:)]) {
-                 [listener chatMessagesDataSource:self didCreateSessionId:chatSession.oid];
+                 [listener chatMessagesDataSource:self didCreateSessionId:_sessionId];
              }
          }
      }];

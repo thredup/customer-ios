@@ -117,6 +117,47 @@
      }];
 }
 
+- (void)submitFormMessages:(NSArray<NSDictionary *> *)messages
+                    formId:(NSString *)formId
+                completion:(void (^)(NSError *, KUSChatSession *, NSArray<KUSChatMessage *> *))completion
+{
+    __weak KUSChatSessionsDataSource *weakSelf = self;
+    [self.userSession.requestManager
+     performRequestType:KUSRequestTypePost
+     endpoint:[NSString stringWithFormat:@"/c/v1/chat/forms/%@/responses", formId]
+     params:@{ @"messages": messages }
+     authenticated:YES
+     completion:^(NSError *error, NSDictionary *response) {
+         if (error) {
+             if (completion) {
+                 completion(error, nil, nil);
+             }
+             return;
+         }
+
+         KUSChatSession *chatSession = nil;
+         NSMutableArray<KUSChatMessage *> *chatMessages = [[NSMutableArray alloc] init];
+
+         NSArray<NSDictionary *> *includedModelsJSON = response[@"included"];
+         for (NSDictionary *includedModelJSON in includedModelsJSON) {
+             NSString *type = includedModelJSON[@"type"];
+             if ([type isEqualToString:@"chat_session"]) {
+                 chatSession = [[KUSChatSession alloc] initWithJSON:includedModelJSON];
+             } else if ([type isEqualToString:@"chat_message"]) {
+                 KUSChatMessage *chatMessage = [[KUSChatMessage alloc] initWithJSON:includedModelJSON];
+                 [chatMessages addObject:chatMessage];
+             }
+         }
+
+         if (chatSession) {
+             [weakSelf upsertObjects:@[ chatSession ]];
+         }
+         if (completion) {
+             completion(nil, chatSession, chatMessages);
+         }
+     }];
+}
+
 - (void)describeActiveConversation:(NSDictionary<NSString *, NSObject *> *)customAttributes
 {
     KUSChatSession *mostRecentChatSession = [self _mostRecentChatSession];
