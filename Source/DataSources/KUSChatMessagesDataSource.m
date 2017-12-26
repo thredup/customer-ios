@@ -535,7 +535,9 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     if ([self count] == 0) {
         return;
     }
-
+    if (_sessionId) {
+        return;
+    }
     KUSForm *form = self.userSession.formDataSource.object;
     if (form == nil) {
         return;
@@ -651,8 +653,38 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
              KUSLogError(@"Error submitting form: %@", error);
              return;
          }
-         _submittingForm = YES;
-         NSLog(@"responses: %@", response);
+
+         NSMutableArray<KUSChatMessage *> *chatMessages = [[NSMutableArray alloc] init];
+         KUSChatSession *chatSession = nil;
+
+         NSArray<NSDictionary *> *includedModelsJSON = response[@"included"];
+         for (NSDictionary *includedModelJSON in includedModelsJSON) {
+             NSString *type = includedModelJSON[@"type"];
+             if ([type isEqualToString:@"chat_message"]) {
+                 KUSChatMessage *chatMessage = [[KUSChatMessage alloc] initWithJSON:includedModelJSON];
+                 [chatMessages addObject:chatMessage];
+             } else if ([type isEqualToString:@"chat_session"]) {
+                 chatSession = [[KUSChatSession alloc] initWithJSON:includedModelJSON];
+             }
+         }
+
+
+         // Grab the session id
+         _sessionId = chatSession.oid;
+         _submittingForm = NO;
+
+         [self removeObjects:self.allObjects];
+         [self upsertNewMessages:chatMessages];
+
+         // Insert the current messages data source into the userSession's lookup table
+         [self.userSession.chatMessagesDataSources setObject:self forKey:chatSession.oid];
+
+         // Notify listeners
+         for (id<KUSChatMessagesDataSourceListener> listener in [self.listeners copy]) {
+             if ([listener respondsToSelector:@selector(chatMessagesDataSource:didCreateSessionId:)]) {
+                 [listener chatMessagesDataSource:self didCreateSessionId:chatSession.oid];
+             }
+         }
      }];
 }
 
