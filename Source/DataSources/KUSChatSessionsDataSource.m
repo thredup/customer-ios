@@ -13,6 +13,12 @@
 #import "KUSDate.h"
 #import "KUSLog.h"
 
+@interface KUSChatSession (SortDate)
+
+- (NSDate *)sortDate;
+
+@end
+
 @interface KUSChatSessionsDataSource () <KUSPaginatedDataSourceListener> {
     NSDictionary<NSString *, NSObject *> *_pendingCustomChatSessionAttributes;
 }
@@ -47,8 +53,7 @@
 - (NSArray<NSSortDescriptor *> *)sortDescriptors
 {
     return @[
-        [NSSortDescriptor sortDescriptorWithKey:@"lastMessageAt" ascending:NO],
-        [NSSortDescriptor sortDescriptorWithKey:@"createdAt" ascending:NO],
+        [NSSortDescriptor sortDescriptorWithKey:@"sortDate" ascending:NO],
         [NSSortDescriptor sortDescriptorWithKey:@"oid" ascending:NO]
     ];
 }
@@ -231,6 +236,15 @@
             _pendingCustomChatSessionAttributes = nil;
         }
     }
+}
+
+@end
+
+@implementation KUSChatSession (SortDate)
+
+- (NSDate *)sortDate
+{
+    return self.lastMessageAt ?: self.createdAt;
 }
 
 @end

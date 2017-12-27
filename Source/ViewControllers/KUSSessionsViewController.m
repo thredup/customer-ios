@@ -137,13 +137,19 @@
 
     CGFloat bottomPadding = self.view.bounds.size.height - CGRectGetMaxY(self.createSessionButton.frame);
     CGFloat bottomButtonPadding = (bottomPadding * 2.0) + createSessionButtonSize.height;
+    CGPoint startingContentOffset = self.tableView.contentOffset;
+    UIEdgeInsets startingContentInset = self.tableView.contentInset;
     self.tableView.contentInset = (UIEdgeInsets) {
-        .top = self.edgeInsets.top,
+        .top = self.fauxNavigationBar.bounds.size.height,
         .bottom = self.edgeInsets.bottom + bottomButtonPadding
     };
     self.tableView.scrollIndicatorInsets = (UIEdgeInsets) {
-        .top = self.edgeInsets.top,
+        .top = self.tableView.contentInset.top,
         .bottom = self.edgeInsets.bottom
+    };
+    self.tableView.contentOffset = (CGPoint) {
+        .x = startingContentOffset.x,
+        .y = startingContentOffset.y - (self.tableView.contentInset.top - startingContentInset.top)
     };
 }
 
