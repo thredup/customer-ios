@@ -9,6 +9,7 @@
 #import "KUSPaginatedDataSource.h"
 
 #import "KUSChatMessage.h"
+#import "KUSFormQuestion.h"
 
 #import <UIKit/UIKit.h>
 
@@ -31,9 +32,9 @@
 - (NSString *)firstOtherUserId;
 - (NSUInteger)unreadCountAfterDate:(NSDate *)date;
 - (BOOL)shouldPreventSendingMessage;
+- (KUSFormQuestion *)currentQuestion;
 
 - (void)upsertNewMessages:(NSArray<KUSChatMessage *> *)chatMessages;
-
 - (void)sendMessageWithText:(NSString *)text attachments:(NSArray<UIImage *> *)attachments;
 - (void)resendMessage:(KUSChatMessage *)message;
 

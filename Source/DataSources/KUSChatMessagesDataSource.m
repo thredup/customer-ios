@@ -23,6 +23,9 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 
     NSMutableSet<NSString *> *_delayedChatMessageIds;
 
+    KUSForm *_form;
+    NSUInteger _questionIndex;
+    KUSFormQuestion *_formQuestion;
     BOOL _submittingForm;
 }
 
@@ -68,6 +71,10 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 
 - (void)objectDataSourceDidLoad:(KUSObjectDataSource *)dataSource
 {
+    if (_form == nil && [dataSource isKindOfClass:[KUSFormDataSource class]]) {
+        _form = dataSource.object;
+    }
+
     [self _insertAutoreplyIfNecessary];
     [self _insertFormMessageIfNecessary];
 }
@@ -179,6 +186,14 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     }
 
     return NO;
+}
+
+- (KUSFormQuestion *)currentQuestion
+{
+    if (_sessionId) {
+        return nil;
+    }
+    return _formQuestion;
 }
 
 - (void)upsertNewMessages:(NSArray<KUSChatMessage *> *)chatMessages
@@ -530,53 +545,29 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     if (_sessionId) {
         return;
     }
-    KUSForm *form = self.userSession.formDataSource.object;
-    if (form == nil) {
+    if (_form == nil) {
         return;
     }
 
-    NSMutableArray<KUSChatMessage *> *userMessages = [[NSMutableArray alloc] init];
-    for (KUSChatMessage *message in self.allObjects.reverseObjectEnumerator) {
-        if (KUSChatMessageSentByUser(message)) {
-            [userMessages addObject:message];
-        }
+    KUSChatMessage *lastMessage = [self objectAtIndex:0];
+    if (!KUSChatMessageSentByUser(lastMessage)) {
+        return;
+    }
+    if ([self shouldPreventSendingMessage]) {
+        return;
     }
 
-    NSMutableArray<NSArray *> *groupedFormQuestions = [[NSMutableArray alloc] init];
-
-    NSMutableArray<KUSFormQuestion *> *currentGroup = nil;
-    for (KUSFormQuestion *question in form.questions) {
+    NSTimeInterval additionalInsertDelay = 0;
+    NSUInteger latestQuestionIndex = _questionIndex;
+    NSUInteger startingOffset = (_formQuestion ? 1 : 0);
+    for (NSInteger i = _questionIndex + startingOffset; i < _form.questions.count; i++) {
+        KUSFormQuestion *question = _form.questions[i];
         if (question.type == KUSFormQuestionTypeUnknown) {
             continue;
         }
-        if (currentGroup == nil) {
-            currentGroup = [[NSMutableArray alloc] init];
-        }
-        [currentGroup addObject:question];
 
-        if (KUSFormQuestionRequiresResponse(question)) {
-            [groupedFormQuestions addObject:currentGroup];
-            currentGroup = nil;
-        }
-    }
-
-    if (userMessages.count == groupedFormQuestions.count + 1) {
-        [self _submitFormResponses];
-        return;
-    }
-
-    NSUInteger questionIndex = userMessages.count - 1;
-    if (questionIndex >= groupedFormQuestions.count) {
-        return;
-    }
-
-    NSArray<KUSFormQuestion *> *questionsToInsert = groupedFormQuestions[questionIndex];
-    KUSChatMessage *lastUserMessage = userMessages.lastObject;
-    NSTimeInterval additionalDelay = 0;
-    for (KUSFormQuestion *question in questionsToInsert) {
-        NSDate *createdAt = [lastUserMessage.createdAt dateByAddingTimeInterval:KUSChatAutoreplyDelay + additionalDelay];
+        NSDate *createdAt = [lastMessage.createdAt dateByAddingTimeInterval:KUSChatAutoreplyDelay + additionalInsertDelay];
         NSString *questionId = [NSString stringWithFormat:@"_question_%@", question.oid];
-
         NSDictionary *json = @{
             @"type": @"chat_message",
             @"id": questionId,
@@ -588,7 +579,19 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
         };
         KUSChatMessage *formMessage = [[KUSChatMessage alloc] initWithJSON:json];
         [self _insertDelayedMessage:formMessage];
-        additionalDelay += KUSChatAutoreplyDelay;
+        additionalInsertDelay += KUSChatAutoreplyDelay;
+
+        latestQuestionIndex = i;
+        if (KUSFormQuestionRequiresResponse(question)) {
+            break;
+        }
+    }
+
+    if (latestQuestionIndex == _questionIndex) {
+        [self _submitFormResponses];
+    } else {
+        _questionIndex = latestQuestionIndex;
+        _formQuestion = _form.questions[_questionIndex];
     }
 }
 
@@ -605,8 +608,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
         @"inputAt": [KUSDate stringFromDate:firstUserMessage.createdAt]
     }];
 
-    KUSForm *form = self.userSession.formDataSource.object;
-    for (KUSFormQuestion *question in form.questions) {
+    for (KUSFormQuestion *question in _form.questions) {
         NSMutableDictionary<NSString *, NSObject *> *formMessage = [[NSMutableDictionary alloc] init];
 
         KUSChatMessage *questionMessage = [self objectAtIndex:currentMessageIndex];
@@ -630,7 +632,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 
     [self.userSession.chatSessionsDataSource
      submitFormMessages:messagesJSON
-     formId:form.oid
+     formId:_form.oid
      completion:^(NSError *error, KUSChatSession *session, NSArray<KUSChatMessage *> *messages) {
          if (error) {
              KUSLogError(@"Error submitting form: %@", error);
