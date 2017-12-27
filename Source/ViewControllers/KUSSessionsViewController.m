@@ -141,6 +141,10 @@
         .top = self.edgeInsets.top,
         .bottom = self.edgeInsets.bottom + bottomButtonPadding
     };
+    self.tableView.scrollIndicatorInsets = (UIEdgeInsets) {
+        .top = self.edgeInsets.top,
+        .bottom = self.edgeInsets.bottom
+    };
 }
 
 #pragma mark - Interface element methods
