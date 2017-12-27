@@ -141,9 +141,9 @@
          NSArray<NSDictionary *> *includedModelsJSON = response[@"included"];
          for (NSDictionary *includedModelJSON in includedModelsJSON) {
              NSString *type = includedModelJSON[@"type"];
-             if ([type isEqualToString:@"chat_session"]) {
+             if ([type isEqual:[KUSChatSession modelType]]) {
                  chatSession = [[KUSChatSession alloc] initWithJSON:includedModelJSON];
-             } else if ([type isEqualToString:@"chat_message"]) {
+             } else if ([type isEqual:[KUSChatMessage modelType]]) {
                  KUSChatMessage *chatMessage = [[KUSChatMessage alloc] initWithJSON:includedModelJSON];
                  [chatMessages addObject:chatMessage];
              }
