@@ -125,7 +125,7 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
 
 - (NSString *)text
 {
-    return [self _actualText];
+    return [_textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 }
 
 #pragma mark - UIResponder methods
@@ -158,11 +158,6 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
 
 #pragma mark - Interface element methods
 
-- (NSString *)_actualText
-{
-    return [_textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-}
-
 - (void)_pressAttach
 {
     if ([self.delegate respondsToSelector:@selector(inputBarDidTapAttachment:)]) {
@@ -172,19 +167,24 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
 
 - (void)_pressSend
 {
-    NSString *actualText = [self _actualText];
-    if (actualText.length == 0) {
+    NSString *text = self.text;
+    if (text.length == 0) {
         return;
     }
-    if ([self.delegate respondsToSelector:@selector(inputBar:didEnterText:)]) {
-        [self.delegate inputBar:self didEnterText:actualText];
+    if ([self.delegate respondsToSelector:@selector(inputBarDidPressSend:)]) {
+        [self.delegate inputBarDidPressSend:self];
     }
 }
 
 - (void)_updateSendButton
 {
-    _sendButton.userInteractionEnabled = [self _actualText].length > 0;
-    _sendButton.alpha = ([self _actualText].length ? 1.0 : 0.5);
+    NSString *text = self.text;
+    BOOL shouldEnableSend = text.length > 0;
+    if (shouldEnableSend && [self.delegate respondsToSelector:@selector(inputBarShouldEnableSend:)]) {
+        shouldEnableSend = [self.delegate inputBarShouldEnableSend:self];
+    }
+    _sendButton.userInteractionEnabled = shouldEnableSend;
+    _sendButton.alpha = (shouldEnableSend ? 1.0 : 0.5);
 }
 
 #pragma mark - KUSTextViewDelegate methods

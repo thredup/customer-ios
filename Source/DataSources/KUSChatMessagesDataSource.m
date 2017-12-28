@@ -639,10 +639,19 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
              return;
          }
 
+         // If the form contained an email prompt, mark the local session as having submitted email already
+         if ([_form containsEmailQuestion]) {
+             [self.userSession.userDefaults setDidCaptureEmail:YES];
+         }
+
          // Grab the session id
          _sessionId = session.oid;
+         _form = nil;
+         _questionIndex = 0;
+         _formQuestion = nil;
          _submittingForm = NO;
 
+         // Replace all of the local messages with the new ones
          [self removeObjects:self.allObjects];
          [self upsertNewMessages:messages];
 

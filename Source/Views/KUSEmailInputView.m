@@ -10,6 +10,7 @@
 
 #import "KUSColor.h"
 #import "KUSImage.h"
+#import "KUSText.h"
 
 @interface KUSEmailInputView () <UITextFieldDelegate>
 
@@ -127,7 +128,8 @@
 
 - (void)_userWantsToSubmit
 {
-    if ([self _isValidEmail]) {
+    BOOL isValidEmail = [KUSText isValidEmail:[self _sanitizedText]];
+    if (isValidEmail) {
         [self.delegate emailInputView:self didSubmitEmail:[self _sanitizedText]];
         [self.textField resignFirstResponder];
     }
@@ -138,17 +140,9 @@
     return [self.textField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 }
 
-- (BOOL)_isValidEmail
-{
-    NSString *sanitizedText = [self _sanitizedText];
-    static NSString *kEmailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
-    NSPredicate *emailPredicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", kEmailRegex];
-    return sanitizedText.length > 0 && [emailPredicate evaluateWithObject:sanitizedText];
-}
-
 - (void)_updateSubmitButton
 {
-    BOOL isValidEmail = [self _isValidEmail];
+    BOOL isValidEmail = [KUSText isValidEmail:[self _sanitizedText]];
     self.submitButton.userInteractionEnabled = isValidEmail;
     self.submitButton.alpha = (isValidEmail ? 1.0 : 0.5);
 }

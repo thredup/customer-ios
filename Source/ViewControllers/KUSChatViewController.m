@@ -23,6 +23,7 @@
 #import "KUSImage.h"
 #import "KUSInputBar.h"
 #import "KUSLog.h"
+#import "KUSText.h"
 #import "KUSPermissions.h"
 #import "KUSNavigationBarView.h"
 #import "KUSNYTChatMessagePhoto.h"
@@ -437,14 +438,23 @@
 
 #pragma mark - KUSInputBarDelegate methods
 
-- (void)inputBar:(KUSInputBar *)inputBar didEnterText:(NSString *)text
+- (BOOL)inputBarShouldEnableSend:(KUSInputBar *)inputBar
+{
+    KUSFormQuestion *currentQuestion = _chatMessagesDataSource.currentQuestion;
+    if (currentQuestion && currentQuestion.property == KUSFormQuestionPropertyCustomerEmail) {
+        return [KUSText isValidEmail:inputBar.text];
+    }
+    return inputBar.text.length > 0;
+}
+
+- (void)inputBarDidPressSend:(KUSInputBar *)inputBar
 {
     // Disallow message sending while autoreply/form messages are being delayed
     if ([_chatMessagesDataSource shouldPreventSendingMessage]) {
         return;
     }
 
-    [_chatMessagesDataSource sendMessageWithText:text attachments:nil];
+    [_chatMessagesDataSource sendMessageWithText:inputBar.text attachments:nil];
     [_inputBarView setText:nil];
 }
 

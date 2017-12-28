@@ -28,4 +28,16 @@
     return self;
 }
 
+#pragma mark - Helper methods
+
+- (BOOL)containsEmailQuestion
+{
+    for (KUSFormQuestion *question in self.questions) {
+        if (question.property == KUSFormQuestionPropertyCustomerEmail) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
 @end

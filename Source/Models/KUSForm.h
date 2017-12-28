@@ -13,4 +13,6 @@
 
 @property (nonatomic, copy, readonly) NSArray<KUSFormQuestion *> *questions;
 
+- (BOOL)containsEmailQuestion;
+
 @end
