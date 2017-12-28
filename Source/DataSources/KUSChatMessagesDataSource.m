@@ -213,37 +213,18 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 {
     KUSChatSettings *chatSettings = self.userSession.chatSettingsDataSource.object;
     if (_sessionId == nil && chatSettings.activeFormId) {
+        NSAssert(attachments.count == 0, @"Should not have been able to send attachments without a _sessionId");
 
         NSString *tempMessageId = [[NSUUID UUID] UUIDString];
-        NSMutableArray<NSDictionary<NSString *, NSString *> *> *attachmentObjects = [[NSMutableArray alloc] initWithCapacity:attachments.count];
-        NSMutableArray<NSString *> *cachedImageKeys = [[NSMutableArray alloc] initWithCapacity:attachments.count];
-        for (UIImage *attachment in attachments) {
-            NSString *attachmentId = [[NSUUID UUID] UUIDString];
-            NSURL *attachmentURL = [KUSChatMessage attachmentURLForMessageId:tempMessageId attachmentId:attachmentId];
-            NSString *imageKey = attachmentURL.absoluteString;
-            [[SDImageCache sharedImageCache] storeImage:attachment
-                                                 forKey:imageKey
-                                                 toDisk:NO
-                                             completion:nil];
-            [attachmentObjects addObject:@{ @"id": attachmentId }];
-            [cachedImageKeys addObject:imageKey];
-        }
-
         NSDictionary *json = @{
-                               @"type": @"chat_message",
-                               @"id": tempMessageId,
-                               @"attributes": @{
-                                       @"body": text,
-                                       @"direction": @"in",
-                                       @"createdAt": [KUSDate stringFromDate:[NSDate date]]
-                                       },
-                               @"relationships": @{
-                                       @"attachments" : @{
-                                               @"data": attachmentObjects
-                                               }
-                                       }
-                               };
-
+            @"type": @"chat_message",
+            @"id": tempMessageId,
+            @"attributes": @{
+                @"body": text,
+                @"direction": @"in",
+                @"createdAt": [KUSDate stringFromDate:[NSDate date]]
+            }
+        };
         NSArray<KUSChatMessage *> *temporaryMessages = [KUSChatMessage objectsWithJSON:json];
         [self upsertNewMessages:temporaryMessages];
 

@@ -208,7 +208,10 @@
 
 - (void)paste:(id)sender
 {
-    if ([self.delegate respondsToSelector:@selector(textView:didPasteImage:)]) {
+    BOOL canPasteImage = ([self.delegate respondsToSelector:@selector(textViewCanPasteImage:)]
+                          && [self.delegate textViewCanPasteImage:self]
+                          && [self.delegate respondsToSelector:@selector(textView:didPasteImage:)]);
+    if (canPasteImage) {
         UIImage *pastedImage = [self _imageFromPasteboard];
         if (pastedImage) {
             [self.delegate textView:self didPasteImage:pastedImage];

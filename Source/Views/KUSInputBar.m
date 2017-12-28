@@ -56,7 +56,7 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
 
         _attachmentButton = [[UIButton alloc] init];
         [_attachmentButton addTarget:self action:@selector(_pressAttach) forControlEvents:UIControlEventTouchUpInside];
-        _attachmentButton.hidden = ![KUSPermissions cameraAccessIsAvailable] && ![KUSPermissions photoLibraryAccessIsAvailable];
+        _attachmentButton.hidden = YES;
         [self addSubview:_attachmentButton];
 
         _textView = [[KUSTextView alloc] init];
@@ -126,6 +126,18 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
 - (NSString *)text
 {
     return [_textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+}
+
+- (void)setAllowsAttachments:(BOOL)allowsAttachments
+{
+    _allowsAttachments = allowsAttachments;
+
+    if (!allowsAttachments) {
+        _attachmentButton.hidden = YES;
+    } else {
+        _attachmentButton.hidden = ![KUSPermissions cameraAccessIsAvailable] && ![KUSPermissions photoLibraryAccessIsAvailable];
+    }
+    [self setNeedsLayout];
 }
 
 #pragma mark - UIResponder methods
@@ -212,7 +224,7 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
 
 - (BOOL)textViewCanPasteImage:(KUSTextView *)textView
 {
-    return [self.delegate respondsToSelector:@selector(inputBar:didPasteImage:)];
+    return _allowsAttachments && [self.delegate respondsToSelector:@selector(inputBar:didPasteImage:)];
 }
 
 - (void)textView:(KUSTextView *)textView didPasteImage:(UIImage *)image

@@ -121,6 +121,7 @@
     self.inputBarView = [[KUSInputBar alloc] init];
     self.inputBarView.delegate = self;
     self.inputBarView.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth);
+    self.inputBarView.allowsAttachments = _chatSessionId != nil;
     [self.view addSubview:self.inputBarView];
 
     [_chatMessagesDataSource addListener:self];
@@ -284,6 +285,7 @@
 - (void)chatMessagesDataSource:(KUSChatMessagesDataSource *)dataSource didCreateSessionId:(NSString *)sessionId
 {
     _chatSessionId = sessionId;
+    self.inputBarView.allowsAttachments = YES;
     [self.navigationItem setHidesBackButton:NO animated:YES];
     [self.fauxNavigationBar setSessionId:_chatSessionId];
     [self _checkShouldShowEmailInput];
