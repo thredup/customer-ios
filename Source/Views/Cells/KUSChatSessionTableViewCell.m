@@ -144,7 +144,9 @@ CGFloat KUSChatSessionTableViewCellHeight = 88.0;
         }
     }
     NSString *subtitleText = latestTextMessage.body ?: _chatSession.preview;
-    self.subtitleLabel.attributedText = [KUSText attributedStringFromText:subtitleText fontSize:12.0];
+    self.subtitleLabel.attributedText = [KUSText attributedStringFromText:subtitleText
+                                                                 fontSize:12.0
+                                                                    color:self.subtitleLabel.textColor];
 
     // Date text (from last message date, or session created at)
     NSDate *sessionDate = latestTextMessage.createdAt ?: _chatSession.createdAt;

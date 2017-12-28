@@ -396,8 +396,12 @@
 
 - (void)chatMessageTableViewCell:(KUSChatMessageTableViewCell *)cell didTapLink:(NSURL *)URL
 {
-    SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:URL];
-    [self presentViewController:safariViewController animated:YES completion:nil];
+    if ([URL.scheme isEqualToString:@"http"] || [URL.scheme isEqualToString:@"https"]) {
+        SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:URL];
+        [self presentViewController:safariViewController animated:YES completion:nil];
+    } else {
+        [[UIApplication sharedApplication] openURL:URL];
+    }
 }
 
 - (void)chatMessageTableViewCellDidTapError:(KUSChatMessageTableViewCell *)cell forMessage:(KUSChatMessage *)message

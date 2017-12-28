@@ -36,13 +36,16 @@
 }
 
 NSDictionary<NSString *, id> *KUSAttributedFontWithSize(NSDictionary<NSString *, id> *attributes, CGFloat fontSize, UIColor *color) {
-    UIFont *currentFont = [attributes objectForKey:NSFontAttributeName];
-    if (currentFont == nil || currentFont.pointSize == fontSize) {
-        return attributes;
-    }
     NSMutableDictionary<NSString *, id> *mutableAttributes = [attributes mutableCopy];
-    UIFont *newFont = [UIFont fontWithName:currentFont.fontName size:fontSize];
-    [mutableAttributes setObject:newFont forKey:NSFontAttributeName];
+
+    UIFont *currentFont = [attributes objectForKey:NSFontAttributeName];
+    UIFont *newFont = nil;
+    if (currentFont && currentFont.pointSize != fontSize) {
+        newFont = [UIFont fontWithName:currentFont.fontName size:fontSize];
+        [mutableAttributes setObject:newFont forKey:NSFontAttributeName];
+
+    }
+
     if (color) {
         [mutableAttributes setObject:color forKey:NSForegroundColorAttributeName];
     }
@@ -51,8 +54,10 @@ NSDictionary<NSString *, id> *KUSAttributedFontWithSize(NSDictionary<NSString *,
     // https://github.com/TTTAttributedLabel/TTTAttributedLabel/issues/405#issuecomment-135864151
     NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
     paragraphStyle.lineHeightMultiple = 1.0;
-    paragraphStyle.minimumLineHeight = newFont.lineHeight;
-    paragraphStyle.maximumLineHeight = newFont.lineHeight;
+    if (newFont) {
+        paragraphStyle.minimumLineHeight = newFont.lineHeight;
+        paragraphStyle.maximumLineHeight = newFont.lineHeight;
+    }
     [mutableAttributes setObject:paragraphStyle forKey:NSParagraphStyleAttributeName];
 
     return mutableAttributes;
