@@ -597,7 +597,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 
 - (void)_submitFormResponses
 {
-    NSMutableArray<NSDictionary *> *messagesJSON = [[NSMutableArray alloc] init];
+    NSMutableArray<NSDictionary<NSString *, NSObject *> *> *messagesJSON = [[NSMutableArray alloc] init];
 
     NSUInteger currentMessageIndex = self.count - 1;
     KUSChatMessage *firstUserMessage = [self objectAtIndex:currentMessageIndex];
@@ -630,38 +630,46 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 
     _submittingForm = YES;
 
+    BOOL containsEmailQuestion = [_form containsEmailQuestion];
+    __weak KUSChatMessagesDataSource *weakSelf = self;
+    __weak KUSUserSession *weakUserSession = self.userSession;
     [self.userSession.chatSessionsDataSource
      submitFormMessages:messagesJSON
      formId:_form.oid
      completion:^(NSError *error, KUSChatSession *session, NSArray<KUSChatMessage *> *messages) {
+         // If the form contained an email prompt, mark the local session as having submitted email already
+         if (containsEmailQuestion && !error) {
+             [weakUserSession.userDefaults setDidCaptureEmail:YES];
+         }
+
+         __strong KUSChatMessagesDataSource *strongSelf = weakSelf;
+         if (strongSelf == nil) {
+             return;
+         }
+
          if (error) {
              KUSLogError(@"Error submitting form: %@", error);
              return;
          }
 
-         // If the form contained an email prompt, mark the local session as having submitted email already
-         if ([_form containsEmailQuestion]) {
-             [self.userSession.userDefaults setDidCaptureEmail:YES];
-         }
-
          // Grab the session id
-         _sessionId = session.oid;
-         _form = nil;
-         _questionIndex = 0;
-         _formQuestion = nil;
-         _submittingForm = NO;
+         strongSelf->_sessionId = session.oid;
+         strongSelf->_form = nil;
+         strongSelf->_questionIndex = 0;
+         strongSelf->_formQuestion = nil;
+         strongSelf->_submittingForm = NO;
 
          // Replace all of the local messages with the new ones
-         [self removeObjects:self.allObjects];
-         [self upsertNewMessages:messages];
+         [strongSelf removeObjects:strongSelf.allObjects];
+         [strongSelf upsertNewMessages:messages];
 
          // Insert the current messages data source into the userSession's lookup table
-         [self.userSession.chatMessagesDataSources setObject:self forKey:_sessionId];
+         [weakUserSession.chatMessagesDataSources setObject:strongSelf forKey:strongSelf->_sessionId];
 
          // Notify listeners
-         for (id<KUSChatMessagesDataSourceListener> listener in [self.listeners copy]) {
+         for (id<KUSChatMessagesDataSourceListener> listener in [strongSelf.listeners copy]) {
              if ([listener respondsToSelector:@selector(chatMessagesDataSource:didCreateSessionId:)]) {
-                 [listener chatMessagesDataSource:self didCreateSessionId:_sessionId];
+                 [listener chatMessagesDataSource:strongSelf didCreateSessionId:strongSelf->_sessionId];
              }
          }
      }];
@@ -689,10 +697,17 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     }
 
     [_delayedChatMessageIds addObject:chatMessage.oid];
+
+    __weak KUSChatMessagesDataSource *weakSelf = self;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [_delayedChatMessageIds removeObject:chatMessage.oid];
-        BOOL doesNotAlreadyContainMessage = ![self objectWithId:chatMessage.oid];
-        [self upsertObjects:@[ chatMessage ]];
+        __strong KUSChatMessagesDataSource *strongSelf = weakSelf;
+        if (strongSelf == nil) {
+            return;
+        }
+
+        [strongSelf->_delayedChatMessageIds removeObject:chatMessage.oid];
+        BOOL doesNotAlreadyContainMessage = ![strongSelf objectWithId:chatMessage.oid];
+        [strongSelf upsertObjects:@[ chatMessage ]];
         if (doesNotAlreadyContainMessage) {
             [KUSAudio playMessageReceivedSound];
         }

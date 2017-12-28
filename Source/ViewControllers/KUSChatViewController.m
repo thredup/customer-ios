@@ -271,8 +271,12 @@
 - (void)paginatedDataSource:(KUSPaginatedDataSource *)dataSource didReceiveError:(NSError *)error
 {
     if (dataSource == _chatMessagesDataSource && !_chatMessagesDataSource.didFetch) {
+        __weak KUSChatViewController *weakSelf = self;
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [_chatMessagesDataSource fetchLatest];
+            __strong KUSChatViewController *strongSelf = weakSelf;
+            if (strongSelf) {
+                [strongSelf->_chatMessagesDataSource fetchLatest];
+            }
         });
     }
 }
