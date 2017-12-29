@@ -14,6 +14,7 @@
 
 #import "KUSChatMessage.h"
 #import "KUSColor.h"
+#import "KUSDate.h"
 #import "KUSImage.h"
 #import "KUSText.h"
 #import "KUSUserSession.h"
@@ -32,10 +33,15 @@ static const CGFloat kRowTopPadding = 3.0;
 static const CGFloat kMaxBubbleWidth = 250.0;
 static const CGFloat kMinBubbleHeight = 38.0;
 
+static const CGFloat kAvatarDiameter = 40.0;
+
+static const CGFloat kTimestampTopPadding = 4.0;
+
 @interface KUSChatMessageTableViewCell () <TTTAttributedLabelDelegate> {
     KUSUserSession *_userSession;
     KUSChatMessage *_chatMessage;
     BOOL _showsAvatar;
+    BOOL _showsTimestamp;
     NSTimer *_sendingFadeTimer;
 
     KUSAvatarImageView *_avatarImageView;
@@ -43,6 +49,7 @@ static const CGFloat kMinBubbleHeight = 38.0;
     TTTAttributedLabel *_labelView;
     UIImageView *_imageView;
     UIButton *_errorButton;
+    UILabel *_timestampLabel;
 }
 
 @end
@@ -60,6 +67,8 @@ static const CGFloat kMinBubbleHeight = 38.0;
         [appearance setCompanyBubbleColor:[KUSColor lightGrayColor]];
         [appearance setUserTextColor:[UIColor whiteColor]];
         [appearance setCompanyTextColor:[UIColor blackColor]];
+        [appearance setTimestampFont:[UIFont systemFontOfSize:11.0]];
+        [appearance setTimestampTextColor:[UIColor grayColor]];
     }
 }
 
@@ -70,6 +79,22 @@ static const CGFloat kMinBubbleHeight = 38.0;
     height = MAX(height, kMinBubbleHeight);
     height += kRowTopPadding * 2.0;
     return height;
+}
+
++ (CGFloat)heightForTimestamp
+{
+    UIFont *font = [self timestampFont];
+    if (font) {
+        return font.lineHeight + kTimestampTopPadding;
+    } else {
+        return 0.0;
+    }
+}
+
++ (UIFont *)timestampFont
+{
+    KUSChatMessageTableViewCell *appearance = [KUSChatMessageTableViewCell appearance];
+    return [appearance timestampFont];
 }
 
 + (CGFloat)fontSize
@@ -153,6 +178,13 @@ static const CGFloat kMinBubbleHeight = 38.0;
 
         UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_didTapImage)];
         [_imageView addGestureRecognizer:tapGestureRecognizer];
+
+        _timestampLabel = [[UILabel alloc] init];
+        _timestampLabel.userInteractionEnabled = NO;
+        _timestampLabel.backgroundColor = self.backgroundColor;
+        _timestampLabel.adjustsFontSizeToFitWidth = YES;
+        _timestampLabel.minimumScaleFactor = 8.0 / 11.0;
+        [self.contentView addSubview:_timestampLabel];
     }
     return self;
 }
@@ -170,19 +202,10 @@ static const CGFloat kMinBubbleHeight = 38.0;
 
     BOOL currentUser = KUSChatMessageSentByUser(_chatMessage);
 
-    _avatarImageView.hidden = currentUser || !_showsAvatar;
-    _avatarImageView.frame = (CGRect) {
-        .origin.x = kRowSidePadding,
-        .origin.y = (self.contentView.bounds.size.height - 40.0) / 2.0,
-        .size.width = 40.0,
-        .size.height = 40.0
-    };
-
     CGSize boundingSizeForContent = [[self class] boundingSizeForMessage:_chatMessage maxWidth:self.contentView.bounds.size.width];
-
     CGSize bubbleViewSize = (CGSize) {
         .width = boundingSizeForContent.width + kBubbleSidePadding * 2.0,
-        .height = self.contentView.bounds.size.height - kRowTopPadding * 2.0
+        .height = boundingSizeForContent.height + kBubbleTopPadding * 2.0
     };
     _bubbleView.frame = (CGRect) {
         .origin.x = currentUser ? self.contentView.bounds.size.width - bubbleViewSize.width - kRowSidePadding : 60.0,
@@ -190,6 +213,14 @@ static const CGFloat kMinBubbleHeight = 38.0;
         .size = bubbleViewSize
     };
     _bubbleView.layer.cornerRadius = MIN(_bubbleView.frame.size.height / 2.0, 15.0);
+
+    _avatarImageView.hidden = currentUser || !_showsAvatar;
+    _avatarImageView.frame = (CGRect) {
+        .origin.x = kRowSidePadding,
+        .origin.y = ((bubbleViewSize.height + kRowTopPadding * 2.0) - kAvatarDiameter) / 2.0,
+        .size.width = kAvatarDiameter,
+        .size.height = kAvatarDiameter
+    };
 
     switch (_chatMessage.type) {
         default:
@@ -214,6 +245,16 @@ static const CGFloat kMinBubbleHeight = 38.0;
         .origin.y = _bubbleView.frame.origin.y + (_bubbleView.frame.size.height - kMinBubbleHeight) / 2.0,
         .size.width = kMinBubbleHeight,
         .size.height = kMinBubbleHeight
+    };
+
+    _timestampLabel.hidden = !_showsTimestamp;
+    CGFloat timestampInset = ceil(_bubbleView.layer.cornerRadius / 2.0);
+    CGFloat timestampWidth = MAX(bubbleViewSize.width - timestampInset * 2.0, 200.0);
+    _timestampLabel.frame = (CGRect) {
+        .origin.x = (currentUser ? CGRectGetMaxX(_bubbleView.frame) - timestampWidth - timestampInset : _bubbleView.frame.origin.x + timestampInset),
+        .origin.y = CGRectGetMaxY(_bubbleView.frame) + kTimestampTopPadding,
+        .size.width = timestampWidth,
+        .size.height = MAX([[self class] heightForTimestamp] - kTimestampTopPadding, 0.0)
     };
 }
 
@@ -329,6 +370,9 @@ static const CGFloat kMinBubbleHeight = 38.0;
         _errorButton.hidden = YES;
     }
 
+    _timestampLabel.textAlignment = (currentUser ? NSTextAlignmentRight : NSTextAlignmentLeft);
+    _timestampLabel.text = [KUSDate messageTimestampTextFromDate:_chatMessage.createdAt];
+
     [self _updateAlphaForState];
     [self setNeedsLayout];
 }
@@ -336,6 +380,12 @@ static const CGFloat kMinBubbleHeight = 38.0;
 - (void)setShowsAvatar:(BOOL)showsAvatar
 {
     _showsAvatar = showsAvatar;
+    [self setNeedsLayout];
+}
+
+- (void)setShowsTimestamp:(BOOL)showsTimestamp
+{
+    _showsTimestamp = showsTimestamp;
     [self setNeedsLayout];
 }
 
@@ -369,6 +419,26 @@ static const CGFloat kMinBubbleHeight = 38.0;
     if ([self.delegate respondsToSelector:@selector(chatMessageTableViewCellDidTapImage:forMessage:)]) {
         [self.delegate chatMessageTableViewCellDidTapImage:self forMessage:_chatMessage];
     }
+}
+
+#pragma mark - UIAppearance methods
+
+- (void)setBackgroundColor:(UIColor *)backgroundColor
+{
+    [super setBackgroundColor:backgroundColor];
+    _timestampLabel.backgroundColor = backgroundColor;
+}
+
+- (void)setTimestampFont:(UIFont *)timestampFont
+{
+    _timestampFont = timestampFont;
+    _timestampLabel.font = _timestampFont;
+}
+
+- (void)setTimestampTextColor:(UIColor *)timestampTextColor
+{
+    _timestampTextColor = timestampTextColor;
+    _timestampLabel.textColor = _timestampTextColor;
 }
 
 @end

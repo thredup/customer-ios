@@ -39,6 +39,11 @@ const NSTimeInterval kDaysPerWeek = 7.0;
     }
 }
 
++ (NSString *)messageTimestampTextFromDate:(NSDate *)date
+{
+    return [_ShortRelativeDateFormatter() stringFromDate:date];
+}
+
 + (NSDate *)dateFromString:(NSString *)string
 {
     return (string.length ? [_ISO8601DateFormatterFromString() dateFromString:string] : nil);
@@ -51,13 +56,26 @@ const NSTimeInterval kDaysPerWeek = 7.0;
 
 #pragma mark - Helper logic
 
+static NSDateFormatter *_ShortRelativeDateFormatter(void)
+{
+    static NSDateFormatter *_dateFormatter;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _dateFormatter = [[NSDateFormatter alloc] init];
+        _dateFormatter.timeStyle = NSDateFormatterShortStyle;
+        _dateFormatter.dateStyle = NSDateFormatterShortStyle;
+        _dateFormatter.doesRelativeDateFormatting = YES;
+    });
+    return _dateFormatter;
+}
+
 static NSString *_AgoTextWithCountAndUnit(NSTimeInterval unitCount, NSString *unit)
 {
     int integerUnit = (int)round(unitCount);
     return [NSString stringWithFormat:@"%i %@%@ ago", integerUnit, unit, (integerUnit > 1 ? @"s": @"")];
 }
 
-static NSDateFormatter *_ISO8601DateFormatterFromDate()
+static NSDateFormatter *_ISO8601DateFormatterFromDate(void)
 {
     static NSDateFormatter *_dateFormatter;
     static dispatch_once_t onceToken;
@@ -70,7 +88,7 @@ static NSDateFormatter *_ISO8601DateFormatterFromDate()
     return _dateFormatter;
 }
 
-static NSDateFormatter *_ISO8601DateFormatterFromString()
+static NSDateFormatter *_ISO8601DateFormatterFromString(void)
 {
     static NSDateFormatter *_dateFormatter;
     static dispatch_once_t onceToken;

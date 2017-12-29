@@ -345,6 +345,7 @@
 {
     KUSChatMessage *chatMessage = [self messageForRow:indexPath.row];
     KUSChatMessage *previousChatMessage = [self messageBeforeRow:indexPath.row];
+    KUSChatMessage *nextChatMessage = [self messageAfterRow:indexPath.row];
     BOOL currentUser = KUSChatMessageSentByUser(chatMessage);
 
     NSString *messageCellIdentifier = (currentUser ? @"CurrentUserMessageCell" : @"OtherUserMessageCell");
@@ -358,7 +359,9 @@
     [cell setChatMessage:chatMessage];
 
     BOOL previousMessageDiffSender = !KUSChatMessagesSameSender(previousChatMessage, chatMessage);
+    BOOL nextMessageDiffSender = !KUSChatMessagesSameSender(nextChatMessage, chatMessage);
     [cell setShowsAvatar:previousMessageDiffSender];
+    [cell setShowsTimestamp:nextMessageDiffSender];
 
     // Make sure that we've fetched all of the latest messages by loading the next page
     static NSUInteger kPrefetchPadding = 20;
@@ -374,7 +377,14 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     KUSChatMessage *chatMessage = [self messageForRow:indexPath.row];
-    return [KUSChatMessageTableViewCell heightForChatMessage:chatMessage maxWidth:tableView.bounds.size.width];
+    KUSChatMessage *nextChatMessage = [self messageAfterRow:indexPath.row];
+    BOOL nextMessageDiffSender = !KUSChatMessagesSameSender(nextChatMessage, chatMessage);
+    CGFloat messageHeight = [KUSChatMessageTableViewCell heightForChatMessage:chatMessage maxWidth:tableView.bounds.size.width];
+    if (nextMessageDiffSender) {
+        return messageHeight + [KUSChatMessageTableViewCell heightForTimestamp];
+    } else {
+        return messageHeight;
+    }
 }
 
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
@@ -391,8 +401,17 @@
 
 - (KUSChatMessage *)messageBeforeRow:(NSInteger)row
 {
-    if (row < [_chatMessagesDataSource count] - 1) {
+    if (row < [_chatMessagesDataSource count] - 1 && row >= 0) {
         return [self messageForRow:row + 1];
+    } else {
+        return nil;
+    }
+}
+
+- (KUSChatMessage *)messageAfterRow:(NSInteger)row
+{
+    if (row > 0 && row < [_chatMessagesDataSource count]) {
+        return [self messageForRow:row - 1];
     } else {
         return nil;
     }

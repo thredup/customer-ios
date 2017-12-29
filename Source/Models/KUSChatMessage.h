@@ -52,9 +52,10 @@ static inline BOOL KUSChatMessageSentByUser(KUSChatMessage *message)
 
 static inline BOOL KUSChatMessagesSameSender(KUSChatMessage *message1, KUSChatMessage *message2)
 {
-    return ((message1.sentById == message2.sentById
-            || [message1.sentById isEqualToString:message2.sentById])
-            && message1.direction == message2.direction);
+    return (message1 && message2
+            && message1.direction == message2.direction
+            && (message1.sentById == message2.sentById
+            || [message1.sentById isEqualToString:message2.sentById]));
 }
 
 NS_ASSUME_NONNULL_END
