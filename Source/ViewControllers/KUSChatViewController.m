@@ -540,7 +540,7 @@
     [self presentViewController:imagePickerController animated:YES completion:nil];
 }
 
-- (void)inputBarTextDidChange:(KUSInputBar *)inputBar
+- (void)inputBarDesiredHeightDidChange:(KUSInputBar *)inputBar
 {
     [self.view setNeedsLayout];
     [self.view layoutIfNeeded];

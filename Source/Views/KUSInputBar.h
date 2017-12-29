@@ -39,5 +39,6 @@
 - (void)inputBar:(KUSInputBar *)inputBar didPasteImage:(UIImage *)image;
 - (void)inputBarDidTapAttachment:(KUSInputBar *)inputBar;
 - (void)inputBarTextDidChange:(KUSInputBar *)inputBar;
+- (void)inputBarDesiredHeightDidChange:(KUSInputBar *)inputBar;
 
 @end
