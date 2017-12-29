@@ -35,6 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy, readonly) NSArray<NSString *> *attachmentIds;
 
 @property (nonatomic, copy, readonly) NSDate *createdAt;
+@property (nonatomic, copy, readonly) NSDate *importedAt;
 @property (nonatomic, assign, readonly) KUSChatMessageDirection direction;
 @property (nonatomic, copy, readonly, nullable) NSString *sentById;
 

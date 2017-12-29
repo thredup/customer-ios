@@ -479,8 +479,9 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 - (BOOL)_shouldShowAutoreply
 {
     KUSChatMessage *firstMessage = self.allObjects.lastObject;
+    KUSChatMessage *secondMessage = self.count >= 2 ? [self objectAtIndex:self.count - 2] : nil;
     KUSChatSettings *chatSettings = self.userSession.chatSettingsDataSource.object;
-    return (chatSettings.activeFormId.length == 0
+    return ((chatSettings.activeFormId.length == 0 || (firstMessage.importedAt == nil && secondMessage && secondMessage.importedAt == nil))
             && chatSettings.autoreply.length > 0
             && [self count] > 0
             && self.didFetchAll

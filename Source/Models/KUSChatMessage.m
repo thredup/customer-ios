@@ -157,6 +157,7 @@ static NSString *KUSUnescapeBackslashesFromString(NSString *string)
         _attachmentIds = [json valueForKeyPath:@"relationships.attachments.data.@unionOfObjects.id"];
 
         _createdAt = DateFromKeyPath(json, @"attributes.createdAt");
+        _importedAt = DateFromKeyPath(json, @"attributes.importedAt");
         _direction = KUSChatMessageDirectionFromString(NSStringFromKeyPath(json, @"attributes.direction"));
         _sentById = NSStringFromKeyPath(json, @"relationships.sentBy.data.id");
     }
@@ -203,6 +204,9 @@ static NSString *KUSUnescapeBackslashesFromString(NSString *string)
         return NO;
     }
     if (![chatMessage.createdAt isEqual:self.createdAt]) {
+        return NO;
+    }
+    if (![chatMessage.importedAt isEqual:self.importedAt]) {
         return NO;
     }
     if (![chatMessage.body isEqual:self.body]) {
