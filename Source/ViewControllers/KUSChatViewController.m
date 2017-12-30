@@ -169,7 +169,9 @@
 
     // Only bring up the keyboard if the chat is being presented/pushed
     if (self.isBeingPresented || self.isMovingToParentViewController) {
-        [_inputBarView becomeFirstResponder];
+        if (!_inputBarView.hidden) {
+            [_inputBarView becomeFirstResponder];
+        }
     }
 
     [_userSession.chatSessionsDataSource updateLastSeenAtForSessionId:_chatSessionId completion:nil];
