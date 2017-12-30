@@ -25,5 +25,6 @@
 + (UIImage *)defaultAvatarImageForName:(NSString *)name;
 
 + (UIImage *)resizeImage:(UIImage *)image toFixedPixelCount:(CGFloat)maximumPixelCount;
++ (UIImage *)xImageWithColor:(UIColor *)color size:(CGSize)size lineWidth:(CGFloat)lineWidth;
 
 @end

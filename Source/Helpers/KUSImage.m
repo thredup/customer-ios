@@ -175,6 +175,25 @@
     return resizedImage ?: image;
 }
 
++ (UIImage *)xImageWithColor:(UIColor *)color size:(CGSize)size lineWidth:(CGFloat)lineWidth
+{
+    CGFloat cornerInset = sqrt((lineWidth * lineWidth) / 2.0f);
+
+    UIGraphicsBeginImageContextWithOptions(size, NO, 0.0f);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetStrokeColorWithColor(context, color.CGColor);
+    CGContextSetLineWidth(context, lineWidth);
+    CGContextMoveToPoint(context, 0.0f + cornerInset, 0.0f + cornerInset);
+    CGContextAddLineToPoint(context, size.width - cornerInset, size.height - cornerInset);
+    CGContextMoveToPoint(context, size.width - cornerInset, 0.0f + cornerInset);
+    CGContextAddLineToPoint(context, 0.0f + cornerInset, size.height - cornerInset);
+    CGContextStrokePath(context);
+
+    UIImage *xImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return xImage;
+}
+
 #pragma mark - Internal methods
 
 + (NSArray<NSString *> *)_initialsFromName:(NSString *)name
