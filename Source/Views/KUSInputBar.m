@@ -348,7 +348,10 @@ static NSString *kCellIdentifier = @"ImageAttachment";
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    // TODO: Full-screen preview of image?
+    if ([self.delegate respondsToSelector:@selector(inputBar:wantsToPreviewImage:)]) {
+        UIImage *image = [_imageAttachments objectAtIndex:indexPath.row];
+        [self.delegate inputBar:self wantsToPreviewImage:image];
+    }
 }
 
 #pragma mark - KUSImageAttachmentCollectionViewCellDelegate methods

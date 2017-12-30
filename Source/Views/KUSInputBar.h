@@ -41,5 +41,6 @@
 - (void)inputBarDidTapAttachment:(KUSInputBar *)inputBar;
 - (void)inputBarTextDidChange:(KUSInputBar *)inputBar;
 - (void)inputBarDesiredHeightDidChange:(KUSInputBar *)inputBar;
+- (void)inputBar:(KUSInputBar *)inputBar wantsToPreviewImage:(UIImage *)image;
 
 @end

@@ -29,6 +29,7 @@
 #import "KUSPermissions.h"
 #import "KUSNavigationBarView.h"
 #import "KUSNYTChatMessagePhoto.h"
+#import "KUSNYTImagePhoto.h"
 
 @interface KUSChatViewController () <KUSEmailInputViewDelegate, KUSInputBarDelegate, KUSOptionPickerViewDelegate,
                                      KUSChatMessagesDataSourceListener, KUSChatMessageTableViewCellDelegate,
@@ -644,6 +645,26 @@
 {
     [self.view setNeedsLayout];
     [self.view layoutIfNeeded];
+}
+
+- (void)inputBar:(KUSInputBar *)inputBar wantsToPreviewImage:(UIImage *)image
+{
+    [_inputBarView resignFirstResponder];
+
+    NSMutableArray<id<NYTPhoto>> *photos = [[NSMutableArray alloc] init];
+    id<NYTPhoto> initialPhoto = nil;
+
+    for (UIImage *imageAttachment in inputBar.imageAttachments) {
+        id<NYTPhoto> photo = [[KUSNYTImagePhoto alloc] initWithImage:imageAttachment];
+        [photos addObject:photo];
+        if (image == imageAttachment) {
+            initialPhoto = photo;
+        }
+    }
+
+    NYTPhotosViewController *photosViewController = [[NYTPhotosViewController alloc] initWithPhotos:photos initialPhoto:initialPhoto];
+    photosViewController.delegate = self;
+    [self presentViewController:photosViewController animated:YES completion:nil];
 }
 
 #pragma mark - NYTPhotosViewControllerDelegate methods
