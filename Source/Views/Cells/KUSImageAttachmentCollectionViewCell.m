@@ -28,7 +28,7 @@ static const CGSize kKUSImageAttachmentXImageSize = { 14.0, 14.0 };
         self.backgroundColor = [UIColor clearColor];
         self.contentView.layer.cornerRadius = 10.0;
         self.contentView.layer.masksToBounds = YES;
-        self.contentView.layer.borderWidth = 1.0 / [UIScreen mainScreen].scale;
+        self.contentView.layer.borderWidth = 1.0;
         self.contentView.layer.borderColor = [[KUSColor grayColor] colorWithAlphaComponent:0.25].CGColor;
 
         _imageView = [[UIImageView alloc] initWithFrame:self.bounds];

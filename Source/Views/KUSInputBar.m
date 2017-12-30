@@ -214,6 +214,12 @@ static NSString *kCellIdentifier = @"ImageAttachment";
     [self _checkIfDesiredHeightDidChange];
     [_imageCollectionView reloadData];
     [self setNeedsLayout];
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        // Scroll the image collection view all the way to the right
+        CGPoint rightOffset = CGPointMake(MAX(self.imageCollectionView.contentSize.width - self.imageCollectionView.bounds.size.width, 0.0), 0.0);
+        [self.imageCollectionView setContentOffset:rightOffset animated:YES];
+    });
 }
 
 - (void)_removeImage:(UIImage *)image

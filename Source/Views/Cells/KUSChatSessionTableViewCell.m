@@ -73,10 +73,12 @@ CGFloat KUSChatSessionTableViewCellHeight = 88.0;
 
         _titleLabel = [[UILabel alloc] init];
         _titleLabel.textAlignment = NSTextAlignmentLeft;
+        _titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         [self.contentView addSubview:_titleLabel];
 
         _subtitleLabel = [[UILabel alloc] init];
         _subtitleLabel.textAlignment = NSTextAlignmentLeft;
+        _subtitleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         [self.contentView addSubview:_subtitleLabel];
 
         _dateLabel = [[UILabel alloc] init];
