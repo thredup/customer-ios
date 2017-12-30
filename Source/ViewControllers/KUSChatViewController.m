@@ -270,7 +270,9 @@
                               && currentQuestion.values.count > 0);
     if (wantsOptionPicker && _teamOptionsDataSource.error == nil) {
         self.inputBarView.hidden = YES;
-        [self.view endEditing:YES];
+        if ([self.inputBarView isFirstResponder]) {
+            [self.inputBarView resignFirstResponder];
+        }
 
         NSArray<NSString *> *teamIds = currentQuestion.values;
         if (_teamOptionsDataSource == nil || ![_teamOptionsDataSource.teamIds isEqual:teamIds]) {

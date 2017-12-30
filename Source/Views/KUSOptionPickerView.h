@@ -20,6 +20,10 @@
 @interface KUSOptionPickerView : UIView
 
 @property (nonatomic, strong) UIColor *separatorColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIColor *borderColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIColor *textColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIFont *textFont UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIColor *buttonColor UI_APPEARANCE_SELECTOR;
 
 @property (nonatomic, weak) id<KUSOptionPickerViewDelegate> delegate;
 

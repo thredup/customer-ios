@@ -7,9 +7,11 @@
 //
 
 #import "KUSOptionPickerView.h"
-#import "KUSColor.h"
 
-static const CGFloat kKUSOptionPickerViewMinimumHeight = 50.0;
+#import "KUSColor.h"
+#import "KUSImage.h"
+
+static const CGFloat kKUSOptionPickerViewMinimumHeight = 60.0;
 static const CGFloat kKUSOptionPickerViewButtonPadding = 10.0;
 static const CGFloat kKUSOptionPickerViewMinimumButtonHeight = kKUSOptionPickerViewMinimumHeight - kKUSOptionPickerViewButtonPadding * 2.0;
 static const CGFloat kKUSOptionPickerViewMinimumButtonWidth = 100.0;
@@ -33,6 +35,12 @@ static const CGFloat kKUSOptionPickerViewMinimumButtonWidth = 100.0;
         KUSOptionPickerView *appearance = [KUSOptionPickerView appearance];
         [appearance setBackgroundColor:[UIColor whiteColor]];
         [appearance setSeparatorColor:[KUSColor lightGrayColor]];
+
+        UIColor *textColor = [[KUSColor blueColor] colorWithAlphaComponent:0.8];
+        [appearance setBorderColor:textColor];
+        [appearance setTextColor:textColor];
+        [appearance setTextFont:[UIFont systemFontOfSize:14.0]];
+        [appearance setButtonColor:[UIColor colorWithWhite:0.975 alpha:1.0]];
     }
 }
 
@@ -138,17 +146,16 @@ static const CGFloat kKUSOptionPickerViewMinimumButtonWidth = 100.0;
 
     NSMutableArray<UIButton *> *optionButtons = [[NSMutableArray alloc] initWithCapacity:self.options.count];
 
-    UIColor *buttonColor = [[KUSColor blueColor] colorWithAlphaComponent:0.75];;
     for (NSString *option in self.options) {
         UIButton *button = [[UIButton alloc] init];
-        button.backgroundColor = [UIColor colorWithWhite:0.975 alpha:1.0];
+        button.backgroundColor = self.buttonColor;
         button.layer.cornerRadius = 5.0;
         button.layer.masksToBounds = YES;
         button.layer.borderWidth = 1.0;
-        button.layer.borderColor = buttonColor.CGColor;
-        button.titleLabel.font = [UIFont systemFontOfSize:14.0];
+        button.layer.borderColor = self.borderColor.CGColor;
+        button.titleLabel.font = self.textFont;
         [button setTitle:option forState:UIControlStateNormal];
-        [button setTitleColor:buttonColor forState:UIControlStateNormal];
+        [button setTitleColor:self.textColor forState:UIControlStateNormal];
         [button addTarget:self action:@selector(_onButtonPress:) forControlEvents:UIControlEventTouchUpInside];
         [optionButtons addObject:button];
         [self addSubview:button];
@@ -175,6 +182,30 @@ static const CGFloat kKUSOptionPickerViewMinimumButtonWidth = 100.0;
 {
     _separatorColor = separatorColor;
     _separatorView.backgroundColor = _separatorColor;
+}
+
+- (void)setBorderColor:(UIColor *)borderColor
+{
+    _borderColor = borderColor;
+    [self _rebuildOptionButtons];
+}
+
+- (void)setTextColor:(UIColor *)textColor
+{
+    _textColor = textColor;
+    [self _rebuildOptionButtons];
+}
+
+- (void)setTextFont:(UIFont *)textFont
+{
+    _textFont = textFont;
+    [self _rebuildOptionButtons];
+}
+
+- (void)setButtonColor:(UIColor *)buttonColor
+{
+    _buttonColor = buttonColor;
+    [self _rebuildOptionButtons];
 }
 
 @end
