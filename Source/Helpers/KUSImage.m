@@ -172,7 +172,7 @@
     UIImage *resizedImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
 
-    return resizedImage;
+    return resizedImage ?: image;
 }
 
 #pragma mark - Internal methods

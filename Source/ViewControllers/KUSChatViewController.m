@@ -582,8 +582,9 @@
         return;
     }
 
-    [_chatMessagesDataSource sendMessageWithText:inputBar.text attachments:nil];
+    [_chatMessagesDataSource sendMessageWithText:inputBar.text attachments:inputBar.imageAttachments];
     [_inputBarView setText:nil];
+    [_inputBarView setImageAttachments:nil];
 }
 
 - (void)inputBarDidTapAttachment:(KUSInputBar *)inputBar
@@ -645,20 +646,6 @@
     [self.view layoutIfNeeded];
 }
 
-- (void)inputBar:(KUSInputBar *)inputBar didPasteImage:(UIImage *)image
-{
-    [self _attachImage:image];
-}
-
-#pragma mark - Attachment logic methods
-
-- (void)_attachImage:(UIImage *)image
-{
-    // TODO: Stage image for upload but don't upload immediately
-    UIImage *resizedImage = [KUSImage resizeImage:image toFixedPixelCount:1000000.0];
-    [_chatMessagesDataSource sendMessageWithText:@"Image:" attachments:@[ resizedImage ]];
-}
-
 #pragma mark - NYTPhotosViewControllerDelegate methods
 
 - (UIView *)photosViewController:(NYTPhotosViewController *)photosViewController loadingViewForPhoto:(id <NYTPhoto>)photo
@@ -683,7 +670,7 @@
     UIImage *editedImage = [info valueForKey:UIImagePickerControllerEditedImage];
     UIImage *chosenImage = editedImage ?: originalImage;
 
-    [self _attachImage:chosenImage];
+    [self.inputBarView attachImage:chosenImage];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker

@@ -12,15 +12,31 @@
 #import "KUSImage.h"
 #import "KUSPermissions.h"
 #import "KUSTextView.h"
+#import "KUSImageAttachmentCollectionViewCell.h"
 
 static const CGFloat kKUSInputBarMinimumHeight = 50.0;
+static const CGFloat kKUSInputBarPadding = 3.0;
 static const CGFloat kKUSInputBarButtonSize = 50.0;
 
-@interface KUSInputBar () <KUSTextViewDelegate> {
+static const CGFloat kKUSInputBarAttachmentsHeight = 90.0;
+static const CGFloat kKUSInputBarAttachmentsPadding = 6.0;
+static const CGSize kKUSInputBarImageAttachmentSize = {
+    kKUSInputBarAttachmentsHeight - kKUSInputBarAttachmentsPadding * 2.0,
+    kKUSInputBarAttachmentsHeight - kKUSInputBarAttachmentsPadding * 2.0
+};
+
+// To limit the maximum size of uploaded images
+static const CGFloat kKUSMaximumImagePixelCount = 1000000.0;
+
+static NSString *kCellIdentifier = @"ImageAttachment";
+
+@interface KUSInputBar () <KUSImageAttachmentCollectionViewCellDelegate, KUSTextViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate> {
     CGFloat _lastDesiredHeight;
+    NSMutableArray<UIImage *> *_imageAttachments;
 }
 
 @property (nonatomic, strong) UIView *separatorView;
+@property (nonatomic, strong) UICollectionView *imageCollectionView;
 @property (nonatomic, strong, readwrite) UIButton *attachmentButton;
 @property (nonatomic, strong, readwrite) KUSTextView *textView;
 @property (nonatomic, strong, readwrite) UIButton *sendButton;
@@ -52,9 +68,25 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
 {
     self = [super initWithFrame:frame];
     if (self) {
+        _imageAttachments = [[NSMutableArray alloc] init];
+
         _separatorView = [[UIView alloc] init];
         _separatorView.userInteractionEnabled = NO;
         [self addSubview:_separatorView];
+
+        UICollectionViewFlowLayout *collectionViewLayout = [[UICollectionViewFlowLayout alloc] init];
+        collectionViewLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+        collectionViewLayout.itemSize = kKUSInputBarImageAttachmentSize;
+        collectionViewLayout.minimumInteritemSpacing = kKUSInputBarAttachmentsPadding + kKUSInputBarPadding;
+        collectionViewLayout.minimumLineSpacing = kKUSInputBarAttachmentsPadding + kKUSInputBarPadding;
+        _imageCollectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:collectionViewLayout];
+        _imageCollectionView.alwaysBounceHorizontal = YES;
+        _imageCollectionView.backgroundColor = [UIColor clearColor];
+        _imageCollectionView.showsHorizontalScrollIndicator = NO;
+        _imageCollectionView.dataSource = self;
+        _imageCollectionView.delegate = self;
+        [_imageCollectionView registerClass:[KUSImageAttachmentCollectionViewCell class] forCellWithReuseIdentifier:kCellIdentifier];
+        [self addSubview:_imageCollectionView];
 
         _attachmentButton = [[UIButton alloc] init];
         [_attachmentButton addTarget:self action:@selector(_pressAttach) forControlEvents:UIControlEventTouchUpInside];
@@ -102,10 +134,19 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
         .size.height = kKUSInputBarButtonSize
     };
 
+    self.imageCollectionView.hidden = self.imageAttachments.count == 0;
+    self.imageCollectionView.frame = (CGRect) {
+        .origin.x = kKUSInputBarPadding + kKUSInputBarAttachmentsPadding,
+        .origin.y = kKUSInputBarPadding,
+        .size.width = self.bounds.size.width - (kKUSInputBarPadding + kKUSInputBarAttachmentsPadding) * 2.0,
+        .size.height = kKUSInputBarAttachmentsHeight
+    };
+
+    CGFloat imageAttachmentsOffset = (self.imageCollectionView.hidden ? 0.0 : kKUSInputBarAttachmentsHeight);
     CGFloat desiredTextHeight = [self.textView desiredHeight];
     self.textView.frame = (CGRect) {
         .origin.x = MAX(CGRectGetWidth(self.attachmentButton.frame), 10.0),
-        .origin.y = (self.bounds.size.height - desiredTextHeight) / 2.0,
+        .origin.y = (self.bounds.size.height - imageAttachmentsOffset - desiredTextHeight) / 2.0 + imageAttachmentsOffset,
         .size.width = self.bounds.size.width - CGRectGetWidth(self.sendButton.frame) - MAX(CGRectGetWidth(self.attachmentButton.frame), 10.0),
         .size.height = desiredTextHeight
     };
@@ -115,8 +156,16 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
 
 - (CGFloat)desiredHeight
 {
-    CGFloat height = [self.textView desiredHeight] + 3.0 * 2.0;
-    return MAX(height, kKUSInputBarMinimumHeight);
+    CGFloat textBarHeight = kKUSInputBarPadding;
+    textBarHeight += [self.textView desiredHeight];
+    textBarHeight += kKUSInputBarPadding;
+    textBarHeight = MAX(textBarHeight, kKUSInputBarMinimumHeight);
+
+    if (self.imageAttachments.count) {
+        textBarHeight += kKUSInputBarAttachmentsHeight;
+    }
+
+    return textBarHeight;
 }
 
 - (void)setText:(NSString *)text
@@ -133,12 +182,45 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
 - (void)setAllowsAttachments:(BOOL)allowsAttachments
 {
     _allowsAttachments = allowsAttachments;
-
-    if (!allowsAttachments) {
+    if (!_allowsAttachments) {
         _attachmentButton.hidden = YES;
     } else {
         _attachmentButton.hidden = ![KUSPermissions cameraAccessIsAvailable] && ![KUSPermissions photoLibraryAccessIsAvailable];
     }
+    [self setNeedsLayout];
+}
+
+- (void)setImageAttachments:(NSArray<UIImage *> *)imageAttachments
+{
+    [_imageAttachments removeAllObjects];
+    for (UIImage *image in imageAttachments) {
+        UIImage *resizedImage = [KUSImage resizeImage:image toFixedPixelCount:kKUSMaximumImagePixelCount];
+        [_imageAttachments addObject:resizedImage];
+    }
+    [self _checkIfDesiredHeightDidChange];
+    [_imageCollectionView reloadData];
+    [self setNeedsLayout];
+}
+
+- (NSArray<UIImage *> *)imageAttachments
+{
+    return [_imageAttachments copy];
+}
+
+- (void)attachImage:(UIImage *)image
+{
+    UIImage *resizedImage = [KUSImage resizeImage:image toFixedPixelCount:kKUSMaximumImagePixelCount];
+    [_imageAttachments addObject:resizedImage];
+    [self _checkIfDesiredHeightDidChange];
+    [_imageCollectionView reloadData];
+    [self setNeedsLayout];
+}
+
+- (void)_removeImage:(UIImage *)image
+{
+    [_imageAttachments removeObject:image];
+    [self _checkIfDesiredHeightDidChange];
+    [_imageCollectionView reloadData];
     [self setNeedsLayout];
 }
 
@@ -239,14 +321,41 @@ static const CGFloat kKUSInputBarButtonSize = 50.0;
 
 - (BOOL)textViewCanPasteImage:(KUSTextView *)textView
 {
-    return _allowsAttachments && [self.delegate respondsToSelector:@selector(inputBar:didPasteImage:)];
+    return _allowsAttachments;
 }
 
 - (void)textView:(KUSTextView *)textView didPasteImage:(UIImage *)image
 {
-    if ([self.delegate respondsToSelector:@selector(inputBar:didPasteImage:)]) {
-        [self.delegate inputBar:self didPasteImage:image];
-    }
+    [self attachImage:image];
+}
+
+#pragma mark - UICollectionViewDataSource methods
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return _imageAttachments.count;
+}
+
+- (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    KUSImageAttachmentCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kCellIdentifier forIndexPath:indexPath];
+    cell.image = [_imageAttachments objectAtIndex:indexPath.row];
+    cell.delegate = self;
+    return cell;
+}
+
+#pragma mark - UICollectionViewDelegate methods
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    // TODO: Full-screen preview of image?
+}
+
+#pragma mark - KUSImageAttachmentCollectionViewCellDelegate methods
+
+- (void)imageAttachmentCollectionViewCellDidTapRemove:(KUSImageAttachmentCollectionViewCell *)cell
+{
+    [self _removeImage:cell.image];
 }
 
 #pragma mark - UIAppearance methods

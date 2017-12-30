@@ -26,6 +26,8 @@
 
 @property (nonatomic, copy) NSString *text;
 @property (nonatomic, assign) BOOL allowsAttachments;
+@property (nonatomic, copy) NSArray<UIImage *> *imageAttachments;
+- (void)attachImage:(UIImage *)image;
 
 - (CGFloat)desiredHeight;
 
@@ -36,7 +38,6 @@
 @optional
 - (BOOL)inputBarShouldEnableSend:(KUSInputBar *)inputBar;
 - (void)inputBarDidPressSend:(KUSInputBar *)inputBar;
-- (void)inputBar:(KUSInputBar *)inputBar didPasteImage:(UIImage *)image;
 - (void)inputBarDidTapAttachment:(KUSInputBar *)inputBar;
 - (void)inputBarTextDidChange:(KUSInputBar *)inputBar;
 - (void)inputBarDesiredHeightDidChange:(KUSInputBar *)inputBar;
