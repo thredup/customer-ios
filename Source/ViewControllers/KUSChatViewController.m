@@ -268,7 +268,8 @@
     BOOL wantsOptionPicker = (currentQuestion
                               && currentQuestion.property == KUSFormQuestionPropertyConversationTeam
                               && currentQuestion.values.count > 0);
-    if (wantsOptionPicker && _teamOptionsDataSource.error == nil) {
+    BOOL teamOptionsDidFail = _teamOptionsDataSource.error || (_teamOptionsDataSource.didFetch && _teamOptionsDataSource.count == 0);
+    if (wantsOptionPicker && !teamOptionsDidFail) {
         self.inputBarView.hidden = YES;
         if ([self.inputBarView isFirstResponder]) {
             [self.inputBarView resignFirstResponder];
@@ -334,6 +335,7 @@
         }
         [self.tableView reloadData];
     } else if (dataSource == _teamOptionsDataSource) {
+        [self _checkShouldShowOptionPicker];
         [self _updateOptionsPickerOptions];
     }
 }

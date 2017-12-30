@@ -24,31 +24,37 @@
         return nil;
     }
 
-    // There needs to be meta, data, and links properties
-    if (!json[@"meta"] || !json[@"data"] || !json[@"links"]) {
-        return nil;
-    }
-
-    // The data needs to be an array
-    if (![json[@"data"] isKindOfClass:[NSArray class]]) {
+    // The data needs to be an array or dictionary
+    id data = json[@"data"];
+    BOOL dataIsArray = [data isKindOfClass:[NSArray class]];
+    BOOL dataIsDictionary = [data isKindOfClass:[NSDictionary class]];
+    if (!dataIsArray && !dataIsDictionary) {
         return nil;
     }
 
     // Actually create the object
     self = [super init];
     if (self) {
-        _page = IntegerFromKeyPath(json, @"meta.page");
-        _pageSize = IntegerFromKeyPath(json, @"meta.pageSize");
-
-        NSArray<NSDictionary *> *jsonObjects = json[@"data"];
         NSMutableArray<__kindof KUSModel *> *objects = [[NSMutableArray alloc] init];
-        for (NSDictionary *jsonObject in jsonObjects) {
-            NSArray<__kindof KUSModel *> *models = [modelClass objectsWithJSON:jsonObject];
+        if (dataIsArray) {
+            NSArray<NSDictionary *> *jsonObjects = json[@"data"];
+            for (NSDictionary *jsonObject in jsonObjects) {
+                NSArray<__kindof KUSModel *> *models = [modelClass objectsWithJSON:jsonObject];
+                for (__kindof KUSModel *model in [models reverseObjectEnumerator]) {
+                    [objects addObject:model];
+                }
+            }
+            _objects = objects;
+        } else if (dataIsDictionary) {
+            NSArray<__kindof KUSModel *> *models = [modelClass objectsWithJSON:data];
             for (__kindof KUSModel *model in [models reverseObjectEnumerator]) {
                 [objects addObject:model];
             }
         }
         _objects = objects;
+
+        _page = IntegerFromKeyPath(json, @"meta.page");
+        _pageSize = MAX(IntegerFromKeyPath(json, @"meta.pageSize"), _objects.count);
 
         _selfPath = NSStringFromKeyPath(json, @"links.self");
         _firstPath = NSStringFromKeyPath(json, @"links.first");
