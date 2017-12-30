@@ -545,6 +545,11 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
         return;
     }
 
+    // Make sure we submit the form if we just inserted a non-response question
+    if (!_submittingForm && !KUSFormQuestionRequiresResponse(_formQuestion) && _questionIndex == _form.questions.count - 1) {
+        [self _submitFormResponses];
+    }
+
     KUSChatMessage *lastMessage = [self objectAtIndex:0];
     if (!KUSChatMessageSentByUser(lastMessage)) {
         return;
