@@ -193,6 +193,10 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     if (_sessionId) {
         return nil;
     }
+    KUSChatMessage *latestMessage = [self count] > 0 ? [self objectAtIndex:0] : nil;
+    if (KUSChatMessageSentByUser(latestMessage)) {
+        return nil;
+    }
     return _formQuestion;
 }
 

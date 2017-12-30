@@ -28,6 +28,11 @@
     return self;
 }
 
+- (NSArray<NSString *> *)teamIds
+{
+    return _teamIds;
+}
+
 #pragma mark - KUSPaginatedDataSource subclass methods
 
 - (NSURL *)firstURL

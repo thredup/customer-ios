@@ -13,4 +13,6 @@
 @property (nonatomic, copy, readonly) NSString *displayName;
 @property (nonatomic, copy, readonly) NSString *icon;
 
+- (NSString *)fullDisplay;
+
 @end

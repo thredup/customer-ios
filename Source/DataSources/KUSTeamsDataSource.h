@@ -14,4 +14,6 @@
 - (instancetype)initWithUserSession:(KUSUserSession *)userSession teamIds:(NSArray<NSString *> *)teamIds;
 - (instancetype)initWithUserSession:(KUSUserSession *)userSession NS_UNAVAILABLE;
 
+- (NSArray<NSString *> *)teamIds;
+
 @end

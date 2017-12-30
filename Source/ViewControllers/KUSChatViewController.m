@@ -23,12 +23,14 @@
 #import "KUSImage.h"
 #import "KUSInputBar.h"
 #import "KUSLog.h"
+#import "KUSOptionPickerView.h"
+#import "KUSTeamsDataSource.h"
 #import "KUSText.h"
 #import "KUSPermissions.h"
 #import "KUSNavigationBarView.h"
 #import "KUSNYTChatMessagePhoto.h"
 
-@interface KUSChatViewController () <KUSEmailInputViewDelegate, KUSInputBarDelegate,
+@interface KUSChatViewController () <KUSEmailInputViewDelegate, KUSInputBarDelegate, KUSOptionPickerViewDelegate,
                                      KUSChatMessagesDataSourceListener, KUSChatMessageTableViewCellDelegate,
                                      NYTPhotosViewControllerDelegate, UITableViewDataSource, UITableViewDelegate,
                                      UINavigationControllerDelegate, UIImagePickerControllerDelegate> {
@@ -37,12 +39,15 @@
     NSString *_chatSessionId;
     KUSChatMessagesDataSource *_chatMessagesDataSource;
 
+    KUSTeamsDataSource *_teamOptionsDataSource;
+
     CGFloat _keyboardHeight;
 }
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) KUSEmailInputView *emailInputView;
 @property (nonatomic, strong) KUSInputBar *inputBarView;
+@property (nonatomic, strong) KUSOptionPickerView *optionPickerView;
 @property (nonatomic, strong) KUSNavigationBarView *fauxNavigationBar;
 
 @end
@@ -194,6 +199,14 @@
         .size.height = inputBarHeight
     };
 
+    CGFloat optionPickerHeight = [self.optionPickerView desiredHeight];
+    CGFloat optionPickerY = self.view.bounds.size.height - MAX(self.edgeInsets.bottom, _keyboardHeight) - optionPickerHeight;
+    self.optionPickerView.frame = (CGRect) {
+        .origin.y = optionPickerY,
+        .size.width = self.view.bounds.size.width,
+        .size.height = optionPickerHeight
+    };
+
     self.fauxNavigationBar.frame = (CGRect) {
         .size.width = self.view.bounds.size.width,
         .size.height = navigationBarHeight
@@ -211,7 +224,7 @@
 
     self.tableView.frame = (CGRect) {
         .size.width = self.view.bounds.size.width,
-        .size.height = self.inputBarView.frame.origin.y
+        .size.height = MIN(inputBarY, optionPickerY)
     };
 
     self.tableView.contentInset = (UIEdgeInsets) {
@@ -249,24 +262,78 @@
     }
 }
 
+- (void)_checkShouldShowOptionPicker
+{
+    KUSFormQuestion *currentQuestion = _chatMessagesDataSource.currentQuestion;
+    BOOL wantsOptionPicker = (currentQuestion
+                              && currentQuestion.property == KUSFormQuestionPropertyConversationTeam
+                              && currentQuestion.values.count > 0);
+    if (wantsOptionPicker && _teamOptionsDataSource.error == nil) {
+        self.inputBarView.hidden = YES;
+        [self.view endEditing:YES];
+
+        NSArray<NSString *> *teamIds = currentQuestion.values;
+        if (_teamOptionsDataSource == nil || ![_teamOptionsDataSource.teamIds isEqual:teamIds]) {
+            _teamOptionsDataSource = [[KUSTeamsDataSource alloc] initWithUserSession:_userSession teamIds:teamIds];
+            [_teamOptionsDataSource addListener:self];
+            [_teamOptionsDataSource fetchLatest];
+        }
+
+        if (self.optionPickerView == nil) {
+            self.optionPickerView = [[KUSOptionPickerView alloc] init];
+            self.optionPickerView.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth);
+            self.optionPickerView.delegate = self;
+            [self.view addSubview:self.optionPickerView];
+            [self _updateOptionsPickerOptions];
+        }
+    } else {
+        _teamOptionsDataSource = nil;
+
+        self.inputBarView.hidden = NO;
+        [self.optionPickerView removeFromSuperview];
+        self.optionPickerView = nil;
+        [self.view setNeedsLayout];
+    }
+}
+
+- (void)_updateOptionsPickerOptions
+{
+    NSMutableArray<NSString *> *options = [[NSMutableArray alloc] init];
+    for (KUSTeam *team in _teamOptionsDataSource.allObjects) {
+        [options addObject:team.fullDisplay];
+    }
+    [self.optionPickerView setOptions:options];
+
+    [self.view setNeedsLayout];
+    [self.view layoutIfNeeded];
+}
+
 #pragma mark - KUSChatMessagesDataSourceListener methods
 
 - (void)paginatedDataSourceDidLoad:(KUSPaginatedDataSource *)dataSource
 {
-    [self hideLoadingIndicator];
+    if (dataSource == _chatMessagesDataSource) {
+        [self hideLoadingIndicator];
+    }
 }
 
 - (void)paginatedDataSourceDidChangeContent:(KUSPaginatedDataSource *)dataSource
 {
-    if (dataSource.count == 1) {
-        [UIView animateWithDuration:0.2 animations:^{
+    if (dataSource == _chatMessagesDataSource) {
+        [self _checkShouldShowOptionPicker];
+
+        if (dataSource.count == 1) {
+            [UIView animateWithDuration:0.2 animations:^{
+                [self.view setNeedsLayout];
+                [self.view layoutIfNeeded];
+            }];
+        } else {
             [self.view setNeedsLayout];
-            [self.view layoutIfNeeded];
-        }];
-    } else {
-        [self.view setNeedsLayout];
+        }
+        [self.tableView reloadData];
+    } else if (dataSource == _teamOptionsDataSource) {
+        [self _updateOptionsPickerOptions];
     }
-    [self.tableView reloadData];
 }
 
 - (void)paginatedDataSource:(KUSPaginatedDataSource *)dataSource didReceiveError:(NSError *)error
@@ -279,6 +346,8 @@
                 [strongSelf->_chatMessagesDataSource fetchLatest];
             }
         });
+    } else if (dataSource == _teamOptionsDataSource) {
+        [self _checkShouldShowOptionPicker];
     }
 }
 
@@ -309,14 +378,21 @@
     _keyboardHeight = self.view.frame.size.height - keyboardEndFrameView.origin.y;
 
     UIViewAnimationOptions options = keyboardTransitionAnimationCurve << 16 | UIViewAnimationOptionBeginFromCurrentState;
-    [UIView animateWithDuration:keyboardTransitionDuration
-                          delay:0.0
-                        options:options
-                     animations:^{
-                         [self.view setNeedsLayout];
-                         [self.view layoutIfNeeded];
-                     }
-                     completion:nil];
+
+    BOOL shouldAnimate = keyboardTransitionDuration > 0.0 && self.optionPickerView == nil;
+    if (shouldAnimate) {
+        [UIView animateWithDuration:keyboardTransitionDuration
+                              delay:0.0
+                            options:options
+                         animations:^{
+                             [self.view setNeedsLayout];
+                             [self.view layoutIfNeeded];
+                         }
+                         completion:nil];
+    } else {
+        [self.view setNeedsLayout];
+        [self.view layoutIfNeeded];
+    }
 }
 
 
@@ -463,6 +539,13 @@
 {
     [_userSession submitEmail:email];
     [self _checkShouldShowEmailInput];
+}
+
+#pragma mark - KUSOptionPickerViewDelegate methods
+
+- (void)optionPickerView:(KUSOptionPickerView *)pickerView didSelectOption:(NSString *)option
+{
+    [_chatMessagesDataSource sendMessageWithText:option attachments:nil];
 }
 
 #pragma mark - KUSInputBarDelegate methods
