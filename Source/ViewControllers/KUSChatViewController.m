@@ -437,9 +437,9 @@
     [cell setChatMessage:chatMessage];
 
     BOOL previousMessageDiffSender = !KUSChatMessagesSameSender(previousChatMessage, chatMessage);
-    BOOL nextMessageDiffSender = !KUSChatMessagesSameSender(nextChatMessage, chatMessage);
+    BOOL nextMessageOlderThan5Min = nextChatMessage == nil || [nextChatMessage.createdAt timeIntervalSinceDate:chatMessage.createdAt] > 5.0 * 60.0;
     [cell setShowsAvatar:previousMessageDiffSender];
-    [cell setShowsTimestamp:nextMessageDiffSender];
+    [cell setShowsTimestamp:nextMessageOlderThan5Min];
 
     // Make sure that we've fetched all of the latest messages by loading the next page
     static NSUInteger kPrefetchPadding = 20;
@@ -456,9 +456,9 @@
 {
     KUSChatMessage *chatMessage = [self messageForRow:indexPath.row];
     KUSChatMessage *nextChatMessage = [self messageAfterRow:indexPath.row];
-    BOOL nextMessageDiffSender = !KUSChatMessagesSameSender(nextChatMessage, chatMessage);
+    BOOL nextMessageOlderThan5Min = nextChatMessage == nil || [nextChatMessage.createdAt timeIntervalSinceDate:chatMessage.createdAt] > 5.0 * 60.0;
     CGFloat messageHeight = [KUSChatMessageTableViewCell heightForChatMessage:chatMessage maxWidth:tableView.bounds.size.width];
-    if (nextMessageDiffSender) {
+    if (nextMessageOlderThan5Min) {
         return messageHeight + [KUSChatMessageTableViewCell heightForTimestamp];
     } else {
         return messageHeight;
