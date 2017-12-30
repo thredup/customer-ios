@@ -41,6 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign, readonly) KUSChatMessageType type;
 @property (nonatomic, assign, readwrite) KUSChatMessageState state;
+@property (nonatomic, copy, readwrite, nullable) NSString *value;
 
 + (NSURL *)attachmentURLForMessageId:(NSString *)messageId attachmentId:(NSString *)attachmentId;
 

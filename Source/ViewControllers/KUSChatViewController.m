@@ -545,7 +545,17 @@
 
 - (void)optionPickerView:(KUSOptionPickerView *)pickerView didSelectOption:(NSString *)option
 {
-    [_chatMessagesDataSource sendMessageWithText:option attachments:nil];
+    NSString *value = nil;
+    KUSTeam *team = nil;
+    NSUInteger optionIndex = [pickerView.options indexOfObject:option];
+    KUSFormQuestion *currentQuestion = _chatMessagesDataSource.currentQuestion;
+    if (optionIndex != NSNotFound && optionIndex < currentQuestion.values.count) {
+        value = currentQuestion.values[optionIndex];
+    }
+    if (optionIndex != NSNotFound && optionIndex < _teamOptionsDataSource.count) {
+        team = [_teamOptionsDataSource objectAtIndex:optionIndex];
+    }
+    [_chatMessagesDataSource sendMessageWithText:team.displayName ?: option attachments:nil value:value ?: team.oid];
 }
 
 #pragma mark - KUSInputBarDelegate methods

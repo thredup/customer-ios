@@ -215,6 +215,11 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 
 - (void)sendMessageWithText:(NSString *)text attachments:(NSArray<UIImage *> *)attachments
 {
+    [self sendMessageWithText:text attachments:attachments value:nil];
+}
+
+- (void)sendMessageWithText:(NSString *)text attachments:(NSArray<UIImage *> *)attachments value:(NSString *)value
+{
     KUSChatSettings *chatSettings = self.userSession.chatSettingsDataSource.object;
     if (_sessionId == nil && chatSettings.activeFormId) {
         NSAssert(attachments.count == 0, @"Should not have been able to send attachments without a _sessionId");
@@ -230,6 +235,11 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
             }
         };
         NSArray<KUSChatMessage *> *temporaryMessages = [KUSChatMessage objectsWithJSON:json];
+        if (value) {
+            for (KUSChatMessage *temporaryMessage in temporaryMessages) {
+                temporaryMessage.value = value;
+            }
+        }
         [self upsertNewMessages:temporaryMessages];
 
         return;
@@ -610,6 +620,9 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 
             [formMessage setObject:responseMessage.body forKey:@"input"];
             [formMessage setObject:[KUSDate stringFromDate:responseMessage.createdAt] forKey:@"inputAt"];
+            if (responseMessage.value) {
+                [formMessage setObject:responseMessage.value forKey:@"value"];
+            }
         }
         [messagesJSON addObject:formMessage];
     }
