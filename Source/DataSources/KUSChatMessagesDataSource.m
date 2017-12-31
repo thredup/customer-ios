@@ -28,6 +28,9 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     KUSFormQuestion *_formQuestion;
     BOOL _submittingForm;
     BOOL _creatingSession;
+
+    NSMutableArray<void(^)(BOOL success, NSError *error)> *_onSessionCreationCallbacks;
+    NSMutableDictionary<NSString *, void(^)(void)> *_messageRetryBlocksById;
 }
 
 @end
@@ -41,6 +44,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     self = [super initWithUserSession:userSession];
     if (self) {
         _delayedChatMessageIds = [[NSMutableSet alloc] init];
+        _messageRetryBlocksById = [[NSMutableDictionary alloc] init];
 
         [self.userSession.chatSettingsDataSource addListener:self];
         [self addListener:self];
@@ -246,6 +250,59 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     [self _actuallySendMessageWithText:text attachments:attachments];
 }
 
+- (void)_createSessionIfNecessaryWithTitle:(NSString *)title completion:(void(^)(BOOL success, NSError *error))completion
+{
+    if (_sessionId) {
+        if (completion) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                completion(YES, nil);
+            });
+        }
+    } else {
+        if (_onSessionCreationCallbacks) {
+            if (completion) {
+                [_onSessionCreationCallbacks addObject:completion];
+            }
+        } else {
+            _onSessionCreationCallbacks = [[NSMutableArray alloc] initWithObjects:completion, nil];
+
+            _creatingSession = YES;
+            [self.userSession.chatSessionsDataSource
+             createSessionWithTitle:title
+             completion:^(NSError *error, KUSChatSession *session) {
+                 NSArray<void(^)(BOOL success, NSError *error)> *callbacks = [_onSessionCreationCallbacks copy];
+                 _onSessionCreationCallbacks = nil;
+
+                 if (error || session == nil) {
+                     KUSLogError(@"Error creating session: %@", error);
+                     for (void(^callback)(BOOL success, NSError *error) in callbacks) {
+                         callback(NO, error);
+                     }
+                     return;
+                 }
+
+                 // Grab the session id
+                 _sessionId = session.oid;
+                 _creatingSession = NO;
+
+                 // Insert the current messages data source into the userSession's lookup table
+                 [self.userSession.chatMessagesDataSources setObject:self forKey:session.oid];
+
+                 // Notify listeners
+                 for (id<KUSChatMessagesDataSourceListener> listener in [self.listeners copy]) {
+                     if ([listener respondsToSelector:@selector(chatMessagesDataSource:didCreateSessionId:)]) {
+                         [listener chatMessagesDataSource:self didCreateSessionId:session.oid];
+                     }
+                 }
+
+                 for (void(^callback)(BOOL success, NSError *error) in callbacks) {
+                     callback(YES, nil);
+                 }
+             }];
+        }
+    }
+}
+
 - (void)_actuallySendMessageWithText:(NSString *)text attachments:(NSArray<UIImage *> *)attachments
 {
     NSString *tempMessageId = [[NSUUID UUID] UUIDString];
@@ -277,29 +334,27 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
             }
         }
     };
-
     NSArray<KUSChatMessage *> *temporaryMessages = [KUSChatMessage objectsWithJSON:json];
-    for (KUSChatMessage *message in temporaryMessages) {
-        message.state = KUSChatMessageStateSending;
-    }
-    [self upsertNewMessages:temporaryMessages];
 
-    // Logic to handle a chat session error or a message send error
-    void(^handleError)(void) = ^void() {
+    // Insert the messages
+    void(^insertMessagesWithState)(KUSChatMessageState) = ^void(KUSChatMessageState state) {
         [self removeObjects:temporaryMessages];
-
         for (KUSChatMessage *message in temporaryMessages) {
-            message.state = KUSChatMessageStateSending;
+            message.state = state;
         }
         [self upsertNewMessages:temporaryMessages];
     };
 
-    // Logic to handle a successful message send
-    void(^handleMessageSend)(NSDictionary *) = ^void(NSDictionary *response) {
-        [self removeObjects:temporaryMessages];
+    // Logic to handle a chat session error or a message send error
+    void(^handleError)(void) = ^void() {
+        insertMessagesWithState(KUSChatMessageStateFailed);
+    };
 
+    // Logic to handle a successful message send
+    void(^handleMessageSent)(NSDictionary *) = ^void(NSDictionary *response) {
         NSArray<KUSChatMessage *> *finalMessages = [KUSChatMessage objectsWithJSON:response[@"data"]];
 
+        // Store the local image data in our cache for the remote image urls
         KUSChatMessage *firstMessage = finalMessages.firstObject;
         for (NSUInteger i = 0; i < firstMessage.attachmentIds.count; i++) {
             UIImage *attachment = [attachments objectAtIndex:i];
@@ -311,11 +366,18 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
                                              completion:nil];
         }
 
+        // Remove the temporary objects and insert the new/sent objects
+        [self removeObjects:temporaryMessages];
         [self upsertNewMessages:finalMessages];
 
         // Remove the temporary images from the cache
         for (NSString *imageKey in cachedImageKeys) {
             [[SDImageCache sharedImageCache] removeImageForKey:imageKey fromDisk:NO withCompletion:nil];
+        }
+
+        // Remove the retry blocks
+        for (KUSChatMessage *temporaryMessage in temporaryMessages) {
+            [_messageRetryBlocksById removeObjectForKey:temporaryMessage.oid];
         }
     };
 
@@ -342,41 +404,27 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
                       return;
                   }
 
-                  handleMessageSend(response);
+                  handleMessageSent(response);
               }];
          }];
     };
 
-    if (_sessionId) {
-        sendMessage();
-    } else {
-        _creatingSession = YES;
-        [self.userSession.chatSessionsDataSource
-         createSessionWithTitle:text
-         completion:^(NSError *error, KUSChatSession *session) {
-             if (error) {
-                 KUSLogError(@"Error creating session: %@", error);
-                 handleError();
-                 return;
-             }
+    // Full encapsulating logic for sending the message
+    void (^fullySendMessage)(void) = ^void() {
+        insertMessagesWithState(KUSChatMessageStateSending);
+        [self _createSessionIfNecessaryWithTitle:text completion:^(BOOL success, NSError *error) {
+            if (success) {
+                sendMessage();
+            } else {
+                handleError();
+            }
+        }];
+    };
 
-             // Grab the session id
-             _sessionId = session.oid;
-             _creatingSession = NO;
-
-             // Insert the current messages data source into the userSession's lookup table
-             [self.userSession.chatMessagesDataSources setObject:self forKey:session.oid];
-
-             // Notify listeners
-             for (id<KUSChatMessagesDataSourceListener> listener in [self.listeners copy]) {
-                 if ([listener respondsToSelector:@selector(chatMessagesDataSource:didCreateSessionId:)]) {
-                     [listener chatMessagesDataSource:self didCreateSessionId:session.oid];
-                 }
-             }
-
-             sendMessage();
-         }];
+    for (KUSChatMessage *temporaryMessage in temporaryMessages) {
+        _messageRetryBlocksById[temporaryMessage.oid] = fullySendMessage;
     }
+    fullySendMessage();
 }
 
 - (void)_uploadImages:(NSArray<UIImage *> *)images completion:(void(^)(NSError *error, NSArray<NSString *> *attachmentIds))completion
@@ -472,8 +520,10 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 - (void)resendMessage:(KUSChatMessage *)message
 {
     if (message) {
-        [self removeObjects:@[ message ]];
-        // [self sendTextMessage:message.body];
+        void(^retryBlock)(void) = _messageRetryBlocksById[message.oid];
+        if (retryBlock) {
+            retryBlock();
+        }
     }
 }
 
@@ -633,50 +683,74 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     }
 
     _submittingForm = YES;
+    KUSChatMessage *lastUserChatMessage = nil;
+    for (KUSChatMessage *chatMessage in self.allObjects) {
+        if (KUSChatMessageSentByUser(chatMessage)) {
+            lastUserChatMessage = chatMessage;
+            break;
+        }
+    }
 
-    BOOL containsEmailQuestion = [_form containsEmailQuestion];
-    __weak KUSChatMessagesDataSource *weakSelf = self;
-    __weak KUSUserSession *weakUserSession = self.userSession;
-    [self.userSession.chatSessionsDataSource
-     submitFormMessages:messagesJSON
-     formId:_form.oid
-     completion:^(NSError *error, KUSChatSession *session, NSArray<KUSChatMessage *> *messages) {
-         // If the form contained an email prompt, mark the local session as having submitted email already
-         if (containsEmailQuestion && !error) {
-             [weakUserSession.userDefaults setDidCaptureEmail:YES];
-         }
+    // Logic to handle an error
+    void(^handleError)(void) = ^void() {
+        if (lastUserChatMessage) {
+            [self removeObjects:@[ lastUserChatMessage ]];
+            lastUserChatMessage.state = KUSChatMessageStateFailed;
+            [self upsertObjects:@[ lastUserChatMessage ]];
+        }
+    };
 
-         __strong KUSChatMessagesDataSource *strongSelf = weakSelf;
-         if (strongSelf == nil) {
-             return;
-         }
-
-         if (error) {
-             KUSLogError(@"Error submitting form: %@", error);
-             return;
-         }
-
-         // Grab the session id
-         strongSelf->_sessionId = session.oid;
-         strongSelf->_form = nil;
-         strongSelf->_questionIndex = 0;
-         strongSelf->_formQuestion = nil;
-         strongSelf->_submittingForm = NO;
-
-         // Replace all of the local messages with the new ones
-         [strongSelf removeObjects:strongSelf.allObjects];
-         [strongSelf upsertNewMessages:messages];
-
-         // Insert the current messages data source into the userSession's lookup table
-         [weakUserSession.chatMessagesDataSources setObject:strongSelf forKey:strongSelf->_sessionId];
-
-         // Notify listeners
-         for (id<KUSChatMessagesDataSourceListener> listener in [strongSelf.listeners copy]) {
-             if ([listener respondsToSelector:@selector(chatMessagesDataSource:didCreateSessionId:)]) {
-                 [listener chatMessagesDataSource:strongSelf didCreateSessionId:strongSelf->_sessionId];
+    void (^actuallySubmitForm)(void) = ^void() {
+        [self.userSession.chatSessionsDataSource
+         submitFormMessages:messagesJSON
+         formId:_form.oid
+         completion:^(NSError *error, KUSChatSession *session, NSArray<KUSChatMessage *> *messages) {
+             if (error) {
+                 handleError();
+                 return;
              }
-         }
-     }];
+
+             // If the form contained an email prompt, mark the local session as having submitted email
+             if ([_form containsEmailQuestion]) {
+                 [self.userSession.userDefaults setDidCaptureEmail:YES];
+             }
+
+             // Grab the session id
+             _sessionId = session.oid;
+             _form = nil;
+             _questionIndex = 0;
+             _formQuestion = nil;
+             _submittingForm = NO;
+
+             // Replace all of the local messages with the new ones
+             [self removeObjects:self.allObjects];
+             [self upsertNewMessages:messages];
+
+             // Insert the current messages data source into the userSession's lookup table
+             [self.userSession.chatMessagesDataSources setObject:self forKey:_sessionId];
+
+             // Notify listeners
+             for (id<KUSChatMessagesDataSourceListener> listener in [self.listeners copy]) {
+                 if ([listener respondsToSelector:@selector(chatMessagesDataSource:didCreateSessionId:)]) {
+                     [listener chatMessagesDataSource:self didCreateSessionId:_sessionId];
+                 }
+             }
+         }];
+    };
+
+    void (^retrySubmittingForm)(void) = ^void() {
+        if (lastUserChatMessage) {
+            [self removeObjects:@[ lastUserChatMessage ]];
+            lastUserChatMessage.state = KUSChatMessageStateSending;
+            [self upsertObjects:@[ lastUserChatMessage ]];
+        }
+        actuallySubmitForm();
+    };
+
+    if (lastUserChatMessage) {
+        _messageRetryBlocksById[lastUserChatMessage.oid] = retrySubmittingForm;
+    }
+    actuallySubmitForm();
 }
 
 - (void)_insertDelayedMessage:(KUSChatMessage *)chatMessage
