@@ -11,28 +11,13 @@
 #import "KUSAttributionToolbar.h"
 #import "KUSColor.h"
 
-@interface KUSNavigationController () {
+@interface KUSNavigationController () <UIGestureRecognizerDelegate> {
     UIStatusBarStyle _preferredStatusBarStyle;
 }
 
 @end
 
 @implementation KUSNavigationController
-
-#pragma mark - Class methods
-
-+ (void)initialize
-{
-    if (self == [KUSNavigationController class]) {
-        UINavigationBar *appearance = [UINavigationBar appearanceWhenContainedInInstancesOfClasses:@[self]];
-
-        UIImage *transparentImage = [UIImage new];
-        appearance.tintColor = [KUSColor darkGrayColor];
-        appearance.shadowImage = transparentImage;
-        appearance.translucent = YES;
-        [appearance setBackgroundImage:transparentImage forBarMetrics:UIBarMetricsDefault];
-    }
-}
 
 #pragma mark - Lifecycle methods
 
@@ -64,10 +49,18 @@
     return self;
 }
 
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+
+    self.interactivePopGestureRecognizer.delegate = self;
+}
+
 #pragma mark - Internal methods
 
 - (void)_commonInit
 {
+    self.navigationBarHidden = YES;
     self.toolbarHidden = NO;
     _preferredStatusBarStyle = UIStatusBarStyleDefault;
 }
@@ -83,6 +76,13 @@
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     return _preferredStatusBarStyle;
+}
+
+#pragma mark - UIGestureRecognizerDelegate methods
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+    return self.viewControllers.count > 1;
 }
 
 @end

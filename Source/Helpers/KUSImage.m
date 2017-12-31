@@ -177,21 +177,39 @@
 
 + (UIImage *)xImageWithColor:(UIColor *)color size:(CGSize)size lineWidth:(CGFloat)lineWidth
 {
-    CGFloat cornerInset = sqrt((lineWidth * lineWidth) / 2.0f);
+    CGFloat cornerInset = sqrt((lineWidth * lineWidth) / 2.0);
 
-    UIGraphicsBeginImageContextWithOptions(size, NO, 0.0f);
+    UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetStrokeColorWithColor(context, color.CGColor);
     CGContextSetLineWidth(context, lineWidth);
-    CGContextMoveToPoint(context, 0.0f + cornerInset, 0.0f + cornerInset);
+    CGContextMoveToPoint(context, 0.0 + cornerInset, 0.0 + cornerInset);
     CGContextAddLineToPoint(context, size.width - cornerInset, size.height - cornerInset);
-    CGContextMoveToPoint(context, size.width - cornerInset, 0.0f + cornerInset);
-    CGContextAddLineToPoint(context, 0.0f + cornerInset, size.height - cornerInset);
+    CGContextMoveToPoint(context, size.width - cornerInset, 0.0 + cornerInset);
+    CGContextAddLineToPoint(context, 0.0 + cornerInset, size.height - cornerInset);
     CGContextStrokePath(context);
 
     UIImage *xImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return xImage;
+}
+
++ (UIImage *)leftChevronWithColor:(UIColor *)color size:(CGSize)size lineWidth:(CGFloat)lineWidth
+{
+    CGFloat cornerInset = sqrt((lineWidth * lineWidth) / 2.0);
+
+    UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetStrokeColorWithColor(context, color.CGColor);
+    CGContextSetLineWidth(context, lineWidth);
+    CGContextMoveToPoint(context, size.width - cornerInset, 0.0 + cornerInset);
+    CGContextAddLineToPoint(context, 0.0 + cornerInset, size.height / 2.0);
+    CGContextAddLineToPoint(context, size.width - cornerInset, size.height - cornerInset);
+    CGContextStrokePath(context);
+
+    UIImage *chevronImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return chevronImage;
 }
 
 #pragma mark - Internal methods

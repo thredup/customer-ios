@@ -112,7 +112,7 @@ The majority of the user interface for the support screens can be configured usi
 // Make the navigation bar have a dark gray background
 [[KUSNavigationBarView appearance] setBackgroundColor:[UIColor colorWithWhite:0.25 alpha:1.0]];
 // Make the navigation bar items orange
-[[UINavigationBar appearanceWhenContainedInInstancesOfClasses:@[[KUSNavigationController class]]] setTintColor:[KUSColor orangeColor]];
+[[KUSNavigationBarView appearance] setTintColor:[KUSColor orangeColor]];
 
 // Make the session table view and cells light gray
 [[KUSSessionsTableView appearance] setBackgroundColor:[UIColor lightGrayColor]];

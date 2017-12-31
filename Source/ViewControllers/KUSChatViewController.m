@@ -34,9 +34,11 @@
 @interface KUSChatViewController () <KUSEmailInputViewDelegate, KUSInputBarDelegate, KUSOptionPickerViewDelegate,
                                      KUSChatMessagesDataSourceListener, KUSChatMessageTableViewCellDelegate,
                                      NYTPhotosViewControllerDelegate, UITableViewDataSource, UITableViewDelegate,
-                                     UINavigationControllerDelegate, UIImagePickerControllerDelegate> {
+                                     UINavigationControllerDelegate, UIImagePickerControllerDelegate,
+                                     KUSNavigationBarViewDelegate> {
     KUSUserSession *_userSession;
 
+    BOOL _showBackButton;
     NSString *_chatSessionId;
     KUSChatMessagesDataSource *_chatMessagesDataSource;
 
@@ -64,6 +66,7 @@
         _userSession = userSession;
         _chatSessionId = session.oid;
         _chatMessagesDataSource = [_userSession chatMessagesDataSourceForSessionId:_chatSessionId];
+        _showBackButton = YES;
     }
     return self;
 }
@@ -74,8 +77,7 @@
     if (self) {
         _userSession = userSession;
         _chatMessagesDataSource = [[KUSChatMessagesDataSource alloc] initForNewConversationWithUserSession:_userSession];
-
-        [self.navigationItem setHidesBackButton:!showBackButton animated:NO];
+        _showBackButton = showBackButton;
     }
     return self;
 }
@@ -93,12 +95,6 @@
 
     self.view.backgroundColor = [UIColor whiteColor];
     self.edgesForExtendedLayout = UIRectEdgeTop;
-
-    UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop
-                                                                                   target:self
-                                                                                   action:@selector(_dismiss)];
-    barButtonItem.style = UIBarButtonItemStyleDone;
-    self.navigationItem.rightBarButtonItem = barButtonItem;
 
     self.tableView = [[KUSChatTableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     self.tableView.autoresizingMask = (UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth);
@@ -120,8 +116,11 @@
 #endif
 
     self.fauxNavigationBar = [[KUSNavigationBarView alloc] initWithUserSession:_userSession];
+    self.fauxNavigationBar.delegate = self;
     [self.fauxNavigationBar setSessionId:_chatSessionId];
     [self.fauxNavigationBar setShowsLabels:YES];
+    [self.fauxNavigationBar setShowsBackButton:_showBackButton];
+    [self.fauxNavigationBar setShowsDismissButton:YES];
     [self.view addSubview:self.fauxNavigationBar];
 
     self.inputBarView = [[KUSInputBar alloc] init];
@@ -192,7 +191,8 @@
     [super viewWillLayoutSubviews];
 
     [self.fauxNavigationBar setExtraLarge:_chatMessagesDataSource.count == 0];
-    CGFloat navigationBarHeight = [self.fauxNavigationBar desiredHeightWithTopInset:self.edgeInsets.top];
+    self.fauxNavigationBar.topInset = self.edgeInsets.top;
+    CGFloat navigationBarHeight = [self.fauxNavigationBar desiredHeight];
 
     CGFloat inputBarHeight = [self.inputBarView desiredHeight];
     CGFloat inputBarY = self.view.bounds.size.height - MAX(self.edgeInsets.bottom, _keyboardHeight) - inputBarHeight;
@@ -237,13 +237,6 @@
     self.tableView.scrollIndicatorInsets = (UIEdgeInsets) {
         .bottom = navigationBarHeight + self.emailInputView.frame.size.height
     };
-}
-
-#pragma mark - Interface element methods
-
-- (void)_dismiss
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - Internal logic methods
@@ -362,8 +355,9 @@
 {
     _chatSessionId = sessionId;
     self.inputBarView.allowsAttachments = YES;
-    [self.navigationItem setHidesBackButton:NO animated:YES];
     [self.fauxNavigationBar setSessionId:_chatSessionId];
+    _showBackButton = YES;
+    [self.fauxNavigationBar setShowsBackButton:YES];
     [self _checkShouldShowEmailInput];
     [self.view setNeedsLayout];
 }
@@ -538,6 +532,18 @@
     NYTPhotosViewController *photosViewController = [[NYTPhotosViewController alloc] initWithPhotos:photos initialPhoto:initialPhoto];
     photosViewController.delegate = self;
     [self presentViewController:photosViewController animated:YES completion:nil];
+}
+
+#pragma mark - KUSNavigationBarViewDelegate methods
+
+- (void)navigationBarViewDidTapBack:(KUSNavigationBarView *)navigationBarView
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)navigationBarViewDidTapDismiss:(KUSNavigationBarView *)navigationBarView
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - KUSEmailInputViewDelegate methods

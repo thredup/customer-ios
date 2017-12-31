@@ -20,7 +20,7 @@
 #import "KUSNewSessionButton.h"
 #import "KUSSessionsTableView.h"
 
-@interface KUSSessionsViewController () <KUSPaginatedDataSourceListener, UITableViewDataSource, UITableViewDelegate> {
+@interface KUSSessionsViewController () <KUSNavigationBarViewDelegate, KUSPaginatedDataSourceListener, UITableViewDataSource, UITableViewDelegate> {
     KUSUserSession *_userSession;
 
     KUSChatSessionsDataSource *_chatSessionsDataSource;
@@ -85,7 +85,9 @@
 #endif
 
     self.fauxNavigationBar = [[KUSNavigationBarView alloc] initWithUserSession:_userSession];
+    self.fauxNavigationBar.delegate = self;
     [self.fauxNavigationBar setShowsLabels:NO];
+    [self.fauxNavigationBar setShowsDismissButton:YES];
     [self.view addSubview:self.fauxNavigationBar];
 
     self.createSessionButton = [[KUSNewSessionButton alloc] init];
@@ -123,9 +125,10 @@
 
     self.tableView.frame = self.view.bounds;
 
+    self.fauxNavigationBar.topInset = self.edgeInsets.top;
     self.fauxNavigationBar.frame = (CGRect) {
         .size.width = self.view.bounds.size.width,
-        .size.height = [self.fauxNavigationBar desiredHeightWithTopInset:self.edgeInsets.top]
+        .size.height = [self.fauxNavigationBar desiredHeight]
     };
 
     CGSize createSessionButtonSize = self.createSessionButton.intrinsicContentSize;
@@ -194,6 +197,13 @@
                                                                                         forChatSession:chatSession];
         [self.navigationController pushViewController:chatViewController animated:NO];
     }
+}
+
+#pragma mark - KUSNavigationBarViewDelegate methods
+
+- (void)navigationBarViewDidTapDismiss:(KUSNavigationBarView *)navigationBarView
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - KUSPaginatedDataSourceListener methods

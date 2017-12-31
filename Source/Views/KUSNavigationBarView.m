@@ -10,7 +10,15 @@
 
 #import "KUSAvatarImageView.h"
 #import "KUSColor.h"
+#import "KUSImage.h"
 #import "KUSUserSession.h"
+
+static const CGFloat kKUSNavigationBarHeight = 44.0;
+
+static const CGSize kKUSNavigationBarBackButtonSize = { 40.0, kKUSNavigationBarHeight };
+static const CGSize kKUSNavigationBarBackImageSize = { 12.0, 21.0 };
+static const CGSize kKUSNavigationBarDismissButtonSize = { 49.0, kKUSNavigationBarHeight };
+static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
 
 @interface KUSNavigationBarView () <KUSObjectDataSourceListener, KUSChatMessagesDataSourceListener> {
     KUSUserSession *_userSession;
@@ -21,6 +29,9 @@
     UILabel *_nameLabel;
     UILabel *_greetingLabel;
     UIView *_separatorView;
+
+    UIButton *_backButton;
+    UIButton *_dismissButton;
 }
 
 @end
@@ -39,6 +50,12 @@
         [appearance setGreetingColor:[KUSColor darkGrayColor]];
         [appearance setGreetingFont:[UIFont systemFontOfSize:11.0]];
         [appearance setSeparatorColor:[KUSColor grayColor]];
+        [appearance setTintColor:[KUSColor darkGrayColor]];
+
+        UIImage *backButtonImage = [KUSImage leftChevronWithColor:[UIColor blackColor] size:kKUSNavigationBarBackImageSize lineWidth:2.5];
+        appearance.backButtonImage = [backButtonImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        UIImage *dismissButtonImage = [KUSImage xImageWithColor:[UIColor blackColor] size:kKUSNavigationBarDismissImageSize lineWidth:2.0];
+        appearance.dismissButtonImage = [dismissButtonImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     }
 }
 
@@ -70,6 +87,16 @@
         _separatorView = [[UIView alloc] init];
         [self addSubview:_separatorView];
 
+        _backButton = [[UIButton alloc] init];
+        _backButton.hidden = YES;
+        [_backButton addTarget:self action:@selector(_onBackButton:) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:_backButton];
+
+        _dismissButton = [[UIButton alloc] init];
+        _dismissButton.hidden = YES;
+        [_dismissButton addTarget:self action:@selector(_onDismissButton:) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:_dismissButton];
+
         [_userSession.chatSettingsDataSource addListener:self];
         [self _updateTextLabels];
     }
@@ -80,10 +107,8 @@
 {
     [super layoutSubviews];
 
-    BOOL hasStatusBar = ![UIApplication sharedApplication].statusBarHidden;
-
     CGFloat avatarSize = 30.0;
-    CGFloat statusBarHeight = (hasStatusBar && UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPad ? 20.0 : 0.0);
+    CGFloat statusBarHeight = self.topInset;
     CGFloat labelSidePad = 10.0;
 
     if (self.showsLabels) {
@@ -146,6 +171,17 @@
         .size.width = self.bounds.size.width,
         .size.height = 0.5
     };
+
+    _backButton.frame = (CGRect) {
+        .origin.x = 0.0,
+        .origin.y = _topInset,
+        .size = kKUSNavigationBarBackButtonSize
+    };
+    _dismissButton.frame = (CGRect) {
+        .origin.x = self.bounds.size.width - kKUSNavigationBarDismissButtonSize.width,
+        .origin.y = _topInset,
+        .size = kKUSNavigationBarDismissButtonSize
+    };
 }
 
 #pragma mark - Internal methods
@@ -172,14 +208,30 @@
     _greetingLabel.text = chatSettings.greeting;
 }
 
+#pragma mark - Interface element methods
+
+- (void)_onBackButton:(UIButton *)button
+{
+    if ([self.delegate respondsToSelector:@selector(navigationBarViewDidTapBack:)]) {
+        [self.delegate navigationBarViewDidTapBack:self];
+    }
+}
+
+- (void)_onDismissButton:(UIButton *)button
+{
+    if ([self.delegate respondsToSelector:@selector(navigationBarViewDidTapDismiss:)]) {
+        [self.delegate navigationBarViewDidTapDismiss:self];
+    }
+}
+
 #pragma mark - Public methods
 
-- (CGFloat)desiredHeightWithTopInset:(CGFloat)topInset
+- (CGFloat)desiredHeight
 {
     if (self.showsLabels) {
-        return [self _extraNavigationBarHeight] + topInset;
+        return [self _extraNavigationBarHeight] + self.topInset + kKUSNavigationBarHeight;
     } else {
-        return topInset;
+        return self.topInset + kKUSNavigationBarHeight;
     }
 }
 
@@ -202,6 +254,18 @@
 {
     _showsLabels = showsLabels;
     [self setNeedsLayout];
+}
+
+- (void)setShowsBackButton:(BOOL)showsBackButton
+{
+    _showsBackButton = showsBackButton;
+    _backButton.hidden = !_showsBackButton;
+}
+
+- (void)setShowsDismissButton:(BOOL)showsDismissButton
+{
+    _showsDismissButton = showsDismissButton;
+    _dismissButton.hidden = !_showsDismissButton;
 }
 
 #pragma mark - KUSObjectDataSourceListener
@@ -249,6 +313,18 @@
 {
     _separatorColor = separatorColor;
     _separatorView.backgroundColor = _separatorColor;
+}
+
+- (void)setBackButtonImage:(UIImage *)backButtonImage
+{
+    _backButtonImage = backButtonImage;
+    [_backButton setImage:backButtonImage forState:UIControlStateNormal];
+}
+
+- (void)setDismissButtonImage:(UIImage *)dismissButtonImage
+{
+    _dismissButtonImage = dismissButtonImage;
+    [_dismissButton setImage:dismissButtonImage forState:UIControlStateNormal];
 }
 
 @end
