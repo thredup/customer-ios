@@ -103,6 +103,29 @@ KustomerViewController *kustomerViewController = [[KustomerViewController alloc]
 */
 ```
 
+```objective-c
+/*
+ Attach custom attributes to the user
+
+ NOTE:
+ Attached key-value pairs via the `custom` property must be enabled on the Customer Klass via the admin portal.
+ This can be done by an admin via Settings > Platform Settings > Klasses > Customer
+*/
+KUSCustomerDescription *customerDescription = [[KUSCustomerDescription alloc] init];
+customerDescription.email = @"address@example.com";
+customerDescription.custom = @{ @"customAttributeStr": @"value" };
+[Kustomer describeCustomer:customerDescription];
+
+/*
+ Attach custom attributes to the user's most recent conversation (or the first one they create)
+
+ NOTE:
+ These key-value pairs must be enabled on the Conversation Klass via the admin portal.
+ This can be done by an admin via Settings > Platform Settings > Klasses > Conversation
+*/
+[Kustomer describeConversation:@{ @"customAttributeStr" : @"value" }];
+```
+
 ### Appearance
 
 The majority of the user interface for the support screens can be configured using `UIAppearance`. As an example, if you are designing a Halloween-themed support interface, you could re-skin the Kustomer iOS support screens using the following:
