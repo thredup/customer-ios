@@ -358,7 +358,7 @@ static const CGFloat kTimestampTopPadding = 4.0;
 
     if (_chatMessage.state == KUSChatMessageStateFailed) {
         if (_errorButton == nil) {
-            _errorButton = [UIButton buttonWithType:UIButtonTypeCustom];
+            _errorButton = [[UIButton alloc] init];
             [_errorButton setImage:[KUSImage errorImage] forState:UIControlStateNormal];
             [_errorButton addTarget:self
                              action:@selector(_didTapError)

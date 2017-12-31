@@ -74,7 +74,7 @@
                                                      name:UITextFieldTextDidChangeNotification
                                                    object:self.textField];
 
-        self.submitButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        self.submitButton = [[UIButton alloc] init];
         [self.submitButton addTarget:self
                               action:@selector(_userWantsToSubmit)
                     forControlEvents:UIControlEventTouchUpInside];

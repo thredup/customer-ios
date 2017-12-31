@@ -17,7 +17,7 @@
 + (UIImage *)pencilImage;
 + (UIImage *)errorImage;
 
-+ (UIImage *)attachImageWithSize:(CGSize)size color:(UIColor *)color;
++ (UIImage *)attachImageWithSize:(CGSize)size;
 + (UIImage *)sendImageWithSize:(CGSize)size color:(UIColor *)color;
 + (UIImage *)submitImageWithSize:(CGSize)size color:(UIColor *)color;
 + (UIImage *)circularImageWithSize:(CGSize)size color:(UIColor *)color;

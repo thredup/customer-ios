@@ -10,6 +10,7 @@
 
 #import "KUSColor.h"
 #import "KUSImage.h"
+#import "KUSFadingButton.h"
 
 static const CGFloat kKUSOptionPickerViewMinimumHeight = 60.0;
 static const CGFloat kKUSOptionPickerViewButtonPadding = 10.0;
@@ -147,7 +148,7 @@ static const CGFloat kKUSOptionPickerViewMinimumButtonWidth = 100.0;
     NSMutableArray<UIButton *> *optionButtons = [[NSMutableArray alloc] initWithCapacity:self.options.count];
 
     for (NSString *option in self.options) {
-        UIButton *button = [[UIButton alloc] init];
+        UIButton *button = [[KUSFadingButton alloc] init];
         button.backgroundColor = self.buttonColor;
         button.layer.cornerRadius = 5.0;
         button.layer.masksToBounds = YES;

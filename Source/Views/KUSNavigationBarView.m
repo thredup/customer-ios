@@ -11,6 +11,7 @@
 #import "KUSAvatarImageView.h"
 #import "KUSColor.h"
 #import "KUSImage.h"
+#import "KUSFadingButton.h"
 #import "KUSUserSession.h"
 
 static const CGFloat kKUSNavigationBarHeight = 44.0;
@@ -87,12 +88,12 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
         _separatorView = [[UIView alloc] init];
         [self addSubview:_separatorView];
 
-        _backButton = [[UIButton alloc] init];
+        _backButton = [[KUSFadingButton alloc] init];
         _backButton.hidden = YES;
         [_backButton addTarget:self action:@selector(_onBackButton:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_backButton];
 
-        _dismissButton = [[UIButton alloc] init];
+        _dismissButton = [[KUSFadingButton alloc] init];
         _dismissButton.hidden = YES;
         [_dismissButton addTarget:self action:@selector(_onDismissButton:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_dismissButton];

@@ -10,6 +10,7 @@
 
 #import "KUSColor.h"
 #import "KUSImage.h"
+#import "KUSFadingButton.h"
 #import "KUSPermissions.h"
 #import "KUSTextView.h"
 #import "KUSImageAttachmentCollectionViewCell.h"
@@ -88,7 +89,9 @@ static NSString *kCellIdentifier = @"ImageAttachment";
         [_imageCollectionView registerClass:[KUSImageAttachmentCollectionViewCell class] forCellWithReuseIdentifier:kCellIdentifier];
         [self addSubview:_imageCollectionView];
 
-        _attachmentButton = [[UIButton alloc] init];
+        _attachmentButton = [[KUSFadingButton alloc] init];
+        UIImage *attachmentButtonImage = [KUSImage attachImageWithSize:CGSizeMake(35.0, 35.0)];
+        [_attachmentButton setImage:attachmentButtonImage forState:UIControlStateNormal];
         [_attachmentButton addTarget:self action:@selector(_pressAttach) forControlEvents:UIControlEventTouchUpInside];
         _attachmentButton.hidden = YES;
         [self addSubview:_attachmentButton];
@@ -373,10 +376,6 @@ static NSString *kCellIdentifier = @"ImageAttachment";
 {
     [super setBackgroundColor:backgroundColor];
     _textView.backgroundColor = self.backgroundColor;
-
-    UIImage *attachmentButtonImage = [KUSImage attachImageWithSize:CGSizeMake(35.0, 35.0) color:self.backgroundColor];
-    [_attachmentButton setImage:attachmentButtonImage forState:UIControlStateNormal];
-    _attachmentButton.imageView.tintColor = [UIColor redColor];
 }
 
 - (void)setSeparatorColor:(UIColor *)separatorColor

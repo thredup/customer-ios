@@ -10,6 +10,7 @@
 
 #import "KUSColor.h"
 #import "KUSImage.h"
+#import "KUSFadingButton.h"
 
 static const CGSize kKUSImageAttachmentRemoveButtonSize = { 30.0, 30.0 };
 static const CGSize kKUSImageAttachmentXImageSize = { 14.0, 14.0 };
@@ -36,7 +37,7 @@ static const CGSize kKUSImageAttachmentXImageSize = { 14.0, 14.0 };
         [self.contentView addSubview:_imageView];
 
         UIImage *xImage = [KUSImage xImageWithColor:[UIColor whiteColor] size:kKUSImageAttachmentXImageSize lineWidth:1.5];
-        _removeButton = [[UIButton alloc] init];
+        _removeButton = [[KUSFadingButton alloc] init];
         _removeButton.layer.shadowOffset = CGSizeZero;
         _removeButton.layer.shadowColor = [UIColor blackColor].CGColor;
         _removeButton.layer.shadowRadius = 2.0;
