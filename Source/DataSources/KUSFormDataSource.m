@@ -49,7 +49,10 @@
         [self.userSession.chatSettingsDataSource fetch];
         return;
     }
-    [super fetch];
+    KUSChatSettings *chatSettings = self.userSession.chatSettingsDataSource.object;
+    if (chatSettings.activeFormId) {
+        [super fetch];
+    }
 }
 
 - (BOOL)isFetching
@@ -71,10 +74,7 @@
 
 - (NSError *)error
 {
-    if (self.userSession.chatSettingsDataSource.error) {
-        return self.userSession.chatSettingsDataSource.error;
-    }
-    return [super error];
+    return self.userSession.chatSettingsDataSource.error ?: [super error];
 }
 
 #pragma mark - KUSObjectDataSourceListener methods

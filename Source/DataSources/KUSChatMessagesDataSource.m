@@ -20,6 +20,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 
 @interface KUSChatMessagesDataSource () <KUSChatMessagesDataSourceListener, KUSObjectDataSourceListener> {
     NSString *_Nullable _sessionId;
+    BOOL _createdLocally;
 
     NSMutableSet<NSString *> *_delayedChatMessageIds;
 
@@ -56,8 +57,11 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 {
     self = [self _initWithUserSession:userSession];
     if (self) {
+        _createdLocally = YES;
         [self.userSession.formDataSource addListener:self];
-        [self.userSession.formDataSource fetch];
+        if (!self.userSession.formDataSource.didFetch) {
+            [self.userSession.formDataSource fetch];
+        }
     }
     return self;
 }
@@ -122,7 +126,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 
 - (BOOL)didFetch
 {
-    if (_sessionId == nil) {
+    if (_createdLocally) {
         return YES;
     }
     return [super didFetch];
@@ -130,7 +134,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 
 - (BOOL)didFetchAll
 {
-    if (_sessionId == nil) {
+    if (_createdLocally) {
         return YES;
     }
     return [super didFetchAll];
