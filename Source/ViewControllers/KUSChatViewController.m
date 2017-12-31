@@ -115,6 +115,7 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
 #endif
 
+    self.navigationController.interactivePopGestureRecognizer.enabled = _showBackButton;
     self.fauxNavigationBar = [[KUSNavigationBarView alloc] initWithUserSession:_userSession];
     self.fauxNavigationBar.delegate = self;
     [self.fauxNavigationBar setSessionId:_chatSessionId];
@@ -357,6 +358,7 @@
     self.inputBarView.allowsAttachments = YES;
     [self.fauxNavigationBar setSessionId:_chatSessionId];
     _showBackButton = YES;
+    self.navigationController.interactivePopGestureRecognizer.enabled = _showBackButton;
     [self.fauxNavigationBar setShowsBackButton:YES];
     [self _checkShouldShowEmailInput];
     [self.view setNeedsLayout];
