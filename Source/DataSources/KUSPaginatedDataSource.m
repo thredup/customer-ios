@@ -221,7 +221,7 @@
     if (error || response == nil) {
         self.isFetching = NO;
         self.error = error ?: [NSError new];
-        [self notifyAnnouncersDidError:error];
+        [self notifyAnnouncersDidError:self.error];
         return;
     }
 
@@ -242,7 +242,7 @@
     if (error || response == nil) {
         self.isFetching = NO;
         self.error = error ?: [NSError new];
-        [self notifyAnnouncersDidError:error];
+        [self notifyAnnouncersDidError:self.error];
         return;
     }
 

@@ -27,6 +27,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     NSUInteger _questionIndex;
     KUSFormQuestion *_formQuestion;
     BOOL _submittingForm;
+    BOOL _creatingSession;
 }
 
 @end
@@ -172,8 +173,8 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
         return YES;
     }
 
-    // When submitting the form, prevent sending more responses
-    if (_submittingForm) {
+    // When submitting the form or creating session, prevent sending more responses
+    if (_submittingForm || _creatingSession) {
         return YES;
     }
 
@@ -224,10 +225,9 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     if (_sessionId == nil && chatSettings.activeFormId) {
         NSAssert(attachments.count == 0, @"Should not have been able to send attachments without a _sessionId");
 
-        NSString *tempMessageId = [[NSUUID UUID] UUIDString];
         NSDictionary *json = @{
             @"type": @"chat_message",
-            @"id": tempMessageId,
+            @"id": [[NSUUID UUID] UUIDString],
             @"attributes": @{
                 @"body": text,
                 @"direction": @"in",
@@ -235,10 +235,8 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
             }
         };
         NSArray<KUSChatMessage *> *temporaryMessages = [KUSChatMessage objectsWithJSON:json];
-        if (value) {
-            for (KUSChatMessage *temporaryMessage in temporaryMessages) {
-                temporaryMessage.value = value;
-            }
+        for (KUSChatMessage *temporaryMessage in temporaryMessages) {
+            temporaryMessage.value = value;
         }
         [self upsertNewMessages:temporaryMessages];
 
@@ -352,6 +350,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     if (_sessionId) {
         sendMessage();
     } else {
+        _creatingSession = YES;
         [self.userSession.chatSessionsDataSource
          createSessionWithTitle:text
          completion:^(NSError *error, KUSChatSession *session) {
@@ -363,6 +362,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 
              // Grab the session id
              _sessionId = session.oid;
+             _creatingSession = NO;
 
              // Insert the current messages data source into the userSession's lookup table
              [self.userSession.chatMessagesDataSources setObject:self forKey:session.oid];
@@ -506,7 +506,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 - (void)_insertAutoreplyIfNecessary
 {
     if ([self _shouldShowAutoreply]) {
-        NSString *autoreplyId = [NSString stringWithFormat:@"_autoreply_%@", _sessionId];
+        NSString *autoreplyId = [NSString stringWithFormat:@"autoreply_%@", _sessionId];
         // Early escape if we already have an autoreply
         if ([self objectWithId:autoreplyId]) {
             return;
@@ -568,7 +568,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
         }
 
         NSDate *createdAt = [lastMessage.createdAt dateByAddingTimeInterval:KUSChatAutoreplyDelay + additionalInsertDelay];
-        NSString *questionId = [NSString stringWithFormat:@"_question_%@", question.oid];
+        NSString *questionId = [NSString stringWithFormat:@"question_%@", question.oid];
         NSDictionary *json = @{
             @"type": @"chat_message",
             @"id": questionId,

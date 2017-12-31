@@ -68,8 +68,8 @@
 
         strongSelf.isFetching = NO;
         if (error || model == nil) {
-            strongSelf.error = error;
-            [strongSelf notifyAnnouncersDidError:error];
+            strongSelf.error = error ?: [NSError new];
+            [strongSelf notifyAnnouncersDidError:strongSelf.error];
         } else {
             strongSelf.object = model;
             strongSelf.didFetch = YES;
