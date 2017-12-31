@@ -12,7 +12,7 @@
 #import "Kustomer.h"
 
 #error A valid API key is required
-static NSString *kKustomerAPIKey = @"API_KEY";
+static NSString *const kKustomerAPIKey = @"API_KEY";
 
 @implementation AppDelegate
 

@@ -43,7 +43,7 @@ In your project's UIApplicationDelegate:
 ```objective-c
 #import <Kustomer/Kustomer.h>
 
-static NSString *kKustomerAPIKey = @"YOUR_API_KEY";
+static NSString *const kKustomerAPIKey = @"YOUR_API_KEY";
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -61,6 +61,10 @@ KustomerViewController *kustomerViewController = [[KustomerViewController alloc]
 [Kustomer presentSupport];
 ```
 
+Enabling the ability for your users to upload images to conversations requires certain app privacy descriptions. If neither of these is present, the image attachments button will be hidden.
+- [NSCameraUsageDescription](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/CocoaKeys.html#//apple_ref/doc/plist/info/NSCameraUsageDescription) is required to enable taking a photo
+- [NSPhotoLibraryUsageDescription](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/CocoaKeys.html#//apple_ref/doc/plist/info/NSPhotoLibraryUsageDescription) is required to enable picking from your Camera Roll
+
 ### Additional API Reference
 
 ```objective-c
@@ -71,9 +75,7 @@ KustomerViewController *kustomerViewController = [[KustomerViewController alloc]
 ```objective-c
 // Convenience method that will present the chat interface on the topmost view controller.
 [Kustomer presentSupport];
-```
 
-```objective-c
 // Convenience methods that will present a browser interface pointing to your KnowledgeBase.
 [Kustomer presentKnowledgeBase];
 ```
@@ -92,14 +94,17 @@ KustomerViewController *kustomerViewController = [[KustomerViewController alloc]
  it gives them access to all of the previous conversations across devices.
  By default, users can see their conversation history only on a single device. By including a secure
  hash with the ID of your user, you can securely identify that user and grant them access.
-*/
 
-/*
  JSON Web Token:
  The JWT used for secure identification must use HMAC SHA256 and include the following header and claims:
  Header: @{ @"alg" : @"HS256", @"typ" : @"JWT" }
  Claims: @{ @"externalId" : @"your_user_id", @"iat" : @"current_time_utc" }
  NOTE: tokens with an @"iat" older than 15 minutes will be rejected
+
+ The JWT must be signed with your organization's secret. This secret is accessible to your server,
+ via `/v1/auth/customer/settings`. The intent is that your own server fetches the secret, generates
+ and signs the JWT and then sends it to your client which in turn calls the `+[Kustomer identify:]`
+ method, preventing any risk of falsified indentification calls.
 */
 ```
 
@@ -154,8 +159,6 @@ The majority of the user interface for the support screens can be configured usi
 // Make the new conversation button orange
 [[KUSNewSessionButton appearance] setColor:[KUSColor orangeColor]];
 ```
-
-Before and after:
 
 <p align="center" >
   Before and after:
