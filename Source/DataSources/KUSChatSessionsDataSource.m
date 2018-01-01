@@ -211,7 +211,7 @@
         if (mostRecentMessageAt == nil) {
             mostRecentMessageAt = chatSession.lastMessageAt;
             mostRecentChatSession = chatSession;
-        } else if ([mostRecentMessageAt earlierDate:chatSession.lastMessageAt] == mostRecentMessageAt) {
+        } else if ([mostRecentMessageAt laterDate:chatSession.lastMessageAt] == chatSession.lastMessageAt) {
             mostRecentMessageAt = chatSession.lastMessageAt;
             mostRecentChatSession = chatSession;
         }

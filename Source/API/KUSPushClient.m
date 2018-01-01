@@ -22,7 +22,6 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
 @interface KUSPushClient () <KUSObjectDataSourceListener, KUSPaginatedDataSourceListener, PTPusherDelegate> {
     __weak KUSUserSession *_userSession;
 
-    BOOL _shouldBeConnectedToPusher;
     NSTimer *_pollingTimer;
 
     PTPusher *_pusherClient;
@@ -42,7 +41,6 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
     self = [super init];
     if (self) {
         _userSession = userSession;
-        _shouldBeConnectedToPusher = NO;
 
         [_userSession.chatSessionsDataSource addListener:self];
         [_userSession.chatSettingsDataSource addListener:self];
@@ -94,8 +92,12 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
     }
 
     // Connect or disconnect from pusher
-    if (_shouldBeConnectedToPusher) {
+    if ([self _shouldBeConnectedToPusher]) {
         [_pusherClient connect];
+
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(KUSLazyPollingTimerInterval * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self _connectToChannelsIfNecessary];
+        });
     } else {
         [_pusherClient disconnect];
     }
@@ -113,7 +115,7 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
 - (void)_updatePollingTimer
 {
     // Connect or disconnect from pusher
-    if (_shouldBeConnectedToPusher) {
+    if ([self _shouldBeConnectedToPusher]) {
         if (_pusherClient.connection.connected) {
             // Stop polling
             if (_pollingTimer) {
@@ -178,13 +180,20 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
     }
 }
 
+- (BOOL)_shouldBeConnectedToPusher
+{
+    if (_supportViewControllerPresented) {
+        return YES;
+    }
+    NSDate *lastMessageAt = _userSession.chatSessionsDataSource.lastMessageAt;
+    return lastMessageAt && [lastMessageAt timeIntervalSinceNow] > -KUSLazyPollingTimerInterval;
+}
+
 #pragma mark - Property methods
 
 - (void)setSupportViewControllerPresented:(BOOL)supportViewControllerPresented
 {
     _supportViewControllerPresented = supportViewControllerPresented;
-    _shouldBeConnectedToPusher = supportViewControllerPresented;
-
     [self _connectToChannelsIfNecessary];
 }
 
@@ -254,6 +263,8 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
             [self _notifyForUpdatedChatSession:updatedSessionId];
             updatedSessionId = nil;
         }
+
+        [self _connectToChannelsIfNecessary];
     }
 
 }
