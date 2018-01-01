@@ -155,7 +155,8 @@ CGFloat KUSChatSessionTableViewCellHeight = 88.0;
     self.dateLabel.text = [KUSDate humanReadableTextFromDate:sessionDate];
 
     // Unread count (number of messages > the lastSeenAt)
-    NSUInteger unreadCount = [_chatMessagesDataSource unreadCountAfterDate:_chatSession.lastSeenAt];
+    NSDate *sessionLastSeenAt = [_userSession.chatSessionsDataSource lastSeenAtForSessionId:_chatSession.oid];
+    NSUInteger unreadCount = [_chatMessagesDataSource unreadCountAfterDate:sessionLastSeenAt];
     if (unreadCount > 0) {
         self.unreadCountLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)unreadCount];
         self.unreadCountLabel.hidden = NO;

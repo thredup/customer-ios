@@ -25,4 +25,7 @@
 // Returns the latest date representing the last message received across all sessions
 - (NSDate *)lastMessageAt;
 
+// Returns the lastSeenAt for a given session, using the data model as well as augmented by a local store
+- (NSDate *)lastSeenAtForSessionId:(NSString *)sessionId;
+
 @end

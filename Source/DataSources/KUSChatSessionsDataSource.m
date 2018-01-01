@@ -21,6 +21,8 @@
 
 @interface KUSChatSessionsDataSource () <KUSPaginatedDataSourceListener> {
     NSDictionary<NSString *, NSObject *> *_pendingCustomChatSessionAttributes;
+
+    NSMutableDictionary<NSString *, NSDate *> *_localLastSeenAtBySessionId;
 }
 
 @end
@@ -33,6 +35,8 @@
 {
     self = [super initWithUserSession:userSession];
     if (self) {
+        _localLastSeenAtBySessionId = [[NSMutableDictionary alloc] init];
+
         [self addListener:self];
     }
     return self;
@@ -97,7 +101,10 @@
         return;
     }
 
-    NSString *lastSeenAtString = [KUSDate stringFromDate:[NSDate date]];
+    NSDate *lastSeenAtDate = [NSDate date];
+    [_localLastSeenAtBySessionId setObject:lastSeenAtDate forKey:sessionId];
+    NSString *lastSeenAtString = [KUSDate stringFromDate:lastSeenAtDate];
+
     __weak KUSChatSessionsDataSource *weakSelf = self;
     [self.userSession.requestManager
      performRequestType:KUSRequestTypePut
@@ -222,6 +229,14 @@
 - (NSDate * _Nullable)lastMessageAt
 {
     return [self _mostRecentChatSession].lastMessageAt;
+}
+
+- (NSDate * _Nullable)lastSeenAtForSessionId:(NSString *)sessionId
+{
+    KUSChatSession *chatSession = [self objectWithId:sessionId];
+    NSDate *chatSessionDate = chatSession.lastSeenAt;
+    NSDate *localDate = [_localLastSeenAtBySessionId objectForKey:sessionId];
+    return [chatSessionDate ?: localDate laterDate:localDate];
 }
 
 #pragma mark - KUSPaginatedDataSourceListener methods
