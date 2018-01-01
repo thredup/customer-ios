@@ -126,24 +126,26 @@
     self.requestMarker = requestMarker;
 
     __weak KUSPaginatedDataSource *weakSelf = self;
+    Class modelClass = [self modelClass];
+
     [self.userSession.requestManager
      performRequestType:KUSRequestTypeGet
      URL:URL
      params:nil
      authenticated:YES
      completion:^(NSError *error, NSDictionary *json) {
-         __strong KUSPaginatedDataSource *strongSelf = weakSelf;
-         if (strongSelf == nil) {
-             return;
-         }
-         // Check to make sure that the request marker did not change
-         if (strongSelf.requestMarker != requestMarker) {
-             return;
-         }
-         strongSelf.requestMarker = nil;
-
-         KUSPaginatedResponse *response = [[KUSPaginatedResponse alloc] initWithJSON:json modelClass:[strongSelf modelClass]];
-         [strongSelf _prependResponse:response error:error];
+         dispatch_async(dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0), ^{
+             KUSPaginatedResponse *response = [[KUSPaginatedResponse alloc] initWithJSON:json modelClass:modelClass];
+             dispatch_async(dispatch_get_main_queue(), ^{
+                 __strong KUSPaginatedDataSource *strongSelf = weakSelf;
+                 // Check to make sure that the request marker did not change
+                 if (strongSelf == nil || strongSelf.requestMarker != requestMarker) {
+                     return;
+                 }
+                 strongSelf.requestMarker = nil;
+                 [strongSelf _prependResponse:response error:error];
+             });
+         });
      }];
 }
 
@@ -168,24 +170,26 @@
     self.requestMarker = requestMarker;
 
     __weak KUSPaginatedDataSource *weakSelf = self;
+    Class modelClass = [self modelClass];
+
     [self.userSession.requestManager
      performRequestType:KUSRequestTypeGet
      URL:URL
      params:nil
      authenticated:YES
      completion:^(NSError *error, NSDictionary *json) {
-         __strong KUSPaginatedDataSource *strongSelf = weakSelf;
-         if (strongSelf == nil) {
-             return;
-         }
-         // Check to make sure that the request marker did not change
-         if (strongSelf.requestMarker != requestMarker) {
-             return;
-         }
-         strongSelf.requestMarker = nil;
-
-         KUSPaginatedResponse *response = [[KUSPaginatedResponse alloc] initWithJSON:json modelClass:[strongSelf modelClass]];
-         [strongSelf _appendResponse:response error:error];
+         dispatch_async(dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0), ^{
+             KUSPaginatedResponse *response = [[KUSPaginatedResponse alloc] initWithJSON:json modelClass:modelClass];
+             dispatch_async(dispatch_get_main_queue(), ^{
+                 __strong KUSPaginatedDataSource *strongSelf = weakSelf;
+                 // Check to make sure that the request marker did not change
+                 if (strongSelf == nil || strongSelf.requestMarker != requestMarker) {
+                     return;
+                 }
+                 strongSelf.requestMarker = nil;
+                 [strongSelf _appendResponse:response error:error];
+             });
+         });
      }];
 }
 
