@@ -153,6 +153,22 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     return nil;
 }
 
+- (NSArray<NSString *> *)otherUserIds
+{
+    NSMutableSet<NSString *> *userIdsSet = [[NSMutableSet alloc] init];
+    NSMutableArray<NSString *> *otherUserIds = [[NSMutableArray alloc] init];
+    for (KUSChatMessage *message in self.allObjects) {
+        if (!KUSChatMessageSentByUser(message)) {
+            NSString *sentById = message.sentById;
+            if (sentById && ![userIdsSet containsObject:sentById]) {
+                [userIdsSet addObject:sentById];
+                [otherUserIds addObject:sentById];
+            }
+        }
+    }
+    return otherUserIds;
+}
+
 - (NSUInteger)unreadCountAfterDate:(NSDate *)date
 {
     NSUInteger count = 0;

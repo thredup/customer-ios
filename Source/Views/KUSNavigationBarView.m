@@ -8,7 +8,7 @@
 
 #import "KUSNavigationBarView.h"
 
-#import "KUSAvatarImageView.h"
+#import "KUSMultipleAvatarsView.h"
 #import "KUSColor.h"
 #import "KUSImage.h"
 #import "KUSFadingButton.h"
@@ -26,7 +26,7 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
     KUSChatMessagesDataSource *_chatMessagesDataSource;
     KUSUserDataSource *_userDataSource;
 
-    KUSAvatarImageView *_avatarImageView;
+    KUSMultipleAvatarsView *_avatarsView;
     UILabel *_nameLabel;
     UILabel *_greetingLabel;
     UIView *_separatorView;
@@ -68,8 +68,8 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
     if (self) {
         _userSession = userSession;
 
-        _avatarImageView = [[KUSAvatarImageView alloc] initWithUserSession:userSession];
-        [self addSubview:_avatarImageView];
+        _avatarsView = [[KUSMultipleAvatarsView alloc] initWithUserSession:_userSession];
+        [self addSubview:_avatarsView];
 
         _nameLabel = [[UILabel alloc] init];
         _nameLabel.textAlignment = NSTextAlignmentCenter;
@@ -108,7 +108,7 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
 {
     [super layoutSubviews];
 
-    CGFloat avatarSize = 30.0;
+    CGSize avatarSize = CGSizeMake(90.0, 30.0);
     CGFloat statusBarHeight = self.topInset;
     CGFloat labelSidePad = 10.0;
 
@@ -117,15 +117,14 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
             _nameLabel.font = [UIFont boldSystemFontOfSize:13.0];
             _greetingLabel.font = [UIFont systemFontOfSize:11.0];
 
-            _avatarImageView.frame = (CGRect) {
-                .origin.x = (self.bounds.size.width - avatarSize) / 2.0,
-                .origin.y = (self.bounds.size.height - [self _extraNavigationBarHeight] - avatarSize - statusBarHeight) / 2.0 + statusBarHeight,
-                .size.width = avatarSize,
-                .size.height = avatarSize
+            _avatarsView.frame = (CGRect) {
+                .origin.x = (self.bounds.size.width - avatarSize.width) / 2.0,
+                .origin.y = (self.bounds.size.height - [self _extraNavigationBarHeight] - avatarSize.height - statusBarHeight) / 2.0 + statusBarHeight,
+                .size = avatarSize
             };
             _nameLabel.frame = (CGRect) {
                 .origin.x = labelSidePad,
-                .origin.y = _avatarImageView.frame.origin.y + _avatarImageView.frame.size.height + 4.0,
+                .origin.y = _avatarsView.frame.origin.y + _avatarsView.frame.size.height + 4.0,
                 .size.width = self.bounds.size.width - labelSidePad * 2.0,
                 .size.height = 16.0
             };
@@ -139,15 +138,14 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
             _nameLabel.font = [UIFont boldSystemFontOfSize:15.0];
             _greetingLabel.font = [UIFont systemFontOfSize:13.0];
 
-            _avatarImageView.frame = (CGRect) {
-                .origin.x = (self.bounds.size.width - avatarSize) / 2.0,
-                .origin.y = (self.bounds.size.height / 2.0) - avatarSize,
-                .size.width = avatarSize,
-                .size.height = avatarSize
+            _avatarsView.frame = (CGRect) {
+                .origin.x = (self.bounds.size.width - avatarSize.width) / 2.0,
+                .origin.y = (self.bounds.size.height / 2.0) - avatarSize.height,
+                .size = avatarSize
             };
             _nameLabel.frame = (CGRect) {
                 .origin.x = labelSidePad,
-                .origin.y = _avatarImageView.frame.origin.y + _avatarImageView.frame.size.height + 8.0,
+                .origin.y = _avatarsView.frame.origin.y + _avatarsView.frame.size.height + 8.0,
                 .size.width = self.bounds.size.width - labelSidePad * 2.0,
                 .size.height = 20.0
             };
@@ -159,11 +157,10 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
             };
         }
     } else {
-        _avatarImageView.frame = (CGRect) {
-            .origin.x = (self.bounds.size.width - avatarSize) / 2.0,
-            .origin.y = (self.bounds.size.height - avatarSize - statusBarHeight) / 2.0 + statusBarHeight,
-            .size.width = avatarSize,
-            .size.height = avatarSize
+        _avatarsView.frame = (CGRect) {
+            .origin.x = (self.bounds.size.width - avatarSize.width) / 2.0,
+            .origin.y = (self.bounds.size.height - avatarSize.height - statusBarHeight) / 2.0 + statusBarHeight,
+            .size = avatarSize
         };
     }
 
@@ -247,7 +244,7 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
     [_chatMessagesDataSource removeListener:self];
     _chatMessagesDataSource = [_userSession chatMessagesDataSourceForSessionId:_sessionId];
     [_chatMessagesDataSource addListener:self];
-    [_avatarImageView setUserId:_chatMessagesDataSource.firstOtherUserId];
+    [_avatarsView setUserIds:_chatMessagesDataSource.otherUserIds];
     [self _updateTextLabels];
 }
 
@@ -280,7 +277,7 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
 
 - (void)paginatedDataSourceDidChangeContent:(KUSPaginatedDataSource *)dataSource
 {
-    [_avatarImageView setUserId:_chatMessagesDataSource.firstOtherUserId];
+    [_avatarsView setUserIds:_chatMessagesDataSource.otherUserIds];
     [self _updateTextLabels];
 }
 

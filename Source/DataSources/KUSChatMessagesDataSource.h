@@ -30,6 +30,7 @@
 - (void)addListener:(id<KUSChatMessagesDataSourceListener>)listener;
 
 - (NSString *)firstOtherUserId;
+- (NSArray<NSString *> *)otherUserIds;
 - (NSUInteger)unreadCountAfterDate:(NSDate *)date;
 - (BOOL)shouldPreventSendingMessage;
 - (KUSFormQuestion *)currentQuestion;

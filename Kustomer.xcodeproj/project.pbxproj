@@ -150,6 +150,8 @@
 		63EDF3DA1F415797000345D8 /* KUSTrackingTokenDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 63EDF3D81F415797000345D8 /* KUSTrackingTokenDataSource.m */; };
 		63F61A791FF99D3100E56766 /* KUSUpload.h in Headers */ = {isa = PBXBuildFile; fileRef = 63F61A771FF99D3100E56766 /* KUSUpload.h */; };
 		63F61A7A1FF99D3100E56766 /* KUSUpload.m in Sources */ = {isa = PBXBuildFile; fileRef = 63F61A781FF99D3100E56766 /* KUSUpload.m */; };
+		63F61A7D1FFAC86400E56766 /* KUSMultipleAvatarsView.h in Headers */ = {isa = PBXBuildFile; fileRef = 63F61A7B1FFAC86400E56766 /* KUSMultipleAvatarsView.h */; };
+		63F61A7E1FFAC86400E56766 /* KUSMultipleAvatarsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 63F61A7C1FFAC86400E56766 /* KUSMultipleAvatarsView.m */; };
 		6D7CDE24CE12E0916484305C /* Pods_Kustomer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4074C2A1E9213757162ED660 /* Pods_Kustomer.framework */; };
 		7C3913946A295179BE2E925B /* Pods_KustomerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D624913E5C7AD4492EF0D39B /* Pods_KustomerTests.framework */; };
 		FC5BDC34DC026F04AE056627 /* Pods_KustomerExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BBA02B9E3111B375725C25D /* Pods_KustomerExample.framework */; };
@@ -342,6 +344,8 @@
 		63EDF3D81F415797000345D8 /* KUSTrackingTokenDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSTrackingTokenDataSource.m; sourceTree = "<group>"; };
 		63F61A771FF99D3100E56766 /* KUSUpload.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KUSUpload.h; sourceTree = "<group>"; };
 		63F61A781FF99D3100E56766 /* KUSUpload.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KUSUpload.m; sourceTree = "<group>"; };
+		63F61A7B1FFAC86400E56766 /* KUSMultipleAvatarsView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KUSMultipleAvatarsView.h; sourceTree = "<group>"; };
+		63F61A7C1FFAC86400E56766 /* KUSMultipleAvatarsView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KUSMultipleAvatarsView.m; sourceTree = "<group>"; };
 		6BBA02B9E3111B375725C25D /* Pods_KustomerExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KustomerExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F91D0EF26D550F6FA48F5E6 /* Pods-Kustomer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Kustomer.release.xcconfig"; path = "Pods/Target Support Files/Pods-Kustomer/Pods-Kustomer.release.xcconfig"; sourceTree = "<group>"; };
 		A8B9C7F846CD493168479E0A /* Pods-KustomerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KustomerTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-KustomerTests/Pods-KustomerTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -505,6 +509,8 @@
 				6334BE4C1F0C600F00258DAF /* KUSAttributionToolbar.m */,
 				6371779B1F43EDDC00A7F79C /* KUSAvatarImageView.h */,
 				6371779C1F43EDDC00A7F79C /* KUSAvatarImageView.m */,
+				63F61A7B1FFAC86400E56766 /* KUSMultipleAvatarsView.h */,
+				63F61A7C1FFAC86400E56766 /* KUSMultipleAvatarsView.m */,
 				624D7CBB1F7876440039BE90 /* KUSNavigationBarView.h */,
 				624D7CBC1F7876440039BE90 /* KUSNavigationBarView.m */,
 				639FBBBB1F5F98110065AB0B /* KUSNewSessionButton.h */,
@@ -696,6 +702,7 @@
 				636531A51F1BBAA100433A50 /* KustomerViewController.h in Headers */,
 				63BF9C711FEB57B400E30C73 /* KUSFormDataSource.h in Headers */,
 				63D472951F71561100C947F2 /* KUSDelegateProxy.h in Headers */,
+				63F61A7D1FFAC86400E56766 /* KUSMultipleAvatarsView.h in Headers */,
 				633D8FE61F239F9500BAFAC9 /* KUSChatPlaceholderTableViewCell.h in Headers */,
 				63B9CDB21F0890B400120F3E /* Kustomer.h in Headers */,
 				637177AD1F46A28300A7F79C /* KUSUser.h in Headers */,
@@ -1014,6 +1021,7 @@
 				63D9C17E1F2F705100999183 /* KUSChatSettingsDataSource.m in Sources */,
 				637177AE1F46A28300A7F79C /* KUSUser.m in Sources */,
 				63B9CDB31F0890B400120F3E /* Kustomer.m in Sources */,
+				63F61A7E1FFAC86400E56766 /* KUSMultipleAvatarsView.m in Sources */,
 				630236CA1FD84107008B4EA8 /* KUSUserDefaults.m in Sources */,
 				6334BE2B1F0C3E8600258DAF /* KUSModel.m in Sources */,
 				63BF9C721FEB57B400E30C73 /* KUSFormDataSource.m in Sources */,
