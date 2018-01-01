@@ -127,7 +127,11 @@ typedef void (^KUSTrackingTokenCompletion)(NSError *error, NSString *trackingTok
                     bodyData:nil
                authenticated:authenticated
            additionalHeaders:additionalHeaders
-                  completion:completion];
+                  completion:^(NSError *error, NSDictionary *response, NSHTTPURLResponse *httpResponse) {
+                      if (completion) {
+                          completion(error, response);
+                      }
+                  }];
 }
 
 - (void)performRequestType:(KUSRequestType)type
@@ -136,15 +140,15 @@ typedef void (^KUSTrackingTokenCompletion)(NSError *error, NSString *trackingTok
                   bodyData:(NSData *)bodyData
              authenticated:(BOOL)authenticated
          additionalHeaders:(NSDictionary *)additionalHeaders
-                completion:(KUSRequestCompletion)completion
+                completion:(void(^)(NSError *error, NSDictionary *response, NSHTTPURLResponse *httpResponse))completion
 {
-    void (^safeComplete)(NSError *, NSDictionary *) = ^void(NSError *error, NSDictionary *response) {
+    void (^safeComplete)(NSError *, NSDictionary *, NSHTTPURLResponse *) = ^void(NSError *error, NSDictionary *response, NSHTTPURLResponse *httpResponse) {
         if (completion) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (error) {
-                    completion(error, nil);
+                    completion(error, nil, httpResponse);
                 } else {
-                    completion(nil, response);
+                    completion(nil, response, httpResponse);
                 }
             });
         }
@@ -184,7 +188,7 @@ typedef void (^KUSTrackingTokenCompletion)(NSError *error, NSString *trackingTok
 
         void (^responseBlock)(NSData *, NSURLResponse *, NSError *) = ^void(NSData *data, NSURLResponse *response, NSError *error) {
             if (error) {
-                safeComplete(error, nil);
+                safeComplete(error, nil, (NSHTTPURLResponse *)response);
                 return;
             }
             NSError *jsonError;
@@ -196,9 +200,9 @@ typedef void (^KUSTrackingTokenCompletion)(NSError *error, NSString *trackingTok
                 NSError *error = [NSError errorWithDomain:@"com.kustomer.error"
                                                      code:0
                                                  userInfo:kError];
-                safeComplete(error, nil);
+                safeComplete(error, nil, (NSHTTPURLResponse *)response);
             } else {
-                safeComplete(jsonError, json);
+                safeComplete(jsonError, json, (NSHTTPURLResponse *)response);
             }
         };
         NSURLSessionDataTask *dataTask = [_urlSession dataTaskWithRequest:urlRequest completionHandler:responseBlock];
@@ -208,7 +212,7 @@ typedef void (^KUSTrackingTokenCompletion)(NSError *error, NSString *trackingTok
     if (authenticated) {
         [self _dispenseTrackingToken:^(NSError *error, NSString *trackingToken) {
             if (error) {
-                safeComplete(error, nil);
+                safeComplete(error, nil, nil);
             } else {
                 performRequestWithTrackingToken(trackingToken);
             }

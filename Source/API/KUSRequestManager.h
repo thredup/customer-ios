@@ -63,6 +63,6 @@ typedef void (^KUSRequestCompletion)(NSError *error, NSDictionary *response);
                   bodyData:(NSData *)bodyData
              authenticated:(BOOL)authenticated
          additionalHeaders:(NSDictionary *)additionalHeaders
-                completion:(KUSRequestCompletion)completion;
+                completion:(void(^)(NSError *error, NSDictionary *response, NSHTTPURLResponse *httpResponse))completion;
 
 @end

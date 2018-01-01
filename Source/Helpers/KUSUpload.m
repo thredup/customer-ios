@@ -102,7 +102,15 @@
           bodyData:bodyData
           authenticated:NO
           additionalHeaders:@{ @"Content-Type" : contentType }
-          completion:^(NSError *error, NSDictionary *response) {
+          completion:^(NSError *error, NSDictionary *response, NSHTTPURLResponse *httpResponse) {
+              BOOL twoHundred = httpResponse.statusCode >= 200 && httpResponse.statusCode < 300;
+              if (!twoHundred) {
+                  if (completion) {
+                      completion(error ?: [NSError new], nil);
+                  }
+                  return;
+              }
+
               if (completion) {
                   completion(nil, chatAttachment);
               }
