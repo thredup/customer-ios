@@ -74,6 +74,11 @@
 
 - (void)_updateAvatarImage
 {
+    if (_userId == nil && self.companyAvatarImage) {
+        [self setImage:self.companyAvatarImage];
+        return;
+    }
+
     KUSUser *user = _userDataSource.object;
     if (_userDataSource && user == nil && !_userDataSource.isFetching) {
         [_userDataSource fetch];
@@ -103,6 +108,14 @@
     } else if (dataSource == _userDataSource) {
         [self _updateAvatarImage];
     }
+}
+
+#pragma mark - UIAppearance methods
+
+- (void)setCompanyAvatarImage:(UIImage *)companyAvatarImage
+{
+    _companyAvatarImage = companyAvatarImage;
+    [self _updateAvatarImage];
 }
 
 @end

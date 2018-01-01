@@ -108,7 +108,7 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
 {
     [super layoutSubviews];
 
-    CGSize avatarSize = CGSizeMake(90.0, 30.0);
+    CGSize avatarSize = CGSizeMake(self.bounds.size.width - 150.0, 30.0);
     CGFloat statusBarHeight = self.topInset;
     CGFloat labelSidePad = 10.0;
 

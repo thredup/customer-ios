@@ -11,7 +11,7 @@
 #import "KUSAvatarImageView.h"
 #import "KUSImage.h"
 
-static const NSUInteger kKUSMaximumAvatarCount = 3;
+static const NSUInteger kKUSDefaultMaximumAvatarsToDisplay = 3;
 
 @interface KUSMultipleAvatarsView () {
     __weak KUSUserSession *_userSession;
@@ -22,6 +22,16 @@ static const NSUInteger kKUSMaximumAvatarCount = 3;
 @end
 
 @implementation KUSMultipleAvatarsView
+
+#pragma mark - Class methods
+
++ (void)initialize
+{
+    if (self == [KUSMultipleAvatarsView class]) {
+        KUSMultipleAvatarsView *appearance = [KUSMultipleAvatarsView appearance];
+        [appearance setMaximumAvatarsToDisplay:kKUSDefaultMaximumAvatarsToDisplay];
+    }
+}
 
 #pragma mark - Lifecycle methods
 
@@ -96,14 +106,14 @@ static const NSUInteger kKUSMaximumAvatarCount = 3;
 
     NSMutableArray<KUSAvatarImageView *> *avatarViews = [[NSMutableArray alloc] initWithCapacity:_userIds.count + 1];
 
-    for (NSUInteger i = 0; i < MIN(_userIds.count, kKUSMaximumAvatarCount); i++) {
+    for (NSUInteger i = 0; i < MIN(_userIds.count, self.maximumAvatarsToDisplay); i++) {
         NSString *userId = [_userIds objectAtIndex:i];
         KUSAvatarImageView *userAvatarView = [[KUSAvatarImageView alloc] initWithUserSession:_userSession];
         [userAvatarView setUserId:userId];
         [avatarViews addObject:userAvatarView];
     }
 
-    if (avatarViews.count < kKUSMaximumAvatarCount) {
+    if (avatarViews.count < self.maximumAvatarsToDisplay) {
         KUSAvatarImageView *companyAvatarView = [[KUSAvatarImageView alloc] initWithUserSession:_userSession];
         [avatarViews addObject:companyAvatarView];
     }
@@ -113,6 +123,14 @@ static const NSUInteger kKUSMaximumAvatarCount = 3;
     }
     _avatarViews = avatarViews;
     [self setNeedsLayout];
+}
+
+#pragma mark - UIAppearance methods
+
+- (void)setMaximumAvatarsToDisplay:(NSUInteger)maximumAvatarsToDisplay
+{
+    _maximumAvatarsToDisplay = MAX(maximumAvatarsToDisplay, 1);
+    [self _rebuildAvatarViews];
 }
 
 @end

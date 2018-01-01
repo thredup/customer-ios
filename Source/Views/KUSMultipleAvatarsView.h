@@ -11,6 +11,8 @@
 @class KUSUserSession;
 @interface KUSMultipleAvatarsView : UIView
 
+@property (nonatomic, assign) NSUInteger maximumAvatarsToDisplay UI_APPEARANCE_SELECTOR;
+
 @property (nonatomic, copy) NSArray<NSString *> *userIds;
 
 - (instancetype)initWithUserSession:(KUSUserSession *)userSession;

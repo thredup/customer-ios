@@ -11,6 +11,8 @@
 @class KUSUserSession;
 @interface KUSAvatarImageView : UIImageView
 
+@property (nonatomic, strong) UIImage *companyAvatarImage UI_APPEARANCE_SELECTOR;
+
 @property (nonatomic, copy) NSString *userId;
 
 - (instancetype)initWithUserSession:(KUSUserSession *)userSession;
