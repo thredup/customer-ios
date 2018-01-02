@@ -261,7 +261,7 @@
     [self notifyAnnouncersDidLoad];
 }
 
-- (void)_sortMessages
+- (void)sortObjects
 {
     [_fetchedModels sortUsingDescriptors:[self sortDescriptors]];
 }
@@ -310,7 +310,7 @@
         }
     }
 
-    [self _sortMessages];
+    [self sortObjects];
 
     if (didChange) {
         [self notifyAnnouncersDidChangeContent];

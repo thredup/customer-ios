@@ -20,7 +20,12 @@
 - (Class)modelClass;
 - (NSArray<NSSortDescriptor *> *)sortDescriptors;
 
+- (void)sortObjects;
 - (void)removeObjects:(NSArray<KUSModel *> *)objects;
 - (void)upsertObjects:(NSArray<KUSModel *> *)objects;
+
+- (void)notifyAnnouncersDidChangeContent;
+- (void)notifyAnnouncersDidError:(NSError *)error;
+- (void)notifyAnnouncersDidLoad;
 
 @end

@@ -414,7 +414,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
                  return;
              }
 
-             NSArray<NSString *> *attachmentIds = [attachments valueForKeyPath:@"@unionOfObjects.oid"];;
+             NSArray<NSString *> *attachmentIds = [attachments valueForKeyPath:@"@unionOfObjects.oid"];
              [self.userSession.requestManager
               performRequestType:KUSRequestTypePost
               endpoint:@"/c/v1/chat/messages"

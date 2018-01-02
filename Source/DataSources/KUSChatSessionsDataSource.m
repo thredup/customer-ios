@@ -19,7 +19,7 @@
 
 @end
 
-@interface KUSChatSessionsDataSource () <KUSPaginatedDataSourceListener> {
+@interface KUSChatSessionsDataSource () <KUSChatMessagesDataSourceListener> {
     NSDictionary<NSString *, NSObject *> *_pendingCustomChatSessionAttributes;
 
     NSMutableDictionary<NSString *, NSDate *> *_localLastSeenAtBySessionId;
@@ -243,12 +243,26 @@
 
 - (void)paginatedDataSourceDidChangeContent:(KUSPaginatedDataSource *)dataSource
 {
-    if (_pendingCustomChatSessionAttributes) {
-        KUSChatSession *mostRecentChatSession = [self _mostRecentChatSession];
-        NSString *mostRecentChatSessionId = mostRecentChatSession.oid;
-        if (mostRecentChatSessionId) {
-            [self _flushCustomAttributes:_pendingCustomChatSessionAttributes toChatSessionId:mostRecentChatSessionId];
-            _pendingCustomChatSessionAttributes = nil;
+    if (dataSource == self) {
+        if (_pendingCustomChatSessionAttributes) {
+            KUSChatSession *mostRecentChatSession = [self _mostRecentChatSession];
+            NSString *mostRecentChatSessionId = mostRecentChatSession.oid;
+            if (mostRecentChatSessionId) {
+                [self _flushCustomAttributes:_pendingCustomChatSessionAttributes toChatSessionId:mostRecentChatSessionId];
+                _pendingCustomChatSessionAttributes = nil;
+            }
+        }
+
+        NSArray<NSString *> *sessionIds = [self.allObjects valueForKeyPath:@"@unionOfObjects.oid"];
+        for (NSString *sessionId in sessionIds) {
+            KUSChatMessagesDataSource *messagesDataSource = [self.userSession chatMessagesDataSourceForSessionId:sessionId];
+            [messagesDataSource addListener:self];
+        }
+    } else if ([dataSource isKindOfClass:[KUSChatMessagesDataSource class]]) {
+        NSArray<KUSChatSession *> *previousObjects = self.allObjects;
+        [self sortObjects];
+        if (![previousObjects isEqualToArray:self.allObjects]) {
+            [self notifyAnnouncersDidChangeContent];
         }
     }
 }
@@ -259,7 +273,11 @@
 
 - (NSDate *)sortDate
 {
-    return self.lastMessageAt ?: self.createdAt;
+    KUSUserSession *userSession = [Kustomer sharedInstance].userSession;
+    KUSChatMessagesDataSource *messagesDataSource = [userSession chatMessagesDataSourceForSessionId:self.oid];
+    KUSChatMessage *chatMessage = (messagesDataSource.count ? [messagesDataSource objectAtIndex:0] : nil);
+    NSDate *laterLastMessageAt = [chatMessage.createdAt ?: self.lastMessageAt laterDate:self.lastMessageAt];
+    return laterLastMessageAt ?: self.createdAt;
 }
 
 @end
