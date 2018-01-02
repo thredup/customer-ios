@@ -10,6 +10,13 @@
 
 @interface KUSNavigationController : UINavigationController
 
+- (instancetype)init NS_UNAVAILABLE;
+- (instancetype)initWithNavigationBarClass:(Class)navigationBarClass toolbarClass:(Class)toolbarClass NS_UNAVAILABLE;
+
+// Custom setter if you want a specific status bar style (e.g. if you have customized the appearance)
 - (void)setPreferredStatusBarStyle:(UIStatusBarStyle)preferredStatusBarStyle;
+
+// Custom setter if you want to disable any interface orientations
+- (void)setSupportedInterfaceOrientations:(UIInterfaceOrientationMask)supportedInterfaceOrientations;
 
 @end

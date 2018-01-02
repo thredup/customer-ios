@@ -14,4 +14,6 @@
 
 - (instancetype)init;
 
+- (instancetype)initWithRootViewController:(UIViewController *)rootViewController NS_UNAVAILABLE;
+
 @end

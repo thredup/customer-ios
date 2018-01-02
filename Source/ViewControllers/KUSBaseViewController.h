@@ -10,19 +10,19 @@
 
 @interface KUSBaseViewController : UIViewController
 
-// Layout logic
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil NS_UNAVAILABLE;
+- (instancetype)initWithCoder:(NSCoder *)aDecoder NS_UNAVAILABLE;
 
+// Layout logic
 - (UIEdgeInsets)edgeInsets;
 
 // State helpers
-
 - (void)showLoadingIndicatorWithText:(NSString *)text;
 - (void)showLoadingIndicator;
 - (void)hideLoadingIndicator;
 - (void)showErrorWithText:(NSString *)text;
 
 // Subclass overridable methods
-
 - (void)userTappedRetryButton;
 
 @end

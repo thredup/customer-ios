@@ -13,6 +13,7 @@
 
 @interface KUSNavigationController () <UIGestureRecognizerDelegate> {
     UIStatusBarStyle _preferredStatusBarStyle;
+    UIInterfaceOrientationMask _supportedInterfaceOrientations;
 }
 
 @end
@@ -21,30 +22,16 @@
 
 #pragma mark - Lifecycle methods
 
-- (instancetype)init
-{
-    self = [super initWithNavigationBarClass:nil toolbarClass:[KUSAttributionToolbar class]];
-    if (self) {
-        [self _commonInit];
-    }
-    return self;
-}
-
 - (instancetype)initWithRootViewController:(UIViewController *)rootViewController
 {
     self = [super initWithNavigationBarClass:nil toolbarClass:[KUSAttributionToolbar class]];
     if (self) {
-        [self _commonInit];
-        [self pushViewController:rootViewController animated:NO];
-    }
-    return self;
-}
+        _preferredStatusBarStyle = UIStatusBarStyleDefault;
+        _supportedInterfaceOrientations = UIInterfaceOrientationMaskAll;
 
-- (instancetype)initWithNavigationBarClass:(Class)navigationBarClass toolbarClass:(Class)toolbarClass
-{
-    self = [super initWithNavigationBarClass:navigationBarClass toolbarClass:toolbarClass];
-    if (self) {
-        [self _commonInit];
+        [self setNavigationBarHidden:YES];
+        [self setToolbarHidden:NO];
+        [self pushViewController:rootViewController animated:NO];
     }
     return self;
 }
@@ -56,16 +43,7 @@
     self.interactivePopGestureRecognizer.delegate = self;
 }
 
-#pragma mark - Internal methods
-
-- (void)_commonInit
-{
-    self.navigationBarHidden = YES;
-    self.toolbarHidden = NO;
-    _preferredStatusBarStyle = UIStatusBarStyleDefault;
-}
-
-#pragma mark - Status bar appearance methods
+#pragma mark - UIViewController orientation & status bar override methods
 
 - (void)setPreferredStatusBarStyle:(UIStatusBarStyle)preferredStatusBarStyle
 {
@@ -76,6 +54,16 @@
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     return _preferredStatusBarStyle;
+}
+
+- (void)setSupportedInterfaceOrientations:(UIInterfaceOrientationMask)supportedInterfaceOrientations
+{
+    _supportedInterfaceOrientations = supportedInterfaceOrientations;
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+{
+    return _supportedInterfaceOrientations;
 }
 
 #pragma mark - UIGestureRecognizerDelegate methods

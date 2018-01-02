@@ -64,6 +64,10 @@ static NSString *kKustomerOrgNameKey = @"orgName";
 {
     UIViewController *topMostViewController = KUSTopMostViewController();
     if (topMostViewController) {
+        if ([topMostViewController isKindOfClass:[KustomerViewController class]]) {
+            KUSLogError(@"Kustomer support is already presented");
+            return;
+        }
         KustomerViewController *kustomerViewController = [[KustomerViewController alloc] init];
         [topMostViewController presentViewController:kustomerViewController animated:YES completion:nil];
     } else {
@@ -75,6 +79,10 @@ static NSString *kKustomerOrgNameKey = @"orgName";
 {
     UIViewController *topMostViewController = KUSTopMostViewController();
     if (topMostViewController) {
+        if ([topMostViewController isKindOfClass:[KnowledgeBaseViewController class]]) {
+            KUSLogError(@"KnowledgeBase is already presented");
+            return;
+        }
         KnowledgeBaseViewController *knowledgeBaseViewController = [[KnowledgeBaseViewController alloc] init];
         [topMostViewController presentViewController:knowledgeBaseViewController animated:YES completion:nil];
     } else {

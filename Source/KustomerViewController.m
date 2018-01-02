@@ -13,10 +13,6 @@
 #import "KUSSessionsViewController.h"
 #import "KUSUserSession.h"
 
-@interface KustomerViewController ()
-
-@end
-
 @implementation KustomerViewController
 
 #pragma mark - Lifecycle methods

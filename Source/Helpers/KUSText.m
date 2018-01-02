@@ -63,7 +63,7 @@ NSDictionary<NSString *, id> *KUSAttributedFontWithSize(NSDictionary<NSString *,
     return mutableAttributes;
 };
 
-static NSString *kEmailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+static NSString *kEmailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,5}";
 + (BOOL)isValidEmail:(NSString *)text
 {
     if (text.length == 0) {

@@ -60,8 +60,9 @@
 - (void)_playMessageReceivedSound
 {
     NSURL *fileURL = [[NSBundle bundleForClass:[self class]] URLForResource:@"message_received" withExtension:@"m4a"];
-    AVAudioPlayer *audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:fileURL error:NULL];
-    if (audioPlayer) {
+    NSError *audioError;
+    AVAudioPlayer *audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:fileURL error:&audioError];
+    if (audioPlayer && audioError == nil) {
         [_playingAudioPlayers addObject:audioPlayer];
         audioPlayer.delegate = self;
         [audioPlayer play];
