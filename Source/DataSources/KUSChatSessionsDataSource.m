@@ -239,6 +239,22 @@
     return [chatSessionDate ?: localDate laterDate:localDate];
 }
 
+- (NSUInteger)totalUnreadCountExcludingSessionId:(NSString *)excludedSessionId
+{
+    NSUInteger count = 0;
+    for (KUSChatSession *session in self.allObjects) {
+        NSString *sessionId = session.oid;
+        if (excludedSessionId && [excludedSessionId isEqualToString:sessionId]) {
+            continue;
+        }
+        KUSChatMessagesDataSource *messagesDataSource = [self.userSession chatMessagesDataSourceForSessionId:sessionId];
+        NSDate *sessionLastSeenAt = [self lastSeenAtForSessionId:sessionId];
+        NSUInteger unreadCountForSession = [messagesDataSource unreadCountAfterDate:sessionLastSeenAt];
+        count += unreadCountForSession;
+    }
+    return count;
+}
+
 #pragma mark - KUSPaginatedDataSourceListener methods
 
 - (void)paginatedDataSourceDidChangeContent:(KUSPaginatedDataSource *)dataSource
@@ -259,11 +275,8 @@
             [messagesDataSource addListener:self];
         }
     } else if ([dataSource isKindOfClass:[KUSChatMessagesDataSource class]]) {
-        NSArray<KUSChatSession *> *previousObjects = self.allObjects;
         [self sortObjects];
-        if (![previousObjects isEqualToArray:self.allObjects]) {
-            [self notifyAnnouncersDidChangeContent];
-        }
+        [self notifyAnnouncersDidChangeContent];
     }
 }
 

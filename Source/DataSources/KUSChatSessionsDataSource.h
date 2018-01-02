@@ -28,4 +28,7 @@
 // Returns the lastSeenAt for a given session, using the data model as well as augmented by a local store
 - (NSDate *)lastSeenAtForSessionId:(NSString *)sessionId;
 
+// Returns the total unread message count for all sessions excluding the specified sessionId
+- (NSUInteger)totalUnreadCountExcludingSessionId:(NSString *)excludedSessionId;
+
 @end

@@ -32,6 +32,7 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
     UIView *_separatorView;
 
     UIButton *_backButton;
+    UILabel *_unreadCountLabel;
     UIButton *_dismissButton;
 }
 
@@ -52,6 +53,9 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
         [appearance setGreetingFont:[UIFont systemFontOfSize:11.0]];
         [appearance setSeparatorColor:[KUSColor grayColor]];
         [appearance setTintColor:[KUSColor darkGrayColor]];
+        [appearance setUnreadColor:[UIColor whiteColor]];
+        [appearance setUnreadBackgroundColor:[KUSColor redColor]];
+        [appearance setUnreadFont:[UIFont systemFontOfSize:10.0]];
 
         UIImage *backButtonImage = [KUSImage leftChevronWithColor:[UIColor blackColor] size:kKUSNavigationBarBackImageSize lineWidth:2.5];
         appearance.backButtonImage = [backButtonImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -93,13 +97,21 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
         [_backButton addTarget:self action:@selector(_onBackButton:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_backButton];
 
+        _unreadCountLabel = [[UILabel alloc] init];
+        _unreadCountLabel.textAlignment = NSTextAlignmentCenter;
+        _unreadCountLabel.layer.masksToBounds = YES;
+        _unreadCountLabel.layer.cornerRadius = 4.0;
+        [_backButton addSubview:_unreadCountLabel];
+
         _dismissButton = [[KUSFadingButton alloc] init];
         _dismissButton.hidden = YES;
         [_dismissButton addTarget:self action:@selector(_onDismissButton:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_dismissButton];
 
+        [_userSession.chatSessionsDataSource addListener:self];
         [_userSession.chatSettingsDataSource addListener:self];
         [self _updateTextLabels];
+        [self _updateBackButtonBadge];
     }
     return self;
 }
@@ -175,6 +187,14 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
         .origin.y = _topInset,
         .size = kKUSNavigationBarBackButtonSize
     };
+    CGSize unreadSize = [_unreadCountLabel sizeThatFits:CGSizeMake(CGFLOAT_MAX, 15.0)];
+    unreadSize.height = MAX(ceil(unreadSize.height + 4.0), 15.0);
+    unreadSize.width = MAX(ceil(unreadSize.width + 4.0), 15.0);
+    _unreadCountLabel.frame = (CGRect) {
+        .origin.x = _backButton.frame.size.width / 2.0 + _backButtonImage.size.width / 2.0 + 4.0,
+        .origin.y = (_backButton.frame.size.height - unreadSize.height) / 2.0,
+        .size = unreadSize
+    };
     _dismissButton.frame = (CGRect) {
         .origin.x = self.bounds.size.width - kKUSNavigationBarDismissButtonSize.width,
         .origin.y = _topInset,
@@ -204,6 +224,18 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
     }
     _nameLabel.text = responderName;
     _greetingLabel.text = chatSettings.greeting;
+}
+
+- (void)_updateBackButtonBadge
+{
+    NSUInteger unreadCount = [_userSession.chatSessionsDataSource totalUnreadCountExcludingSessionId:_sessionId];
+    if (unreadCount > 0) {
+        _unreadCountLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)unreadCount];
+        _unreadCountLabel.hidden = NO;
+    } else {
+        _unreadCountLabel.hidden = YES;
+    }
+    [self setNeedsLayout];
 }
 
 #pragma mark - Interface element methods
@@ -246,6 +278,7 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
     [_chatMessagesDataSource addListener:self];
     [_avatarsView setUserIds:_chatMessagesDataSource.otherUserIds];
     [self _updateTextLabels];
+    [self _updateBackButtonBadge];
 }
 
 - (void)setShowsLabels:(BOOL)showsLabels
@@ -277,8 +310,12 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
 
 - (void)paginatedDataSourceDidChangeContent:(KUSPaginatedDataSource *)dataSource
 {
-    [_avatarsView setUserIds:_chatMessagesDataSource.otherUserIds];
-    [self _updateTextLabels];
+    if (dataSource == _chatMessagesDataSource) {
+        [_avatarsView setUserIds:_chatMessagesDataSource.otherUserIds];
+        [self _updateTextLabels];
+    } else if (dataSource == _userSession.chatSessionsDataSource) {
+        [self _updateBackButtonBadge];
+    }
 }
 
 #pragma mark - UIAppearance methods
@@ -323,6 +360,24 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
 {
     _dismissButtonImage = dismissButtonImage;
     [_dismissButton setImage:dismissButtonImage forState:UIControlStateNormal];
+}
+
+- (void)setUnreadColor:(UIColor *)unreadColor
+{
+    _unreadColor = unreadColor;
+    _unreadCountLabel.textColor = [UIColor whiteColor];
+}
+
+- (void)setUnreadBackgroundColor:(UIColor *)unreadBackgroundColor
+{
+    _unreadBackgroundColor = unreadBackgroundColor;
+    _unreadCountLabel.layer.backgroundColor = _unreadBackgroundColor.CGColor;
+}
+
+- (void)setUnreadFont:(UIFont *)unreadFont
+{
+    _unreadFont = unreadFont;
+    _unreadCountLabel.font = _unreadFont;
 }
 
 @end

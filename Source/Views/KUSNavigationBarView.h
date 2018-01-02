@@ -27,6 +27,9 @@
 @property (nonatomic, strong) UIColor *separatorColor UI_APPEARANCE_SELECTOR;
 @property (nonatomic, strong) UIImage *backButtonImage UI_APPEARANCE_SELECTOR;
 @property (nonatomic, strong) UIImage *dismissButtonImage UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIColor *unreadColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIColor *unreadBackgroundColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIFont *unreadFont UI_APPEARANCE_SELECTOR;
 
 @property (nonatomic, copy) NSString *sessionId;
 @property (nonatomic, assign) BOOL showsLabels;

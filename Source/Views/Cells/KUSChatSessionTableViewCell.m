@@ -192,7 +192,7 @@ CGFloat KUSChatSessionTableViewCellHeight = 88.0;
     };
 
     CGSize unreadSize = [self.unreadCountLabel sizeThatFits:CGSizeMake(CGFLOAT_MAX, 15.0)];
-    unreadSize.height = 15.0;
+    unreadSize.height = MAX(ceil(unreadSize.height + 4.0), 15.0);
     unreadSize.width = MAX(ceil(unreadSize.width + 4.0), 15.0);
     self.unreadCountLabel.frame = (CGRect) {
         .origin.x = self.bounds.size.width - rightMargin - unreadSize.width,
