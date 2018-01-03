@@ -160,7 +160,8 @@ typedef void (^KUSTrackingTokenCompletion)(NSError *error, NSString *trackingTok
     };
 
     void (^performRequestWithTrackingToken)(NSString *) = ^void(NSString *trackingToken) {
-        KUSLogRequest(@"Performing request: %@%@%@", URL.path, URL.query.length ? @"?" : @"", URL.query ?: @"");
+        KUSLogRequest(@"Performing request: %@ %@%@%@", KUSRequestTypeToString(type),
+                      URL.path, URL.query.length ? @"?" : @"", URL.query ?: @"");
 
         NSURL *finalURL = (type == KUSRequestTypeGet ? KUSURLFromURLAndQueryParams(URL, params) : URL);
         NSMutableURLRequest *urlRequest = [[NSMutableURLRequest alloc] initWithURL:finalURL];
