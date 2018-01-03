@@ -212,6 +212,11 @@ static KUSLogOptions _logOptions = KUSLogOptionInfo | KUSLogOptionErrors;
     [self.userSession.delegateProxy setDelegate:self.delegate];
 }
 
++ (NSString *)sdkVersion
+{
+    return [NSBundle bundleForClass:self].infoDictionary[@"CFBundleShortVersionString"];
+}
+
 #pragma mark - Helper functions
 
 NS_INLINE NSString *paddedBase64String(NSString *base64String) {

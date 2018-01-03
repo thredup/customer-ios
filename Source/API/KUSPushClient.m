@@ -300,9 +300,13 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
 - (void)pusher:(PTPusher *)pusher willAuthorizeChannel:(PTPusherChannel *)channel
 withAuthOperation:(PTPusherChannelAuthorizationOperation *)operation
 {
-    [operation.mutableURLRequest setValue:kKustomerCORSHeaderValue forHTTPHeaderField:kKustomerCORSHeaderKey];
     [operation.mutableURLRequest setValue:_userSession.trackingTokenDataSource.currentTrackingToken
                        forHTTPHeaderField:kKustomerTrackingTokenHeaderKey];
+
+    NSDictionary<NSString *, NSString *> *genericHTTPHeaderValues = [_userSession.requestManager genericHTTPHeaderValues];
+    for (NSString *key in genericHTTPHeaderValues) {
+        [operation.mutableURLRequest setValue:genericHTTPHeaderValues[key] forHTTPHeaderField:key];
+    }
 }
 
 - (void)pusher:(PTPusher *)pusher didSubscribeToChannel:(PTPusherChannel *)channel

@@ -32,6 +32,9 @@ FOUNDATION_EXPORT const unsigned char KustomerVersionString[];
 // A convenience method that will present the knowledgebase interface on the topmost view controller
 + (void)presentKnowledgeBase;
 
+// The current SDK version
++ (NSString *)sdkVersion;
+
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)new NS_UNAVAILABLE;
 

@@ -16,8 +16,6 @@ typedef NS_ENUM(NSInteger, KUSRequestType) {
     KUSRequestTypeDelete
 };
 
-extern NSString *const kKustomerCORSHeaderKey;
-extern NSString *const kKustomerCORSHeaderValue;
 extern NSString *const kKustomerTrackingTokenHeaderKey;
 
 typedef void (^KUSRequestCompletion)(NSError *error, NSDictionary *response);
@@ -31,6 +29,8 @@ typedef void (^KUSRequestCompletion)(NSError *error, NSDictionary *response);
 // URL methods
 
 - (NSURL *)URLForEndpoint:(NSString *)endpoint;
+
+- (NSDictionary<NSString *, NSString *> *)genericHTTPHeaderValues;
 
 // Request methods
 

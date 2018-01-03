@@ -15,8 +15,6 @@
 #import "KUSUserSession.h"
 #import "Kustomer_Private.h"
 
-NSString *const kKustomerCORSHeaderKey = @"X-Kustomer";
-NSString *const kKustomerCORSHeaderValue = @"kustomer";
 NSString *const kKustomerTrackingTokenHeaderKey = @"x-kustomer-tracking-token";
 
 typedef void (^KUSTrackingTokenCompletion)(NSError *error, NSString *trackingToken);
@@ -24,8 +22,7 @@ typedef void (^KUSTrackingTokenCompletion)(NSError *error, NSString *trackingTok
 @interface KUSRequestManager () <KUSObjectDataSourceListener> {
     __weak KUSUserSession *_userSession;
 
-    NSString *_acceptLanguageHeaderValue;
-    NSString *_userAgentHeaderValue;
+    NSDictionary<NSString *, NSString *> *_genericHTTPHeaderValues;
 }
 
 @property (nonatomic, strong, readonly) NSString *baseUrlString;
@@ -48,8 +45,11 @@ typedef void (^KUSTrackingTokenCompletion)(NSError *error, NSString *trackingTok
 
         _baseUrlString = [NSString stringWithFormat:@"https://%@.api.%@",
                           _userSession.orgName, [Kustomer hostDomain]];
-        _acceptLanguageHeaderValue = KUSAcceptLanguageHeaderValue();
-        _userAgentHeaderValue = KUSUserAgentHeaderValue();
+        _genericHTTPHeaderValues = @{
+            @"X-Kustomer": @"kustomer",                         // CORS Header
+            @"Accept-Language": KUSAcceptLanguageHeaderValue(), // Accept-Language Header
+            @"User-Agent": KUSUserAgentHeaderValue(),           // User-Agent Header
+        };
 
         _queue = dispatch_queue_create("com.kustomer.request-manager", nil);
 
@@ -72,6 +72,11 @@ typedef void (^KUSTrackingTokenCompletion)(NSError *error, NSString *trackingTok
 {
     NSString *endpointUrlString = [NSString stringWithFormat:@"%@%@", self.baseUrlString, endpoint];
     return [NSURL URLWithString:endpointUrlString];
+}
+
+- (NSDictionary<NSString *, NSString *> *)genericHTTPHeaderValues
+{
+    return _genericHTTPHeaderValues;
 }
 
 #pragma mark - Request methods
@@ -161,12 +166,9 @@ typedef void (^KUSTrackingTokenCompletion)(NSError *error, NSString *trackingTok
         NSMutableURLRequest *urlRequest = [[NSMutableURLRequest alloc] initWithURL:finalURL];
         [urlRequest setHTTPMethod:KUSRequestTypeToString(type)];
 
-        // CORS Header
-        [urlRequest setValue:kKustomerCORSHeaderValue forHTTPHeaderField:kKustomerCORSHeaderKey];
-        // Accept-Language Header
-        [urlRequest setValue:_acceptLanguageHeaderValue forHTTPHeaderField:@"Accept-Language"];
-        // User-Agent Header
-        [urlRequest setValue:_userAgentHeaderValue forHTTPHeaderField:@"User-Agent"];
+        for (NSString *key in _genericHTTPHeaderValues) {
+            [urlRequest setValue:_genericHTTPHeaderValues[key] forHTTPHeaderField:key];
+        }
 
         for (NSString *headerField in additionalHeaders) {
             [urlRequest setValue:additionalHeaders[headerField] forHTTPHeaderField:headerField];
@@ -266,18 +268,13 @@ typedef void (^KUSTrackingTokenCompletion)(NSError *error, NSString *trackingTok
         BOOL isKustomer = [url.absoluteString hasPrefix:self->_baseUrlString];
         if (isKustomer) {
             NSMutableDictionary<NSString *, NSString *> *responseHeaders = [(headers ?: @{}) mutableCopy];
+            [responseHeaders addEntriesFromDictionary:strongSelf->_genericHTTPHeaderValues];
 
             // Tracking token
             NSString *trackingToken = strongSelf->_userSession.trackingTokenDataSource.currentTrackingToken;
             if (trackingToken) {
                 [responseHeaders setObject:trackingToken forKey:kKustomerTrackingTokenHeaderKey];
             }
-            // CORS Header
-            [responseHeaders setObject:kKustomerCORSHeaderValue forKey:kKustomerCORSHeaderKey];
-            // Accept-Language Header
-            [responseHeaders setObject:strongSelf->_acceptLanguageHeaderValue forKey:@"Accept-Language"];
-            // User-Agent Header
-            [responseHeaders setObject:strongSelf->_userAgentHeaderValue forKey:@"User-Agent"];
 
             return responseHeaders;
         }
@@ -378,7 +375,7 @@ static NSString *KUSAcceptLanguageHeaderValue()
 static NSString *KUSUserAgentHeaderValue()
 {
     // See http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.43
-    NSDictionary<NSString *, id> *bundleInfo = [[NSBundle mainBundle] infoDictionary];
+    NSDictionary<NSString *, id> *bundleInfo = [[NSBundle bundleForClass:[Kustomer class]] infoDictionary];
     return [NSString stringWithFormat:@"%@/%@ (%@; iOS %@; Scale/%0.2f)",
             bundleInfo[(__bridge NSString *)kCFBundleExecutableKey] ?: bundleInfo[(__bridge NSString *)kCFBundleIdentifierKey],
             bundleInfo[@"CFBundleShortVersionString"] ?: bundleInfo[(__bridge NSString *)kCFBundleVersionKey],
