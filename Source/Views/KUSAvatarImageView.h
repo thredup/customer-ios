@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @class KUSUserSession;
-@interface KUSAvatarImageView : UIImageView
+@interface KUSAvatarImageView : UIView
 
 @property (nonatomic, strong) UIImage *companyAvatarImage UI_APPEARANCE_SELECTOR;
 

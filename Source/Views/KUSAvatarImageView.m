@@ -18,6 +18,9 @@
     __weak KUSUserSession *_userSession;
 
     __weak KUSUserDataSource *_userDataSource;
+
+    UIImageView *_staticImageView;
+    UIImageView *_remoteImageView;
 }
 
 @end
@@ -30,12 +33,17 @@
 {
     self = [super init];
     if (self) {
-        _userSession = userSession;
-
-        self.contentMode = UIViewContentModeScaleAspectFill;
         self.layer.masksToBounds = YES;
-
+        _userSession = userSession;
         [_userSession.chatSettingsDataSource addListener:self];
+
+        _staticImageView = [[UIImageView alloc] initWithFrame:self.bounds];
+        _staticImageView.contentMode = UIViewContentModeScaleAspectFill;
+        [self addSubview:_staticImageView];
+
+        _remoteImageView = [[UIImageView alloc] initWithFrame:self.bounds];
+        _remoteImageView.contentMode = UIViewContentModeScaleAspectFill;
+        [self addSubview:_remoteImageView];
 
         [self _updateAvatarImage];
     }
@@ -43,6 +51,13 @@
 }
 
 #pragma mark - View methods
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    _staticImageView.frame = self.bounds;
+    _remoteImageView.frame = self.bounds;
+}
 
 - (void)setBounds:(CGRect)bounds
 {
@@ -75,7 +90,8 @@
 - (void)_updateAvatarImage
 {
     if (_userId == nil && self.companyAvatarImage) {
-        [self setImage:self.companyAvatarImage];
+        _staticImageView.image = self.companyAvatarImage;
+        [_remoteImageView sd_setImageWithURL:nil];
         return;
     }
 
@@ -88,15 +104,14 @@
         [_userSession.chatSettingsDataSource fetch];
     }
 
+    // Render the default/fallback image into the static image view
     NSString *name = user.displayName ?: chatSettings.teamName ?: _userSession.organizationName;
-    NSURL *iconURL = user.avatarURL ?: chatSettings.teamIconURL;
-
     UIImage *placeholderImage = [KUSImage defaultAvatarImageForName:name];
-    if (iconURL) {
-        [self sd_setImageWithURL:iconURL placeholderImage:placeholderImage];
-    } else {
-        [self setImage:placeholderImage];
-    }
+    _staticImageView.image = placeholderImage;
+
+    // Load the dynamic URL into the remote image view
+    NSURL *iconURL = user.avatarURL ?: chatSettings.teamIconURL;
+    [_remoteImageView sd_setImageWithURL:iconURL];
 }
 
 #pragma mark - KUSObjectDataSourceListener methods
