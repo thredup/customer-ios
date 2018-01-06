@@ -79,20 +79,13 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
 - (void)_connectToChannelsIfNecessary
 {
     KUSChatSettings *chatSettings = _userSession.chatSettingsDataSource.object;
-    if (chatSettings.pusherAccessKey == nil) {
-        return;
-    }
-    if (_userSession.trackingTokenDataSource.currentTrackingToken == nil) {
-        return;
-    }
-
-    if (_pusherClient == nil) {
+    if (_pusherClient == nil && chatSettings.pusherAccessKey) {
         _pusherClient = [PTPusher pusherWithKey:chatSettings.pusherAccessKey delegate:self encrypted:YES];
         _pusherClient.authorizationURL = [self _pusherAuthURL];
     }
 
     // Connect or disconnect from pusher
-    if ([self _shouldBeConnectedToPusher]) {
+    if (_pusherClient && [self _shouldBeConnectedToPusher]) {
         [_pusherClient connect];
 
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(KUSLazyPollingTimerInterval * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -101,7 +94,6 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
     } else {
         [_pusherClient disconnect];
     }
-    [self _updatePollingTimer];
 
     NSString *pusherChannelName = [self _pusherChannelName];
     if (pusherChannelName && _pusherChannel == nil) {
@@ -110,6 +102,8 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
                                             target:self
                                             action:@selector(_onPusherChatMessageSend:)];
     }
+
+    [self _updatePollingTimer];
 }
 
 - (void)_updatePollingTimer
@@ -138,7 +132,7 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
                 KUSLogPusher(@"Started active polling timer");
             }
         }
-    } else {
+    } else if (_userSession.chatSessionsDataSource.count > 0) {
         // Make sure we're polling lazily
         if (_pollingTimer == nil || _pollingTimer.timeInterval != KUSLazyPollingTimerInterval) {
             [_pollingTimer invalidate];
@@ -229,9 +223,11 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
 
 #pragma mark - KUSPaginatedDataSourceListener methods
 
-- (void)paginatedDataSourceDidLoad:(KUSPaginatedDataSource *)dataSource
+- (void)paginatedDataSourceDidChangeContent:(KUSPaginatedDataSource *)dataSource
 {
     if (dataSource == _userSession.chatSessionsDataSource) {
+        [self _connectToChannelsIfNecessary];
+
         // Only consider new messages here if we're actively polling
         if (_pollingTimer == nil) {
             return;
@@ -264,10 +260,7 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
             [self _notifyForUpdatedChatSession:updatedSessionId];
             updatedSessionId = nil;
         }
-
-        [self _connectToChannelsIfNecessary];
     }
-
 }
 
 #pragma mark - PTPusherDelegate methods
