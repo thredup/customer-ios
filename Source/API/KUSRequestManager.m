@@ -49,6 +49,8 @@ typedef void (^KUSTrackingTokenCompletion)(NSError *error, NSString *trackingTok
             @"X-Kustomer": @"kustomer",                         // CORS Header
             @"Accept-Language": KUSAcceptLanguageHeaderValue(), // Accept-Language Header
             @"User-Agent": KUSUserAgentHeaderValue(),           // User-Agent Header
+            @"x-kustomer-client": @"iOS",                       // Kustomer client Header
+            @"x-kustomer-version": [Kustomer sdkVersion],       // Kustomer version Header
         };
 
         _queue = dispatch_queue_create("com.kustomer.request-manager", nil);
@@ -376,7 +378,7 @@ static NSString *KUSAcceptLanguageHeaderValue()
 static NSString *KUSUserAgentHeaderValue()
 {
     // See http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.43
-    NSDictionary<NSString *, id> *bundleInfo = [[NSBundle bundleForClass:[Kustomer class]] infoDictionary];
+    NSDictionary<NSString *, id> *bundleInfo = [[NSBundle mainBundle] infoDictionary];
     return [NSString stringWithFormat:@"%@/%@ (%@; iOS %@; Scale/%0.2f)",
             bundleInfo[(__bridge NSString *)kCFBundleExecutableKey] ?: bundleInfo[(__bridge NSString *)kCFBundleIdentifierKey],
             bundleInfo[@"CFBundleShortVersionString"] ?: bundleInfo[(__bridge NSString *)kCFBundleVersionKey],
