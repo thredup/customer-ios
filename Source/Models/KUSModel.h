@@ -31,6 +31,7 @@ NSString *_Nullable NSStringFromKeyPath(NSDictionary * _Nullable dict, NSString 
 NSArray *_Nullable NSArrayFromKeyPath(NSDictionary * _Nullable dict, NSString * _Nonnull keyPath);
 BOOL BOOLFromKeyPath(NSDictionary * _Nullable dict, NSString * _Nonnull keyPath);
 NSInteger IntegerFromKeyPath(NSDictionary * _Nullable dict, NSString * _Nonnull keyPath);
+double DoubleFromKeyPath(NSDictionary * _Nullable dict, NSString * _Nonnull keyPath);
 NSDate * _Nullable DateFromKeyPath(NSDictionary * _Nullable dict, NSString * _Nonnull keyPath);
 
 @end

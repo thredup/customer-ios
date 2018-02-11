@@ -128,6 +128,15 @@ NSInteger IntegerFromKeyPath(NSDictionary * _Nullable dict, NSString * _Nonnull 
     return 0;
 }
 
+double DoubleFromKeyPath(NSDictionary * _Nullable dict, NSString * _Nonnull keyPath)
+{
+    id value = [dict valueForKeyPath:keyPath];
+    if ([value respondsToSelector:@selector(doubleValue)]) {
+        return [value doubleValue];
+    }
+    return 0.0;
+}
+
 NSDate *DateFromKeyPath(NSDictionary * _Nullable dict, NSString * _Nonnull keyPath)
 {
     NSString *value = NSStringFromKeyPath(dict, keyPath);
