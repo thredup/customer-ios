@@ -17,6 +17,8 @@
 		630BA33E2030040400C80CD2 /* KUSClientActivity.h in Headers */ = {isa = PBXBuildFile; fileRef = 630BA33C2030040400C80CD2 /* KUSClientActivity.h */; };
 		630BA33F2030040400C80CD2 /* KUSClientActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 630BA33D2030040400C80CD2 /* KUSClientActivity.m */; };
 		630BA341203005F500C80CD2 /* KUSClientActivityTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 630BA340203005F500C80CD2 /* KUSClientActivityTest.m */; };
+		630BA344203101C700C80CD2 /* KUSClientActivityManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 630BA342203101C700C80CD2 /* KUSClientActivityManager.h */; };
+		630BA345203101C700C80CD2 /* KUSClientActivityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 630BA343203101C700C80CD2 /* KUSClientActivityManager.m */; };
 		631E3F351F52497A00FAA33F /* KUSEmailInputView.h in Headers */ = {isa = PBXBuildFile; fileRef = 631E3F331F52497A00FAA33F /* KUSEmailInputView.h */; };
 		631E3F361F52497A00FAA33F /* KUSEmailInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 631E3F341F52497A00FAA33F /* KUSEmailInputView.m */; };
 		631E3F381F52561E00FAA33F /* checkmark_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 631E3F371F52561E00FAA33F /* checkmark_image@2x.png */; };
@@ -206,6 +208,8 @@
 		630BA33C2030040400C80CD2 /* KUSClientActivity.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KUSClientActivity.h; sourceTree = "<group>"; };
 		630BA33D2030040400C80CD2 /* KUSClientActivity.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KUSClientActivity.m; sourceTree = "<group>"; };
 		630BA340203005F500C80CD2 /* KUSClientActivityTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KUSClientActivityTest.m; sourceTree = "<group>"; };
+		630BA342203101C700C80CD2 /* KUSClientActivityManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KUSClientActivityManager.h; sourceTree = "<group>"; };
+		630BA343203101C700C80CD2 /* KUSClientActivityManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KUSClientActivityManager.m; sourceTree = "<group>"; };
 		631E3F331F52497A00FAA33F /* KUSEmailInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSEmailInputView.h; sourceTree = "<group>"; };
 		631E3F341F52497A00FAA33F /* KUSEmailInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSEmailInputView.m; sourceTree = "<group>"; };
 		631E3F371F52561E00FAA33F /* checkmark_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkmark_image@2x.png"; sourceTree = "<group>"; };
@@ -433,6 +437,8 @@
 			children = (
 				63270E931F4A1FA200E25BF5 /* KUSPushClient.h */,
 				63270E941F4A1FA200E25BF5 /* KUSPushClient.m */,
+				630BA342203101C700C80CD2 /* KUSClientActivityManager.h */,
+				630BA343203101C700C80CD2 /* KUSClientActivityManager.m */,
 				63EDF3D31F414A67000345D8 /* KUSRequestManager.h */,
 				63EDF3D41F414A67000345D8 /* KUSRequestManager.m */,
 				63EDF3CF1F412503000345D8 /* KUSUserSession.h */,
@@ -743,6 +749,7 @@
 				6334BE321F0C487400258DAF /* KUSChatSettings.h in Headers */,
 				6334BE3E1F0C4EBE00258DAF /* KUSCustomer.h in Headers */,
 				6394DFF91FA57C21006F2899 /* KUSCustomerDescription.h in Headers */,
+				630BA344203101C700C80CD2 /* KUSClientActivityManager.h in Headers */,
 				636531A91F1BBCCD00433A50 /* KUSChatViewController.h in Headers */,
 				63EDF3D11F412503000345D8 /* KUSUserSession.h in Headers */,
 				6334BE2E1F0C43BE00258DAF /* KUSTrackingToken.h in Headers */,
@@ -839,6 +846,7 @@
 					};
 					63B9CDB71F089BF000120F3E = {
 						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = 4LAX75HPEJ;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -1043,6 +1051,7 @@
 				6334BE331F0C487400258DAF /* KUSChatSettings.m in Sources */,
 				63EDF3DA1F415797000345D8 /* KUSTrackingTokenDataSource.m in Sources */,
 				632665DE1F945DB800ED1AB2 /* KUSSessionsTableView.m in Sources */,
+				630BA345203101C700C80CD2 /* KUSClientActivityManager.m in Sources */,
 				6334BE4E1F0C600F00258DAF /* KUSAttributionToolbar.m in Sources */,
 				636531A61F1BBAA100433A50 /* KustomerViewController.m in Sources */,
 				630BA33F2030040400C80CD2 /* KUSClientActivity.m in Sources */,
@@ -1317,7 +1326,7 @@
 			baseConfigurationReference = 479720192A1054576AB58BBA /* Pods-KustomerExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 4LAX75HPEJ;
 				INFOPLIST_FILE = KustomerExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1332,7 +1341,7 @@
 			baseConfigurationReference = 448086DB570B5537AB2DFA4E /* Pods-KustomerExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 4LAX75HPEJ;
 				INFOPLIST_FILE = KustomerExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

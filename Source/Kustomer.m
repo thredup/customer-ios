@@ -60,6 +60,11 @@ static NSString *kKustomerOrgNameKey = @"orgName";
     [[self sharedInstance] resetTracking];
 }
 
++ (void)setCurrentPageName:(NSString *)currentPageName
+{
+    [[self sharedInstance] setCurrentPageName:currentPageName];
+}
+
 + (void)presentSupport
 {
     UIViewController *topMostViewController = KUSTopMostViewController();
@@ -210,6 +215,11 @@ static KUSLogOptions _logOptions = KUSLogOptionInfo | KUSLogOptionErrors;
 {
     self.userSession = [[KUSUserSession alloc] initWithOrgName:self.orgName orgId:self.orgId reset:YES];
     [self.userSession.delegateProxy setDelegate:self.delegate];
+}
+
+- (void)setCurrentPageName:(NSString *)currentPageName
+{
+    [self.userSession.activityManager setCurrentPageName:currentPageName];
 }
 
 + (NSString *)sdkVersion

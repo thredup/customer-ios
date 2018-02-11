@@ -19,6 +19,7 @@
 #import "KUSUserDataSource.h"
 #import "KUSUserDefaults.h"
 #import "KUSCustomerDescription.h"
+#import "KUSClientActivityManager.h"
 
 @interface KUSUserSession : NSObject
 
@@ -40,10 +41,11 @@
 - (KUSChatMessagesDataSource *)chatMessagesDataSourceForSessionId:(NSString *)sessionId;
 - (KUSUserDataSource *)userDataSourceForUserId:(NSString *)userId;
 
-// Request manager & Push client & Delegate proxy
+// Request manager & Push client & Delegate proxy & Client activity manager
 - (KUSRequestManager *)requestManager;
 - (KUSPushClient *)pushClient;
 - (KUSDelegateProxy *)delegateProxy;
+- (KUSClientActivityManager *)activityManager;
 
 - (KUSUserDefaults *)userDefaults;
 

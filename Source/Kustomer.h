@@ -26,6 +26,8 @@ FOUNDATION_EXPORT const unsigned char KustomerVersionString[];
 + (void)identify:(NSString *)externalToken;
 + (void)resetTracking;
 
++ (void)setCurrentPageName:(NSString *)currentPageName;
+
 // A convenience method that will present the support interface on the topmost view controller
 + (void)presentSupport;
 

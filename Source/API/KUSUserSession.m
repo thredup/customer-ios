@@ -28,6 +28,7 @@
 @property (nonatomic, strong, null_resettable) KUSRequestManager *requestManager;
 @property (nonatomic, strong, null_resettable) KUSPushClient *pushClient;
 @property (nonatomic, strong, null_resettable) KUSDelegateProxy *delegateProxy;
+@property (nonatomic, strong, null_resettable) KUSClientActivityManager *activityManager;
 
 @property (nonatomic, strong, null_resettable) KUSUserDefaults *userDefaults;
 
@@ -169,6 +170,14 @@
         _delegateProxy = [[KUSDelegateProxy alloc] init];
     }
     return _delegateProxy;
+}
+
+- (KUSClientActivityManager *)activityManager
+{
+    if (_activityManager == nil) {
+        _activityManager = [[KUSClientActivityManager alloc] initWithUserSession:self];
+    }
+    return _activityManager;
 }
 
 - (KUSUserDefaults *)userDefaults
