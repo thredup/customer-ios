@@ -16,6 +16,7 @@
 		63035BDA1F2EBCD400FBBF66 /* KUSText.m in Sources */ = {isa = PBXBuildFile; fileRef = 63035BD81F2EBCD400FBBF66 /* KUSText.m */; };
 		630BA33E2030040400C80CD2 /* KUSClientActivity.h in Headers */ = {isa = PBXBuildFile; fileRef = 630BA33C2030040400C80CD2 /* KUSClientActivity.h */; };
 		630BA33F2030040400C80CD2 /* KUSClientActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 630BA33D2030040400C80CD2 /* KUSClientActivity.m */; };
+		630BA341203005F500C80CD2 /* KUSClientActivityTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 630BA340203005F500C80CD2 /* KUSClientActivityTest.m */; };
 		631E3F351F52497A00FAA33F /* KUSEmailInputView.h in Headers */ = {isa = PBXBuildFile; fileRef = 631E3F331F52497A00FAA33F /* KUSEmailInputView.h */; };
 		631E3F361F52497A00FAA33F /* KUSEmailInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 631E3F341F52497A00FAA33F /* KUSEmailInputView.m */; };
 		631E3F381F52561E00FAA33F /* checkmark_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 631E3F371F52561E00FAA33F /* checkmark_image@2x.png */; };
@@ -204,6 +205,7 @@
 		63035BD81F2EBCD400FBBF66 /* KUSText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSText.m; sourceTree = "<group>"; };
 		630BA33C2030040400C80CD2 /* KUSClientActivity.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KUSClientActivity.h; sourceTree = "<group>"; };
 		630BA33D2030040400C80CD2 /* KUSClientActivity.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KUSClientActivity.m; sourceTree = "<group>"; };
+		630BA340203005F500C80CD2 /* KUSClientActivityTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KUSClientActivityTest.m; sourceTree = "<group>"; };
 		631E3F331F52497A00FAA33F /* KUSEmailInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSEmailInputView.h; sourceTree = "<group>"; };
 		631E3F341F52497A00FAA33F /* KUSEmailInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSEmailInputView.m; sourceTree = "<group>"; };
 		631E3F371F52561E00FAA33F /* checkmark_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkmark_image@2x.png"; sourceTree = "<group>"; };
@@ -588,6 +590,7 @@
 				636EA6291F9D12BE00340B66 /* KUSDateTests.m */,
 				636EA62B1F9D309C00340B66 /* KUSChatMessageTests.m */,
 				6398E04E1FC2316F00001050 /* KUSChatSettingsTest.m */,
+				630BA340203005F500C80CD2 /* KUSClientActivityTest.m */,
 				636EA62F1F9D4FD100340B66 /* KUSDelegateProxyTests.m */,
 				63B9CDA11F088E8800120F3E /* Info.plist */,
 			);
@@ -1090,6 +1093,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				63B9CDA01F088E8800120F3E /* KustomerTests.m in Sources */,
+				630BA341203005F500C80CD2 /* KUSClientActivityTest.m in Sources */,
 				6398E04F1FC2316F00001050 /* KUSChatSettingsTest.m in Sources */,
 				636EA62A1F9D12BE00340B66 /* KUSDateTests.m in Sources */,
 				636EA6271F9CF76100340B66 /* KUSRequestManagerTests.m in Sources */,
