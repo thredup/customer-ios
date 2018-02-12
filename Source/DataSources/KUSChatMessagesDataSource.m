@@ -483,7 +483,8 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
             && [self count] > 0
             && self.didFetchAll
             && _sessionId.length > 0
-            && firstMessage.state == KUSChatMessageStateSent);
+            && firstMessage.state == KUSChatMessageStateSent
+            && KUSChatMessageSentByUser(firstMessage));
 }
 
 - (void)_insertAutoreplyIfNecessary
