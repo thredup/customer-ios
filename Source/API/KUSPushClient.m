@@ -132,7 +132,7 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
                 KUSLogPusher(@"Started active polling timer");
             }
         }
-    } else if (_userSession.chatSessionsDataSource.count > 0) {
+    } else {
         // Make sure we're polling lazily
         if (_pollingTimer == nil || _pollingTimer.timeInterval != KUSLazyPollingTimerInterval) {
             [_pollingTimer invalidate];
