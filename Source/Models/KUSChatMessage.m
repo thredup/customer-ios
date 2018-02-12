@@ -160,6 +160,7 @@ static NSString *KUSUnescapeBackslashesFromString(NSString *string)
         _importedAt = DateFromKeyPath(json, @"attributes.importedAt");
         _direction = KUSChatMessageDirectionFromString(NSStringFromKeyPath(json, @"attributes.direction"));
         _sentById = NSStringFromKeyPath(json, @"relationships.sentBy.data.id");
+        _campaignId = NSStringFromKeyPath(json, @"relationships.campaign.data.id");
     }
     return self;
 }

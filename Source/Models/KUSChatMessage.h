@@ -38,6 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy, readonly) NSDate *importedAt;
 @property (nonatomic, assign, readonly) KUSChatMessageDirection direction;
 @property (nonatomic, copy, readonly, nullable) NSString *sentById;
+@property (nonatomic, copy, readonly, nullable) NSString *campaignId;
 
 @property (nonatomic, assign, readonly) KUSChatMessageType type;
 @property (nonatomic, assign, readwrite) KUSChatMessageState state;
