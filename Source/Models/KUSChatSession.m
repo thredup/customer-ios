@@ -8,6 +8,8 @@
 
 #import "KUSChatSession.h"
 
+#import "KUSChatMessage.h"
+
 @implementation KUSChatSession
 
 #pragma mark - Class methods
@@ -15,6 +17,21 @@
 + (NSString *)modelType
 {
     return @"chat_session";
+}
+
++ (KUSChatSession *)tempSessionFromChatMessage:(KUSChatMessage *)message
+{
+    NSDictionary *json = @{
+        @"id": message.sessionId ?: @"",
+        @"type": [self modelType],
+        @"attributes": @{
+            @"preview": message.body ?: @"",
+            @"createdAt": message.createdAt ?: [NSDate date],
+            @"lastSeenAt": message.createdAt ?: [NSDate date],
+            @"lastMessageAt": message.createdAt ?: [NSDate date],
+        }
+    };
+    return [[KUSChatSession alloc] initWithJSON:json];
 }
 
 #pragma mark - Lifecycle methods

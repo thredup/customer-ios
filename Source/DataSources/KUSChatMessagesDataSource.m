@@ -219,11 +219,18 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     if (_sessionId) {
         return nil;
     }
-    KUSChatMessage *latestMessage = [self count] > 0 ? [self objectAtIndex:0] : nil;
-    if (KUSChatMessageSentByUser(latestMessage)) {
+    if (KUSChatMessageSentByUser([self latestMessage])) {
         return nil;
     }
     return _formQuestion;
+}
+
+- (KUSChatMessage *)latestMessage
+{
+    if (self.count > 0) {
+        return [self objectAtIndex:0];
+    }
+    return nil;
 }
 
 - (void)upsertNewMessages:(NSArray<KUSChatMessage *> *)chatMessages
@@ -534,7 +541,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
         [self _submitFormResponses];
     }
 
-    KUSChatMessage *lastMessage = [self objectAtIndex:0];
+    KUSChatMessage *lastMessage = [self latestMessage];
     if (!KUSChatMessageSentByUser(lastMessage)) {
         return;
     }

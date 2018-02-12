@@ -8,6 +8,7 @@
 
 #import "KUSModel.h"
 
+@class KUSChatMessage;
 @interface KUSChatSession : KUSModel
 
 @property (nonatomic, copy, readonly) NSString *preview;
@@ -16,5 +17,7 @@
 @property (nonatomic, copy, readonly) NSDate *createdAt;
 @property (nonatomic, copy, readonly) NSDate *lastSeenAt;
 @property (nonatomic, copy, readonly) NSDate *lastMessageAt;
+
++ (KUSChatSession *)tempSessionFromChatMessage:(KUSChatMessage *)message;
 
 @end

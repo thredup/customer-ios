@@ -166,7 +166,13 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
     if (self.supportViewControllerPresented) {
         [KUSAudio playMessageReceivedSound];
     } else {
-        KUSChatSession *chatSession = [[_userSession chatSessionsDataSource] objectWithId:chatSessionId];
+        KUSChatSession *chatSession = [_userSession.chatSessionsDataSource objectWithId:chatSessionId];
+        if (chatSession == nil) {
+            KUSChatMessagesDataSource *chatMessagesDataSource = [_userSession chatMessagesDataSourceForSessionId:chatSessionId];
+            KUSChatMessage *latestMessage = [chatMessagesDataSource latestMessage];
+            chatSession = [KUSChatSession tempSessionFromChatMessage:latestMessage];
+            [_userSession.chatSessionsDataSource fetchLatest];
+        }
         if ([_userSession.delegateProxy shouldDisplayInAppNotification] && chatSession) {
             [KUSAudio playMessageReceivedSound];
             [[KUSNotificationWindow sharedInstance] showChatSession:chatSession];

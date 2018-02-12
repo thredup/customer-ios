@@ -34,6 +34,7 @@
 - (NSUInteger)unreadCountAfterDate:(NSDate *)date;
 - (BOOL)shouldPreventSendingMessage;
 - (KUSFormQuestion *)currentQuestion;
+- (KUSChatMessage *)latestMessage;
 
 - (void)upsertNewMessages:(NSArray<KUSChatMessage *> *)chatMessages;
 - (void)sendMessageWithText:(NSString *)text attachments:(NSArray<UIImage *> *)attachments;
