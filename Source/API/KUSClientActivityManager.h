@@ -11,7 +11,7 @@
 @class KUSUserSession;
 @interface KUSClientActivityManager : NSObject
 
-@property (nonatomic, copy) NSString currentPageName;
+@property (nonatomic, copy) NSString *currentPageName;
 
 - (instancetype)initWithUserSession:(KUSUserSession *)userSession;
 - (instancetype)init NS_UNAVAILABLE;
