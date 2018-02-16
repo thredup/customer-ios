@@ -16,7 +16,7 @@
 #import "KUSNotificationWindow.h"
 #import "KUSUserSession.h"
 
-static const NSTimeInterval KUSLazyPollingTimerInterval = 45.0;
+static const NSTimeInterval KUSLazyPollingTimerInterval = 30.0;
 static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
 
 @interface KUSPushClient () <KUSObjectDataSourceListener, KUSPaginatedDataSourceListener, PTPusherDelegate> {
@@ -153,11 +153,6 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
 
 - (void)_onPollTick
 {
-    KUSTrackingToken *trackingToken = _userSession.trackingTokenDataSource.object;
-    if (trackingToken.customerId.length == 0 || !_userSession.chatSessionsDataSource.didFetch) {
-        return;
-    }
-
     [_userSession.chatSessionsDataSource fetchLatest];
 }
 
@@ -220,11 +215,6 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
 - (void)objectDataSourceDidLoad:(KUSObjectDataSource *)dataSource
 {
     [self _connectToChannelsIfNecessary];
-
-    KUSTrackingToken *trackingToken = _userSession.trackingTokenDataSource.object;
-    if (trackingToken.customerId.length && !_userSession.chatSessionsDataSource.didFetch) {
-        [_userSession.chatSessionsDataSource fetchLatest];
-    }
 }
 
 #pragma mark - KUSPaginatedDataSourceListener methods
