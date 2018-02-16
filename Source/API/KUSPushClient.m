@@ -16,6 +16,7 @@
 #import "KUSNotificationWindow.h"
 #import "KUSUserSession.h"
 
+static const NSTimeInterval KUSShouldConnectToPusherRecencyThreshold = 60.0;
 static const NSTimeInterval KUSLazyPollingTimerInterval = 30.0;
 static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
 
@@ -23,7 +24,6 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
     __weak KUSUserSession *_userSession;
 
     NSTimer *_pollingTimer;
-
     PTPusher *_pusherClient;
     PTPusherChannel *_pusherChannel;
 
@@ -89,7 +89,7 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
     if (_pusherClient && [self _shouldBeConnectedToPusher]) {
         [_pusherClient connect];
 
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(KUSLazyPollingTimerInterval * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(KUSShouldConnectToPusherRecencyThreshold * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self _connectToChannelsIfNecessary];
         });
     } else {
@@ -183,7 +183,7 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
         return YES;
     }
     NSDate *lastMessageAt = _userSession.chatSessionsDataSource.lastMessageAt;
-    return lastMessageAt && [lastMessageAt timeIntervalSinceNow] > -KUSLazyPollingTimerInterval;
+    return lastMessageAt && [lastMessageAt timeIntervalSinceNow] > -KUSShouldConnectToPusherRecencyThreshold;
 }
 
 #pragma mark - Property methods
