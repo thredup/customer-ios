@@ -19,7 +19,7 @@
 static const NSTimeInterval KUSLazyPollingTimerInterval = 30.0;
 static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
 
-@interface KUSPushClient () <KUSObjectDataSourceListener, KUSPaginatedDataSourceListener, PTPusherDelegate> {
+@interface KUSPushClient () <KUSObjectDataSourceListener, KUSPaginatedDataSourceListener, PTPusherDelegate, KUSChatMessagesDataSourceListener> {
     __weak KUSUserSession *_userSession;
 
     NSTimer *_pollingTimer;
@@ -28,6 +28,7 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
     PTPusherChannel *_pusherChannel;
 
     NSMutableDictionary<NSString *, KUSChatSession *> *_previousChatSessions;
+    NSString *_pendingNotificationSessionId;
 }
 
 @end
@@ -234,15 +235,34 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
 - (void)paginatedDataSourceDidLoad:(KUSPaginatedDataSource *)dataSource
 {
     [self _updatePreviousChatSessions];
+
+    if ([dataSource isKindOfClass:[KUSChatMessagesDataSource class]]) {
+        KUSChatMessagesDataSource *chatMessagesDataSource = (KUSChatMessagesDataSource *)dataSource;
+        if ([chatMessagesDataSource.sessionId isEqualToString:_pendingNotificationSessionId]) {
+            [self _notifyForUpdatedChatSession:_pendingNotificationSessionId];
+            _pendingNotificationSessionId = nil;
+        }
+    }
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self _connectToChannelsIfNecessary];
+    });
+}
+
+- (void)paginatedDataSource:(KUSPaginatedDataSource *)dataSource didReceiveError:(NSError *)error
+{
+    if ([dataSource isKindOfClass:[KUSChatMessagesDataSource class]]) {
+        KUSChatMessagesDataSource *chatMessagesDataSource = (KUSChatMessagesDataSource *)dataSource;
+        if ([chatMessagesDataSource.sessionId isEqualToString:_pendingNotificationSessionId]) {
+            [self _notifyForUpdatedChatSession:_pendingNotificationSessionId];
+            _pendingNotificationSessionId = nil;
+        }
+    }
 }
 
 - (void)paginatedDataSourceDidChangeContent:(KUSPaginatedDataSource *)dataSource
 {
     if (dataSource == _userSession.chatSessionsDataSource) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self _connectToChannelsIfNecessary];
-        });
-
         // Only consider new messages here if we're actively polling
         if (_pollingTimer == nil) {
             // But update the state of _previousChatSessions
@@ -263,10 +283,12 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
                 BOOL lastMessageAtNewerThanLocalLastMessage = latestChatMessage == nil || [chatSession.lastMessageAt compare:latestChatMessage.createdAt] == NSOrderedDescending;
                 if (isUpdatedSession && lastSeenBeforeMessage && lastMessageAtNewerThanLocalLastMessage) {
                     updatedSessionId = chatSession.oid;
+                    [messagesDataSource addListener:self];
                     [messagesDataSource fetchLatest];
                 }
             } else if (_previousChatSessions != nil) {
                 updatedSessionId = chatSession.oid;
+                [messagesDataSource addListener:self];
                 [messagesDataSource fetchLatest];
             }
         }
@@ -274,8 +296,7 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
         [self _updatePreviousChatSessions];
 
         if (updatedSessionId) {
-            [self _notifyForUpdatedChatSession:updatedSessionId];
-            updatedSessionId = nil;
+            _pendingNotificationSessionId = updatedSessionId;
         }
     }
 }

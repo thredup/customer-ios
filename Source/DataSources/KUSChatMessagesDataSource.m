@@ -143,6 +143,11 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 
 #pragma mark - Public methods
 
+- (NSString *)sessionId
+{
+    return _sessionId;
+}
+
 - (NSString *)firstOtherUserId
 {
     for (KUSChatMessage *message in self.allObjects) {

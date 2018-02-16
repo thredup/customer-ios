@@ -29,6 +29,7 @@
 
 - (void)addListener:(id<KUSChatMessagesDataSourceListener>)listener;
 
+- (NSString *)sessionId;
 - (NSString *)firstOtherUserId;
 - (NSArray<NSString *> *)otherUserIds;
 - (NSUInteger)unreadCountAfterDate:(NSDate *)date;
