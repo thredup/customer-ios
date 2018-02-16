@@ -14,7 +14,7 @@
 
 + (KUSNotificationWindow *)sharedInstance;
 
-- (void)showChatSession:(KUSChatSession *)chatSession;
+- (void)showChatSession:(KUSChatSession *)chatSession autoDismiss:(BOOL)autoDismiss;
 - (void)hide;
 
 @end

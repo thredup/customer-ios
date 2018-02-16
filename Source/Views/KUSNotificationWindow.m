@@ -92,7 +92,7 @@ static const CGFloat KUSNotificationWindowMaxWidth = 400.0;
 
 #pragma mark - Public methods
 
-- (void)showChatSession:(KUSChatSession *)chatSession;
+- (void)showChatSession:(KUSChatSession *)chatSession autoDismiss:(BOOL)autoDismiss
 {
     [self _layoutWindow];
 
@@ -115,11 +115,13 @@ static const CGFloat KUSNotificationWindowMaxWidth = 400.0;
      } completion:nil];
 
     [_hideTimer invalidate];
-    _hideTimer = [NSTimer scheduledTimerWithTimeInterval:KUSNotificationWindowShowDuration + KUSNotificationWindowVisibleDuration
-                                                  target:self
-                                                selector:@selector(hide)
-                                                userInfo:nil
-                                                 repeats:NO];
+    if (autoDismiss) {
+        _hideTimer = [NSTimer scheduledTimerWithTimeInterval:KUSNotificationWindowShowDuration + KUSNotificationWindowVisibleDuration
+                                                      target:self
+                                                    selector:@selector(hide)
+                                                    userInfo:nil
+                                                     repeats:NO];
+    }
 }
 
 - (void)hide
