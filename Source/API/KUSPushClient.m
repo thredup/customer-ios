@@ -215,18 +215,38 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
 
 - (void)objectDataSourceDidLoad:(KUSObjectDataSource *)dataSource
 {
+    if (!_userSession.chatSessionsDataSource.didFetch) {
+        [_userSession.chatSessionsDataSource fetchLatest];
+    }
     [self _connectToChannelsIfNecessary];
 }
 
 #pragma mark - KUSPaginatedDataSourceListener methods
 
+- (void)_updatePreviousChatSessions
+{
+    _previousChatSessions = [[NSMutableDictionary alloc] init];
+    for (KUSChatSession *chatSession in _userSession.chatSessionsDataSource.allObjects) {
+        [_previousChatSessions setObject:chatSession forKey:chatSession.oid];
+    }
+}
+
+- (void)paginatedDataSourceDidLoad:(KUSPaginatedDataSource *)dataSource
+{
+    [self _updatePreviousChatSessions];
+}
+
 - (void)paginatedDataSourceDidChangeContent:(KUSPaginatedDataSource *)dataSource
 {
     if (dataSource == _userSession.chatSessionsDataSource) {
-        [self _connectToChannelsIfNecessary];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self _connectToChannelsIfNecessary];
+        });
 
         // Only consider new messages here if we're actively polling
         if (_pollingTimer == nil) {
+            // But update the state of _previousChatSessions
+            [self _updatePreviousChatSessions];
             return;
         }
 
@@ -234,8 +254,8 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
         NSArray<KUSChatSession *> *newChatSessions = _userSession.chatSessionsDataSource.allObjects;
         for (KUSChatSession *chatSession in newChatSessions) {
             KUSChatSession *previousChatSession = [_previousChatSessions objectForKey:chatSession.oid];
+            KUSChatMessagesDataSource *messagesDataSource = [_userSession chatMessagesDataSourceForSessionId:chatSession.oid];
             if (previousChatSession) {
-                KUSChatMessagesDataSource *messagesDataSource = [_userSession chatMessagesDataSourceForSessionId:chatSession.oid];
                 KUSChatMessage *latestChatMessage = messagesDataSource.allObjects.firstObject;
                 BOOL isUpdatedSession = [chatSession.lastMessageAt compare:previousChatSession.lastMessageAt] == NSOrderedDescending;
                 NSDate *sessionLastSeenAt = [_userSession.chatSessionsDataSource lastSeenAtForSessionId:chatSession.oid];
@@ -245,13 +265,13 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
                     updatedSessionId = chatSession.oid;
                     [messagesDataSource fetchLatest];
                 }
+            } else if (_previousChatSessions != nil) {
+                updatedSessionId = chatSession.oid;
+                [messagesDataSource fetchLatest];
             }
         }
 
-        _previousChatSessions = [[NSMutableDictionary alloc] init];
-        for (KUSChatSession *chatSession in newChatSessions) {
-            [_previousChatSessions setObject:chatSession forKey:chatSession.oid];
-        }
+        [self _updatePreviousChatSessions];
 
         if (updatedSessionId) {
             [self _notifyForUpdatedChatSession:updatedSessionId];
