@@ -38,8 +38,12 @@
         _selector = selector;
         _timeInterval = interval;
 
-        _timer = [NSTimer timerWithTimeInterval:interval target:self selector:@selector(fire) userInfo:nil repeats:repeats];
-        _timer.tolerance = interval / 10.0;
+        _timer = [NSTimer timerWithTimeInterval:interval
+                                         target:self
+                                       selector:@selector(fire)
+                                       userInfo:nil
+                                        repeats:repeats];
+        _timer.tolerance = MIN(interval / 20.0, 2.0);
     }
     return self;
 }
