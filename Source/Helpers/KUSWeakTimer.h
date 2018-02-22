@@ -12,12 +12,14 @@
 
 // The underlying NSTimer
 @property (nonatomic, strong, readonly) NSTimer *timer;
+@property (assign, readonly) NSTimeInterval timeInterval;
 
 + (instancetype)scheduledTimerWithTimeInterval:(NSTimeInterval)interval
                                         target:(id)target
                                       selector:(SEL)selector
                                        repeats:(BOOL)repeats;
 
+- (void)fire;
 - (void)invalidate;
 
 - (instancetype)init NS_UNAVAILABLE;

@@ -11,13 +11,14 @@
 #import <QuartzCore/CABase.h>
 
 #import "KUSClientActivityDataSource.h"
+#import "KUSWeakTimer.h"
 
 @interface KUSClientActivityManager () <KUSObjectDataSourceListener> {
     __weak KUSUserSession *_userSession;
     NSString *_previousPageName;
     NSTimeInterval _currentPageStartTime;
 
-    NSArray<NSTimer *> *_timers;
+    NSArray<KUSWeakTimer *> *_timers;
     KUSClientActivityDataSource *_activityDataSource;
 }
 
@@ -40,9 +41,9 @@
 
 - (void)_cancelTimers
 {
-    NSArray<NSTimer *> *timers = [_timers copy];
+    NSArray<KUSWeakTimer *> *timers = [_timers copy];
     _timers = nil;
-    for (NSTimer *timer in timers) {
+    for (KUSWeakTimer *timer in timers) {
         [timer invalidate];
     }
 }
@@ -54,13 +55,12 @@
         return;
     }
 
-    NSMutableArray<NSTimer *> *timers = [[NSMutableArray alloc] initWithCapacity:_activityDataSource.intervals.count];
+    NSMutableArray<KUSWeakTimer *> *timers = [[NSMutableArray alloc] initWithCapacity:_activityDataSource.intervals.count];
     for (NSNumber *intervalNumber in _activityDataSource.intervals) {
-        NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:intervalNumber.doubleValue
-                                                          target:self
-                                                        selector:@selector(_onActivityTimer:)
-                                                        userInfo:nil
-                                                         repeats:NO];
+        KUSWeakTimer *timer = [KUSWeakTimer scheduledTimerWithTimeInterval:intervalNumber.doubleValue
+                                                                    target:self
+                                                                  selector:@selector(_onActivityTimer:)
+                                                                   repeats:NO];
         [timers addObject:timer];
     }
     _timers = timers;
@@ -90,7 +90,7 @@
 
 #pragma mark - Timer methods
 
-- (void)_onActivityTimer:(NSTimer *)timer
+- (void)_onActivityTimer:(KUSWeakTimer *)timer
 {
     [self _requestClientActivity];
 }

@@ -36,8 +36,9 @@
     if (self) {
         _target = target;
         _selector = selector;
+        _timeInterval = interval;
 
-        _timer = [NSTimer timerWithTimeInterval:interval target:self selector:@selector(_fire) userInfo:nil repeats:repeats];
+        _timer = [NSTimer timerWithTimeInterval:interval target:self selector:@selector(fire) userInfo:nil repeats:repeats];
         _timer.tolerance = interval / 10.0;
     }
     return self;
@@ -51,7 +52,7 @@
 
 #pragma mark - Internal methods
 
-- (void)_fire
+- (void)fire
 {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"

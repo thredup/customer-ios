@@ -15,6 +15,7 @@
 #import "KUSLog.h"
 #import "KUSNotificationWindow.h"
 #import "KUSUserSession.h"
+#import "KUSWeakTimer.h"
 
 static const NSTimeInterval KUSShouldConnectToPusherRecencyThreshold = 60.0;
 static const NSTimeInterval KUSLazyPollingTimerInterval = 30.0;
@@ -23,7 +24,7 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
 @interface KUSPushClient () <KUSObjectDataSourceListener, KUSPaginatedDataSourceListener, PTPusherDelegate, KUSChatMessagesDataSourceListener> {
     __weak KUSUserSession *_userSession;
 
-    NSTimer *_pollingTimer;
+    KUSWeakTimer *_pollingTimer;
     PTPusher *_pusherClient;
     PTPusherChannel *_pusherChannel;
 
@@ -123,13 +124,10 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
             // (in the event that connecting to pusher fails)
             if (_pollingTimer == nil || _pollingTimer.timeInterval != KUSActivePollingTimerInterval) {
                 [_pollingTimer invalidate];
-                _pollingTimer = [NSTimer timerWithTimeInterval:KUSActivePollingTimerInterval
-                                                        target:self
-                                                      selector:@selector(_onPollTick)
-                                                      userInfo:nil
-                                                       repeats:YES];
-                _pollingTimer.tolerance = _pollingTimer.timeInterval / 10.0;
-                [[NSRunLoop mainRunLoop] addTimer:_pollingTimer forMode:NSRunLoopCommonModes];
+                _pollingTimer = [KUSWeakTimer scheduledTimerWithTimeInterval:KUSActivePollingTimerInterval
+                                                                      target:self
+                                                                    selector:@selector(_onPollTick)
+                                                                     repeats:YES];
                 KUSLogPusher(@"Started active polling timer");
             }
         }
@@ -137,13 +135,10 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
         // Make sure we're polling lazily
         if (_pollingTimer == nil || _pollingTimer.timeInterval != KUSLazyPollingTimerInterval) {
             [_pollingTimer invalidate];
-            _pollingTimer = [NSTimer timerWithTimeInterval:KUSLazyPollingTimerInterval
-                                                    target:self
-                                                  selector:@selector(_onPollTick)
-                                                  userInfo:nil
-                                                   repeats:YES];
-            _pollingTimer.tolerance = _pollingTimer.timeInterval / 10.0;
-            [[NSRunLoop mainRunLoop] addTimer:_pollingTimer forMode:NSRunLoopCommonModes];
+            _pollingTimer = [KUSWeakTimer scheduledTimerWithTimeInterval:KUSLazyPollingTimerInterval
+                                                                  target:self
+                                                                selector:@selector(_onPollTick)
+                                                                 repeats:YES];
             KUSLogPusher(@"Started lazy polling timer");
 
             // Tick immediately

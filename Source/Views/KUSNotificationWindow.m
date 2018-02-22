@@ -11,6 +11,7 @@
 #import "KUSChatSessionTableViewCell.h"
 #import "KUSUserSession.h"
 #import "Kustomer_Private.h"
+#import "KUSWeakTimer.h"
 
 static const CGFloat KUSNotificationWindowShowDuration = 0.3;
 static const CGFloat KUSNotificationWindowHideDuration = 0.2;
@@ -20,7 +21,7 @@ static const CGFloat KUSNotificationWindowMaxWidth = 400.0;
 
 @interface KUSNotificationWindow () {
     KUSChatSessionTableViewCell *_sessionTableViewCell;
-    NSTimer *_hideTimer;
+    KUSWeakTimer *_hideTimer;
 }
 
 @end
@@ -116,11 +117,10 @@ static const CGFloat KUSNotificationWindowMaxWidth = 400.0;
 
     [_hideTimer invalidate];
     if (autoDismiss) {
-        _hideTimer = [NSTimer scheduledTimerWithTimeInterval:KUSNotificationWindowShowDuration + KUSNotificationWindowVisibleDuration
-                                                      target:self
-                                                    selector:@selector(hide)
-                                                    userInfo:nil
-                                                     repeats:NO];
+        _hideTimer = [KUSWeakTimer scheduledTimerWithTimeInterval:KUSNotificationWindowShowDuration + KUSNotificationWindowVisibleDuration
+                                                           target:self
+                                                         selector:@selector(hide)
+                                                          repeats:NO];
     }
 }
 

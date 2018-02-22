@@ -18,6 +18,7 @@
 #import "KUSImage.h"
 #import "KUSText.h"
 #import "KUSUserSession.h"
+#import "KUSWeakTimer.h"
 
 #import "KUSAvatarImageView.h"
 
@@ -42,7 +43,7 @@ static const CGFloat kTimestampTopPadding = 4.0;
     KUSChatMessage *_chatMessage;
     BOOL _showsAvatar;
     BOOL _showsTimestamp;
-    NSTimer *_sendingFadeTimer;
+    KUSWeakTimer *_sendingFadeTimer;
 
     KUSAvatarImageView *_avatarImageView;
     UIView *_bubbleView;
@@ -277,11 +278,10 @@ static const CGFloat kTimestampTopPadding = 4.0;
                 _bubbleView.alpha = 1.0;
 
                 NSTimeInterval timerInterval = kOptimisticSendLoadingDelay - timeElapsed;
-                _sendingFadeTimer = [NSTimer scheduledTimerWithTimeInterval:timerInterval
-                                                                     target:self
-                                                                   selector:_cmd
-                                                                   userInfo:nil
-                                                                    repeats:NO];
+                _sendingFadeTimer = [KUSWeakTimer scheduledTimerWithTimeInterval:timerInterval
+                                                                          target:self
+                                                                        selector:_cmd
+                                                                         repeats:NO];
             }
         }   break;
         case KUSChatMessageStateFailed: {
