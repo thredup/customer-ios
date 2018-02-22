@@ -11,6 +11,7 @@
 #import <QuartzCore/CABase.h>
 
 #import "KUSClientActivityDataSource.h"
+#import "KUSUserSession.h"
 #import "KUSWeakTimer.h"
 
 @interface KUSClientActivityManager () <KUSObjectDataSourceListener> {
@@ -122,6 +123,12 @@
 
 - (void)objectDataSourceDidLoad:(KUSObjectDataSource *)dataSource
 {
+    if (dataSource == _activityDataSource) {
+        KUSClientActivity *clientActivity = (KUSClientActivity *)_activityDataSource.object;
+        if (clientActivity.currentPageSeconds > 0) {
+            [_userSession.pushClient onClientActivityTick];
+        }
+    }
     [self _updateTimers];
 }
 

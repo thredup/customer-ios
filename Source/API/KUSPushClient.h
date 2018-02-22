@@ -16,4 +16,6 @@
 - (instancetype)initWithUserSession:(KUSUserSession *)userSession;
 - (instancetype)init NS_UNAVAILABLE;
 
+- (void)onClientActivityTick;
+
 @end

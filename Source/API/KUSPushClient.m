@@ -181,6 +181,16 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
     return lastMessageAt && [lastMessageAt timeIntervalSinceNow] > -KUSShouldConnectToPusherRecencyThreshold;
 }
 
+#pragma mark - Public methods
+
+- (void)onClientActivityTick
+{
+    // We only need to poll for client activity changes if we are not connected to the socket
+    if (![self _shouldBeConnectedToPusher]) {
+        [self _onPollTick];
+    }
+}
+
 #pragma mark - Property methods
 
 - (void)setSupportViewControllerPresented:(BOOL)supportViewControllerPresented

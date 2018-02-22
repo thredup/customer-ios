@@ -10,8 +10,6 @@
 
 #import "KUSObjectDataSource_Private.h"
 
-#import "KUSClientActivity.h"
-
 @implementation KUSClientActivityDataSource {
     NSString *_previousPageName;
     NSString *_currentPageName;

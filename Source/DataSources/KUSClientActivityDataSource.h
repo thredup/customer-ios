@@ -7,6 +7,7 @@
 //
 
 #import "KUSObjectDataSource.h"
+#import "KUSClientActivity.h"
 
 @interface KUSClientActivityDataSource : KUSObjectDataSource
 
