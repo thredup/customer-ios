@@ -19,5 +19,6 @@
 
 - (NSArray<NSNumber *> *)intervals;
 - (NSDate *)createdAt;
+- (NSTimeInterval)currentPageSeconds;
 
 @end

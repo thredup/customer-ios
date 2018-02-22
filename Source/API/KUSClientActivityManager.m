@@ -51,18 +51,23 @@
 
 - (void)_updateTimers
 {
+    [self _cancelTimers];
+
     if (_activityDataSource.object == nil) {
-        [self _cancelTimers];
         return;
     }
 
     NSMutableArray<KUSWeakTimer *> *timers = [[NSMutableArray alloc] initWithCapacity:_activityDataSource.intervals.count];
     for (NSNumber *intervalNumber in _activityDataSource.intervals) {
-        KUSWeakTimer *timer = [KUSWeakTimer scheduledTimerWithTimeInterval:intervalNumber.doubleValue
-                                                                    target:self
-                                                                  selector:@selector(_onActivityTimer:)
-                                                                   repeats:NO];
-        [timers addObject:timer];
+        // The time intervals in the response are relative to the 0 second start time
+        NSTimeInterval intervalTimeFromNow = intervalNumber.doubleValue - _activityDataSource.currentPageSeconds;
+        if (intervalTimeFromNow > 0) {
+            KUSWeakTimer *timer = [KUSWeakTimer scheduledTimerWithTimeInterval:intervalNumber.doubleValue
+                                                                        target:self
+                                                                      selector:@selector(_onActivityTimer:)
+                                                                       repeats:NO];
+            [timers addObject:timer];
+        }
     }
     _timers = timers;
 }
@@ -124,8 +129,7 @@
 - (void)objectDataSourceDidLoad:(KUSObjectDataSource *)dataSource
 {
     if (dataSource == _activityDataSource) {
-        KUSClientActivity *clientActivity = (KUSClientActivity *)_activityDataSource.object;
-        if (clientActivity.currentPageSeconds > 0) {
+        if (_activityDataSource.currentPageSeconds > 0) {
             [_userSession.pushClient onClientActivityTick];
         }
     }

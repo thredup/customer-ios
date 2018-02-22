@@ -47,6 +47,12 @@
     return clientActivity.createdAt;
 }
 
+- (NSTimeInterval)currentPageSeconds
+{
+    KUSClientActivity *clientActivity = (KUSClientActivity *)self.object;
+    return clientActivity.currentPageSeconds;
+}
+
 #pragma mark - KUSObjectDataSource subclass methods
 
 - (void)performRequestWithCompletion:(KUSRequestCompletion)completion
