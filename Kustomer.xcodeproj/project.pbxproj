@@ -128,6 +128,8 @@
 		63BF9C721FEB57B400E30C73 /* KUSFormDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 63BF9C701FEB57B400E30C73 /* KUSFormDataSource.m */; };
 		63BF9C751FEB5C3900E30C73 /* KUSTeamsDataSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 63BF9C731FEB5C3900E30C73 /* KUSTeamsDataSource.h */; };
 		63BF9C761FEB5C3900E30C73 /* KUSTeamsDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 63BF9C741FEB5C3900E30C73 /* KUSTeamsDataSource.m */; };
+		63C7626B203E71BD00A12BDD /* KUSWeakTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = 63C76269203E71BD00A12BDD /* KUSWeakTimer.h */; };
+		63C7626C203E71BD00A12BDD /* KUSWeakTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C7626A203E71BD00A12BDD /* KUSWeakTimer.m */; };
 		63D472911F70AACC00C947F2 /* KUSNotificationWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 63D4728F1F70AACC00C947F2 /* KUSNotificationWindow.h */; };
 		63D472921F70AACC00C947F2 /* KUSNotificationWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 63D472901F70AACC00C947F2 /* KUSNotificationWindow.m */; };
 		63D472951F71561100C947F2 /* KUSDelegateProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = 63D472931F71561100C947F2 /* KUSDelegateProxy.h */; };
@@ -329,6 +331,8 @@
 		63BF9C701FEB57B400E30C73 /* KUSFormDataSource.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KUSFormDataSource.m; sourceTree = "<group>"; };
 		63BF9C731FEB5C3900E30C73 /* KUSTeamsDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KUSTeamsDataSource.h; sourceTree = "<group>"; };
 		63BF9C741FEB5C3900E30C73 /* KUSTeamsDataSource.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KUSTeamsDataSource.m; sourceTree = "<group>"; };
+		63C76269203E71BD00A12BDD /* KUSWeakTimer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KUSWeakTimer.h; sourceTree = "<group>"; };
+		63C7626A203E71BD00A12BDD /* KUSWeakTimer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KUSWeakTimer.m; sourceTree = "<group>"; };
 		63D4728F1F70AACC00C947F2 /* KUSNotificationWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSNotificationWindow.h; sourceTree = "<group>"; };
 		63D472901F70AACC00C947F2 /* KUSNotificationWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSNotificationWindow.m; sourceTree = "<group>"; };
 		63D472931F71561100C947F2 /* KUSDelegateProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSDelegateProxy.h; sourceTree = "<group>"; };
@@ -472,6 +476,8 @@
 				63F61A781FF99D3100E56766 /* KUSUpload.m */,
 				630236C71FD84107008B4EA8 /* KUSUserDefaults.h */,
 				630236C81FD84107008B4EA8 /* KUSUserDefaults.m */,
+				63C76269203E71BD00A12BDD /* KUSWeakTimer.h */,
+				63C7626A203E71BD00A12BDD /* KUSWeakTimer.m */,
 				63DC73611F57B44900683DE8 /* message_received.m4a */,
 			);
 			path = Helpers;
@@ -760,6 +766,7 @@
 				63EDF3D11F412503000345D8 /* KUSUserSession.h in Headers */,
 				6334BE2E1F0C43BE00258DAF /* KUSTrackingToken.h in Headers */,
 				63270E991F4A717600E25BF5 /* KUSDate.h in Headers */,
+				63C7626B203E71BD00A12BDD /* KUSWeakTimer.h in Headers */,
 				63270E951F4A1FA200E25BF5 /* KUSPushClient.h in Headers */,
 				6334BE2A1F0C3E8600258DAF /* KUSModel.h in Headers */,
 				632665E11F945DC700ED1AB2 /* KUSChatTableView.h in Headers */,
@@ -1075,6 +1082,7 @@
 				63D9C18C1F31761B00999183 /* KUSBaseViewController.m in Sources */,
 				63BF9C661FE9564300E30C73 /* KUSForm.m in Sources */,
 				636531B71F1DB73B00433A50 /* KUSColor.m in Sources */,
+				63C7626C203E71BD00A12BDD /* KUSWeakTimer.m in Sources */,
 				63D472961F71561100C947F2 /* KUSDelegateProxy.m in Sources */,
 				633D8FEE1F23C98200BAFAC9 /* KUSPaginatedDataSource.m in Sources */,
 				6334BE2F1F0C43BE00258DAF /* KUSTrackingToken.m in Sources */,
