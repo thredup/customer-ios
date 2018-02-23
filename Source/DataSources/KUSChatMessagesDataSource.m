@@ -26,7 +26,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     NSMutableSet<NSString *> *_delayedChatMessageIds;
 
     KUSForm *_form;
-    NSUInteger _questionIndex;
+    NSInteger _questionIndex;
     KUSFormQuestion *_formQuestion;
     BOOL _submittingForm;
     BOOL _creatingSession;
@@ -45,6 +45,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 {
     self = [super initWithUserSession:userSession];
     if (self) {
+        _questionIndex = -1;
         _delayedChatMessageIds = [[NSMutableSet alloc] init];
         _messageRetryBlocksById = [[NSMutableDictionary alloc] init];
 
@@ -555,9 +556,9 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     }
 
     NSTimeInterval additionalInsertDelay = 0;
-    NSUInteger latestQuestionIndex = _questionIndex;
-    NSUInteger startingOffset = (_formQuestion ? 1 : 0);
-    for (NSInteger i = _questionIndex + startingOffset; i < _form.questions.count; i++) {
+    NSInteger latestQuestionIndex = _questionIndex;
+    NSInteger startingOffset = (_formQuestion ? 1 : 0);
+    for (NSInteger i = MAX(_questionIndex + startingOffset, 0); i < _form.questions.count; i++) {
         KUSFormQuestion *question = _form.questions[i];
         if (question.type == KUSFormQuestionTypeUnknown) {
             continue;
@@ -664,7 +665,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
              // Grab the session id
              _sessionId = session.oid;
              _form = nil;
-             _questionIndex = 0;
+             _questionIndex = -1;
              _formQuestion = nil;
              _submittingForm = NO;
 
