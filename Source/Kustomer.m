@@ -213,8 +213,14 @@ static KUSLogOptions _logOptions = KUSLogOptionInfo | KUSLogOptionErrors;
 
 - (void)resetTracking
 {
+    NSString *currentPageName = [self.userSession.activityManager currentPageName];
+
+    // Create a new userSession and release the previous one
     self.userSession = [[KUSUserSession alloc] initWithOrgName:self.orgName orgId:self.orgId reset:YES];
+
+    // Update the new userSession with the previous state
     [self.userSession.delegateProxy setDelegate:self.delegate];
+    [self.userSession.activityManager setCurrentPageName:currentPageName];
 }
 
 - (void)setCurrentPageName:(NSString *)currentPageName
