@@ -131,6 +131,19 @@ customerDescription.custom = @{ @"customAttributeStr": @"value" };
 [Kustomer describeConversation:@{ @"customAttributeStr" : @"value" }];
 ```
 
+```objective-c
+/*
+ Mark the user as having navigated to a new page. By marking the user's progress around the app, you will be able to create proactive conversational campaigns that can be triggered as a result of the user's progress in your application flow.
+*/
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    // Track the current page on appearance
+    [Kustomer setCurrentPageName:@"Home"];
+}
+```
+
 ### Appearance
 
 The majority of the user interface for the support screens can be configured using `UIAppearance`. As an example, if you are designing a Halloween-themed support interface, you could re-skin the Kustomer iOS support screens using the following:
