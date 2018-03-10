@@ -63,6 +63,8 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
         [self.userSession.formDataSource addListener:self];
         if (!self.userSession.formDataSource.didFetch) {
             [self.userSession.formDataSource fetch];
+        } else {
+            _form = self.userSession.formDataSource.object;
         }
     }
     return self;
