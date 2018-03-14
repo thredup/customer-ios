@@ -66,6 +66,7 @@
                                                                         target:self
                                                                       selector:@selector(_onActivityTimer:)
                                                                        repeats:NO];
+            timer.userInfo = intervalNumber;
             [timers addObject:timer];
         }
     }
@@ -91,14 +92,15 @@
 
 - (NSTimeInterval)_timeOnCurrentPage
 {
-    return CACurrentMediaTime() - _currentPageStartTime;
+    return round(CACurrentMediaTime() - _currentPageStartTime);
 }
 
 #pragma mark - Timer methods
 
 - (void)_onActivityTimer:(KUSWeakTimer *)timer
 {
-    [self _requestClientActivity];
+    NSNumber *intervalNumber = timer.userInfo;
+    [self _requestClientActivityWithCurrentPageSeconds:[intervalNumber doubleValue]];
 }
 
 #pragma mark - Public methods

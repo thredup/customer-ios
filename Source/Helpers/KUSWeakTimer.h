@@ -13,6 +13,7 @@
 // The underlying NSTimer
 @property (nonatomic, strong, readonly) NSTimer *timer;
 @property (atomic, assign, readonly) NSTimeInterval timeInterval;
+@property (nonatomic, strong) id userInfo;
 
 + (instancetype)scheduledTimerWithTimeInterval:(NSTimeInterval)interval target:(id)target selector:(SEL)selector repeats:(BOOL)repeats;
 
