@@ -1,5 +1,10 @@
 # Changelog for Kustomer iOS SDK
 
+## 0.1.3
+
+* Fixed a bug that would prevent time-based conversational campaigns from properly triggering.
+* Mitigated a race condition that would cause campaign messages to be received with a large delay.
+
 ## 0.1.2
 
 * Added support for tracking current page names; support conversational campaigns.
