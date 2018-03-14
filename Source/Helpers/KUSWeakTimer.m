@@ -39,7 +39,7 @@
     if (self) {
         KUSWeakTarget *weakTarget = [[KUSWeakTarget alloc] initWithTarget:target selector:selector timer:self];
         _timer = [NSTimer timerWithTimeInterval:interval target:weakTarget selector:@selector(fire) userInfo:nil repeats:repeats];
-        _timer.tolerance = MIN(interval / 20.0, 2.0);
+        _timer.tolerance = MIN(interval / 20.0, 1.0);
         _target = weakTarget;
     }
     return self;

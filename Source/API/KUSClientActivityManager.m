@@ -132,7 +132,11 @@
 {
     if (dataSource == _activityDataSource) {
         if (_activityDataSource.currentPageSeconds > 0) {
-            [_userSession.pushClient onClientActivityTick];
+            // Tell the push client to perform a sessions list pull to check for automated messages
+            // We delay a bit here to avoid a race in message creation delay
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [_userSession.pushClient onClientActivityTick];
+            });
         }
     }
     [self _updateTimers];
