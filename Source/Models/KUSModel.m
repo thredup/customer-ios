@@ -10,7 +10,9 @@
 
 #import "KUSDate.h"
 
-@implementation KUSModel
+@implementation KUSModel {
+    NSDictionary *_rawJSON;
+}
 
 #pragma mark - Class methods
 
@@ -68,6 +70,7 @@
     self = [super init];
     if (self) {
         _oid = objectId;
+        _rawJSON = [json copy];
 
         // Grab relationship identifiers
         _orgId = NSStringFromKeyPath(json, @"relationships.org.data.id");
@@ -88,6 +91,11 @@
 - (NSUInteger)hash
 {
     return [self.oid hash];
+}
+
+- (NSDictionary *_Nonnull)originalJSON
+{
+    return _rawJSON;
 }
 
 #pragma mark - Helper methods

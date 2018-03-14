@@ -25,6 +25,7 @@
 - (instancetype _Nullable)initWithJSON:(NSDictionary * _Nonnull)json;
 - (instancetype _Nonnull)init NS_UNAVAILABLE;
 + (instancetype _Nonnull)new NS_UNAVAILABLE;
+- (NSDictionary *_Nonnull)originalJSON;
 
 NSURL *_Nullable NSURLFromKeyPath(NSDictionary * _Nullable dict, NSString * _Nonnull keyPath);
 NSString *_Nullable NSStringFromKeyPath(NSDictionary * _Nullable dict, NSString * _Nonnull keyPath);
