@@ -10,7 +10,7 @@
 
 #import "KUSLog.h"
 
-@interface KUSUserSession ()
+@interface KUSUserSession () <KUSPaginatedDataSourceListener>
 
 @property (nonatomic, copy, readonly) NSString *orgId;
 @property (nonatomic, copy, readonly) NSString *orgName;
@@ -57,6 +57,9 @@
 
         [self.chatSettingsDataSource fetch];
         [self pushClient];
+
+        [self.chatSessionsDataSource addListener:self];
+        [self.chatSessionsDataSource fetchLatest];
     }
     return self;
 }
@@ -236,6 +239,24 @@
              completion(error == nil, error);
          }
      }];
+}
+
+#pragma mark - KUSPaginatedDataSourceListener methods
+
+- (void)paginatedDataSourceDidLoad:(KUSPaginatedDataSource *)dataSource
+{
+    if (dataSource == self.chatSessionsDataSource) {
+        [self.chatSessionsDataSource removeListener:self];
+
+        for (KUSChatSession *chatSession in self.chatSessionsDataSource.allObjects) {
+            // Fetch any messages that might contribute to unread count
+            KUSChatMessagesDataSource *messagesDataSource = [self chatMessagesDataSourceForSessionId:chatSession.oid];
+            BOOL hasUnseen = chatSession.lastSeenAt == nil || [chatSession.lastMessageAt laterDate:chatSession.lastSeenAt] == chatSession.lastMessageAt;
+            if (hasUnseen && !messagesDataSource.didFetch) {
+                [messagesDataSource fetchLatest];
+            }
+        }
+    }
 }
 
 @end
