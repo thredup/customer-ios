@@ -65,6 +65,11 @@ static NSString *kKustomerOrgNameKey = @"orgName";
     [[self sharedInstance] setCurrentPageName:currentPageName];
 }
 
++ (NSUInteger)unreadMessageCount
+{
+    return [[self sharedInstance] unreadMessageCount];
+}
+
 + (void)presentSupport
 {
     UIViewController *topMostViewController = KUSTopMostViewController();
@@ -226,6 +231,11 @@ static KUSLogOptions _logOptions = KUSLogOptionInfo | KUSLogOptionErrors;
 - (void)setCurrentPageName:(NSString *)currentPageName
 {
     [self.userSession.activityManager setCurrentPageName:currentPageName];
+}
+
+- (NSUInteger)unreadMessageCount
+{
+    return [self.userSession.chatSessionsDataSource totalUnreadCountExcludingSessionId:nil];
 }
 
 + (NSString *)sdkVersion

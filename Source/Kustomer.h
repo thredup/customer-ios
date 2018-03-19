@@ -28,6 +28,9 @@ FOUNDATION_EXPORT const unsigned char KustomerVersionString[];
 
 + (void)setCurrentPageName:(NSString *)currentPageName;
 
+// Returns the current count of unread messages. It might not be immediately available.
++ (NSUInteger)unreadMessageCount;
+
 // A convenience method that will present the support interface on the topmost view controller
 + (void)presentSupport;
 
