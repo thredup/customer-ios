@@ -1,5 +1,10 @@
 # Changelog for Kustomer iOS SDK
 
+## 0.1.4
+
+* Exposed the current count of unread messages via `+[Kustomer unreadMessageCount]`.
+* Changed initial screen behavior to open directly to the most recent chat when there are multiple chats for the user.
+
 ## 0.1.3
 
 * Fixed a bug that would prevent time-based conversational campaigns from properly triggering.
