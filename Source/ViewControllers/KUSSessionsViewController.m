@@ -190,11 +190,10 @@
         KUSChatViewController *chatViewController = [[KUSChatViewController alloc] initWithUserSession:_userSession
                                                                            forNewSessionWithBackButton:NO];
         [self.navigationController pushViewController:chatViewController animated:NO];
-    } else if (_chatSessionsDataSource.count == 1) {
-        // If there is exactly one chat session, go directly to it
-        KUSChatSession *chatSession = [_chatSessionsDataSource firstObject];
-        KUSChatViewController *chatViewController = [[KUSChatViewController alloc] initWithUserSession:_userSession
-                                                                                        forChatSession:chatSession];
+    } else {
+        // Go directly to the most recent chat session
+        KUSChatSession *chatSession = [_chatSessionsDataSource mostRecentSession];
+        KUSChatViewController *chatViewController = [[KUSChatViewController alloc] initWithUserSession:_userSession forChatSession:chatSession];
         [self.navigationController pushViewController:chatViewController animated:NO];
     }
 }

@@ -223,7 +223,7 @@
             mostRecentSession = chatSession;
         }
     }
-    return mostRecentSession;
+    return mostRecentSession ?: self.firstObject;
 }
 
 - (NSDate * _Nullable)lastMessageAt
