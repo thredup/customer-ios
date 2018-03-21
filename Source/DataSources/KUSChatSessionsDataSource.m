@@ -172,10 +172,10 @@
 
 - (void)describeActiveConversation:(NSDictionary<NSString *, NSObject *> *)customAttributes
 {
-    KUSChatSession *mostRecentChatSession = [self _mostRecentChatSession];
-    NSString *mostRecentChatSessionId = mostRecentChatSession.oid;
-    if (mostRecentChatSessionId) {
-        [self _flushCustomAttributes:customAttributes toChatSessionId:mostRecentChatSessionId];
+    KUSChatSession *mostRecentSession = [self mostRecentSession];
+    NSString *mostRecentSessionId = mostRecentSession.oid;
+    if (mostRecentSessionId) {
+        [self _flushCustomAttributes:customAttributes toChatSessionId:mostRecentSessionId];
     } else {
         // Merge previously queued custom attributes with the latest custom attributes
         NSMutableDictionary<NSString *, NSObject *> *pendingCustomChatSessionAttributes = [[NSMutableDictionary alloc] init];
@@ -210,25 +210,25 @@
 
 #pragma mark - Helper methods
 
-- (KUSChatSession * _Nullable)_mostRecentChatSession
+- (KUSChatSession * _Nullable)mostRecentSession
 {
     NSDate *mostRecentMessageAt = nil;
-    KUSChatSession *mostRecentChatSession = nil;
+    KUSChatSession *mostRecentSession = nil;
     for (KUSChatSession *chatSession in self.allObjects) {
         if (mostRecentMessageAt == nil) {
             mostRecentMessageAt = chatSession.lastMessageAt;
-            mostRecentChatSession = chatSession;
+            mostRecentSession = chatSession;
         } else if ([mostRecentMessageAt laterDate:chatSession.lastMessageAt] == chatSession.lastMessageAt) {
             mostRecentMessageAt = chatSession.lastMessageAt;
-            mostRecentChatSession = chatSession;
+            mostRecentSession = chatSession;
         }
     }
-    return mostRecentChatSession;
+    return mostRecentSession;
 }
 
 - (NSDate * _Nullable)lastMessageAt
 {
-    return [self _mostRecentChatSession].lastMessageAt;
+    return [self mostRecentSession].lastMessageAt;
 }
 
 - (NSDate * _Nullable)lastSeenAtForSessionId:(NSString *)sessionId
@@ -261,10 +261,10 @@
 {
     if (dataSource == self) {
         if (_pendingCustomChatSessionAttributes) {
-            KUSChatSession *mostRecentChatSession = [self _mostRecentChatSession];
-            NSString *mostRecentChatSessionId = mostRecentChatSession.oid;
-            if (mostRecentChatSessionId) {
-                [self _flushCustomAttributes:_pendingCustomChatSessionAttributes toChatSessionId:mostRecentChatSessionId];
+            KUSChatSession *mostRecentSession = [self mostRecentSession];
+            NSString *mostRecentSessionId = mostRecentSession.oid;
+            if (mostRecentSessionId) {
+                [self _flushCustomAttributes:_pendingCustomChatSessionAttributes toChatSessionId:mostRecentSessionId];
                 _pendingCustomChatSessionAttributes = nil;
             }
         }

@@ -22,6 +22,9 @@
 // Sends custom attributes to the most active conversation, or the first conversation created
 - (void)describeActiveConversation:(NSDictionary<NSString *, NSObject *> *)customAttributes;
 
+// Returns the chat session with the most recent MessageAt
+- (KUSChatSession *)mostRecentSession;
+
 // Returns the latest date representing the last message received across all sessions
 - (NSDate *)lastMessageAt;
 
