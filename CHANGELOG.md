@@ -1,5 +1,9 @@
 # Changelog for Kustomer iOS SDK
 
+## 0.1.5
+
+* Fix in-app notification window layout issue on iPhone X.
+
 ## 0.1.4
 
 * Exposed the current count of unread messages via `+[Kustomer unreadMessageCount]`.

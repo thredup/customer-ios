@@ -26,7 +26,7 @@ The Kustomer iOS SDK requires a valid API Key with role `org.tracking`. See [Get
 The preferred installation method is with [CocoaPods](https://cocoapods.org). Add the following to your `Podfile`:
 
 ```ruby
-pod 'Kustomer', :git => 'https://github.com/kustomer/customer-ios.git', :tag => '0.1.4'
+pod 'Kustomer', :git => 'https://github.com/kustomer/customer-ios.git', :tag => '0.1.5'
 ```
 
 #### Carthage
@@ -34,7 +34,7 @@ pod 'Kustomer', :git => 'https://github.com/kustomer/customer-ios.git', :tag => 
 For [Carthage](https://github.com/Carthage/Carthage), add the following to your `Cartfile`:
 
 ```ogdl
-github "kustomer/customer-ios" ~> 0.1.4
+github "kustomer/customer-ios" ~> 0.1.5
 ```
 
 ## Setup
@@ -213,3 +213,18 @@ The majority of the user interface for the support screens can be configured usi
   <br><br>
   <img src="Assets/before_chat.png">&nbsp&nbsp&nbsp<img src="Assets/after_chat.png">
 </p>
+
+### Development
+
+#### Incrementing the build version
+
+- Update the version number references in the above **Installation** section
+- Update the `CFBundleShortVersionString` and `CFBundleVersion` references in the [Info.plist](/Source/Info.plist)
+- Update the [changelog](CHANGELOG.md) if necessary
+- Commit the changes
+- Create a git tag reference with the version number:
+```
+git tag {version_number}
+git push origin master
+git push origin master --tags
+```
