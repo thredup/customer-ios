@@ -13,6 +13,5 @@
 - (instancetype)init;
 
 - (instancetype)initWithURL:(NSURL *)URL entersReaderIfAvailable:(BOOL)entersReaderIfAvailable NS_UNAVAILABLE;
-- (instancetype)initWithURL:(NSURL *)URL NS_UNAVAILABLE;
 
 @end
