@@ -1,0 +1,31 @@
+/* 
+  Localizable.strings
+  Kustomer
+
+  Created by Hunain Shahid on 03/05/2018.
+  Copyright © 2018 Kustomer. All rights reserved.
+*/
+
+
+"week" = "ہفتہ";
+"day" = "دن";
+"hour" = "گھنٹہ";
+"minute" = "منٹ";
+"weeks" = "ہفتوں";
+"days" = "دن";
+"hours" = "گھنٹے";
+"minutes" = "منٹ";
+"Just now" = "ابھی ابھی";
+"Attachment" = "منسلکہ";
+"Camera" = "کیمرہ";
+"Photo Library" = "تصویر لائبریری";
+"Cancel" = "منسوخ کریں";
+"Something went wrong. Please try again." = "کچھ غلط ہو گیا. دوبارہ کوشش کریں.";
+"Try Again" = "دوبارہ کوشش کریں";
+"Messaging by Kustomer" = "کسٹمر کی طرف سے پیغام رسانی";
+"New Conversation" = "نئی بات چیت";
+"Don't miss a response! Get notified by email:" = "جواب مت چھوڑیں ای میل کے ذریعہ اطلاع دیں";
+"example@domain.com" = "example@domain.com";
+"Type a message..." = "ایک پیغام ٹائپ کریں ...";
+"Loading..." = "لوڈ کر رہا ہے ...";
+"ago" = "پہلے";

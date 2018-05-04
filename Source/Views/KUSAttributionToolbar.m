@@ -9,6 +9,7 @@
 #import "KUSAttributionToolbar.h"
 
 #import "KUSColor.h"
+#import "KUSLocalizationManager.h"
 
 @interface KUSAttributionToolbar ()
 
@@ -28,7 +29,7 @@
         self.barTintColor = [KUSColor lightGrayColor];
 
         _attributionLabel = [[UILabel alloc] init];
-        _attributionLabel.text = NSLocalizedString(@"Messaging by Kustomer", nil);
+        _attributionLabel.text = [[KUSLocalizationManager sharedInstance] localizedString:@"Messaging by Kustomer"];
         _attributionLabel.textAlignment = NSTextAlignmentCenter;
         _attributionLabel.backgroundColor = [UIColor clearColor];
         _attributionLabel.textColor = [KUSColor darkGrayColor];

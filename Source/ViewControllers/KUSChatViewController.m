@@ -605,7 +605,8 @@
                                                                        preferredStyle:UIAlertControllerStyleActionSheet];
 
     if ([KUSPermissions cameraAccessIsAvailable]) {
-        UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Camera", nil)
+        
+        UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:[[KUSLocalizationManager sharedInstance] localizedString:@"Camera"]
                                                                style:UIAlertActionStyleDefault
                                                              handler:^(UIAlertAction *action) {
                                                                  [self _presentImagePickerWithSourceType:UIImagePickerControllerSourceTypeCamera];
@@ -614,7 +615,8 @@
     }
 
     if ([KUSPermissions photoLibraryAccessIsAvailable]) {
-        UIAlertAction *photoAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Photo Library", nil)
+        UIAlertAction *photoAction = [UIAlertAction actionWithTitle:[[KUSLocalizationManager sharedInstance]
+                                                                     localizedString:@"Photo Library"]
                                                               style:UIAlertActionStyleDefault
                                                             handler:^(UIAlertAction *action) {
                                                                 [self _presentImagePickerWithSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
@@ -622,7 +624,7 @@
         [actionController addAction:photoAction];
     }
 
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:[[KUSLocalizationManager sharedInstance] localizedString:@"Cancel"]
                                                            style:UIAlertActionStyleCancel
                                                          handler:nil];
     [actionController addAction:cancelAction];
