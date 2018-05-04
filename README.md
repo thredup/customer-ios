@@ -80,7 +80,7 @@ Enabling the ability for your users to upload images to conversations requires c
 [Kustomer presentKnowledgeBase];
 
 // Convenience method that will present a custom web page interface
-+ (void)presentCustomWebPage:(NSString*)url;
+[Kustomer presentCustomWebPage:@"https://www.example.com"];
 ```
 
 ```objective-c
