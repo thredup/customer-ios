@@ -871,7 +871,6 @@
 					};
 					63B9CDB71F089BF000120F3E = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = B5V93DYMK7;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -1372,11 +1371,11 @@
 			baseConfigurationReference = 479720192A1054576AB58BBA /* Pods-KustomerExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = B5V93DYMK7;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = KustomerExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.kustomer.KustomerExampleh;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kustomer.KustomerExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -1387,11 +1386,11 @@
 			baseConfigurationReference = 448086DB570B5537AB2DFA4E /* Pods-KustomerExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = B5V93DYMK7;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = KustomerExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.kustomer.KustomerExampleh;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kustomer.KustomerExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};

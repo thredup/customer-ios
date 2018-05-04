@@ -67,6 +67,7 @@ static NSDateFormatter *_ShortRelativeDateFormatter(void)
         _dateFormatter = [[NSDateFormatter alloc] init];
         _dateFormatter.timeStyle = NSDateFormatterShortStyle;
         _dateFormatter.dateStyle = NSDateFormatterShortStyle;
+        _dateFormatter.locale = [[KUSLocalizationManager sharedInstance] currentLocale];
         _dateFormatter.doesRelativeDateFormatting = YES;
     });
     return _dateFormatter;

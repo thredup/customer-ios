@@ -29,6 +29,10 @@
 {
     [super viewWillLayoutSubviews];
 
+    BOOL isRTL = [[KUSLocalizationManager sharedInstance] isCurrentLanguageRTL];
+    self.navigationController.view.semanticContentAttribute = isRTL ? UISemanticContentAttributeForceRightToLeft : UISemanticContentAttributeForceLeftToRight;
+    self.navigationController.navigationBar.semanticContentAttribute = isRTL ? UISemanticContentAttributeForceRightToLeft : UISemanticContentAttributeForceLeftToRight;
+    
     CGPoint iconCenterPoint = (CGPoint) {
         .x = self.view.bounds.size.width / 2.0,
         .y = self.view.bounds.size.height / 2.5
