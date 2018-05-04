@@ -9,6 +9,7 @@
 #import "KUSChatPlaceholderTableViewCell.h"
 
 #import "KUSColor.h"
+#import "KUSLocalizationManager.h"
 
 @implementation KUSChatPlaceholderTableViewCell
 
@@ -38,6 +39,7 @@
 
 - (void)drawRect:(CGRect)rect
 {
+    BOOL isRTL = [[KUSLocalizationManager sharedInstance] isCurrentLanguageRTL];
     [self.lineColor setFill];
 
     CGFloat margins = 28.0;
@@ -49,21 +51,21 @@
     CGFloat yOffset = (rect.size.height - totalBarHeight) / 2.0;
 
     UIRectFillUsingBlendMode((CGRect) {
-        .origin.x = margins,
+        .origin.x = isRTL ? maxBarWidth - (maxBarWidth * 0.15) + margins : margins,
         .origin.y = yOffset,
         .size.width = maxBarWidth * 0.15,
         .size.height = 10.0
     }, kCGBlendModeNormal);
 
     UIRectFillUsingBlendMode((CGRect) {
-        .origin.x = margins,
+        .origin.x = isRTL ? maxBarWidth - (maxBarWidth * 0.98) + margins : margins,
         .origin.y = yOffset + barHeight + barPadding,
         .size.width = maxBarWidth * 0.98,
         .size.height = 10.0
     }, kCGBlendModeNormal);
 
     UIRectFillUsingBlendMode((CGRect) {
-        .origin.x = margins,
+        .origin.x = isRTL ? maxBarWidth - (maxBarWidth * 0.8) + margins : margins,
         .origin.y = yOffset + (barHeight + barPadding) * 2.0,
         .size.width = maxBarWidth * 0.8,
         .size.height = 10.0

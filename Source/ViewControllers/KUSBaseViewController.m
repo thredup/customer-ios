@@ -10,6 +10,7 @@
 
 #import "KUSColor.h"
 #import "KUSImage.h"
+#import "KUSLocalizationManager.h"
 
 @interface KUSBaseViewController ()
 
@@ -174,7 +175,7 @@
         UIImage *buttonImage = [circularImage resizableImageWithCapInsets:capInsets];
 
         _retryButton = [[UIButton alloc] init];
-        [_retryButton setTitle:NSLocalizedString(@"Try Again", nil) forState:UIControlStateNormal];
+        [_retryButton setTitle:[[KUSLocalizationManager sharedInstance] localizedString:@"Try Again"] forState:UIControlStateNormal];
         _retryButton.titleLabel.textColor = [UIColor whiteColor];
         _retryButton.titleLabel.font = [UIFont systemFontOfSize:12.0];
         [_retryButton setBackgroundImage:buttonImage forState:UIControlStateNormal];

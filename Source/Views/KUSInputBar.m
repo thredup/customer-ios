@@ -14,6 +14,7 @@
 #import "KUSPermissions.h"
 #import "KUSTextView.h"
 #import "KUSImageAttachmentCollectionViewCell.h"
+#import "KUSLocalizationManager.h"
 
 static const CGFloat kKUSInputBarMinimumHeight = 50.0;
 static const CGFloat kKUSInputBarPadding = 3.0;
@@ -56,7 +57,7 @@ static NSString *kCellIdentifier = @"ImageAttachment";
         [appearance setSeparatorColor:[KUSColor lightGrayColor]];
         [appearance setTextColor:[UIColor blackColor]];
         [appearance setTextFont:[UIFont systemFontOfSize:14.0]];
-        [appearance setPlaceholder:NSLocalizedString(@"Type a message...", nil)];
+        [appearance setPlaceholder:[[KUSLocalizationManager sharedInstance] localizedString:@"Type a message..."]];
         [appearance setPlaceholderColor:[UIColor lightGrayColor]];
         [appearance setSendButtonColor:[KUSColor blueColor]];
         [appearance setKeyboardAppearance:UIKeyboardAppearanceDefault];

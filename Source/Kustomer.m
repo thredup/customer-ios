@@ -70,6 +70,21 @@ static NSString *kKustomerOrgNameKey = @"orgName";
     return [[self sharedInstance] unreadMessageCount];
 }
 
++ (void)printLocalizationKeys
+{
+    [[self sharedInstance] printLocalizationKeys];
+}
+
++ (void)setLocalizationRegion:(NSString *)region
+{
+    [[self sharedInstance] setLocalizationRegion:region];
+}
+
++ (void)registerLocalizationTableName:(NSString *)table
+{
+    [[self sharedInstance] registerLocalizationTableName:table];
+}
+
 + (void)presentSupport
 {
     UIViewController *topMostViewController = KUSTopMostViewController();
@@ -236,6 +251,24 @@ static KUSLogOptions _logOptions = KUSLogOptionInfo | KUSLogOptionErrors;
 - (NSUInteger)unreadMessageCount
 {
     return [self.userSession.chatSessionsDataSource totalUnreadCountExcludingSessionId:nil];
+}
+
+- (void)printLocalizationKeys
+{
+    [[KUSLocalizationManager sharedInstance] printAllKeys];
+//    [self.userSession.localizationManager printAllKeys];
+}
+
+- (void)setLocalizationRegion:(NSString *)region
+{
+    [[KUSLocalizationManager sharedInstance] setRegion:region];
+//    [self.userSession.localizationManager setRegion:region];
+}
+
+- (void)registerLocalizationTableName:(NSString *)table
+{
+    [[KUSLocalizationManager sharedInstance] setTable:table];
+//    [self.userSession.localizationManager setTable:table];
 }
 
 + (NSString *)sdkVersion

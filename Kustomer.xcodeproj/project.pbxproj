@@ -163,6 +163,9 @@
 		63F61A7E1FFAC86400E56766 /* KUSMultipleAvatarsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 63F61A7C1FFAC86400E56766 /* KUSMultipleAvatarsView.m */; };
 		6D7CDE24CE12E0916484305C /* Pods_Kustomer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4074C2A1E9213757162ED660 /* Pods_Kustomer.framework */; };
 		7C3913946A295179BE2E925B /* Pods_KustomerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D624913E5C7AD4492EF0D39B /* Pods_KustomerTests.framework */; };
+		D60CA8A9209AF68200CDAA6D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D60CA8AB209AF68200CDAA6D /* Localizable.strings */; };
+		D60CA8BA209B12C100CDAA6D /* KUSLocalizationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = D60CA8B8209B12C100CDAA6D /* KUSLocalizationManager.h */; };
+		D60CA8BB209B12C100CDAA6D /* KUSLocalizationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D60CA8B9209B12C100CDAA6D /* KUSLocalizationManager.m */; };
 		FC5BDC34DC026F04AE056627 /* Pods_KustomerExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BBA02B9E3111B375725C25D /* Pods_KustomerExample.framework */; };
 /* End PBXBuildFile section */
 
@@ -367,6 +370,10 @@
 		6BBA02B9E3111B375725C25D /* Pods_KustomerExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KustomerExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F91D0EF26D550F6FA48F5E6 /* Pods-Kustomer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Kustomer.release.xcconfig"; path = "Pods/Target Support Files/Pods-Kustomer/Pods-Kustomer.release.xcconfig"; sourceTree = "<group>"; };
 		A8B9C7F846CD493168479E0A /* Pods-KustomerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KustomerTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-KustomerTests/Pods-KustomerTests.release.xcconfig"; sourceTree = "<group>"; };
+		D60CA8AC209AF68700CDAA6D /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
+		D60CA8B8209B12C100CDAA6D /* KUSLocalizationManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KUSLocalizationManager.h; sourceTree = "<group>"; };
+		D60CA8B9209B12C100CDAA6D /* KUSLocalizationManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KUSLocalizationManager.m; sourceTree = "<group>"; };
+		D60CA8BE209B63FC00CDAA6D /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D624913E5C7AD4492EF0D39B /* Pods_KustomerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KustomerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAEBB4868A9AF9DB8C939E87 /* Pods-KustomerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KustomerTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-KustomerTests/Pods-KustomerTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -452,6 +459,8 @@
 				63EDF3CF1F412503000345D8 /* KUSUserSession.h */,
 				63BF9C611FE7772200E30C73 /* KUSUserSession_Private.h */,
 				63EDF3D01F412503000345D8 /* KUSUserSession.m */,
+				D60CA8B8209B12C100CDAA6D /* KUSLocalizationManager.h */,
+				D60CA8B9209B12C100CDAA6D /* KUSLocalizationManager.m */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -633,6 +642,7 @@
 				6334BE251F0C3E7100258DAF /* Models */,
 				63B9CDE31F095E1D00120F3E /* ViewControllers */,
 				63A4EDE41F0A968E00EA3852 /* Views */,
+				D60CA8AB209AF68200CDAA6D /* Localizable.strings */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -766,6 +776,7 @@
 				63EDF3D11F412503000345D8 /* KUSUserSession.h in Headers */,
 				6334BE2E1F0C43BE00258DAF /* KUSTrackingToken.h in Headers */,
 				63270E991F4A717600E25BF5 /* KUSDate.h in Headers */,
+				D60CA8BA209B12C100CDAA6D /* KUSLocalizationManager.h in Headers */,
 				63C7626B203E71BD00A12BDD /* KUSWeakTimer.h in Headers */,
 				63270E951F4A1FA200E25BF5 /* KUSPushClient.h in Headers */,
 				6334BE2A1F0C3E8600258DAF /* KUSModel.h in Headers */,
@@ -852,7 +863,7 @@
 				TargetAttributes = {
 					63B9CD901F088E8800120F3E = {
 						CreatedOnToolsVersion = 8.2.1;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 					63B9CD991F088E8800120F3E = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -860,6 +871,7 @@
 					};
 					63B9CDB71F089BF000120F3E = {
 						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = B5V93DYMK7;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -871,6 +883,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ur,
 			);
 			mainGroup = 63B9CD871F088E8800120F3E;
 			productRefGroup = 63B9CD921F088E8800120F3E /* Products */;
@@ -894,6 +907,7 @@
 				63D9C1821F3046DA00999183 /* up_arrow@2x.png in Resources */,
 				63D529851FB7CFA700B1B004 /* paperclip_icon@2x.png in Resources */,
 				63DC73621F57B44900683DE8 /* message_received.m4a in Resources */,
+				D60CA8A9209AF68200CDAA6D /* Localizable.strings in Resources */,
 				63D9C1841F304A7600999183 /* pencil_image@2x.png in Resources */,
 				636531AF1F1C4B9700433A50 /* kusty@2x.png in Resources */,
 			);
@@ -1062,6 +1076,7 @@
 				636531A21F1BBA7C00433A50 /* KUSSessionsViewController.m in Sources */,
 				6334BE3F1F0C4EBE00258DAF /* KUSCustomer.m in Sources */,
 				6334BE611F0C9B5100258DAF /* KUSPaginatedResponse.m in Sources */,
+				D60CA8BB209B12C100CDAA6D /* KUSLocalizationManager.m in Sources */,
 				6334BE331F0C487400258DAF /* KUSChatSettings.m in Sources */,
 				63EDF3DA1F415797000345D8 /* KUSTrackingTokenDataSource.m in Sources */,
 				632665DE1F945DB800ED1AB2 /* KUSSessionsTableView.m in Sources */,
@@ -1161,6 +1176,15 @@
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
+		D60CA8AB209AF68200CDAA6D /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D60CA8AC209AF68700CDAA6D /* Base */,
+				D60CA8BE209B63FC00CDAA6D /* ur */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -1168,6 +1192,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -1225,6 +1250,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -1277,6 +1303,8 @@
 			baseConfigurationReference = 19AB306DD5AA4895D0C92102 /* Pods-Kustomer.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1287,6 +1315,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.kustomer.Kustomer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1297,6 +1326,7 @@
 			baseConfigurationReference = 6F91D0EF26D550F6FA48F5E6 /* Pods-Kustomer.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1307,6 +1337,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.kustomer.Kustomer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1341,11 +1372,11 @@
 			baseConfigurationReference = 479720192A1054576AB58BBA /* Pods-KustomerExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = B5V93DYMK7;
 				INFOPLIST_FILE = KustomerExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.kustomer.KustomerExample;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kustomer.KustomerExampleh;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -1356,11 +1387,11 @@
 			baseConfigurationReference = 448086DB570B5537AB2DFA4E /* Pods-KustomerExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = B5V93DYMK7;
 				INFOPLIST_FILE = KustomerExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.kustomer.KustomerExample;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kustomer.KustomerExampleh;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};

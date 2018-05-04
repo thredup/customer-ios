@@ -11,6 +11,7 @@
 #import "KUSColor.h"
 #import "KUSImage.h"
 #import "KUSText.h"
+#import "KUSLocalizationManager.h"
 
 @interface KUSEmailInputView () <UITextFieldDelegate>
 
@@ -30,10 +31,10 @@
     if (self == [KUSEmailInputView class]) {
         KUSEmailInputView *appearance = [KUSEmailInputView appearance];
         [appearance setBackgroundColor:[KUSColor lightGrayColor]];
-        [appearance setPrompt:NSLocalizedString(@"Don't miss a response! Get notified by email:", nil)];
+        [appearance setPrompt:[[KUSLocalizationManager sharedInstance] localizedString:@"Don't miss a response! Get notified by email:"]];
         [appearance setPromptColor:[KUSColor darkGrayColor]];
         [appearance setPromptFont:[UIFont systemFontOfSize:12.0]];
-        [appearance setPlaceholder:NSLocalizedString(@"example@domain.com", nil)];
+        [appearance setPlaceholder:[[KUSLocalizationManager sharedInstance] localizedString:@"example@domain.com"]];
         [appearance setPlaceholderFont:[UIFont systemFontOfSize:14.0]];
         [appearance setSeparatorColor:[KUSColor grayColor]];
         [appearance setBorderColor:[KUSColor greenColor]];
