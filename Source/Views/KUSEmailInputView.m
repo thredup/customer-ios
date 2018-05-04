@@ -111,8 +111,9 @@
     };
     self.textField.layer.cornerRadius = self.textField.frame.size.height / 2.0;
 
+    BOOL isRTL = [[KUSLocalizationManager sharedInstance] isCurrentLanguageRTL];
     self.submitButton.frame = (CGRect) {
-        .origin.x = CGRectGetMaxX(self.textField.frame) - 30.0,
+        .origin.x = isRTL ? sidePadding : CGRectGetMaxX(self.textField.frame) - 30.0,
         .origin.y = CGRectGetMaxY(self.textField.frame) - 30.0,
         .size.width = 30.0,
         .size.height = 30.0

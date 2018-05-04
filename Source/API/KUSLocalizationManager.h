@@ -21,5 +21,6 @@
 - (void)printAllKeys;
 - (NSString *)localizedString:(NSString *)key;
 - (BOOL)isCurrentLanguageRTL;
+- (NSLocale*)currentLocale;
 
 @end

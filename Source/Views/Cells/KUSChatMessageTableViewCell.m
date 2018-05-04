@@ -201,6 +201,7 @@ static const CGFloat kTimestampTopPadding = 4.0;
 {
     [super layoutSubviews];
 
+    BOOL isRTL = [[KUSLocalizationManager sharedInstance] isCurrentLanguageRTL];
     BOOL currentUser = KUSChatMessageSentByUser(_chatMessage);
 
     CGSize boundingSizeForContent = [[self class] boundingSizeForMessage:_chatMessage maxWidth:self.contentView.bounds.size.width];
@@ -208,8 +209,10 @@ static const CGFloat kTimestampTopPadding = 4.0;
         .width = boundingSizeForContent.width + kBubbleSidePadding * 2.0,
         .height = boundingSizeForContent.height + kBubbleTopPadding * 2.0
     };
+    CGFloat bubbleCurrentX = isRTL ? kRowSidePadding : self.contentView.bounds.size.width - bubbleViewSize.width - kRowSidePadding;
+    CGFloat bubbleOtherX = isRTL ? self.contentView.bounds.size.width - bubbleViewSize.width - 60.0 : 60.0;
     _bubbleView.frame = (CGRect) {
-        .origin.x = currentUser ? self.contentView.bounds.size.width - bubbleViewSize.width - kRowSidePadding : 60.0,
+        .origin.x = currentUser ? bubbleCurrentX : bubbleOtherX,
         .origin.y = kRowTopPadding,
         .size = bubbleViewSize
     };
@@ -217,7 +220,7 @@ static const CGFloat kTimestampTopPadding = 4.0;
 
     _avatarImageView.hidden = currentUser || !_showsAvatar;
     _avatarImageView.frame = (CGRect) {
-        .origin.x = kRowSidePadding,
+        .origin.x = isRTL ? self.contentView.bounds.size.width - kRowSidePadding - 40.0 : kRowSidePadding,
         .origin.y = ((bubbleViewSize.height + kRowTopPadding * 2.0) - kAvatarDiameter) / 2.0,
         .size.width = kAvatarDiameter,
         .size.height = kAvatarDiameter
@@ -242,7 +245,7 @@ static const CGFloat kTimestampTopPadding = 4.0;
     }
 
     _errorButton.frame = (CGRect) {
-        .origin.x = _bubbleView.frame.origin.x - kMinBubbleHeight - 5.0,
+        .origin.x = isRTL ? CGRectGetMaxX(_bubbleView.frame) + kMinBubbleHeight + 5.0 : _bubbleView.frame.origin.x - kMinBubbleHeight - 5.0,
         .origin.y = _bubbleView.frame.origin.y + (_bubbleView.frame.size.height - kMinBubbleHeight) / 2.0,
         .size.width = kMinBubbleHeight,
         .size.height = kMinBubbleHeight
@@ -251,8 +254,10 @@ static const CGFloat kTimestampTopPadding = 4.0;
     _timestampLabel.hidden = !_showsTimestamp;
     CGFloat timestampInset = ceil(_bubbleView.layer.cornerRadius / 2.0);
     CGFloat timestampWidth = MAX(bubbleViewSize.width - timestampInset * 2.0, 200.0);
+    CGFloat timestampCurrentX = isRTL ? _bubbleView.frame.origin.x + timestampInset : CGRectGetMaxX(_bubbleView.frame) - timestampWidth - timestampInset;
+    CGFloat timestampOtherX = isRTL ? CGRectGetMaxX(_bubbleView.frame) - timestampWidth - timestampInset : _bubbleView.frame.origin.x + timestampInset;
     _timestampLabel.frame = (CGRect) {
-        .origin.x = (currentUser ? CGRectGetMaxX(_bubbleView.frame) - timestampWidth - timestampInset : _bubbleView.frame.origin.x + timestampInset),
+        .origin.x = (currentUser ? timestampCurrentX : timestampOtherX),
         .origin.y = CGRectGetMaxY(_bubbleView.frame) + kTimestampTopPadding,
         .size.width = timestampWidth,
         .size.height = MAX([[self class] heightForTimestamp] - kTimestampTopPadding, 0.0)
@@ -326,6 +331,7 @@ static const CGFloat kTimestampTopPadding = 4.0;
 {
     _chatMessage = chatMessage;
 
+    BOOL isRTL = [[KUSLocalizationManager sharedInstance] isCurrentLanguageRTL];
     BOOL currentUser = KUSChatMessageSentByUser(_chatMessage);
 
     KUSChatMessageTableViewCell *appearance = [KUSChatMessageTableViewCell appearance];
@@ -370,7 +376,7 @@ static const CGFloat kTimestampTopPadding = 4.0;
         _errorButton.hidden = YES;
     }
 
-    _timestampLabel.textAlignment = (currentUser ? NSTextAlignmentRight : NSTextAlignmentLeft);
+    _timestampLabel.textAlignment = (currentUser ? isRTL ? NSTextAlignmentLeft : NSTextAlignmentRight : isRTL ?  NSTextAlignmentRight : NSTextAlignmentLeft);
     _timestampLabel.text = [KUSDate messageTimestampTextFromDate:_chatMessage.createdAt];
 
     [self _updateAlphaForState];

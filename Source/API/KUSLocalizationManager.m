@@ -48,10 +48,11 @@
 - (void)setRegion:(NSString *)region
 {
     _region = region;
-    if ([NSLocale characterDirectionForLanguage:_region] == NSLocaleLanguageDirectionRightToLeft)
+    if ([NSLocale characterDirectionForLanguage:_region] == NSLocaleLanguageDirectionRightToLeft) {
         [UIView appearance].semanticContentAttribute = UISemanticContentAttributeForceRightToLeft;
-    else
+    } else {
         [UIView appearance].semanticContentAttribute = UISemanticContentAttributeForceLeftToRight;
+    }
 }
 
 - (void)setTable:(NSString *)table
@@ -100,6 +101,13 @@
     
     NSString *language = [[NSLocale preferredLanguages] firstObject];
     return ([NSLocale characterDirectionForLanguage:language] == NSLocaleLanguageDirectionRightToLeft);
+}
+
+- (NSLocale*)currentLocale
+{
+    if (_region)
+        return [[NSLocale alloc] initWithLocaleIdentifier:_region];
+    return [NSLocale currentLocale];
 }
 
 @end

@@ -209,6 +209,24 @@
     return chevronImage;
 }
 
++ (UIImage *)rightChevronWithColor:(UIColor *)color size:(CGSize)size lineWidth:(CGFloat)lineWidth
+{
+    CGFloat cornerInset = sqrt((lineWidth * lineWidth) / 2.0);
+    
+    UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetStrokeColorWithColor(context, color.CGColor);
+    CGContextSetLineWidth(context, lineWidth);
+    CGContextMoveToPoint(context, 0.0 + cornerInset, 0.0 + cornerInset);
+    CGContextAddLineToPoint(context, size.width - cornerInset, size.height / 2.0);
+    CGContextAddLineToPoint(context, 0.0 + cornerInset, size.height - cornerInset);
+    CGContextStrokePath(context);
+    
+    UIImage *chevronImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return chevronImage;
+}
+
 #pragma mark - Internal methods
 
 + (NSArray<NSString *> *)_initialsFromName:(NSString *)name
