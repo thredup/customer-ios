@@ -606,7 +606,7 @@
 
     if ([KUSPermissions cameraAccessIsAvailable]) {
         
-        UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:[[KUSLocalizationManager sharedInstance] localizedString:@"Camera"]
+        UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:[[KUSLocalization sharedInstance] localizedString:@"Camera"]
                                                                style:UIAlertActionStyleDefault
                                                              handler:^(UIAlertAction *action) {
                                                                  [self _presentImagePickerWithSourceType:UIImagePickerControllerSourceTypeCamera];
@@ -615,7 +615,7 @@
     }
 
     if ([KUSPermissions photoLibraryAccessIsAvailable]) {
-        UIAlertAction *photoAction = [UIAlertAction actionWithTitle:[[KUSLocalizationManager sharedInstance]
+        UIAlertAction *photoAction = [UIAlertAction actionWithTitle:[[KUSLocalization sharedInstance]
                                                                      localizedString:@"Photo Library"]
                                                               style:UIAlertActionStyleDefault
                                                             handler:^(UIAlertAction *action) {
@@ -624,7 +624,7 @@
         [actionController addAction:photoAction];
     }
 
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:[[KUSLocalizationManager sharedInstance] localizedString:@"Cancel"]
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:[[KUSLocalization sharedInstance] localizedString:@"Cancel"]
                                                            style:UIAlertActionStyleCancel
                                                          handler:nil];
     [actionController addAction:cancelAction];

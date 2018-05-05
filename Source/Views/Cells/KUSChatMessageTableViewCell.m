@@ -201,7 +201,7 @@ static const CGFloat kTimestampTopPadding = 4.0;
 {
     [super layoutSubviews];
 
-    BOOL isRTL = [[KUSLocalizationManager sharedInstance] isCurrentLanguageRTL];
+    BOOL isRTL = [[KUSLocalization sharedInstance] isCurrentLanguageRTL];
     BOOL currentUser = KUSChatMessageSentByUser(_chatMessage);
 
     CGSize boundingSizeForContent = [[self class] boundingSizeForMessage:_chatMessage maxWidth:self.contentView.bounds.size.width];
@@ -331,7 +331,7 @@ static const CGFloat kTimestampTopPadding = 4.0;
 {
     _chatMessage = chatMessage;
 
-    BOOL isRTL = [[KUSLocalizationManager sharedInstance] isCurrentLanguageRTL];
+    BOOL isRTL = [[KUSLocalization sharedInstance] isCurrentLanguageRTL];
     BOOL currentUser = KUSChatMessageSentByUser(_chatMessage);
 
     KUSChatMessageTableViewCell *appearance = [KUSChatMessageTableViewCell appearance];

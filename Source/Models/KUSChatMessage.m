@@ -10,7 +10,7 @@
 
 #import "KUSUserSession.h"
 #import "Kustomer_Private.h"
-#import "KUSLocalizationManager.h"
+#import "KUSLocalization.h"
 
 @implementation KUSChatMessage
 
@@ -139,7 +139,7 @@ static NSString *KUSUnescapeBackslashesFromString(NSString *string)
         KUSChatMessage *imageMessage = [[KUSChatMessage alloc] initWithJSON:mutableImageJSON
                                                                        type:KUSChatMessageTypeImage
                                                                    imageURL:imageURL];
-        imageMessage->_body = [[KUSLocalizationManager sharedInstance] localizedString:@"Attachment"];
+        imageMessage->_body = [[KUSLocalization sharedInstance] localizedString:@"Attachment"];
         [chatMessages addObject:imageMessage];
         lastId++;
     }

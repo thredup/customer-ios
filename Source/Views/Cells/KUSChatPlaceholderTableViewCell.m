@@ -9,7 +9,7 @@
 #import "KUSChatPlaceholderTableViewCell.h"
 
 #import "KUSColor.h"
-#import "KUSLocalizationManager.h"
+#import "KUSLocalization.h"
 
 @implementation KUSChatPlaceholderTableViewCell
 
@@ -39,7 +39,7 @@
 
 - (void)drawRect:(CGRect)rect
 {
-    BOOL isRTL = [[KUSLocalizationManager sharedInstance] isCurrentLanguageRTL];
+    BOOL isRTL = [[KUSLocalization sharedInstance] isCurrentLanguageRTL];
     [self.lineColor setFill];
 
     CGFloat margins = 28.0;

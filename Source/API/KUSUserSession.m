@@ -29,7 +29,6 @@
 @property (nonatomic, strong, null_resettable) KUSPushClient *pushClient;
 @property (nonatomic, strong, null_resettable) KUSDelegateProxy *delegateProxy;
 @property (nonatomic, strong, null_resettable) KUSClientActivityManager *activityManager;
-@property (nonatomic, strong, null_resettable) KUSLocalizationManager *localizationManager;
 
 @property (nonatomic, strong, null_resettable) KUSUserDefaults *userDefaults;
 

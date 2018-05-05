@@ -7,18 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "KUSLocalizationManager.h"
+#import "KUSLocalization.h"
 
-@interface KUSLocalizationManager () 
+@interface KUSLocalization () 
 @end
 
-@implementation KUSLocalizationManager
+@implementation KUSLocalization
 
 #pragma mark - Lifecycle methods
 
 + (instancetype)sharedInstance
 {
-    static KUSLocalizationManager *_sharedInstance = nil;
+    static KUSLocalization *_sharedInstance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _sharedInstance = [[self alloc] init];
