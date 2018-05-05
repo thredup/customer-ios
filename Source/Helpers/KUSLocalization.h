@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @class KUSUserSession;
-@interface KUSLocalizationManager : NSObject
+@interface KUSLocalization : NSObject
 
 @property (nonatomic, copy) NSString *region;
 @property (nonatomic, copy) NSString *table;

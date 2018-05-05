@@ -20,7 +20,7 @@
 #import "KUSUserDefaults.h"
 #import "KUSCustomerDescription.h"
 #import "KUSClientActivityManager.h"
-#import "KUSLocalizationManager.h"
+#import "KUSLocalization.h"
 
 @interface KUSUserSession : NSObject
 

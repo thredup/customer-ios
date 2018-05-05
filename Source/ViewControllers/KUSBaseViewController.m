@@ -10,7 +10,7 @@
 
 #import "KUSColor.h"
 #import "KUSImage.h"
-#import "KUSLocalizationManager.h"
+#import "KUSLocalization.h"
 
 @interface KUSBaseViewController ()
 
@@ -29,7 +29,7 @@
 {
     [super viewWillLayoutSubviews];
 
-    BOOL isRTL = [[KUSLocalizationManager sharedInstance] isCurrentLanguageRTL];
+    BOOL isRTL = [[KUSLocalization sharedInstance] isCurrentLanguageRTL];
     self.navigationController.view.semanticContentAttribute = isRTL ? UISemanticContentAttributeForceRightToLeft : UISemanticContentAttributeForceLeftToRight;
     self.navigationController.navigationBar.semanticContentAttribute = isRTL ? UISemanticContentAttributeForceRightToLeft : UISemanticContentAttributeForceLeftToRight;
     
@@ -179,7 +179,7 @@
         UIImage *buttonImage = [circularImage resizableImageWithCapInsets:capInsets];
 
         _retryButton = [[UIButton alloc] init];
-        [_retryButton setTitle:[[KUSLocalizationManager sharedInstance] localizedString:@"Try Again"] forState:UIControlStateNormal];
+        [_retryButton setTitle:[[KUSLocalization sharedInstance] localizedString:@"Try Again"] forState:UIControlStateNormal];
         _retryButton.titleLabel.textColor = [UIColor whiteColor];
         _retryButton.titleLabel.font = [UIFont systemFontOfSize:12.0];
         [_retryButton setBackgroundImage:buttonImage forState:UIControlStateNormal];

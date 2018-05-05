@@ -57,7 +57,7 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
         [appearance setUnreadBackgroundColor:[KUSColor redColor]];
         [appearance setUnreadFont:[UIFont systemFontOfSize:10.0]];
 
-        BOOL isRTL = [[KUSLocalizationManager sharedInstance] isCurrentLanguageRTL];
+        BOOL isRTL = [[KUSLocalization sharedInstance] isCurrentLanguageRTL];
         if (isRTL) {
             UIImage *backButtonImage = [KUSImage rightChevronWithColor:[UIColor blackColor] size:kKUSNavigationBarBackImageSize lineWidth:2.5];
             appearance.backButtonImage = [backButtonImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -188,7 +188,7 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
         .size.height = 0.5
     };
 
-    BOOL isRTL = [[KUSLocalizationManager sharedInstance] isCurrentLanguageRTL];
+    BOOL isRTL = [[KUSLocalization sharedInstance] isCurrentLanguageRTL];
     _backButton.frame = (CGRect) {
         .origin.x = isRTL ? self.bounds.size.width - kKUSNavigationBarBackButtonSize.width : 0.0,
         .origin.y = _topInset,

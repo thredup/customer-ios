@@ -9,7 +9,7 @@
 #import "KUSDate.h"
 #import "Kustomer_Private.h"
 #import "KUSUserSession.h"
-#import "KUSLocalizationManager.h"
+#import "KUSLocalization.h"
 
 const NSTimeInterval kSecondsPerMinute = 60.0;
 const NSTimeInterval kMinutesPerHour = 60.0;
@@ -38,7 +38,7 @@ const NSTimeInterval kDaysPerWeek = 7.0;
         NSTimeInterval count = timeAgo / (kSecondsPerMinute);
         return _AgoTextWithCountAndUnit(count, @"minute");
     } else {
-        return [[KUSLocalizationManager sharedInstance] localizedString:@"Just now"];
+        return [[KUSLocalization sharedInstance] localizedString:@"Just now"];
     }
 }
 
@@ -67,7 +67,7 @@ static NSDateFormatter *_ShortRelativeDateFormatter(void)
         _dateFormatter = [[NSDateFormatter alloc] init];
         _dateFormatter.timeStyle = NSDateFormatterShortStyle;
         _dateFormatter.dateStyle = NSDateFormatterShortStyle;
-        _dateFormatter.locale = [[KUSLocalizationManager sharedInstance] currentLocale];
+        _dateFormatter.locale = [[KUSLocalization sharedInstance] currentLocale];
         _dateFormatter.doesRelativeDateFormatting = YES;
     });
     return _dateFormatter;
@@ -76,8 +76,8 @@ static NSDateFormatter *_ShortRelativeDateFormatter(void)
 static NSString *_AgoTextWithCountAndUnit(NSTimeInterval unitCount, NSString *unit)
 {
     int integerUnit = (int)round(unitCount);
-    NSString* ago = [[KUSLocalizationManager sharedInstance] localizedString:@"ago"];
-    NSString* localizedUnit = [[KUSLocalizationManager sharedInstance] localizedString:[NSString stringWithFormat:@"%@%@", unit, (integerUnit > 1 ? @"s": @"")]];
+    NSString* ago = [[KUSLocalization sharedInstance] localizedString:@"ago"];
+    NSString* localizedUnit = [[KUSLocalization sharedInstance] localizedString:[NSString stringWithFormat:@"%@%@", unit, (integerUnit > 1 ? @"s": @"")]];
     return [NSString stringWithFormat:@"%i %@ %@", integerUnit, localizedUnit, ago];
 }
 

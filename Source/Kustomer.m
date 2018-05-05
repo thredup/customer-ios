@@ -277,20 +277,17 @@ static KUSLogOptions _logOptions = KUSLogOptionInfo | KUSLogOptionErrors;
 
 - (void)printLocalizationKeys
 {
-    [[KUSLocalizationManager sharedInstance] printAllKeys];
-//    [self.userSession.localizationManager printAllKeys];
+    [[KUSLocalization sharedInstance] printAllKeys];
 }
 
 - (void)setLocalizationRegion:(NSString *)region
 {
-    [[KUSLocalizationManager sharedInstance] setRegion:region];
-//    [self.userSession.localizationManager setRegion:region];
+    [[KUSLocalization sharedInstance] setRegion:region];
 }
 
 - (void)registerLocalizationTableName:(NSString *)table
 {
-    [[KUSLocalizationManager sharedInstance] setTable:table];
-//    [self.userSession.localizationManager setTable:table];
+    [[KUSLocalization sharedInstance] setTable:table];
 }
 
 + (NSString *)sdkVersion

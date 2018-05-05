@@ -66,7 +66,7 @@ CGFloat KUSChatSessionTableViewCellHeight = 88.0;
     if (self) {
         _userSession = userSession;
 
-        BOOL isRTL = [[KUSLocalizationManager sharedInstance] isCurrentLanguageRTL];
+        BOOL isRTL = [[KUSLocalization sharedInstance] isCurrentLanguageRTL];
         
         self.selectedBackgroundView = [[UIView alloc] init];
 
@@ -154,7 +154,7 @@ CGFloat KUSChatSessionTableViewCellHeight = 88.0;
                                                                     color:self.subtitleLabel.textColor];
     
     // Setting Text Alignment after value settings
-    BOOL isRTL = [[KUSLocalizationManager sharedInstance] isCurrentLanguageRTL];
+    BOOL isRTL = [[KUSLocalization sharedInstance] isCurrentLanguageRTL];
     _subtitleLabel.textAlignment = isRTL ? NSTextAlignmentRight : NSTextAlignmentLeft;
 
     // Date text (from last message date, or session created at)
@@ -180,7 +180,7 @@ CGFloat KUSChatSessionTableViewCellHeight = 88.0;
 {
     [super layoutSubviews];
 
-    BOOL isRTL = [[KUSLocalizationManager sharedInstance] isCurrentLanguageRTL];
+    BOOL isRTL = [[KUSLocalization sharedInstance] isCurrentLanguageRTL];
     
     CGSize avatarImageSize = CGSizeMake(40.0, 40.0);
     self.avatarImageView.frame = (CGRect) {
