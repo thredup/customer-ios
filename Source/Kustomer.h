@@ -37,6 +37,9 @@ FOUNDATION_EXPORT const unsigned char KustomerVersionString[];
 // A convenience method that will present the knowledgebase interface on the topmost view controller
 + (void)presentKnowledgeBase;
 
+// A convenience method that will present the custom web page interface on the topmost view controller
++ (void)presentCustomWebPage:(NSString*)url;
+
 // The current SDK version
 + (NSString *)sdkVersion;
 

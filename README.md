@@ -78,6 +78,9 @@ Enabling the ability for your users to upload images to conversations requires c
 
 // Convenience methods that will present a browser interface pointing to your KnowledgeBase.
 [Kustomer presentKnowledgeBase];
+
+// Convenience method that will present a custom web page interface
+[Kustomer presentCustomWebPage:@"https://www.example.com"];
 ```
 
 ```objective-c

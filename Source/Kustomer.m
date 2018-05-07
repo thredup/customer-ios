@@ -100,6 +100,28 @@ static NSString *kKustomerOrgNameKey = @"orgName";
     }
 }
 
++ (void)presentCustomWebPage:(NSString*)url
+{
+    UIViewController *topMostViewController = KUSTopMostViewController();
+    if (topMostViewController) {
+        if ([topMostViewController isKindOfClass:[KnowledgeBaseViewController class]]) {
+            KUSLogError(@"KnowledgeBase is already presented");
+            return;
+        }
+        
+        NSURL *URL = [NSURL URLWithString:url];
+        if (URL) {
+            KnowledgeBaseViewController *knowledgeBaseViewController = [[KnowledgeBaseViewController alloc] initWithURL:URL];
+            [topMostViewController presentViewController:knowledgeBaseViewController animated:YES completion:nil];
+        }
+        else {
+            KUSLogError(@"Invalid url, Unable to load Web View Controller");
+        }
+    } else {
+        KUSLogError(@"Could not find view controller to present on top of!");
+    }
+}
+
 #pragma mark - Lifecycle methods
 
 + (instancetype)sharedInstance
