@@ -26,7 +26,7 @@ The Kustomer iOS SDK requires a valid API Key with role `org.tracking`. See [Get
 The preferred installation method is with [CocoaPods](https://cocoapods.org). Add the following to your `Podfile`:
 
 ```ruby
-pod 'Kustomer', :git => 'https://github.com/kustomer/customer-ios.git', :tag => '0.1.5'
+pod 'Kustomer', :git => 'https://github.com/kustomer/customer-ios.git', :tag => '0.1.6'
 ```
 
 #### Carthage
@@ -34,7 +34,7 @@ pod 'Kustomer', :git => 'https://github.com/kustomer/customer-ios.git', :tag => 
 For [Carthage](https://github.com/Carthage/Carthage), add the following to your `Cartfile`:
 
 ```ogdl
-github "kustomer/customer-ios" ~> 0.1.5
+github "kustomer/customer-ios" ~> 0.1.6
 ```
 
 ## Setup
@@ -79,8 +79,8 @@ Enabling the ability for your users to upload images to conversations requires c
 // Convenience methods that will present a browser interface pointing to your KnowledgeBase.
 [Kustomer presentKnowledgeBase];
 
-// Convenience method that will present a custom web page interface
-[Kustomer presentCustomWebPage:@"https://www.example.com"];
+// Convenience method that will present a specific web page interface
+[Kustomer presentCustomWebPage:@"https://www.support.acme.com/specific-article-url"];
 ```
 
 ```objective-c
@@ -141,7 +141,7 @@ customerDescription.custom = @{ @"customAttributeStr": @"value" };
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
+
     // Track the current page on appearance
     [Kustomer setCurrentPageName:@"Home"];
 }
