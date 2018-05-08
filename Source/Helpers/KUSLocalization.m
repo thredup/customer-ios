@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+
 #import "KUSLocalization.h"
+#import "KUSLog.h"
 
 @interface KUSLocalization () 
 @end
@@ -26,28 +28,31 @@
     return _sharedInstance;
 }
 
-#pragma mark - Internal methods
-
-#pragma mark - Internal helper methods
-
 #pragma mark - Public methods
 
 - (void)printAllKeys
 {
-    // Print all keys used for localization
+    NSBundle *bundle = [NSBundle bundleWithIdentifier:@"com.kustomer.Kustomer"];
+    NSString *path = [bundle pathForResource:@"Localizable" ofType:@"strings"];
+    NSDictionary *dictionary = [NSDictionary dictionaryWithContentsOfFile:path];
     
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"Base" ofType:@"lproj"];
-    NSURL *url = [[[NSURL alloc] initWithString:path] URLByAppendingPathComponent:@"Localizable.strings"];
-    NSDictionary *dictionary = [NSDictionary dictionaryWithContentsOfFile:url.absoluteString];
-    for (NSString* key in dictionary.allKeys)
-    {
-        NSLog(@"%@", key);
+    NSUInteger count = 0;
+    NSString *keys = @"[";
+    for (NSString* key in dictionary.allKeys) {
+        keys = [keys stringByAppendingString:[NSString stringWithFormat:@"\"%@\"", key]];
+        if (count < [dictionary.allKeys count] - 1) {
+            keys = [keys stringByAppendingString:@", "];
+        }
+        count++;
     }
+    keys = [keys stringByAppendingString:@"]"];
+    KUSLogInfo(@"Localization Keys: %@", keys);
 }
 
 - (void)setRegion:(NSString *)region
 {
     _region = region;
+    // Check required to make sure that region is valid
     if ([NSLocale characterDirectionForLanguage:_region] == NSLocaleLanguageDirectionRightToLeft) {
         [UIView appearance].semanticContentAttribute = UISemanticContentAttributeForceRightToLeft;
     } else {
@@ -74,18 +79,15 @@
     
 
     NSBundle *bundle = NSBundle.mainBundle;
-    if (_region)
-    {
+    if (_region) {
         bundle = [NSBundle bundleWithPath:[bundle pathForResource:_region ofType:@"lproj"]];
         bundle = bundle ?: NSBundle.mainBundle;
     }
     
     NSString *value = NSLocalizedStringWithDefaultValue(key, _table, bundle, @"~.~", nil);
-    if ([value isEqualToString:@"~.~"])
-    {
+    if ([value isEqualToString:@"~.~"]) {
         NSBundle *bundle = [NSBundle bundleWithIdentifier:@"com.kustomer.Kustomer"];
-        if (_region)
-        {
+        if (_region) {
             bundle = [NSBundle bundleWithPath:[bundle pathForResource:_region ofType:@"lproj"]];
             bundle = bundle ?: [NSBundle bundleWithIdentifier:@"com.kustomer.Kustomer"];
         }
