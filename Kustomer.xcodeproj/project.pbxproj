@@ -163,9 +163,10 @@
 		63F61A7E1FFAC86400E56766 /* KUSMultipleAvatarsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 63F61A7C1FFAC86400E56766 /* KUSMultipleAvatarsView.m */; };
 		6D7CDE24CE12E0916484305C /* Pods_Kustomer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4074C2A1E9213757162ED660 /* Pods_Kustomer.framework */; };
 		7C3913946A295179BE2E925B /* Pods_KustomerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D624913E5C7AD4492EF0D39B /* Pods_KustomerTests.framework */; };
-		D60CA8A9209AF68200CDAA6D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D60CA8AB209AF68200CDAA6D /* Localizable.strings */; };
 		D6BB946120A18537001AFCB6 /* KUSLocalization.h in Headers */ = {isa = PBXBuildFile; fileRef = D6BB945F20A18537001AFCB6 /* KUSLocalization.h */; };
 		D6BB946220A18537001AFCB6 /* KUSLocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = D6BB946020A18537001AFCB6 /* KUSLocalization.m */; };
+		D6BB946620A1AA5F001AFCB6 /* KUSLocalizationTest.m in Sources */ = {isa = PBXBuildFile; fileRef = D6BB946520A1AA5F001AFCB6 /* KUSLocalizationTest.m */; };
+		D6BB946D20A1F673001AFCB6 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D60CA8AB209AF68200CDAA6D /* Localizable.strings */; };
 		FC5BDC34DC026F04AE056627 /* Pods_KustomerExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BBA02B9E3111B375725C25D /* Pods_KustomerExample.framework */; };
 /* End PBXBuildFile section */
 
@@ -375,6 +376,7 @@
 		D624913E5C7AD4492EF0D39B /* Pods_KustomerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KustomerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6BB945F20A18537001AFCB6 /* KUSLocalization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSLocalization.h; sourceTree = "<group>"; };
 		D6BB946020A18537001AFCB6 /* KUSLocalization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSLocalization.m; sourceTree = "<group>"; };
+		D6BB946520A1AA5F001AFCB6 /* KUSLocalizationTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSLocalizationTest.m; sourceTree = "<group>"; };
 		FAEBB4868A9AF9DB8C939E87 /* Pods-KustomerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KustomerTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-KustomerTests/Pods-KustomerTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -610,6 +612,7 @@
 		63B9CD9E1F088E8800120F3E /* KustomerTests */ = {
 			isa = PBXGroup;
 			children = (
+				D6BB946520A1AA5F001AFCB6 /* KUSLocalizationTest.m */,
 				636EA6281F9D03BE00340B66 /* KustomerTestConstants.h */,
 				63B9CD9F1F088E8800120F3E /* KustomerTests.m */,
 				636EA62D1F9D3EC100340B66 /* KUSUserSessionTests.m */,
@@ -906,7 +909,7 @@
 				63D9C1821F3046DA00999183 /* up_arrow@2x.png in Resources */,
 				63D529851FB7CFA700B1B004 /* paperclip_icon@2x.png in Resources */,
 				63DC73621F57B44900683DE8 /* message_received.m4a in Resources */,
-				D60CA8A9209AF68200CDAA6D /* Localizable.strings in Resources */,
+				D6BB946D20A1F673001AFCB6 /* Localizable.strings in Resources */,
 				63D9C1841F304A7600999183 /* pencil_image@2x.png in Resources */,
 				636531AF1F1C4B9700433A50 /* kusty@2x.png in Resources */,
 			);
@@ -1134,6 +1137,7 @@
 				630BA341203005F500C80CD2 /* KUSClientActivityTest.m in Sources */,
 				6398E04F1FC2316F00001050 /* KUSChatSettingsTest.m in Sources */,
 				636EA62A1F9D12BE00340B66 /* KUSDateTests.m in Sources */,
+				D6BB946620A1AA5F001AFCB6 /* KUSLocalizationTest.m in Sources */,
 				636EA6271F9CF76100340B66 /* KUSRequestManagerTests.m in Sources */,
 				636EA6301F9D4FD100340B66 /* KUSDelegateProxyTests.m in Sources */,
 				636EA62C1F9D309C00340B66 /* KUSChatMessageTests.m in Sources */,

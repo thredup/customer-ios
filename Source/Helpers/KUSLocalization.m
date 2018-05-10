@@ -49,11 +49,11 @@
     KUSLogInfo(@"Localization Keys: %@", keys);
 }
 
-- (void)setRegion:(NSString *)region
+- (void)setLocale:(NSLocale *)locale
 {
-    _region = region;
-    // Check required to make sure that region is valid
-    if ([NSLocale characterDirectionForLanguage:_region] == NSLocaleLanguageDirectionRightToLeft) {
+    _locale = locale;
+    
+    if ([NSLocale characterDirectionForLanguage:[_locale localeIdentifier]] == NSLocaleLanguageDirectionRightToLeft) {
         [UIView appearance].semanticContentAttribute = UISemanticContentAttributeForceRightToLeft;
     } else {
         [UIView appearance].semanticContentAttribute = UISemanticContentAttributeForceLeftToRight;
@@ -67,28 +67,17 @@
 
 - (NSString *)localizedString:(NSString *)key
 {
-    // Get Localized Key From SDK
-    // 1. Check that user has defined that language file or not
-    //     Yes -> Find key in that file
-    //              Yes  -> return value
-    // 2. Check we have that region file
-    //     Yes -> Find key in that file
-    //              Yes  -> return that value
-    // 3. Return key as it is.
-    //
-    
-
     NSBundle *bundle = NSBundle.mainBundle;
-    if (_region) {
-        bundle = [NSBundle bundleWithPath:[bundle pathForResource:_region ofType:@"lproj"]];
+    if (_locale) {
+        bundle = [NSBundle bundleWithPath:[bundle pathForResource:[_locale localeIdentifier] ofType:@"lproj"]];
         bundle = bundle ?: NSBundle.mainBundle;
     }
     
     NSString *value = NSLocalizedStringWithDefaultValue(key, _table, bundle, @"~.~", nil);
     if ([value isEqualToString:@"~.~"]) {
         NSBundle *bundle = [NSBundle bundleWithIdentifier:@"com.kustomer.Kustomer"];
-        if (_region) {
-            bundle = [NSBundle bundleWithPath:[bundle pathForResource:_region ofType:@"lproj"]];
+        if (_locale) {
+            bundle = [NSBundle bundleWithPath:[bundle pathForResource:[_locale localeIdentifier] ofType:@"lproj"]];
             bundle = bundle ?: [NSBundle bundleWithIdentifier:@"com.kustomer.Kustomer"];
         }
         return NSLocalizedStringWithDefaultValue(key, nil, bundle, nil, nil);
@@ -98,8 +87,8 @@
 
 - (BOOL)isCurrentLanguageRTL
 {
-    if (_region)
-        return ([NSLocale characterDirectionForLanguage:_region] == NSLocaleLanguageDirectionRightToLeft);
+    if (_locale)
+        return ([NSLocale characterDirectionForLanguage:[_locale localeIdentifier]] == NSLocaleLanguageDirectionRightToLeft);
     
     NSString *language = [[NSLocale preferredLanguages] firstObject];
     return ([NSLocale characterDirectionForLanguage:language] == NSLocaleLanguageDirectionRightToLeft);
@@ -107,8 +96,8 @@
 
 - (NSLocale*)currentLocale
 {
-    if (_region)
-        return [[NSLocale alloc] initWithLocaleIdentifier:_region];
+    if (_locale)
+        return _locale;
     return [NSLocale currentLocale];
 }
 

@@ -11,8 +11,8 @@
 @class KUSUserSession;
 @interface KUSLocalization : NSObject
 
-@property (nonatomic, copy) NSString *region;
 @property (nonatomic, copy) NSString *table;
+@property (nonatomic, copy) NSLocale *locale;
 
 + (instancetype)sharedInstance;
 - (instancetype)init NS_UNAVAILABLE;
