@@ -75,14 +75,14 @@ static NSString *kKustomerOrgNameKey = @"orgName";
     [[self sharedInstance] printLocalizationKeys];
 }
 
-+ (void)setLocalizationRegion:(NSString *)region
-{
-    [[self sharedInstance] setLocalizationRegion:region];
-}
-
 + (void)registerLocalizationTableName:(NSString *)table
 {
     [[self sharedInstance] registerLocalizationTableName:table];
+}
+
++ (void)setLocale:(NSLocale *)locale
+{
+    [[self sharedInstance] setLocale:locale];
 }
 
 + (void)presentSupport
@@ -258,14 +258,14 @@ static KUSLogOptions _logOptions = KUSLogOptionInfo | KUSLogOptionErrors;
     [[KUSLocalization sharedInstance] printAllKeys];
 }
 
-- (void)setLocalizationRegion:(NSString *)region
-{
-    [[KUSLocalization sharedInstance] setRegion:region];
-}
-
 - (void)registerLocalizationTableName:(NSString *)table
 {
     [[KUSLocalization sharedInstance] setTable:table];
+}
+
+- (void)setLocale:(NSLocale *)locale
+{
+    [[KUSLocalization sharedInstance] setLocale:locale];
 }
 
 + (NSString *)sdkVersion
