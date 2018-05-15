@@ -67,20 +67,24 @@
 
 - (NSString *)localizedString:(NSString *)key
 {
+    NSString *customerKey = [NSString stringWithFormat:@"com.kustomer.%@", key];
+    
+    // Find value in User Bundle with specified locale
     NSBundle *bundle = NSBundle.mainBundle;
     if (_locale) {
         bundle = [NSBundle bundleWithPath:[bundle pathForResource:[_locale localeIdentifier] ofType:@"lproj"]];
         bundle = bundle ?: NSBundle.mainBundle;
     }
     
-    NSString *value = NSLocalizedStringWithDefaultValue(key, _table, bundle, @"~.~", nil);
+    NSString *value = NSLocalizedStringWithDefaultValue(customerKey, _table, bundle, @"~.~", nil);
     if ([value isEqualToString:@"~.~"]) {
-        NSBundle *bundle = [NSBundle bundleWithIdentifier:@"com.kustomer.Kustomer"];
+        // Find value in Kustomer SDK Bundle with specified locale
+        bundle = [NSBundle bundleWithIdentifier:@"com.kustomer.Kustomer"];
         if (_locale) {
             bundle = [NSBundle bundleWithPath:[bundle pathForResource:[_locale localeIdentifier] ofType:@"lproj"]];
             bundle = bundle ?: [NSBundle bundleWithIdentifier:@"com.kustomer.Kustomer"];
         }
-        return NSLocalizedStringWithDefaultValue(key, nil, bundle, nil, nil);
+        value = NSLocalizedStringWithDefaultValue(customerKey, nil, bundle, key, nil);
     }
     return value;
 }
