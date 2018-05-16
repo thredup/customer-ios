@@ -12,6 +12,7 @@ typedef NS_ENUM(NSInteger, KUSFormQuestionType) {
     KUSFormQuestionTypeUnknown = -1,
     KUSFormQuestionTypeMessage,
     KUSFormQuestionTypeProperty,
+    KUSFormQuestionTypeResponse,
 };
 
 typedef NS_ENUM(NSInteger, KUSFormQuestionProperty) {
@@ -34,6 +35,6 @@ typedef NS_ENUM(NSInteger, KUSFormQuestionProperty) {
 
 static inline BOOL KUSFormQuestionRequiresResponse(KUSFormQuestion *question)
 {
-    return question.type == KUSFormQuestionTypeProperty;
+    return question.type == KUSFormQuestionTypeProperty || question.type == KUSFormQuestionTypeResponse;
 }
 

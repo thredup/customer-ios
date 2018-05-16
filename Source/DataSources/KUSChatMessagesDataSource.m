@@ -545,7 +545,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     }
 
     // Make sure we submit the form if we just inserted a non-response question
-    if (!_submittingForm && !KUSFormQuestionRequiresResponse(_formQuestion) && _questionIndex == _form.questions.count - 1) {
+    if (!_submittingForm && !KUSFormQuestionRequiresResponse(_formQuestion) && _questionIndex == _form.questions.count - 1 && _delayedChatMessageIds.count == 0) {
         [self _submitFormResponses];
     }
 
@@ -562,9 +562,6 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     NSInteger startingOffset = (_formQuestion ? 1 : 0);
     for (NSInteger i = MAX(_questionIndex + startingOffset, 0); i < _form.questions.count; i++) {
         KUSFormQuestion *question = _form.questions[i];
-        if (question.type == KUSFormQuestionTypeUnknown) {
-            continue;
-        }
 
         NSDate *createdAt = [lastMessage.createdAt dateByAddingTimeInterval:KUSChatAutoreplyDelay + additionalInsertDelay];
         NSString *questionId = [NSString stringWithFormat:@"question_%@", question.oid];
@@ -608,6 +605,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
         @"inputAt": [KUSDate stringFromDate:firstUserMessage.createdAt]
     }];
 
+    // This is running more time then response in list, causing currentMessageIndex to negative value
     for (KUSFormQuestion *question in _form.questions) {
         NSMutableDictionary<NSString *, NSObject *> *formMessage = [[NSMutableDictionary alloc] init];
 

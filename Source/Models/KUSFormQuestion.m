@@ -45,6 +45,9 @@ static KUSFormQuestionType KUSFormQuestionTypeFromString(NSString *string)
     } else if ([string isEqualToString:@"property"]) {
         return KUSFormQuestionTypeProperty;
     }
+    else if ([string isEqualToString:@"response"]) {
+        return KUSFormQuestionTypeResponse;
+    }
     return KUSFormQuestionTypeUnknown;
 }
 
