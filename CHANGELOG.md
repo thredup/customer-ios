@@ -1,4 +1,7 @@
 # Changelog for Kustomer iOS SDK
+## 0.1.7
+* Fixed bug where conversational forms would crash if a question asked for a response but did not set a property
+
 ## 0.1.6
 
 * Created a new method to present specific web page interface using the
