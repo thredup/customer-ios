@@ -26,4 +26,10 @@
     return [KUSChatSettings class];
 }
 
+- (BOOL)isChatAvailable
+{
+    KUSChatSettings *setting = self.object;
+    return setting.enabled;
+}
+
 @end
