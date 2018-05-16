@@ -99,10 +99,8 @@ static NSString *kCellIdentifier = @"ImageAttachment";
         _textView = [[KUSTextView alloc] init];
         _textView.delegate = self;
         _textView.returnKeyType = UIReturnKeySend;
+        _textView.autocorrectionType = UITextAutocorrectionTypeYes;
         _textView.enablesReturnKeyAutomatically = YES;
-        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-            self.textView.autocorrectionType = UITextAutocorrectionTypeNo;
-        }
         [self addSubview:_textView];
 
         _sendButton = [[UIButton alloc] init];

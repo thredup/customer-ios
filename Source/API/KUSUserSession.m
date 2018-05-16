@@ -229,6 +229,11 @@
         return;
     }
 
+    // If email is passed in custom description
+    if (customerDescription.email != nil) {
+        [self.userDefaults setDidCaptureEmail:YES];
+    }
+    
     [self.requestManager
      performRequestType:KUSRequestTypePatch
      endpoint:@"/c/v1/customers/current"
