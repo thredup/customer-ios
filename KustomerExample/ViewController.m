@@ -137,19 +137,19 @@
 
 - (void)_getStatus
 {
-    bool availBool = [Kustomer isChatAvailable];
-    NSString * const testString = (availBool ? @"Yes, chat's turned on!" : @"Sorry, chat is not available at the moment, please contact support@acme.com");
-    
-    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Chat On/Off Status"
-                                                                   message:testString
-                                                            preferredStyle:UIAlertControllerStyleAlert];
-    
-    UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
-                                                          handler:^(UIAlertAction * action) {}];
-    
-    [alert addAction:defaultAction];
-    [self presentViewController:alert animated:YES completion:nil];
-    
+    [Kustomer isChatAvailable:^(BOOL success, BOOL enabled) {
+        NSString * const testString = (enabled ? @"Yes, chat's turned on!" : @"Sorry, chat is not available at the moment, please contact support@acme.com");
+        
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Chat On/Off Status"
+                                                                       message:testString
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+                                                              handler:^(UIAlertAction * action) {}];
+        
+        [alert addAction:defaultAction];
+        [self presentViewController:alert animated:YES completion:nil];
+    }];
 }
 
 - (void)_resetTracking
