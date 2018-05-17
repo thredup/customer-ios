@@ -17,6 +17,7 @@
     UIButton *_presentButton;
 
     UIButton *_supportButton;
+    UIButton *_getStatusButton;
 }
 
 @end
@@ -60,6 +61,14 @@
                        action:@selector(_presentSupport)
              forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_presentButton];
+    
+    _getStatusButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [_getStatusButton setBackgroundImage:buttonImage forState:UIControlStateNormal];
+    [_getStatusButton setTitle:@"Get Online Status" forState:UIControlStateNormal];
+    [_getStatusButton addTarget:self
+                       action:@selector(_getStatus)
+             forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:_getStatusButton];
 
     _supportButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [_supportButton setImage:[KUSImage kustyImage] forState:UIControlStateNormal];
@@ -71,6 +80,8 @@
                        action:@selector(_presentSupport)
              forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_supportButton];
+    
+    
 
 }
 
@@ -96,6 +107,13 @@
         .size.width = self.view.bounds.size.width - 100.0,
         .size.height = 50.0
     };
+    
+    _getStatusButton.frame = (CGRect) {
+        .origin.x = 50.0,
+        .origin.y = 400.0,
+        .size.width = self.view.bounds.size.width - 100.0,
+        .size.height = 50.0
+    };
 
     _supportButton.frame = (CGRect) {
         .origin.x = self.view.bounds.size.width - 75.0,
@@ -115,6 +133,23 @@
 - (void)_presentSupport
 {
     [Kustomer presentSupport];
+}
+
+- (void)_getStatus
+{
+    bool availBool = [Kustomer isChatAvailable];
+    NSString * const testString = (availBool ? @"Yes, chat's turned on!" : @"Sorry, chat is not available at the moment, please contact support@acme.com");
+    
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Chat On/Off Status"
+                                                                   message:testString
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+                                                          handler:^(UIAlertAction * action) {}];
+    
+    [alert addAction:defaultAction];
+    [self presentViewController:alert animated:YES completion:nil];
+    
 }
 
 - (void)_resetTracking
