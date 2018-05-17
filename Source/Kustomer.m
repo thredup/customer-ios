@@ -70,6 +70,11 @@ static NSString *kKustomerOrgNameKey = @"orgName";
     return [[self sharedInstance] unreadMessageCount];
 }
 
++ (void)isChatAvailable:(void (^)(BOOL success, BOOL enabled))block
+{
+    [[self sharedInstance] isChatAvailable:block];
+}
+
 + (void)presentSupport
 {
     UIViewController *topMostViewController = KUSTopMostViewController();
@@ -258,6 +263,11 @@ static KUSLogOptions _logOptions = KUSLogOptionInfo | KUSLogOptionErrors;
 - (NSUInteger)unreadMessageCount
 {
     return [self.userSession.chatSessionsDataSource totalUnreadCountExcludingSessionId:nil];
+}
+
+- (void)isChatAvailable:(void (^)(BOOL success, BOOL enabled))block
+{
+    [self.userSession.chatSettingsDataSource isChatAvailable:block];
 }
 
 + (NSString *)sdkVersion
