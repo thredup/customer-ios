@@ -149,9 +149,12 @@ customerDescription.custom = @{ @"customAttributeStr": @"value" };
 
 ```objective-c
 /*
- Check chat management status to enable support chat. 
+ Check chat management status asynchronously to enable support chat.
 */
-[Kustomer isChatAvailable];
+[Kustomer isChatAvailable:^(BOOL success, BOOL enabled) {
+    // success variable show that API call is successful or not.
+    // enabled represent chat management settings. This is only valid if success is true as well.
+}];
 ```
 
 ### Appearance

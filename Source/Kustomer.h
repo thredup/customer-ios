@@ -31,8 +31,8 @@ FOUNDATION_EXPORT const unsigned char KustomerVersionString[];
 // Returns the current count of unread messages. It might not be immediately available.
 + (NSUInteger)unreadMessageCount;
 
-// Returns status that current chat is available or not.
-+ (BOOL)isChatAvailable;
+// Get status asynchronously about current chat is available or not.
++ (void)isChatAvailable:(void (^)(BOOL success, BOOL enabled))block;
 
 // A convenience method that will present the support interface on the topmost view controller
 + (void)presentSupport;

@@ -26,10 +26,16 @@
     return [KUSChatSettings class];
 }
 
-- (BOOL)isChatAvailable
+- (void)isChatAvailable:(void (^)(BOOL success, BOOL enabled))block
 {
-    KUSChatSettings *setting = self.object;
-    return setting.enabled;
+    [self performRequestWithCompletion:^(NSError *error, NSDictionary *response) {
+        KUSChatSettings *settingsModel = [[KUSChatSettings alloc] initWithJSON:response[@"data"]];
+        if (error || settingsModel == nil) {
+            block(NO, NO);
+        } else {
+            block(YES, settingsModel.enabled);
+        }
+    }];
 }
 
 @end
