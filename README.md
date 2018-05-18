@@ -147,6 +147,16 @@ customerDescription.custom = @{ @"customAttributeStr": @"value" };
 }
 ```
 
+```objective-c
+/*
+ Check chat management status asynchronously to enable support chat.
+*/
+[Kustomer isChatAvailable:^(BOOL success, BOOL enabled) {
+    // success variable show that API call is successful or not.
+    // enabled represent chat management settings. This is only valid if success is true as well.
+}];
+```
+
 ### Appearance
 
 The majority of the user interface for the support screens can be configured using `UIAppearance`. As an example, if you are designing a Halloween-themed support interface, you could re-skin the Kustomer iOS support screens using the following:

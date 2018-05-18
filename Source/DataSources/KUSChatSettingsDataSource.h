@@ -12,4 +12,6 @@
 
 @interface KUSChatSettingsDataSource : KUSObjectDataSource
 
+- (void)isChatAvailable:(void (^)(BOOL success, BOOL enabled))block;
+
 @end

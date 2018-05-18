@@ -85,6 +85,11 @@ static NSString *kKustomerOrgNameKey = @"orgName";
     [[self sharedInstance] setLocale:locale];
 }
 
++ (void)isChatAvailable:(void (^)(BOOL success, BOOL enabled))block
+{
+    [[self sharedInstance] isChatAvailable:block];
+}
+
 + (void)presentSupport
 {
     UIViewController *topMostViewController = KUSTopMostViewController();
@@ -288,6 +293,11 @@ static KUSLogOptions _logOptions = KUSLogOptionInfo | KUSLogOptionErrors;
 - (void)setLocale:(NSLocale *)locale
 {
     [[KUSLocalization sharedInstance] setLocale:locale];
+}
+
+- (void)isChatAvailable:(void (^)(BOOL success, BOOL enabled))block
+{
+    [self.userSession.chatSettingsDataSource isChatAvailable:block];
 }
 
 + (NSString *)sdkVersion
