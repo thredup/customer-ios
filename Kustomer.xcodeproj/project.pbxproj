@@ -649,7 +649,7 @@
 				6334BE251F0C3E7100258DAF /* Models */,
 				63B9CDE31F095E1D00120F3E /* ViewControllers */,
 				63A4EDE41F0A968E00EA3852 /* Views */,
-				D60CA8AB209AF68200CDAA6D /* Localizable.strings */,
+				D6D4325B20B6E380001056F1 /* Strings */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -701,6 +701,14 @@
 				D624913E5C7AD4492EF0D39B /* Pods_KustomerTests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D6D4325B20B6E380001056F1 /* Strings */ = {
+			isa = PBXGroup;
+			children = (
+				D60CA8AB209AF68200CDAA6D /* Localizable.strings */,
+			);
+			path = Strings;
 			sourceTree = "<group>";
 		};
 		E4EF66D4BDAF1A3D5F282BCE /* Pods */ = {
