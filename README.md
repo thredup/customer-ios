@@ -209,7 +209,7 @@ If you would like to use a different strings file to the one provided with the S
 
 #### Custom language
 
-By default, Kustomer SDK use mobile preffered language. If you want to use different language, you can override language as well. If mobile preffered language or override language is not supported in SDK, SDK will use second preffered language. <br>
+By default, SDK use mobile preffered langugage. If you want to use different language, you can override language as well. <br>
 To do that:
 ```objective-c
 // Set Custom Language
@@ -219,7 +219,8 @@ To do that:
 [Kustomer setLanguage:@"en"];
 ```
 
-After setting SDK language, SDK automatically decide to show RTL or LTR view and use `language_code.proj` bundle file for translation.
+You must have to set language before calling `initializeWithAPIKey` method. SDK load only that language whose translation exists either in SDK or in project. If specified language's translation not exists, sdk try to load translation of mobile preffered languages before using default language. 
+
 
 ### Appearance
 
