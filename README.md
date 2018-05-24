@@ -26,7 +26,7 @@ The Kustomer iOS SDK requires a valid API Key with role `org.tracking`. See [Get
 The preferred installation method is with [CocoaPods](https://cocoapods.org). Add the following to your `Podfile`:
 
 ```ruby
-pod 'Kustomer', :git => 'https://github.com/kustomer/customer-ios.git', :tag => '0.1.7'
+pod 'Kustomer', :git => 'https://github.com/kustomer/customer-ios.git', :tag => '0.1.8'
 ```
 
 #### Carthage
@@ -149,7 +149,7 @@ customerDescription.custom = @{ @"customAttributeStr": @"value" };
 
 ```objective-c
 /*
- Check chat management status asynchronously to enable support chat.
+ Check the "turned on/off" status of your chat asynchronously. For example if chat is turned off, you may want to disable the button or deflect customers to contact an email)
 */
 [Kustomer isChatAvailable:^(BOOL success, BOOL enabled) {
     // success variable show that API call is successful or not.

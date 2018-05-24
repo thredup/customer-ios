@@ -1,4 +1,10 @@
 # Changelog for Kustomer iOS SDK
+
+## 0.1.8
+
+* Added async method `isChatAvailable` for getting the current online/offline state of your chat settings
+* fixed bug where the chat assistant would prompt customer for email even though already being passed via customer `[Kustomer describeCustomer]`
+
 ## 0.1.7
 * Fixed bug where conversational forms would crash if a question asked for a response but did not set a property
 
