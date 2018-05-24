@@ -12,7 +12,7 @@
 @interface KUSLocalization : NSObject
 
 @property (nonatomic, copy) NSString *table;
-@property (nonatomic, copy) NSLocale *locale;
+@property (nonatomic, copy) NSString *language;
 
 + (instancetype)sharedInstance;
 - (instancetype)init NS_UNAVAILABLE;
@@ -21,6 +21,7 @@
 - (void)printAllKeys;
 - (NSString *)localizedString:(NSString *)key;
 - (BOOL)isCurrentLanguageRTL;
-- (NSLocale*)currentLocale;
+- (NSLocale *)currentLocale;
+- (NSString *)currentLanguage;
 
 @end

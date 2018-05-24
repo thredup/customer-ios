@@ -80,9 +80,9 @@ static NSString *kKustomerOrgNameKey = @"orgName";
     [[self sharedInstance] registerLocalizationTableName:table];
 }
 
-+ (void)setLocale:(NSLocale *)locale
++ (void)setLanguage:(NSString *)language
 {
-    [[self sharedInstance] setLocale:locale];
+    [[self sharedInstance] setLanguage:language];
 }
 
 + (void)isChatAvailable:(void (^)(BOOL success, BOOL enabled))block
@@ -290,9 +290,9 @@ static KUSLogOptions _logOptions = KUSLogOptionInfo | KUSLogOptionErrors;
     [[KUSLocalization sharedInstance] setTable:table];
 }
 
-- (void)setLocale:(NSLocale *)locale
+- (void)setLanguage:(NSString *)language
 {
-    [[KUSLocalization sharedInstance] setLocale:locale];
+    [[KUSLocalization sharedInstance] setLanguage:language];
 }
 
 - (void)isChatAvailable:(void (^)(BOOL success, BOOL enabled))block

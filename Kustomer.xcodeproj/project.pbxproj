@@ -163,6 +163,7 @@
 		63F61A7E1FFAC86400E56766 /* KUSMultipleAvatarsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 63F61A7C1FFAC86400E56766 /* KUSMultipleAvatarsView.m */; };
 		6D7CDE24CE12E0916484305C /* Pods_Kustomer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4074C2A1E9213757162ED660 /* Pods_Kustomer.framework */; };
 		7C3913946A295179BE2E925B /* Pods_KustomerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D624913E5C7AD4492EF0D39B /* Pods_KustomerTests.framework */; };
+		D63A817920B605F8005DF4F5 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D63A817B20B605F8005DF4F5 /* Localizable.strings */; };
 		D6BB946120A18537001AFCB6 /* KUSLocalization.h in Headers */ = {isa = PBXBuildFile; fileRef = D6BB945F20A18537001AFCB6 /* KUSLocalization.h */; };
 		D6BB946220A18537001AFCB6 /* KUSLocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = D6BB946020A18537001AFCB6 /* KUSLocalization.m */; };
 		D6BB946620A1AA5F001AFCB6 /* KUSLocalizationTest.m in Sources */ = {isa = PBXBuildFile; fileRef = D6BB946520A1AA5F001AFCB6 /* KUSLocalizationTest.m */; };
@@ -374,6 +375,9 @@
 		D60CA8AC209AF68700CDAA6D /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D60CA8BE209B63FC00CDAA6D /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D624913E5C7AD4492EF0D39B /* Pods_KustomerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KustomerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D63A817620B6040F005DF4F5 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		D63A817A20B605F8005DF4F5 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		D63A817C20B61A0D005DF4F5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D6BB945F20A18537001AFCB6 /* KUSLocalization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSLocalization.h; sourceTree = "<group>"; };
 		D6BB946020A18537001AFCB6 /* KUSLocalization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSLocalization.m; sourceTree = "<group>"; };
 		D6BB946520A1AA5F001AFCB6 /* KUSLocalizationTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSLocalizationTest.m; sourceTree = "<group>"; };
@@ -661,6 +665,7 @@
 				63B9CDC81F089BF000120F3E /* LaunchScreen.storyboard */,
 				63B9CDCB1F089BF000120F3E /* Info.plist */,
 				63B9CDBA1F089BF000120F3E /* Supporting Files */,
+				D63A817B20B605F8005DF4F5 /* Localizable.strings */,
 			);
 			path = KustomerExample;
 			sourceTree = "<group>";
@@ -886,6 +891,7 @@
 				en,
 				Base,
 				ur,
+				fr,
 			);
 			mainGroup = 63B9CD871F088E8800120F3E;
 			productRefGroup = 63B9CD921F088E8800120F3E /* Products */;
@@ -927,6 +933,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				63B9CDCA1F089BF000120F3E /* LaunchScreen.storyboard in Resources */,
+				D63A817920B605F8005DF4F5 /* Localizable.strings in Resources */,
 				63B9CDC71F089BF000120F3E /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1184,6 +1191,16 @@
 			children = (
 				D60CA8AC209AF68700CDAA6D /* Base */,
 				D60CA8BE209B63FC00CDAA6D /* ur */,
+				D63A817620B6040F005DF4F5 /* fr */,
+				D63A817C20B61A0D005DF4F5 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		D63A817B20B605F8005DF4F5 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D63A817A20B605F8005DF4F5 /* fr */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

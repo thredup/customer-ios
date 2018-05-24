@@ -11,10 +11,12 @@
 #import "KUSLocalization.h"
 #import "KUSLog.h"
 
-@interface KUSLocalization () 
+@interface KUSLocalization ()
 @end
 
-@implementation KUSLocalization
+@implementation KUSLocalization {
+    NSString *highestConfidentLang;
+}
 
 #pragma mark - Lifecycle methods
 
@@ -24,6 +26,7 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _sharedInstance = [[self alloc] init];
+        [_sharedInstance setHighestConfidentLanguage];                      // Set Highest Confident Language on Start
     });
     return _sharedInstance;
 }
@@ -49,11 +52,12 @@
     KUSLogInfo(@"Localization Keys: %@", keys);
 }
 
-- (void)setLocale:(NSLocale *)locale
+- (void)setLanguage:(NSString *)language
 {
-    _locale = locale;
+    _language = language;
+    [self setHighestConfidentLanguage];
     
-    if ([NSLocale characterDirectionForLanguage:[_locale localeIdentifier]] == NSLocaleLanguageDirectionRightToLeft) {
+    if ([NSLocale characterDirectionForLanguage:highestConfidentLang] == NSLocaleLanguageDirectionRightToLeft) {
         [UIView appearance].semanticContentAttribute = UISemanticContentAttributeForceRightToLeft;
     } else {
         [UIView appearance].semanticContentAttribute = UISemanticContentAttributeForceLeftToRight;
@@ -67,42 +71,118 @@
 
 - (NSString *)localizedString:(NSString *)key
 {
+    if (!highestConfidentLang) {
+        [self setHighestConfidentLanguage];
+    }
+    
     NSString *customerKey = [NSString stringWithFormat:@"com.kustomer.%@", key];
     
-    // Find value in User Bundle with specified locale
     NSBundle *bundle = NSBundle.mainBundle;
-    if (_locale) {
-        bundle = [NSBundle bundleWithPath:[bundle pathForResource:[_locale localeIdentifier] ofType:@"lproj"]];
-        bundle = bundle ?: NSBundle.mainBundle;
+    bundle = [NSBundle bundleWithPath:[bundle pathForResource:highestConfidentLang ofType:@"lproj"]];
+    if (bundle != nil) {
+        NSString *value = NSLocalizedStringWithDefaultValue(customerKey, _table, bundle, @"~.~", nil);
+        if (![value isEqualToString:@"~.~"]) {
+            return value;
+        }
     }
     
-    NSString *value = NSLocalizedStringWithDefaultValue(customerKey, _table, bundle, @"~.~", nil);
-    if ([value isEqualToString:@"~.~"]) {
-        // Find value in Kustomer SDK Bundle with specified locale
-        bundle = [NSBundle bundleWithIdentifier:@"com.kustomer.Kustomer"];
-        if (_locale) {
-            bundle = [NSBundle bundleWithPath:[bundle pathForResource:[_locale localeIdentifier] ofType:@"lproj"]];
-            bundle = bundle ?: [NSBundle bundleWithIdentifier:@"com.kustomer.Kustomer"];
+    bundle = [NSBundle bundleWithIdentifier:@"com.kustomer.Kustomer"];
+    bundle = [NSBundle bundleWithPath:[bundle pathForResource:highestConfidentLang ofType:@"lproj"]];
+    if (bundle != nil) {
+        NSString *value = NSLocalizedStringWithDefaultValue(customerKey, nil, bundle, @"~.~", nil);
+        if (![value isEqualToString:@"~.~"]) {
+            return value;
         }
-        value = NSLocalizedStringWithDefaultValue(customerKey, nil, bundle, key, nil);
     }
-    return value;
+    
+    bundle = [NSBundle bundleWithIdentifier:@"com.kustomer.Kustomer"];
+    return NSLocalizedStringWithDefaultValue(customerKey, nil, bundle, key, nil);
 }
 
 - (BOOL)isCurrentLanguageRTL
 {
-    if (_locale)
-        return ([NSLocale characterDirectionForLanguage:[_locale localeIdentifier]] == NSLocaleLanguageDirectionRightToLeft);
-    
-    NSString *language = [[NSLocale preferredLanguages] firstObject];
-    return ([NSLocale characterDirectionForLanguage:language] == NSLocaleLanguageDirectionRightToLeft);
+    if (!highestConfidentLang) {
+        [self setHighestConfidentLanguage];
+    }
+    return ([NSLocale characterDirectionForLanguage:highestConfidentLang] == NSLocaleLanguageDirectionRightToLeft);
 }
 
-- (NSLocale*)currentLocale
+- (NSLocale *)currentLocale
 {
-    if (_locale)
-        return _locale;
-    return [NSLocale currentLocale];
+    if (!highestConfidentLang) {
+        [self setHighestConfidentLanguage];
+    }
+    return [[NSLocale alloc] initWithLocaleIdentifier:highestConfidentLang];
+}
+
+- (NSString *)currentLanguage
+{
+    if (!highestConfidentLang) {
+        [self setHighestConfidentLanguage];
+    }
+    return highestConfidentLang;
+}
+
+- (void)setHighestConfidentLanguage
+{
+    NSBundle *bundle = nil;
+    
+    if (_language) {
+        // Check language file in User Bundle (if exists)
+        bundle = NSBundle.mainBundle;
+        bundle = [NSBundle bundleWithPath:[bundle pathForResource:_language ofType:@"lproj"]];
+        if (bundle != nil) {
+            highestConfidentLang = _language;
+            return;
+        }
+        
+        // Check language file in Kustomer Bundle (if exists)
+        bundle = [NSBundle bundleWithIdentifier:@"com.kustomer.Kustomer"];
+        bundle = [NSBundle bundleWithPath:[bundle pathForResource:_language ofType:@"lproj"]];
+        if (bundle != nil) {
+            highestConfidentLang = _language;
+            return;
+        }
+    }
+    
+    NSArray<NSString *> *languages = [NSLocale preferredLanguages];
+    NSUInteger size = MIN([languages count], 5);
+    
+    for (NSUInteger i = 0; i < size; i++) {
+        
+        // Check languages file of preffered language with region code
+        bundle = NSBundle.mainBundle;
+        bundle = [NSBundle bundleWithPath:[bundle pathForResource:languages[i] ofType:@"lproj"]];
+        if (bundle != nil) {
+            highestConfidentLang = languages[i];
+            return;
+        }
+        
+        bundle = [NSBundle bundleWithIdentifier:@"com.kustomer.Kustomer"];
+        bundle = [NSBundle bundleWithPath:[bundle pathForResource:languages[i] ofType:@"lproj"]];
+        if (bundle != nil) {
+            highestConfidentLang = languages[i];
+            return;
+        }
+        
+        // Check by removing region
+        NSString *language = [languages[i] substringWithRange:NSMakeRange(0, [languages[i] rangeOfString:@"-"].location)];
+        bundle = NSBundle.mainBundle;
+        bundle = [NSBundle bundleWithPath:[bundle pathForResource:language ofType:@"lproj"]];
+        if (bundle != nil) {
+            highestConfidentLang = language;
+            return;
+        }
+        
+        bundle = [NSBundle bundleWithIdentifier:@"com.kustomer.Kustomer"];
+        bundle = [NSBundle bundleWithPath:[bundle pathForResource:language ofType:@"lproj"]];
+        if (bundle != nil) {
+            highestConfidentLang = language;
+            return;
+        }
+    }
+    
+    highestConfidentLang = @"en";               // If none of the specified language matched, set 'en' as default
 }
 
 @end

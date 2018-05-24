@@ -30,7 +30,7 @@ FOUNDATION_EXPORT const unsigned char KustomerVersionString[];
 
 + (void)printLocalizationKeys;
 + (void)registerLocalizationTableName:(NSString *)table;
-+ (void)setLocale:(NSLocale *)locale;
++ (void)setLanguage:(NSString *)language;
 
 // Returns the current count of unread messages. It might not be immediately available.
 + (NSUInteger)unreadMessageCount;
