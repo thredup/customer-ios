@@ -29,7 +29,7 @@
         self.barTintColor = [KUSColor lightGrayColor];
 
         _attributionLabel = [[UILabel alloc] init];
-        _attributionLabel.text = [[KUSLocalization sharedInstance] localizedString:@"Messaging by Kustomer"];
+        _attributionLabel.text = @"Messaging by Kustomer";
         _attributionLabel.textAlignment = NSTextAlignmentCenter;
         _attributionLabel.backgroundColor = [UIColor clearColor];
         _attributionLabel.textColor = [KUSColor darkGrayColor];

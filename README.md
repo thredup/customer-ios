@@ -157,6 +157,70 @@ customerDescription.custom = @{ @"customAttributeStr": @"value" };
 }];
 ```
 
+### Localization
+
+Kustomer SDK support both <b>Right-to-left (RTL)</b> and <b>Left-to-right (LTR)</b> formatted languages. 
+
+```objective-c
+// To print all localised keys available in SDK
+[Kustomer printLocalizationKeys];
+```
+
+#### Customize existing strings
+
+If you are interested in SDK specified language but with different translation, you can customize the strings as well. For this, your project must have <b>Localizable.strings</b> file. If your project does not yet have a <b>Localizable.strings</b> file with the different language variants, create it now. <br><br>
+To do that:
+<ol>
+<li>In Xcode, select <b>File</b> > <b>New</b> > <b>File</b>, then select <b>Resource</b> in the iOS category in the sidebar.</li>
+<li>Select <b>Strings</b> File from the files and click <b>Next</b>.</li>
+<li>Name the file <b>Localizable</b> and click Create.</li>
+</ol>
+
+To customize the SDK strings with new values:
+
+<ol>
+<li>Choose the strings to customize and add them to the <b>Localizable.strings</b> file as follows:<br>
+
+```
+// add a key and change the value to what you want
+"com.kustomer.week" = "Your Custom String Value";
+```
+</li>
+<li>Make sure that the file is in the <b>Copy Bundle Resources</b> section of the <b>Build Phases</b> tab in Xcode.</li>
+</ol>
+
+#### Add new localization
+
+If the SDK does not include localized strings for the language you are interested in, you can add new ones.
+Select your `Localizable.strings` file, and in the right pane click `Localize`. When you select the missing language a new variant of `Localizable.strings` will be created for it.
+
+In the new file, add translations for all of the strings available in SDK.
+
+#### Different strings file
+
+If you would like to use a different strings file to the one provided with the Support SDK, you can easily change it.
+
+`Localizable.strings` is the standard name for strings files. If you need to use a strings file named `some-other-name.strings`, add the file to your project and register `some-other-name` as follows.
+
+```objective-c
+// Register Localizable String File 
+[Kustomer registerLocalizationTableName:@"some-other-name"];
+```
+
+#### Custom language
+
+By default, Kustomer SDK use mobile preffered language. If you want to use different language, you can override language as well. If mobile preffered language or override language is not supported in SDK, SDK will use second preffered language. <br>
+To do that:
+```objective-c
+// Set Custom Language
+[Kustomer setLanguage:@"language_code"];
+
+// Example
+[Kustomer setLanguage:@"en"];
+```
+
+After setting SDK language, SDK automatically decide to show RTL or LTR view and use `language_code.proj` bundle file for translation.
+
 ### Appearance
 
 The majority of the user interface for the support screens can be configured using `UIAppearance`. As an example, if you are designing a Halloween-themed support interface, you could re-skin the Kustomer iOS support screens using the following:
