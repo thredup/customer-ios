@@ -817,7 +817,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
         if (i == 0) {
             [formMessage setObject:@"conversation_replyChannel" forKey:@"property"];
         } else if (i == 1) {
-            [formMessage setObject:[[NSString alloc] initWithFormat: @"customer_%@", property] forKey:@"property"];
+            [formMessage setObject:[[NSString alloc] initWithFormat: @"customer_%@", [property lowercaseString]] forKey:@"property"];
         }
         
         [messagesJSON addObject:formMessage];
@@ -1076,8 +1076,8 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 {
 //    __weak KUSChatMessagesDataSource *weakSelf = self;
     [self.userSession.requestManager
-     performRequestType:KUSRequestTypePost
-     endpoint:[[NSString alloc] initWithFormat:@"c/v1/chat/sessions/%@", _sessionId]
+     performRequestType:KUSRequestTypePut
+     endpoint:[[NSString alloc] initWithFormat:@"/c/v1/chat/sessions/%@", _sessionId]
      params:@{ @"locked": @YES }
      authenticated:YES
      completion:^(NSError *error, NSDictionary *response) {

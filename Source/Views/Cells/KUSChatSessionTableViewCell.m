@@ -33,6 +33,8 @@ CGFloat KUSChatSessionTableViewCellHeight = 88.0;
 @property (nonatomic, strong) UILabel *subtitleLabel;
 @property (nonatomic, strong) UILabel *dateLabel;
 @property (nonatomic, strong) UILabel *unreadCountLabel;
+@property (nonatomic, strong) UILabel *closedLabel;
+@property (nonatomic, strong) UIView *closedView;
 
 @end
 
@@ -55,6 +57,9 @@ CGFloat KUSChatSessionTableViewCellHeight = 88.0;
         [appearance setUnreadColor:[UIColor whiteColor]];
         [appearance setUnreadBackgroundColor:[KUSColor redColor]];
         [appearance setUnreadFont:[UIFont systemFontOfSize:10.0]];
+        [appearance setClosedColor:[UIColor lightGrayColor]];
+        [appearance setClosedFont:[UIFont systemFontOfSize:12.0]];
+        [appearance setClosedViewColor:[[UIColor lightGrayColor] colorWithAlphaComponent:0.1]];
     }
 }
 
@@ -68,6 +73,11 @@ CGFloat KUSChatSessionTableViewCellHeight = 88.0;
 
         self.selectedBackgroundView = [[UIView alloc] init];
 
+        _closedView = [[UIView alloc] init];
+        _closedView.layer.cornerRadius = 5.0;
+        _closedView.layer.masksToBounds = YES;
+        [self.contentView addSubview:_closedView];
+        
         _avatarImageView = [[KUSAvatarImageView alloc] initWithUserSession:userSession];
         [self.contentView addSubview:_avatarImageView];
 
@@ -93,6 +103,13 @@ CGFloat KUSChatSessionTableViewCellHeight = 88.0;
         _unreadCountLabel.layer.cornerRadius = 4.0;
         [self.contentView addSubview:_unreadCountLabel];
 
+        _closedLabel = [[UILabel alloc] init];
+        _closedLabel.text = @"CLOSED";
+        _closedLabel.textAlignment = NSTextAlignmentRight;
+        _closedLabel.adjustsFontSizeToFitWidth = YES;
+        _closedLabel.minimumScaleFactor = 10.0 / 12.0;
+        [self.contentView addSubview:_closedLabel];
+        
         [_userSession.chatSettingsDataSource addListener:self];
     }
     return self;
@@ -113,6 +130,7 @@ CGFloat KUSChatSessionTableViewCellHeight = 88.0;
 
     [self _updateAvatar];
     [self _updateLabels];
+    [self _updateClosedChatView];
 }
 
 #pragma mark - Internal methods
@@ -153,7 +171,7 @@ CGFloat KUSChatSessionTableViewCellHeight = 88.0;
     // Date text (from last message date, or session created at)
     NSDate *sessionDate = latestTextMessage.createdAt ?: _chatSession.createdAt;
     self.dateLabel.text = [KUSDate humanReadableTextFromDate:sessionDate];
-
+    
     // Unread count (number of messages > the lastSeenAt)
     NSDate *sessionLastSeenAt = [_userSession.chatSessionsDataSource lastSeenAtForSessionId:_chatSession.oid];
     NSUInteger unreadCount = [_chatMessagesDataSource unreadCountAfterDate:sessionLastSeenAt];
@@ -165,6 +183,26 @@ CGFloat KUSChatSessionTableViewCellHeight = 88.0;
     }
 
     [self setNeedsLayout];
+}
+
+- (void)_updateClosedChatView
+{
+    if (_chatSession.lockedAt) {
+        self.closedView.hidden = NO;
+        self.closedLabel.hidden = NO;
+        self.dateLabel.hidden = YES;
+        self.titleLabel.alpha = 0.5;
+        self.subtitleLabel.alpha = 0.5;
+        self.avatarImageView.alpha = 0.5;
+    }
+    else {
+        self.dateLabel.hidden = NO;
+        self.closedLabel.hidden = YES;
+        self.closedView.hidden = YES;
+        self.titleLabel.alpha = 1;
+        self.subtitleLabel.alpha = 1;
+        self.avatarImageView.alpha = 1;
+    }
 }
 
 #pragma mark - Layout methods
@@ -215,6 +253,21 @@ CGFloat KUSChatSessionTableViewCellHeight = 88.0;
         .size.width = 90.0,
         .size.height = dateHeight
     };
+    
+    CGFloat closeHeight = ceil(self.closedLabel.font.lineHeight);
+    self.closedLabel.frame = (CGRect) {
+        .origin.x = self.bounds.size.width - rightMargin - 90.0,
+        .origin.y = (self.bounds.size.height / 2.0) - dateHeight - 4.0,
+        .size.width = 90.0,
+        .size.height = closeHeight
+    };
+    
+    self.closedView.frame = (CGRect) {
+        .origin.x = 8.0,
+        .origin.y = 8.0,
+        .size.width = self.bounds.size.width - 16.0,
+        .size.height = self.bounds.size.height - 16.0
+    };
 }
 
 #pragma mark - KUSObjectDataSourceListener methods
@@ -222,6 +275,7 @@ CGFloat KUSChatSessionTableViewCellHeight = 88.0;
 - (void)objectDataSourceDidLoad:(KUSObjectDataSource *)dataSource
 {
     [self _updateLabels];
+    [self _updateClosedChatView];
 }
 
 #pragma mark - KUSPaginatedDataSourceListener methods
@@ -230,6 +284,7 @@ CGFloat KUSChatSessionTableViewCellHeight = 88.0;
 {
     [self _updateLabels];
     [self _updateAvatar];
+    [self _updateClosedChatView];
 }
 
 #pragma mark - Appearance methods
@@ -292,6 +347,24 @@ CGFloat KUSChatSessionTableViewCellHeight = 88.0;
 {
     _unreadFont = unreadFont;
     _unreadCountLabel.font = _unreadFont;
+}
+
+- (void)setClosedColor:(UIColor *)closedColor
+{
+    _closedColor = closedColor;
+    _closedLabel.textColor = _closedColor;
+}
+
+- (void)setClosedFont:(UIFont *)closedFont
+{
+    _closedFont = closedFont;
+    _closedLabel.font = _closedFont;
+}
+
+- (void)setClosedViewColor:(UIColor *)color
+{
+    _closedViewColor = color;
+    _closedView.backgroundColor = _closedViewColor;
 }
 
 @end
