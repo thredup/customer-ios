@@ -31,6 +31,13 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     BOOL _submittingForm;
     BOOL _creatingSession;
 
+    NSInteger _vcformQuestionIndex;
+    BOOL _vcTrackingStarted;
+    BOOL _vcTrackingDelayCompleted;
+    BOOL _vcFormActive;
+    BOOL _vcFormEnd;
+    NSMutableArray<KUSChatMessage *> *_temporaryVCMessagesResponses;
+    
     NSMutableArray<void(^)(BOOL success, NSError *error)> *_onSessionCreationCallbacks;
     NSMutableDictionary<NSString *, void(^)(void)> *_messageRetryBlocksById;
 }
@@ -46,6 +53,9 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     self = [super initWithUserSession:userSession];
     if (self) {
         _questionIndex = -1;
+        _vcformQuestionIndex = 0;
+        _vcFormActive = NO;
+        _temporaryVCMessagesResponses = [[NSMutableArray alloc] init];
         _delayedChatMessageIds = [[NSMutableSet alloc] init];
         _messageRetryBlocksById = [[NSMutableDictionary alloc] init];
 
@@ -218,6 +228,55 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     return NO;
 }
 
+- (BOOL)shouldPreventVCFormSendingMessage
+{
+    if (!_sessionId) {
+        return YES;
+    }
+    
+    // If we haven't loaded the chat settings data source, prevent input
+    if (!self.userSession.chatSettingsDataSource.didFetch) {
+        return YES;
+    }
+    
+    KUSChatSettings *chatSettings = self.userSession.chatSettingsDataSource.object;
+    if (!chatSettings.volumeControlEnabled) {
+        return YES;
+    }
+    
+    if (!_vcTrackingDelayCompleted) {
+        return YES;
+    }
+    
+    // If we are about to insert an artificial message, prevent input
+    if (_delayedChatMessageIds.count > 0) {
+        return YES;
+    }
+    
+    // When submitting the form, prevent sending more responses
+    if (_submittingForm) {
+        return YES;
+    }
+    
+    if (_vcFormEnd) {
+        return YES;
+    }
+    
+
+    // Check that last message is VC form last message
+    KUSChatMessage *lastMessage = [self latestMessage];
+    if ([lastMessage.oid isEqualToString:@"vc_question_2"]) {
+        return NO;
+    }
+    
+    // Check that response of previous asked question is already entered ? if not return
+    if (_vcFormActive && !KUSChatMessageSentByUser(lastMessage)) {
+        return YES;
+    }
+    
+    return NO;
+}
+
 - (KUSFormQuestion *)currentQuestion
 {
     if (_sessionId) {
@@ -227,6 +286,36 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
         return nil;
     }
     return _formQuestion;
+}
+
+- (NSArray<NSString *> *)vcFormOptions
+{
+    if (!_sessionId) {
+        return nil;
+    }
+    
+    KUSChatSettings *chatSettings = self.userSession.chatSettingsDataSource.object;
+    if (!chatSettings.volumeControlEnabled) {
+        return nil;
+    }
+    
+    if (_vcFormEnd) {
+        return nil;
+    }
+    
+    if (_vcformQuestionIndex == 1) {
+        NSMutableArray<NSString *> *options = [[NSMutableArray alloc] init];
+        for (NSString *option in chatSettings.followUpChannels) {
+            [options addObject:[NSString stringWithFormat:@"%@%@",[[option substringToIndex:1] uppercaseString],[option substringFromIndex:1]]];
+        }
+        
+        if (!chatSettings.hideWaitOption) {
+            [options addObject:@"I'll wait"];
+        }
+        return options;
+    }
+    
+    return nil;
 }
 
 - (KUSChatMessage *)latestMessage
@@ -276,6 +365,28 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
         }
         [self upsertNewMessages:temporaryMessages];
 
+        return;
+    }
+    else if  (_sessionId != nil && _vcFormActive) {
+        NSAssert(attachments.count == 0, @"Should not have been able to send attachments without a _sessionId");
+        
+        NSDictionary *json = @{
+            @"type": @"chat_message",
+            @"id": [[NSUUID UUID] UUIDString],
+            @"attributes": @{
+                @"body": text,
+                @"direction": @"in",
+                @"createdAt": [KUSDate stringFromDate:[NSDate date]]
+            }
+        };
+        NSArray<KUSChatMessage *> *temporaryMessages = [KUSChatMessage objectsWithJSON:json];
+        for (KUSChatMessage *temporaryMessage in temporaryMessages) {
+            temporaryMessage.value = value;
+            [_temporaryVCMessagesResponses addObject:temporaryMessage];
+        }
+        
+        [self upsertNewMessages:temporaryMessages];
+        
         return;
     }
 
@@ -477,11 +588,13 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 {
     [self _insertAutoreplyIfNecessary];
     [self _insertFormMessageIfNecessary];
+    [self _insertVolumeControlFormMessageIfNecessary];
 }
 
 - (void)chatMessagesDataSource:(KUSChatMessagesDataSource *)dataSource didCreateSessionId:(NSString *)sessionId
 {
     [self _insertAutoreplyIfNecessary];
+    [self _startVolumeControlTracking];
 }
 
 - (BOOL)_shouldShowAutoreply
@@ -586,6 +699,177 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
         _questionIndex = latestQuestionIndex;
         _formQuestion = _form.questions[_questionIndex];
     }
+}
+
+// Volume control form message sending
+- (void)_insertVolumeControlFormMessageIfNecessary
+{
+    // If any pre-condition not fulfilled
+    if ([self shouldPreventVCFormSendingMessage]) {
+        return;
+    }
+    
+    // If any message sent by Server apart from auto response or form message.
+    if ([[self otherUserIds] count] > 0) {
+        [self _endVolumeControlTracking];
+        return;
+    }
+
+    KUSChatMessage *lastMessage = [self latestMessage];
+    NSString *previousMessage = lastMessage.body;
+    if (_vcformQuestionIndex == 1 && [previousMessage isEqualToString:@"I'll wait"]) {
+        [self _endVolumeControlTracking];
+        return;
+    }
+    
+    // If last question, send request on backend
+    if (_vcformQuestionIndex == 3) {
+        [self _endVolumeControlTracking];
+        [self _submitVCFormResponses];
+        return;
+    }
+    
+    // Ask next question
+    NSDate *createdAt = [lastMessage.createdAt dateByAddingTimeInterval:KUSChatAutoreplyDelay];
+    if (!_vcFormActive) {
+        createdAt = [[NSDate date] dateByAddingTimeInterval:KUSChatAutoreplyDelay];
+    }
+    NSString *questionId = [NSString stringWithFormat:@"vc_question_%ld", _vcformQuestionIndex];
+    
+    _vcFormActive = YES;
+    if (_vcformQuestionIndex == 0) {
+        NSDictionary *json = @{
+            @"type": @"chat_message",
+            @"id": questionId,
+            @"attributes": @{
+                @"body": @"Sorry, it looks like no one has become available in the time we expected. Please select an alternate contact method for us to followup with you…",
+                @"direction": @"out",
+                @"createdAt": [KUSDate stringFromDate:createdAt]
+            }
+        };
+        KUSChatMessage *formMessage = [[KUSChatMessage alloc] initWithJSON:json];
+        [self _insertDelayedMessage:formMessage];
+    }
+    else if (_vcformQuestionIndex == 1) {
+        NSString *previousChannel = [lastMessage.body lowercaseString];
+        NSDictionary *json = @{
+            @"type": @"chat_message",
+            @"id": questionId,
+            @"attributes": @{
+                @"body": [[NSString alloc] initWithFormat:@"Great, what's the best %@ to reach you at?", previousChannel],
+                @"direction": @"out",
+                @"createdAt": [KUSDate stringFromDate:createdAt]
+            }
+        };
+        KUSChatMessage *formMessage = [[KUSChatMessage alloc] initWithJSON:json];
+        [self _insertDelayedMessage:formMessage];
+    }
+    else if (_vcformQuestionIndex == 2) {
+        NSDictionary *json = @{
+            @"type": @"chat_message",
+            @"id": questionId,
+            @"attributes": @{
+                @"body": @"Thank you. We'll get back to you shortly.",
+                @"direction": @"out",
+                @"createdAt": [KUSDate stringFromDate:createdAt]
+            }
+        };
+        KUSChatMessage *formMessage = [[KUSChatMessage alloc] initWithJSON:json];
+        [self _insertDelayedMessage:formMessage];
+    }
+    
+    _vcformQuestionIndex++;
+}
+
+- (void)_submitVCFormResponses
+{
+    if (self.count <= 5) {
+        return;
+    }
+    
+    if ([[self otherUserIds] count] > 0) {
+        return;
+    }
+    
+    NSMutableArray<NSDictionary<NSString *, NSObject *> *> *messagesJSON = [[NSMutableArray alloc] init];
+    
+    NSUInteger currentMessageIndex = 4;
+    NSString *property = nil;
+    for (int i = 0; i < 3; i++) {
+        NSMutableDictionary<NSString *, NSObject *> *formMessage = [[NSMutableDictionary alloc] init];
+        
+        KUSChatMessage *questionMessage = [self objectAtIndex:currentMessageIndex];
+        currentMessageIndex--;
+        [formMessage setObject:questionMessage.body forKey:@"prompt"];
+        [formMessage setObject:[KUSDate stringFromDate:questionMessage.createdAt] forKey:@"promptAt"];
+        
+        if (i != 2) {
+            KUSChatMessage *responseMessage = [self objectAtIndex:currentMessageIndex];
+            currentMessageIndex--;
+            [formMessage setObject:responseMessage.body forKey:@"input"];
+            [formMessage setObject:[KUSDate stringFromDate:responseMessage.createdAt] forKey:@"inputAt"];
+            
+            if (i == 0) {
+                property = responseMessage.body;
+            }
+        }
+        
+        if (i == 0) {
+            [formMessage setObject:@"conversation_replyChannel" forKey:@"property"];
+        } else if (i == 1) {
+            [formMessage setObject:[[NSString alloc] initWithFormat: @"customer_%@", property] forKey:@"property"];
+        }
+        
+        [messagesJSON addObject:formMessage];
+    }
+    
+    _submittingForm = YES;
+
+    void (^actuallySubmitVCForm)(void) = ^void() {
+        __weak KUSChatMessagesDataSource *weakSelf = self;
+        [self.userSession.requestManager
+         performRequestType:KUSRequestTypePost
+         endpoint:@"/c/v1/chat/volume-control/responses"
+         params:@{ @"messages": messagesJSON , @"session": _sessionId }
+         authenticated:YES
+         completion:^(NSError *error, NSDictionary *response) {
+             __strong KUSChatMessagesDataSource *strongSelf = weakSelf;
+             if (!strongSelf) {
+                 return;
+             }
+
+             if (error) {
+                 return;
+             }
+             
+             NSMutableArray<KUSChatMessage *> *chatMessages = [[NSMutableArray alloc] init];
+             
+             NSArray<NSDictionary *> *includedModelsJSON = response[@"included"];
+             for (NSDictionary *includedModelJSON in includedModelsJSON) {
+                 NSString *type = includedModelJSON[@"type"];
+                 if ([type isEqual:[KUSChatMessage modelType]]) {
+                     KUSChatMessage *chatMessage = [[KUSChatMessage alloc] initWithJSON:includedModelJSON];
+                     [chatMessages addObject:chatMessage];
+                 }
+             }
+
+             NSMutableArray<KUSChatMessage *> *temporaryMessages = [[NSMutableArray alloc] init];
+             for (KUSChatMessage *chatMessage in self.allObjects) {
+                 if ([chatMessage.oid containsString:@"vc_question_"]) {
+                     [temporaryMessages addObject:chatMessage];
+                 }
+             }
+             
+             [self removeObjects:temporaryMessages];
+             [self removeObjects:_temporaryVCMessagesResponses];
+             [self upsertNewMessages:chatMessages];
+             
+             [strongSelf _lockMessaging];
+             _submittingForm = NO;
+         }];
+    };
+    
+    actuallySubmitVCForm();
 }
 
 - (void)_submitFormResponses
@@ -735,5 +1019,75 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
         }
     });
 }
+
+- (void)_startVolumeControlTracking
+{
+    if (!_sessionId) {
+        return;
+    }
+    
+    KUSChatSettings *chatSettings = self.userSession.chatSettingsDataSource.object;
+    if (!chatSettings.volumeControlEnabled) {
+        return;
+    }
+    
+    if (_vcTrackingStarted) {
+        return;
+    }
+    _vcTrackingStarted = YES;
+    
+    __weak KUSChatMessagesDataSource *weakSelf = self;
+    NSTimeInterval delay = chatSettings.promptDelay ?: 0.0f;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        __strong KUSChatMessagesDataSource *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
+        
+        strongSelf->_vcTrackingDelayCompleted = YES;
+        [strongSelf _insertVolumeControlFormMessageIfNecessary];
+    });
+    
+    // Automatically end chat
+    if (chatSettings.markDoneAfterTimeout) {
+        NSTimeInterval delay = chatSettings.timeOut ?: 0.0f;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            __strong KUSChatMessagesDataSource *strongSelf = weakSelf;
+            if (!strongSelf) {
+                return;
+            }
+            
+            // End Control Tracking and Automatically marked it Closed, if form not end
+            if (!strongSelf->_vcFormEnd) {
+                [strongSelf _endVolumeControlTracking];
+                [strongSelf _lockMessaging];
+            }
+        });
+    }
+}
+
+- (void)_endVolumeControlTracking
+{
+    _vcFormEnd = YES;
+    _vcFormActive = NO;
+}
+
+- (void)_lockMessaging
+{
+//    __weak KUSChatMessagesDataSource *weakSelf = self;
+    [self.userSession.requestManager
+     performRequestType:KUSRequestTypePost
+     endpoint:[[NSString alloc] initWithFormat:@"c/v1/chat/sessions/%@", _sessionId]
+     params:@{ @"locked": @YES }
+     authenticated:YES
+     completion:^(NSError *error, NSDictionary *response) {
+         if (error) {
+             return;
+         }
+         
+         // Update UIs with respect to locking
+     }];
+}
+
 
 @end

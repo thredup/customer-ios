@@ -19,4 +19,14 @@
 @property (nonatomic, copy, readonly) NSString *pusherAccessKey;
 @property (nonatomic, assign, readonly) BOOL enabled;
 
+@property (nonatomic, copy, readonly) NSString *customWaitMessage;
+@property (nonatomic, assign, readonly) NSInteger timeOut;
+@property (nonatomic, assign, readonly) NSInteger promptDelay;
+@property (nonatomic, assign, readonly) BOOL hideWaitOption;
+@property (nonatomic, copy, readonly) NSArray<NSString *> *followUpChannels;
+@property (nonatomic, assign, readonly) BOOL useDynamicWaitMessage;
+@property (nonatomic, assign, readonly) BOOL markDoneAfterTimeout;
+@property (nonatomic, assign, readonly) BOOL volumeControlEnabled;
+
+
 @end

@@ -261,6 +261,24 @@
 
 - (void)_checkShouldShowOptionPicker
 {
+    NSArray<NSString *> *vcFormOptions = _chatMessagesDataSource.vcFormOptions;
+    if (vcFormOptions) {
+        self.inputBarView.hidden = YES;
+        if ([self.inputBarView isFirstResponder]) {
+            [self.inputBarView resignFirstResponder];
+        }
+        
+        if (self.optionPickerView == nil) {
+            self.optionPickerView = [[KUSOptionPickerView alloc] init];
+            self.optionPickerView.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth);
+            self.optionPickerView.delegate = self;
+            [self.view addSubview:self.optionPickerView];
+            [self _updateOptionsPickerOptions];
+        }
+        
+        return;
+    }
+    
     KUSFormQuestion *currentQuestion = _chatMessagesDataSource.currentQuestion;
     BOOL wantsOptionPicker = (currentQuestion
                               && currentQuestion.property == KUSFormQuestionPropertyConversationTeam
@@ -298,6 +316,20 @@
 
 - (void)_updateOptionsPickerOptions
 {
+    NSArray<NSString *> *vcFormOptions = _chatMessagesDataSource.vcFormOptions;
+    if (vcFormOptions) {
+        NSMutableArray<NSString *> *options = [[NSMutableArray alloc] init];
+        for (NSString *option in vcFormOptions) {
+            [options addObject:option];
+        }
+        [self.optionPickerView setOptions:options];
+        
+        [self.view setNeedsLayout];
+        [self.view layoutIfNeeded];
+        
+        return;
+    }
+    
     NSMutableArray<NSString *> *options = [[NSMutableArray alloc] init];
     for (KUSTeam *team in _teamOptionsDataSource.allObjects) {
         [options addObject:team.fullDisplay];
