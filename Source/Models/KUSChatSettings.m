@@ -33,6 +33,7 @@
         _pusherAccessKey = NSStringFromKeyPath(json, @"attributes.pusherAccessKey");
         _enabled = BOOLFromKeyPath(json, @"attributes.enabled");
         
+        _waitMessage = NSStringFromKeyPath(json, @"attributes.waitMessage");
         _customWaitMessage = NSStringFromKeyPath(json, @"attributes.volumeControl.customWaitMessage");
         _timeOut = IntegerFromKeyPath(json, @"attributes.volumeControl.timeout");
         _promptDelay = IntegerFromKeyPath(json, @"attributes.volumeControl.promptDelay");

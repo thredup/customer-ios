@@ -19,6 +19,7 @@
 @property (nonatomic, copy, readonly) NSString *pusherAccessKey;
 @property (nonatomic, assign, readonly) BOOL enabled;
 
+@property (nonatomic, copy, readonly) NSString *waitMessage;
 @property (nonatomic, copy, readonly) NSString *customWaitMessage;
 @property (nonatomic, assign, readonly) NSInteger timeOut;
 @property (nonatomic, assign, readonly) NSInteger promptDelay;

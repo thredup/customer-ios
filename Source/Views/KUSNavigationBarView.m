@@ -29,6 +29,7 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
     KUSMultipleAvatarsView *_avatarsView;
     UILabel *_nameLabel;
     UILabel *_greetingLabel;
+    UILabel *_waitingLabel;
     UIView *_separatorView;
 
     UIButton *_backButton;
@@ -49,6 +50,8 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
         [appearance setBackgroundColor:[KUSColor lightGrayColor]];
         [appearance setNameColor:[UIColor darkGrayColor]];
         [appearance setNameFont:[UIFont boldSystemFontOfSize:13.0]];
+        [appearance setWaitingColor:[KUSColor darkGrayColor]];
+        [appearance setWaitingFont:[UIFont systemFontOfSize:11.0]];
         [appearance setGreetingColor:[KUSColor darkGrayColor]];
         [appearance setGreetingFont:[UIFont systemFontOfSize:11.0]];
         [appearance setSeparatorColor:[KUSColor grayColor]];
@@ -80,6 +83,14 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
         _nameLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         _nameLabel.numberOfLines = 1;
         [self addSubview:_nameLabel];
+        
+        _waitingLabel = [[UILabel alloc] init];
+        _waitingLabel.textAlignment = NSTextAlignmentCenter;
+        _waitingLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+        _waitingLabel.numberOfLines = 1;
+        _waitingLabel.adjustsFontSizeToFitWidth = YES;
+        _waitingLabel.minimumScaleFactor = 0.9;
+        [self addSubview:_waitingLabel];
 
         _greetingLabel = [[UILabel alloc] init];
         _greetingLabel.textAlignment = NSTextAlignmentCenter;
@@ -128,7 +139,8 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
         if (!self.extraLarge) {
             _nameLabel.font = [UIFont boldSystemFontOfSize:13.0];
             _greetingLabel.font = [UIFont systemFontOfSize:11.0];
-
+            _waitingLabel.font = [UIFont systemFontOfSize:11.0];
+            
             _avatarsView.frame = (CGRect) {
                 .origin.x = (self.bounds.size.width - avatarSize.width) / 2.0,
                 .origin.y = (self.bounds.size.height - [self _extraNavigationBarHeight] - avatarSize.height - statusBarHeight) / 2.0 + statusBarHeight,
@@ -140,16 +152,30 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
                 .size.width = self.bounds.size.width - labelSidePad * 2.0,
                 .size.height = 16.0
             };
+            _waitingLabel.frame = (CGRect) {
+                .origin.x = labelSidePad,
+                .origin.y = _nameLabel.frame.origin.y + _nameLabel.frame.size.height + 2.0,
+                .size.width = self.bounds.size.width - labelSidePad * 2.0,
+                .size.height = 13.0
+            };
             _greetingLabel.frame = (CGRect) {
                 .origin.x = labelSidePad,
                 .origin.y = _nameLabel.frame.origin.y + _nameLabel.frame.size.height + 2.0,
                 .size.width = self.bounds.size.width - labelSidePad * 2.0,
                 .size.height = 13.0
             };
+            
+            KUSChatSettings *chatSettings = [_userSession.chatSettingsDataSource object];
+            _greetingLabel.hidden = chatSettings.volumeControlEnabled;
+            _waitingLabel.hidden = !chatSettings.volumeControlEnabled;
+
         } else {
+            KUSChatSettings *chatSettings = [_userSession.chatSettingsDataSource object];
+            
             _nameLabel.font = [UIFont boldSystemFontOfSize:15.0];
             _greetingLabel.font = [UIFont systemFontOfSize:13.0];
-
+            _waitingLabel.font = [UIFont systemFontOfSize:13.0];
+            
             _avatarsView.frame = (CGRect) {
                 .origin.x = (self.bounds.size.width - avatarSize.width) / 2.0,
                 .origin.y = (self.bounds.size.height / 2.0) - avatarSize.height,
@@ -161,12 +187,23 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
                 .size.width = self.bounds.size.width - labelSidePad * 2.0,
                 .size.height = 20.0
             };
-            _greetingLabel.frame = (CGRect) {
+            _waitingLabel.frame = (CGRect) {
                 .origin.x = labelSidePad,
-                .origin.y = _nameLabel.frame.origin.y + _nameLabel.frame.size.height + 8.0,
+                .origin.y = _nameLabel.frame.origin.y + _nameLabel.frame.size.height + 6.0,
                 .size.width = self.bounds.size.width - labelSidePad * 2.0,
                 .size.height = 16.0
             };
+            _greetingLabel.frame = (CGRect) {
+                .origin.x = labelSidePad,
+                .origin.y = chatSettings.volumeControlEnabled
+                                    ? _waitingLabel.frame.origin.y + _waitingLabel.frame.size.height + 10.0
+                                    : _nameLabel.frame.origin.y + _nameLabel.frame.size.height + 8.0,
+                .size.width = self.bounds.size.width - labelSidePad * 2.0,
+                .size.height = 16.0
+            };
+            
+            _greetingLabel.hidden = NO;
+            _waitingLabel.hidden = !chatSettings.volumeControlEnabled;
         }
     } else {
         _avatarsView.frame = (CGRect) {
@@ -224,6 +261,7 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
     }
     _nameLabel.text = responderName;
     _greetingLabel.text = chatSettings.greeting;
+    _waitingLabel.text = chatSettings.useDynamicWaitMessage ? chatSettings.waitMessage : chatSettings.customWaitMessage;
 }
 
 - (void)_updateBackButtonBadge
@@ -342,6 +380,18 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
 {
     _greetingFont = greetingFont;
     _greetingLabel.font = _greetingFont;
+}
+
+- (void)setWaitingColor:(UIColor *)waitingColor
+{
+    _waitingColor = waitingColor;
+    _waitingLabel.textColor = _waitingColor;
+}
+
+- (void)setWaitingFont:(UIFont *)waitingFont
+{
+    _waitingFont = waitingFont;
+    _waitingLabel.font = _waitingFont;
 }
 
 - (void)setSeparatorColor:(UIColor *)separatorColor
