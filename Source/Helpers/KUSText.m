@@ -73,4 +73,13 @@ static NSString *kEmailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,5
     return [emailPredicate evaluateWithObject:text];
 }
 
+static NSString *kPhoneRegex = @"(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}";
++ (BOOL)isValidPhone:(NSString *)text
+{
+    if (text.length == 0) {
+        return NO;
+    }
+    NSPredicate *phonePredicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", kPhoneRegex];
+    return [phonePredicate evaluateWithObject:text];
+}
 @end

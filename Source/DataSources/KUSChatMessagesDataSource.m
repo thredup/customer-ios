@@ -36,6 +36,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     BOOL _vcTrackingDelayCompleted;
     BOOL _vcFormActive;
     BOOL _vcFormEnd;
+    BOOL _vcChatClosed;
     NSMutableArray<KUSChatMessage *> *_temporaryVCMessagesResponses;
     
     NSMutableArray<void(^)(BOOL success, NSError *error)> *_onSessionCreationCallbacks;
@@ -55,6 +56,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
         _questionIndex = -1;
         _vcformQuestionIndex = 0;
         _vcFormActive = NO;
+        _vcChatClosed = NO;
         _temporaryVCMessagesResponses = [[NSMutableArray alloc] init];
         _delayedChatMessageIds = [[NSMutableSet alloc] init];
         _messageRetryBlocksById = [[NSMutableDictionary alloc] init];
@@ -270,7 +272,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     }
     
     // Check that response of previous asked question is already entered ? if not return
-    if (_vcFormActive && !KUSChatMessageSentByUser(lastMessage)) {
+    if (_vcFormActive && !KUSChatMessageSentByUser(lastMessage) && [[self otherUserIds] count] == 0) {
         return YES;
     }
     
@@ -288,8 +290,11 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     return _formQuestion;
 }
 
-- (NSArray<NSString *> *)vcFormOptions
+- (KUSFormQuestion *)volumeControlCurrentQuestion
 {
+    if (!_vcFormActive) {
+        return nil;
+    }
     if (!_sessionId) {
         return nil;
     }
@@ -303,19 +308,36 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
         return nil;
     }
     
-    if (_vcformQuestionIndex == 1) {
-        NSMutableArray<NSString *> *options = [[NSMutableArray alloc] init];
-        for (NSString *option in chatSettings.followUpChannels) {
-            [options addObject:[NSString stringWithFormat:@"%@%@",[[option substringToIndex:1] uppercaseString],[option substringFromIndex:1]]];
-        }
-        
-        if (!chatSettings.hideWaitOption) {
-            [options addObject:@"I'll wait"];
-        }
-        return options;
+    if ([[self otherUserIds] count] > 0) {
+        return nil;
     }
     
-    return nil;
+    return _formQuestion;
+}
+
+- (BOOL)isChatClosed
+{
+    if (_vcFormActive) {
+        return false;
+    }
+    if (!_sessionId) {
+        return false;
+    }
+    
+    KUSChatSettings *chatSettings = self.userSession.chatSettingsDataSource.object;
+    if (!chatSettings.volumeControlEnabled) {
+        return false;
+    }
+    
+    if ([[self otherUserIds] count] > 0) {
+        return false;
+    }
+    
+    if (_vcChatClosed) {
+        return true;
+    }
+    
+    return false;
 }
 
 - (KUSChatMessage *)latestMessage
@@ -734,50 +756,28 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     if (!_vcFormActive) {
         createdAt = [[NSDate date] dateByAddingTimeInterval:KUSChatAutoreplyDelay];
     }
-    NSString *questionId = [NSString stringWithFormat:@"vc_question_%ld", _vcformQuestionIndex];
     
     _vcFormActive = YES;
-    if (_vcformQuestionIndex == 0) {
-        NSDictionary *json = @{
-            @"type": @"chat_message",
-            @"id": questionId,
-            @"attributes": @{
-                @"body": @"Sorry, it looks like no one has become available in the time we expected. Please select an alternate contact method for us to followup with you…",
-                @"direction": @"out",
-                @"createdAt": [KUSDate stringFromDate:createdAt]
-            }
-        };
-        KUSChatMessage *formMessage = [[KUSChatMessage alloc] initWithJSON:json];
-        [self _insertDelayedMessage:formMessage];
-    }
-    else if (_vcformQuestionIndex == 1) {
-        NSString *previousChannel = [lastMessage.body lowercaseString];
-        NSDictionary *json = @{
-            @"type": @"chat_message",
-            @"id": questionId,
-            @"attributes": @{
-                @"body": [[NSString alloc] initWithFormat:@"Great, what's the best %@ to reach you at?", previousChannel],
-                @"direction": @"out",
-                @"createdAt": [KUSDate stringFromDate:createdAt]
-            }
-        };
-        KUSChatMessage *formMessage = [[KUSChatMessage alloc] initWithJSON:json];
-        [self _insertDelayedMessage:formMessage];
-    }
-    else if (_vcformQuestionIndex == 2) {
-        NSDictionary *json = @{
-            @"type": @"chat_message",
-            @"id": questionId,
-            @"attributes": @{
-                @"body": @"Thank you. We'll get back to you shortly.",
-                @"direction": @"out",
-                @"createdAt": [KUSDate stringFromDate:createdAt]
-            }
-        };
-        KUSChatMessage *formMessage = [[KUSChatMessage alloc] initWithJSON:json];
-        [self _insertDelayedMessage:formMessage];
-    }
     
+    NSString *previousChannel = [lastMessage.body lowercaseString];
+    KUSFormQuestion *vcFormQuestion = [self _getNextVCFormQuestion:_vcformQuestionIndex previousMessage:previousChannel];
+    NSDictionary *json = @{
+       @"type": @"chat_message",
+       @"id": vcFormQuestion.oid,
+       @"attributes": @{
+           @"body": vcFormQuestion.prompt,
+           @"direction": @"out",
+           @"createdAt": [KUSDate stringFromDate:createdAt]
+        }
+    };
+    KUSChatMessage *formMessage = [[KUSChatMessage alloc] initWithJSON:json];
+    [self _insertDelayedMessage:formMessage];
+    
+    _formQuestion = vcFormQuestion;
+    // If first options response input, update view by remove options component
+    if (_vcformQuestionIndex == 1) {
+        [self notifyAnnouncersDidChangeContent];
+    }
     _vcformQuestionIndex++;
 }
 
@@ -817,7 +817,11 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
         if (i == 0) {
             [formMessage setObject:@"conversation_replyChannel" forKey:@"property"];
         } else if (i == 1) {
-            [formMessage setObject:[[NSString alloc] initWithFormat: @"customer_%@", [property lowercaseString]] forKey:@"property"];
+            if ([[property lowercaseString] isEqualToString:@"email"]) {
+                [formMessage setObject:@"customer_email" forKey:@"property"];
+            } else if ([[property lowercaseString] isEqualToString:@"voice"]) {
+                [formMessage setObject:@"customer_phone" forKey:@"property"];
+            }
         }
         
         [messagesJSON addObject:formMessage];
@@ -826,18 +830,12 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     _submittingForm = YES;
 
     void (^actuallySubmitVCForm)(void) = ^void() {
-        __weak KUSChatMessagesDataSource *weakSelf = self;
         [self.userSession.requestManager
          performRequestType:KUSRequestTypePost
          endpoint:@"/c/v1/chat/volume-control/responses"
          params:@{ @"messages": messagesJSON , @"session": _sessionId }
          authenticated:YES
          completion:^(NSError *error, NSDictionary *response) {
-             __strong KUSChatMessagesDataSource *strongSelf = weakSelf;
-             if (!strongSelf) {
-                 return;
-             }
-
              if (error) {
                  return;
              }
@@ -864,7 +862,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
              [self removeObjects:_temporaryVCMessagesResponses];
              [self upsertNewMessages:chatMessages];
              
-             [strongSelf _lockMessaging];
+             _vcChatClosed = YES;
              _submittingForm = NO;
          }];
     };
@@ -885,7 +883,6 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
         @"inputAt": [KUSDate stringFromDate:firstUserMessage.createdAt]
     }];
 
-    // This is running more time then response in list, causing currentMessageIndex to negative value
     for (KUSFormQuestion *question in _form.questions) {
         NSMutableDictionary<NSString *, NSObject *> *formMessage = [[NSMutableDictionary alloc] init];
 
@@ -1074,7 +1071,6 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 
 - (void)_lockMessaging
 {
-//    __weak KUSChatMessagesDataSource *weakSelf = self;
     [self.userSession.requestManager
      performRequestType:KUSRequestTypePut
      endpoint:[[NSString alloc] initWithFormat:@"/c/v1/chat/sessions/%@", _sessionId]
@@ -1085,9 +1081,64 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
              return;
          }
          
-         // Update UIs with respect to locking
+         // Temporary set locked at to reflect changes in UI
+         KUSChatSession *session = [self.userSession.chatSessionsDataSource objectWithId:_sessionId];
+         session.lockedAt = [[NSDate alloc] init];
+         [self fetchLatest];
      }];
 }
-
-
+        
+- (KUSFormQuestion *)_getNextVCFormQuestion:(NSInteger)index previousMessage:(NSString *)previousMessage
+{
+    if (index == 0) {
+        KUSChatSettings *chatSettings = self.userSession.chatSettingsDataSource.object;
+        NSMutableArray<NSString *> *options = [[NSMutableArray alloc] init];
+        for (NSString *option in chatSettings.followUpChannels) {
+            [options addObject:[NSString stringWithFormat:@"%@%@",[[option substringToIndex:1] uppercaseString], [[option substringFromIndex:1] lowercaseString]]];
+        }
+        
+        if (!chatSettings.hideWaitOption) {
+            [options addObject:@"I'll wait"];
+        }
+        
+        KUSFormQuestion *question = [[KUSFormQuestion alloc]
+                                     initWithJSON:@{
+                                        @"id" : @"vc_question_0",
+                                        @"name" : @"Volume Form 0",
+                                        @"prompt" : @"Sorry, it looks like no one has become available in the time we expected. Please select an alternate contact method for us to followup with you…",
+                                        @"type" : @"property",
+                                        @"property" : @"followup_channel",
+                                        @"values" : options,
+                                    }];
+        return question;
+    } else if (index == 1) {
+        NSString *propery = nil;
+        if ([[previousMessage lowercaseString] isEqualToString:@"email"]) {
+            propery = @"customer_email";
+        } else if ([[previousMessage lowercaseString] isEqualToString:@"voice"]) {
+            propery = @"customer_phone";
+        }
+        
+        KUSFormQuestion *question = [[KUSFormQuestion alloc]
+                                     initWithJSON:@{
+                                        @"id" : @"vc_question_1",
+                                        @"name" : @"Volume Form 1",
+                                        @"prompt" : [[NSString alloc] initWithFormat:@"Great, what's the best %@ to reach you at?", previousMessage],
+                                        @"type" : @"response",
+                                        @"property" : propery
+                                    }];
+        return question;
+    } else if (index == 2) {
+        KUSFormQuestion *question = [[KUSFormQuestion alloc]
+                                     initWithJSON:@{
+                                        @"id" : @"vc_question_2",
+                                        @"name" : @"Volume Form 2",
+                                        @"prompt" : @"Thank you. We'll get back to you shortly.",
+                                        @"type" : @"message"
+                                    }];
+        return question;
+    }
+    
+    return nil;
+}
 @end
