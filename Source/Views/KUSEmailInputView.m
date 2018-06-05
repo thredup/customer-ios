@@ -11,6 +11,7 @@
 #import "KUSColor.h"
 #import "KUSImage.h"
 #import "KUSText.h"
+#import "KUSLocalization.h"
 
 @interface KUSEmailInputView () <UITextFieldDelegate>
 
@@ -30,10 +31,10 @@
     if (self == [KUSEmailInputView class]) {
         KUSEmailInputView *appearance = [KUSEmailInputView appearance];
         [appearance setBackgroundColor:[KUSColor lightGrayColor]];
-        [appearance setPrompt:NSLocalizedString(@"Don't miss a response! Get notified by email:", nil)];
+        [appearance setPrompt:[[KUSLocalization sharedInstance] localizedString:@"Don't miss a response! Get notified by email:"]];
         [appearance setPromptColor:[KUSColor darkGrayColor]];
         [appearance setPromptFont:[UIFont systemFontOfSize:12.0]];
-        [appearance setPlaceholder:NSLocalizedString(@"example@domain.com", nil)];
+        [appearance setPlaceholder:[[KUSLocalization sharedInstance] localizedString:@"example@domain.com"]];
         [appearance setPlaceholderFont:[UIFont systemFontOfSize:14.0]];
         [appearance setSeparatorColor:[KUSColor grayColor]];
         [appearance setBorderColor:[KUSColor greenColor]];
@@ -110,8 +111,9 @@
     };
     self.textField.layer.cornerRadius = self.textField.frame.size.height / 2.0;
 
+    BOOL isRTL = [[KUSLocalization sharedInstance] isCurrentLanguageRTL];
     self.submitButton.frame = (CGRect) {
-        .origin.x = CGRectGetMaxX(self.textField.frame) - 30.0,
+        .origin.x = isRTL ? sidePadding : CGRectGetMaxX(self.textField.frame) - 30.0,
         .origin.y = CGRectGetMaxY(self.textField.frame) - 30.0,
         .size.width = 30.0,
         .size.height = 30.0

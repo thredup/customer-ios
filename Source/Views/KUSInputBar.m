@@ -14,6 +14,7 @@
 #import "KUSPermissions.h"
 #import "KUSTextView.h"
 #import "KUSImageAttachmentCollectionViewCell.h"
+#import "KUSLocalization.h"
 
 static const CGFloat kKUSInputBarMinimumHeight = 50.0;
 static const CGFloat kKUSInputBarPadding = 3.0;
@@ -56,7 +57,7 @@ static NSString *kCellIdentifier = @"ImageAttachment";
         [appearance setSeparatorColor:[KUSColor lightGrayColor]];
         [appearance setTextColor:[UIColor blackColor]];
         [appearance setTextFont:[UIFont systemFontOfSize:14.0]];
-        [appearance setPlaceholder:NSLocalizedString(@"Type a message...", nil)];
+        [appearance setPlaceholder:[[KUSLocalization sharedInstance] localizedString:@"Type a message..."]];
         [appearance setPlaceholderColor:[UIColor lightGrayColor]];
         [appearance setSendButtonColor:[KUSColor blueColor]];
         [appearance setKeyboardAppearance:UIKeyboardAppearanceDefault];
@@ -117,24 +118,26 @@ static NSString *kCellIdentifier = @"ImageAttachment";
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-
+    
+    BOOL isRTL = [[KUSLocalization sharedInstance] isCurrentLanguageRTL];
     self.separatorView.frame = (CGRect) {
         .size.width = self.bounds.size.width,
         .size.height = 1.0
     };
     self.attachmentButton.frame = (CGRect) {
+        .origin.x = isRTL ? self.attachmentButton.hidden ? self.bounds.size.width : self.bounds.size.width - kKUSInputBarButtonSize : 0.0,
         .origin.y = self.bounds.size.height - kKUSInputBarButtonSize,
         .size.width = (self.attachmentButton.hidden ? 0.0 : kKUSInputBarButtonSize),
         .size.height = kKUSInputBarButtonSize
     };
-
+    
     self.sendButton.frame = (CGRect) {
-        .origin.x = self.bounds.size.width - kKUSInputBarButtonSize,
+        .origin.x = isRTL ? 0.0 : self.bounds.size.width - kKUSInputBarButtonSize,
         .origin.y = self.bounds.size.height - kKUSInputBarButtonSize,
         .size.width = kKUSInputBarButtonSize,
         .size.height = kKUSInputBarButtonSize
     };
-
+    
     self.imageCollectionView.hidden = self.imageAttachments.count == 0;
     self.imageCollectionView.frame = (CGRect) {
         .origin.x = kKUSInputBarPadding + kKUSInputBarAttachmentsPadding,
@@ -142,11 +145,11 @@ static NSString *kCellIdentifier = @"ImageAttachment";
         .size.width = self.bounds.size.width - (kKUSInputBarPadding + kKUSInputBarAttachmentsPadding) * 2.0,
         .size.height = kKUSInputBarAttachmentsHeight
     };
-
+    
     CGFloat imageAttachmentsOffset = (self.imageCollectionView.hidden ? 0.0 : kKUSInputBarAttachmentsHeight);
     CGFloat desiredTextHeight = [self.textView desiredHeight];
     self.textView.frame = (CGRect) {
-        .origin.x = MAX(CGRectGetWidth(self.attachmentButton.frame), 10.0),
+        .origin.x = isRTL ? MAX(CGRectGetWidth(self.sendButton.frame), 10.0) : MAX(CGRectGetWidth(self.attachmentButton.frame), 10.0),
         .origin.y = (self.bounds.size.height - imageAttachmentsOffset - desiredTextHeight) / 2.0 + imageAttachmentsOffset,
         .size.width = self.bounds.size.width - CGRectGetWidth(self.sendButton.frame) - MAX(CGRectGetWidth(self.attachmentButton.frame), 10.0),
         .size.height = desiredTextHeight

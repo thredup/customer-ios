@@ -66,23 +66,26 @@ CGFloat KUSChatSessionTableViewCellHeight = 88.0;
     if (self) {
         _userSession = userSession;
 
+        BOOL isRTL = [[KUSLocalization sharedInstance] isCurrentLanguageRTL];
+        
         self.selectedBackgroundView = [[UIView alloc] init];
 
         _avatarImageView = [[KUSAvatarImageView alloc] initWithUserSession:userSession];
         [self.contentView addSubview:_avatarImageView];
 
         _titleLabel = [[UILabel alloc] init];
-        _titleLabel.textAlignment = NSTextAlignmentLeft;
+        _titleLabel.textAlignment = isRTL ? NSTextAlignmentRight : NSTextAlignmentLeft;
         _titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         [self.contentView addSubview:_titleLabel];
 
         _subtitleLabel = [[UILabel alloc] init];
-        _subtitleLabel.textAlignment = NSTextAlignmentLeft;
+        _subtitleLabel.textAlignment = isRTL ? NSTextAlignmentRight : NSTextAlignmentLeft;
+//        _subtitleLabel.textAlignment = NSTextAlignmentNatural;
         _subtitleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         [self.contentView addSubview:_subtitleLabel];
 
         _dateLabel = [[UILabel alloc] init];
-        _dateLabel.textAlignment = NSTextAlignmentRight;
+        _dateLabel.textAlignment = isRTL ? NSTextAlignmentLeft: NSTextAlignmentRight;
         _dateLabel.adjustsFontSizeToFitWidth = YES;
         _dateLabel.minimumScaleFactor = 10.0 / 12.0;
         [self.contentView addSubview:_dateLabel];
@@ -135,7 +138,8 @@ CGFloat KUSChatSessionTableViewCellHeight = 88.0;
         KUSChatSettings *chatSettings = [_userSession.chatSettingsDataSource object];
         responderName = chatSettings.teamName.length ? chatSettings.teamName : _userSession.organizationName;
     }
-    self.titleLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Chat with %@", nil), responderName];
+    NSString *localizedTitle = [[KUSLocalization sharedInstance] localizedString:@"Chat with"];
+    self.titleLabel.text = [NSString stringWithFormat:NSLocalizedString(@"%@ %@", nil), localizedTitle, responderName];
 
     // Subtitle text (from last message, or preview text)
     KUSChatMessage *latestTextMessage = nil;
@@ -149,6 +153,10 @@ CGFloat KUSChatSessionTableViewCellHeight = 88.0;
     self.subtitleLabel.attributedText = [KUSText attributedStringFromText:subtitleText
                                                                  fontSize:12.0
                                                                     color:self.subtitleLabel.textColor];
+    
+    // Setting Text Alignment after value settings
+    BOOL isRTL = [[KUSLocalization sharedInstance] isCurrentLanguageRTL];
+    _subtitleLabel.textAlignment = isRTL ? NSTextAlignmentRight : NSTextAlignmentLeft;
 
     // Date text (from last message date, or session created at)
     NSDate *sessionDate = latestTextMessage.createdAt ?: _chatSession.createdAt;
@@ -173,19 +181,21 @@ CGFloat KUSChatSessionTableViewCellHeight = 88.0;
 {
     [super layoutSubviews];
 
+    BOOL isRTL = [[KUSLocalization sharedInstance] isCurrentLanguageRTL];
+    
     CGSize avatarImageSize = CGSizeMake(40.0, 40.0);
     self.avatarImageView.frame = (CGRect) {
-        .origin.x = 16.0,
+        .origin.x = isRTL ? self.bounds.size.width - avatarImageSize.width - 16.0 : 16.0,
         .origin.y = (self.bounds.size.height - avatarImageSize.height) / 2.0,
         .size = avatarImageSize
     };
 
-    CGFloat textXOffset = CGRectGetMaxX(self.avatarImageView.frame) + 8.0;
+    CGFloat textXOffset = isRTL ? avatarImageSize.width + 8.0 + 16.0 : CGRectGetMaxX(self.avatarImageView.frame) + 8.0;
     CGFloat rightMargin = 20.0;
 
     CGFloat titleHeight = ceil(self.titleLabel.font.lineHeight);
     self.titleLabel.frame = (CGRect) {
-        .origin.x = textXOffset,
+        .origin.x = isRTL ? rightMargin + 90.0 : textXOffset,
         .origin.y = (self.bounds.size.height / 2.0) - titleHeight - 4.0,
         .size.width = self.bounds.size.width - textXOffset - rightMargin - 90.0,
         .size.height = titleHeight
@@ -195,14 +205,14 @@ CGFloat KUSChatSessionTableViewCellHeight = 88.0;
     unreadSize.height = MAX(ceil(unreadSize.height + 4.0), 15.0);
     unreadSize.width = MAX(ceil(unreadSize.width + 4.0), 15.0);
     self.unreadCountLabel.frame = (CGRect) {
-        .origin.x = self.bounds.size.width - rightMargin - unreadSize.width,
+        .origin.x = isRTL ? rightMargin : self.bounds.size.width - rightMargin - unreadSize.width,
         .origin.y = (self.bounds.size.height / 2.0) + 4.0,
         .size = unreadSize
     };
 
     CGFloat subtitleHeight = ceil(self.subtitleLabel.font.lineHeight);
     self.subtitleLabel.frame = (CGRect) {
-        .origin.x = textXOffset,
+        .origin.x = isRTL ? rightMargin + (self.unreadCountLabel ? unreadSize.width + 10.0 : 0.0) : textXOffset,
         .origin.y = (self.bounds.size.height / 2.0) + 4.0,
         .size.width = self.bounds.size.width - textXOffset - rightMargin - (self.unreadCountLabel ? unreadSize.width + 10.0 : 0.0),
         .size.height = subtitleHeight
@@ -210,7 +220,7 @@ CGFloat KUSChatSessionTableViewCellHeight = 88.0;
 
     CGFloat dateHeight = ceil(self.dateLabel.font.lineHeight);
     self.dateLabel.frame = (CGRect) {
-        .origin.x = self.bounds.size.width - rightMargin - 90.0,
+        .origin.x = isRTL ? rightMargin : self.bounds.size.width - rightMargin - 90.0,
         .origin.y = (self.bounds.size.height / 2.0) - dateHeight - 4.0,
         .size.width = 90.0,
         .size.height = dateHeight

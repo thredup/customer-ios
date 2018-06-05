@@ -10,6 +10,7 @@
 
 #import "KUSColor.h"
 #import "KUSImage.h"
+#import "KUSLocalization.h"
 
 static const CGFloat kMinimumSessionButtonWidth = 180.0;
 static const CGFloat kSessionButtonEdgePadding = 20.0;
@@ -28,7 +29,7 @@ static const CGFloat kSessionButtonHeight = 44.0;
         [appearance setTextColor:[UIColor whiteColor]];
         [appearance setTextFont:[UIFont systemFontOfSize:14.0]];
         [appearance setHasShadow:YES];
-        [appearance setText:NSLocalizedString(@"New Conversation", nil)];
+        [appearance setText:[[KUSLocalization sharedInstance] localizedString:@"New Conversation"]];
     }
 }
 
@@ -61,8 +62,16 @@ static const CGFloat kSessionButtonHeight = 44.0;
     _image = image;
     [self setImage:_image forState:UIControlStateNormal];
     [self setImage:_image forState:UIControlStateHighlighted];
-    [self setTitleEdgeInsets:UIEdgeInsetsMake(0.0, 5.0, 0.0, 0.0)];
-    [self setImageEdgeInsets:UIEdgeInsetsMake(0.0, 0.0, 0.0, 5.0)];
+    if ([[KUSLocalization sharedInstance] isCurrentLanguageRTL])
+    {
+        [self setTitleEdgeInsets:UIEdgeInsetsMake(0.0, 0.0, 0.0, 5.0)];
+        [self setImageEdgeInsets:UIEdgeInsetsMake(0.0, 5.0, 0.0, 0.0)];
+    }
+    else
+    {
+        [self setTitleEdgeInsets:UIEdgeInsetsMake(0.0, 5.0, 0.0, 0.0)];
+        [self setImageEdgeInsets:UIEdgeInsetsMake(0.0, 0.0, 0.0, 5.0)];
+    }
 }
 
 - (void)setTextColor:(UIColor *)textColor

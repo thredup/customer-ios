@@ -70,6 +70,21 @@ static NSString *kKustomerOrgNameKey = @"orgName";
     return [[self sharedInstance] unreadMessageCount];
 }
 
++ (void)printLocalizationKeys
+{
+    [[self sharedInstance] printLocalizationKeys];
+}
+
++ (void)registerLocalizationTableName:(NSString *)table
+{
+    [[self sharedInstance] registerLocalizationTableName:table];
+}
+
++ (void)setLanguage:(NSString *)language
+{
+    [[self sharedInstance] setLanguage:language];
+}
+
 + (void)isChatAvailable:(void (^)(BOOL success, BOOL enabled))block
 {
     [[self sharedInstance] isChatAvailable:block];
@@ -263,6 +278,21 @@ static KUSLogOptions _logOptions = KUSLogOptionInfo | KUSLogOptionErrors;
 - (NSUInteger)unreadMessageCount
 {
     return [self.userSession.chatSessionsDataSource totalUnreadCountExcludingSessionId:nil];
+}
+
+- (void)printLocalizationKeys
+{
+    [[KUSLocalization sharedInstance] printAllKeys];
+}
+
+- (void)registerLocalizationTableName:(NSString *)table
+{
+    [[KUSLocalization sharedInstance] setTable:table];
+}
+
+- (void)setLanguage:(NSString *)language
+{
+    [[KUSLocalization sharedInstance] setLanguage:language];
 }
 
 - (void)isChatAvailable:(void (^)(BOOL success, BOOL enabled))block

@@ -7,6 +7,9 @@
 //
 
 #import "KUSDate.h"
+#import "Kustomer_Private.h"
+#import "KUSUserSession.h"
+#import "KUSLocalization.h"
 
 const NSTimeInterval kSecondsPerMinute = 60.0;
 const NSTimeInterval kMinutesPerHour = 60.0;
@@ -20,22 +23,22 @@ const NSTimeInterval kDaysPerWeek = 7.0;
     if (date == nil) {
         return nil;
     }
-
+    
     NSTimeInterval timeAgo = -[date timeIntervalSinceNow];
     if (timeAgo >= kSecondsPerMinute * kMinutesPerHour * kHoursPerDay * kDaysPerWeek) {
         NSTimeInterval count = timeAgo / (kSecondsPerMinute * kMinutesPerHour * kHoursPerDay * kDaysPerWeek);
-        return _AgoTextWithCountAndUnit(count, NSLocalizedString(@"week", nil));
+        return _AgoTextWithCountAndUnit(count, @"week");
     } else if (timeAgo >= kSecondsPerMinute * kMinutesPerHour * kHoursPerDay) {
         NSTimeInterval count = timeAgo / (kSecondsPerMinute * kMinutesPerHour * kHoursPerDay);
-        return _AgoTextWithCountAndUnit(count, NSLocalizedString(@"day", nil));
+        return _AgoTextWithCountAndUnit(count, @"day");
     } else if (timeAgo >= kSecondsPerMinute * kMinutesPerHour) {
         NSTimeInterval count = timeAgo / (kSecondsPerMinute * kMinutesPerHour);
-        return _AgoTextWithCountAndUnit(count, NSLocalizedString(@"hour", nil));
+        return _AgoTextWithCountAndUnit(count, @"hour");
     } else if (timeAgo >= kSecondsPerMinute) {
         NSTimeInterval count = timeAgo / (kSecondsPerMinute);
-        return _AgoTextWithCountAndUnit(count, NSLocalizedString(@"minute", nil));
+        return _AgoTextWithCountAndUnit(count, @"minute");
     } else {
-        return NSLocalizedString(@"Just now", nil);
+        return [[KUSLocalization sharedInstance] localizedString:@"Just now"];
     }
 }
 
@@ -64,6 +67,7 @@ static NSDateFormatter *_ShortRelativeDateFormatter(void)
         _dateFormatter = [[NSDateFormatter alloc] init];
         _dateFormatter.timeStyle = NSDateFormatterShortStyle;
         _dateFormatter.dateStyle = NSDateFormatterShortStyle;
+        _dateFormatter.locale = [[KUSLocalization sharedInstance] currentLocale];
         _dateFormatter.doesRelativeDateFormatting = YES;
     });
     return _dateFormatter;
@@ -72,7 +76,9 @@ static NSDateFormatter *_ShortRelativeDateFormatter(void)
 static NSString *_AgoTextWithCountAndUnit(NSTimeInterval unitCount, NSString *unit)
 {
     int integerUnit = (int)round(unitCount);
-    return [NSString stringWithFormat:@"%i %@%@ ago", integerUnit, unit, (integerUnit > 1 ? @"s": @"")];
+    NSString* ago = [[KUSLocalization sharedInstance] localizedString:@"ago"];
+    NSString* localizedUnit = [[KUSLocalization sharedInstance] localizedString:[NSString stringWithFormat:@"%@%@", unit, (integerUnit > 1 ? @"s": @"")]];
+    return [NSString stringWithFormat:@"%i %@ %@", integerUnit, localizedUnit, ago];
 }
 
 static NSDateFormatter *_ISO8601DateFormatterFromDate(void)

@@ -163,6 +163,11 @@
 		63F61A7E1FFAC86400E56766 /* KUSMultipleAvatarsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 63F61A7C1FFAC86400E56766 /* KUSMultipleAvatarsView.m */; };
 		6D7CDE24CE12E0916484305C /* Pods_Kustomer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4074C2A1E9213757162ED660 /* Pods_Kustomer.framework */; };
 		7C3913946A295179BE2E925B /* Pods_KustomerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D624913E5C7AD4492EF0D39B /* Pods_KustomerTests.framework */; };
+		D63A817920B605F8005DF4F5 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D63A817B20B605F8005DF4F5 /* Localizable.strings */; };
+		D6BB946120A18537001AFCB6 /* KUSLocalization.h in Headers */ = {isa = PBXBuildFile; fileRef = D6BB945F20A18537001AFCB6 /* KUSLocalization.h */; };
+		D6BB946220A18537001AFCB6 /* KUSLocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = D6BB946020A18537001AFCB6 /* KUSLocalization.m */; };
+		D6BB946620A1AA5F001AFCB6 /* KUSLocalizationTest.m in Sources */ = {isa = PBXBuildFile; fileRef = D6BB946520A1AA5F001AFCB6 /* KUSLocalizationTest.m */; };
+		D6BB946D20A1F673001AFCB6 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D60CA8AB209AF68200CDAA6D /* Localizable.strings */; };
 		FC5BDC34DC026F04AE056627 /* Pods_KustomerExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BBA02B9E3111B375725C25D /* Pods_KustomerExample.framework */; };
 /* End PBXBuildFile section */
 
@@ -367,7 +372,15 @@
 		6BBA02B9E3111B375725C25D /* Pods_KustomerExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KustomerExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F91D0EF26D550F6FA48F5E6 /* Pods-Kustomer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Kustomer.release.xcconfig"; path = "Pods/Target Support Files/Pods-Kustomer/Pods-Kustomer.release.xcconfig"; sourceTree = "<group>"; };
 		A8B9C7F846CD493168479E0A /* Pods-KustomerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KustomerTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-KustomerTests/Pods-KustomerTests.release.xcconfig"; sourceTree = "<group>"; };
+		D60CA8AC209AF68700CDAA6D /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
+		D60CA8BE209B63FC00CDAA6D /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D624913E5C7AD4492EF0D39B /* Pods_KustomerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KustomerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D63A817620B6040F005DF4F5 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		D63A817A20B605F8005DF4F5 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		D63A817C20B61A0D005DF4F5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		D6BB945F20A18537001AFCB6 /* KUSLocalization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSLocalization.h; sourceTree = "<group>"; };
+		D6BB946020A18537001AFCB6 /* KUSLocalization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSLocalization.m; sourceTree = "<group>"; };
+		D6BB946520A1AA5F001AFCB6 /* KUSLocalizationTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSLocalizationTest.m; sourceTree = "<group>"; };
 		FAEBB4868A9AF9DB8C939E87 /* Pods-KustomerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KustomerTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-KustomerTests/Pods-KustomerTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -467,11 +480,13 @@
 				63270E981F4A717600E25BF5 /* KUSDate.m */,
 				6334BE521F0C66E200258DAF /* KUSImage.h */,
 				6334BE531F0C66E200258DAF /* KUSImage.m */,
+				D6BB945F20A18537001AFCB6 /* KUSLocalization.h */,
+				D6BB946020A18537001AFCB6 /* KUSLocalization.m */,
 				63006E561F92F8AC00C2BC9D /* KUSLog.h */,
-				63035BD71F2EBCD400FBBF66 /* KUSText.h */,
-				63035BD81F2EBCD400FBBF66 /* KUSText.m */,
 				63D529861FB7F0A500B1B004 /* KUSPermissions.h */,
 				63D529871FB7F0A500B1B004 /* KUSPermissions.m */,
+				63035BD71F2EBCD400FBBF66 /* KUSText.h */,
+				63035BD81F2EBCD400FBBF66 /* KUSText.m */,
 				63F61A771FF99D3100E56766 /* KUSUpload.h */,
 				63F61A781FF99D3100E56766 /* KUSUpload.m */,
 				630236C71FD84107008B4EA8 /* KUSUserDefaults.h */,
@@ -601,6 +616,7 @@
 		63B9CD9E1F088E8800120F3E /* KustomerTests */ = {
 			isa = PBXGroup;
 			children = (
+				D6BB946520A1AA5F001AFCB6 /* KUSLocalizationTest.m */,
 				636EA6281F9D03BE00340B66 /* KustomerTestConstants.h */,
 				63B9CD9F1F088E8800120F3E /* KustomerTests.m */,
 				636EA62D1F9D3EC100340B66 /* KUSUserSessionTests.m */,
@@ -633,6 +649,7 @@
 				6334BE251F0C3E7100258DAF /* Models */,
 				63B9CDE31F095E1D00120F3E /* ViewControllers */,
 				63A4EDE41F0A968E00EA3852 /* Views */,
+				D6D4325B20B6E380001056F1 /* Strings */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -648,6 +665,7 @@
 				63B9CDC81F089BF000120F3E /* LaunchScreen.storyboard */,
 				63B9CDCB1F089BF000120F3E /* Info.plist */,
 				63B9CDBA1F089BF000120F3E /* Supporting Files */,
+				D63A817B20B605F8005DF4F5 /* Localizable.strings */,
 			);
 			path = KustomerExample;
 			sourceTree = "<group>";
@@ -683,6 +701,14 @@
 				D624913E5C7AD4492EF0D39B /* Pods_KustomerTests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D6D4325B20B6E380001056F1 /* Strings */ = {
+			isa = PBXGroup;
+			children = (
+				D60CA8AB209AF68200CDAA6D /* Localizable.strings */,
+			);
+			path = Strings;
 			sourceTree = "<group>";
 		};
 		E4EF66D4BDAF1A3D5F282BCE /* Pods */ = {
@@ -748,6 +774,7 @@
 				63DC734D1F5336BA00683DE8 /* KUSNYTChatMessagePhoto.h in Headers */,
 				632EA5CD1FF70CD400C4681C /* KUSOptionPickerView.h in Headers */,
 				63006E571F92F8AC00C2BC9D /* KUSLog.h in Headers */,
+				D6BB946120A18537001AFCB6 /* KUSLocalization.h in Headers */,
 				633D8FF21F23E07E00BAFAC9 /* KUSChatSessionsDataSource.h in Headers */,
 				6334BE4D1F0C600F00258DAF /* KUSAttributionToolbar.h in Headers */,
 				636531B61F1DB73B00433A50 /* KUSColor.h in Headers */,
@@ -852,7 +879,7 @@
 				TargetAttributes = {
 					63B9CD901F088E8800120F3E = {
 						CreatedOnToolsVersion = 8.2.1;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 					63B9CD991F088E8800120F3E = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -871,6 +898,8 @@
 			knownRegions = (
 				en,
 				Base,
+				ur,
+				fr,
 			);
 			mainGroup = 63B9CD871F088E8800120F3E;
 			productRefGroup = 63B9CD921F088E8800120F3E /* Products */;
@@ -894,6 +923,7 @@
 				63D9C1821F3046DA00999183 /* up_arrow@2x.png in Resources */,
 				63D529851FB7CFA700B1B004 /* paperclip_icon@2x.png in Resources */,
 				63DC73621F57B44900683DE8 /* message_received.m4a in Resources */,
+				D6BB946D20A1F673001AFCB6 /* Localizable.strings in Resources */,
 				63D9C1841F304A7600999183 /* pencil_image@2x.png in Resources */,
 				636531AF1F1C4B9700433A50 /* kusty@2x.png in Resources */,
 			);
@@ -911,6 +941,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				63B9CDCA1F089BF000120F3E /* LaunchScreen.storyboard in Resources */,
+				D63A817920B605F8005DF4F5 /* Localizable.strings in Resources */,
 				63B9CDC71F089BF000120F3E /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1049,6 +1080,7 @@
 				63DC73601F57B1AC00683DE8 /* KUSAudio.m in Sources */,
 				630BA349203107CF00C80CD2 /* KUSClientActivityDataSource.m in Sources */,
 				633D8FDF1F22EDB800BAFAC9 /* KUSInputBar.m in Sources */,
+				D6BB946220A18537001AFCB6 /* KUSLocalization.m in Sources */,
 				63D472921F70AACC00C947F2 /* KUSNotificationWindow.m in Sources */,
 				63D9C17E1F2F705100999183 /* KUSChatSettingsDataSource.m in Sources */,
 				637177AE1F46A28300A7F79C /* KUSUser.m in Sources */,
@@ -1120,6 +1152,7 @@
 				630BA341203005F500C80CD2 /* KUSClientActivityTest.m in Sources */,
 				6398E04F1FC2316F00001050 /* KUSChatSettingsTest.m in Sources */,
 				636EA62A1F9D12BE00340B66 /* KUSDateTests.m in Sources */,
+				D6BB946620A1AA5F001AFCB6 /* KUSLocalizationTest.m in Sources */,
 				636EA6271F9CF76100340B66 /* KUSRequestManagerTests.m in Sources */,
 				636EA6301F9D4FD100340B66 /* KUSDelegateProxyTests.m in Sources */,
 				636EA62C1F9D309C00340B66 /* KUSChatMessageTests.m in Sources */,
@@ -1161,6 +1194,25 @@
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
+		D60CA8AB209AF68200CDAA6D /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D60CA8AC209AF68700CDAA6D /* Base */,
+				D60CA8BE209B63FC00CDAA6D /* ur */,
+				D63A817620B6040F005DF4F5 /* fr */,
+				D63A817C20B61A0D005DF4F5 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		D63A817B20B605F8005DF4F5 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D63A817A20B605F8005DF4F5 /* fr */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -1168,6 +1220,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -1225,6 +1278,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -1277,6 +1331,8 @@
 			baseConfigurationReference = 19AB306DD5AA4895D0C92102 /* Pods-Kustomer.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1287,6 +1343,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.kustomer.Kustomer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1297,6 +1354,7 @@
 			baseConfigurationReference = 6F91D0EF26D550F6FA48F5E6 /* Pods-Kustomer.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1307,6 +1365,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.kustomer.Kustomer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

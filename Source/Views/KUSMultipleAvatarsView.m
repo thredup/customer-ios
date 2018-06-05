@@ -10,6 +10,7 @@
 
 #import "KUSAvatarImageView.h"
 #import "KUSImage.h"
+#import "KUSLocalization.h"
 
 static const NSUInteger kKUSDefaultMaximumAvatarsToDisplay = 3;
 
@@ -50,11 +51,13 @@ static const NSUInteger kKUSDefaultMaximumAvatarsToDisplay = 3;
 {
     [super layoutSubviews];
 
+    BOOL isRTL = [[KUSLocalization sharedInstance] isCurrentLanguageRTL];
+    
     CGFloat height = self.bounds.size.height;
     CGFloat additionalItemGap = ceil(height * 0.1);
     CGFloat additionalItemWidth = height * 0.5 + additionalItemGap;
     CGFloat totalWidth = height + (_avatarViews.count - 1) * additionalItemWidth;
-    CGFloat startingOffset = (self.bounds.size.width - totalWidth) / 2.0;
+    CGFloat startingOffset = isRTL ? (self.bounds.size.width - totalWidth) / 2.0 + (_avatarViews.count - 1) * additionalItemWidth : (self.bounds.size.width - totalWidth) / 2.0;
 
     KUSAvatarImageView *previousAvatarView = nil;
     for (KUSAvatarImageView *avatarView in _avatarViews) {
@@ -68,7 +71,7 @@ static const NSUInteger kKUSDefaultMaximumAvatarsToDisplay = 3;
         if (previousAvatarView) {
             UIBezierPath *outerPath = [UIBezierPath bezierPathWithRect:avatarView.bounds];
             [outerPath setUsesEvenOddFillRule:YES];
-            CGRect maskRect = CGRectOffset(avatarView.bounds, -additionalItemWidth, 0.0);
+            CGRect maskRect = CGRectOffset(avatarView.bounds, isRTL ? additionalItemWidth : -additionalItemWidth, 0.0);
             maskRect = CGRectInset(maskRect, -additionalItemGap, -additionalItemGap);
             UIBezierPath *maskPath = [UIBezierPath bezierPathWithOvalInRect:maskRect];
             [outerPath appendPath:maskPath];
@@ -80,7 +83,7 @@ static const NSUInteger kKUSDefaultMaximumAvatarsToDisplay = 3;
             avatarView.layer.mask = maskLayer;
         }
 
-        startingOffset += additionalItemWidth;
+        startingOffset += isRTL ? -additionalItemWidth : additionalItemWidth;
         previousAvatarView = avatarView;
     }
 }
