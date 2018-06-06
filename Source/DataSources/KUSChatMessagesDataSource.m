@@ -230,55 +230,6 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     return NO;
 }
 
-- (BOOL)shouldPreventVCFormSendingMessage
-{
-    if (!_sessionId) {
-        return YES;
-    }
-    
-    // If we haven't loaded the chat settings data source, prevent input
-    if (!self.userSession.chatSettingsDataSource.didFetch) {
-        return YES;
-    }
-    
-    KUSChatSettings *chatSettings = self.userSession.chatSettingsDataSource.object;
-    if (!chatSettings.volumeControlEnabled) {
-        return YES;
-    }
-    
-    if (!_vcTrackingDelayCompleted) {
-        return YES;
-    }
-    
-    // If we are about to insert an artificial message, prevent input
-    if (_delayedChatMessageIds.count > 0) {
-        return YES;
-    }
-    
-    // When submitting the form, prevent sending more responses
-    if (_submittingForm) {
-        return YES;
-    }
-    
-    if (_vcFormEnd) {
-        return YES;
-    }
-    
-
-    // Check that last message is VC form last message
-    KUSChatMessage *lastMessage = [self latestMessage];
-    if ([lastMessage.oid isEqualToString:@"vc_question_2"]) {
-        return NO;
-    }
-    
-    // Check that response of previous asked question is already entered ? if not return
-    if (_vcFormActive && !KUSChatMessageSentByUser(lastMessage) && [[self otherUserIds] count] == 0) {
-        return YES;
-    }
-    
-    return NO;
-}
-
 - (KUSFormQuestion *)currentQuestion
 {
     if (_sessionId) {
@@ -723,11 +674,208 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     }
 }
 
-// Volume control form message sending
+- (void)_submitFormResponses
+{
+    NSMutableArray<NSDictionary<NSString *, NSObject *> *> *messagesJSON = [[NSMutableArray alloc] init];
+    
+    NSUInteger currentMessageIndex = self.count - 1;
+    KUSChatMessage *firstUserMessage = [self objectAtIndex:currentMessageIndex];
+    currentMessageIndex--;
+    
+    [messagesJSON addObject:@{
+                              @"input": firstUserMessage.body,
+                              @"inputAt": [KUSDate stringFromDate:firstUserMessage.createdAt]
+                              }];
+    
+    for (KUSFormQuestion *question in _form.questions) {
+        NSMutableDictionary<NSString *, NSObject *> *formMessage = [[NSMutableDictionary alloc] init];
+        
+        KUSChatMessage *questionMessage = [self objectAtIndex:currentMessageIndex];
+        currentMessageIndex--;
+        
+        [formMessage setObject:question.oid forKey:@"id"];
+        [formMessage setObject:question.prompt forKey:@"prompt"];
+        [formMessage setObject:[KUSDate stringFromDate:questionMessage.createdAt] forKey:@"promptAt"];
+        
+        if (KUSFormQuestionRequiresResponse(question)) {
+            KUSChatMessage *responseMessage = [self objectAtIndex:currentMessageIndex];
+            currentMessageIndex--;
+            
+            [formMessage setObject:responseMessage.body forKey:@"input"];
+            [formMessage setObject:[KUSDate stringFromDate:responseMessage.createdAt] forKey:@"inputAt"];
+            if (responseMessage.value) {
+                [formMessage setObject:responseMessage.value forKey:@"value"];
+            }
+        }
+        [messagesJSON addObject:formMessage];
+    }
+    
+    _submittingForm = YES;
+    KUSChatMessage *lastUserChatMessage = nil;
+    for (KUSChatMessage *chatMessage in self.allObjects) {
+        if (KUSChatMessageSentByUser(chatMessage)) {
+            lastUserChatMessage = chatMessage;
+            break;
+        }
+    }
+    
+    // Logic to handle an error
+    void(^handleError)(void) = ^void() {
+        if (lastUserChatMessage) {
+            [self removeObjects:@[ lastUserChatMessage ]];
+            lastUserChatMessage.state = KUSChatMessageStateFailed;
+            [self upsertObjects:@[ lastUserChatMessage ]];
+        }
+    };
+    
+    void (^actuallySubmitForm)(void) = ^void() {
+        [self.userSession.chatSessionsDataSource
+         submitFormMessages:messagesJSON
+         formId:_form.oid
+         completion:^(NSError *error, KUSChatSession *session, NSArray<KUSChatMessage *> *messages) {
+             if (error) {
+                 handleError();
+                 return;
+             }
+             
+             // If the form contained an email prompt, mark the local session as having submitted email
+             if ([_form containsEmailQuestion]) {
+                 [self.userSession.userDefaults setDidCaptureEmail:YES];
+             }
+             
+             // Grab the session id
+             _sessionId = session.oid;
+             _form = nil;
+             _questionIndex = -1;
+             _formQuestion = nil;
+             _submittingForm = NO;
+             
+             // Replace all of the local messages with the new ones
+             [self removeObjects:self.allObjects];
+             [self upsertNewMessages:messages];
+             [_messageRetryBlocksById removeObjectForKey:lastUserChatMessage.oid];
+             
+             // Insert the current messages data source into the userSession's lookup table
+             [self.userSession.chatMessagesDataSources setObject:self forKey:_sessionId];
+             
+             // Notify listeners
+             for (id<KUSChatMessagesDataSourceListener> listener in [self.listeners copy]) {
+                 if ([listener respondsToSelector:@selector(chatMessagesDataSource:didCreateSessionId:)]) {
+                     [listener chatMessagesDataSource:self didCreateSessionId:_sessionId];
+                 }
+             }
+         }];
+    };
+    
+    void (^retrySubmittingForm)(void) = ^void() {
+        if (lastUserChatMessage) {
+            [self removeObjects:@[ lastUserChatMessage ]];
+            lastUserChatMessage.state = KUSChatMessageStateSending;
+            [self upsertObjects:@[ lastUserChatMessage ]];
+        }
+        actuallySubmitForm();
+    };
+    
+    if (lastUserChatMessage) {
+        _messageRetryBlocksById[lastUserChatMessage.oid] = retrySubmittingForm;
+    }
+    actuallySubmitForm();
+}
+
+- (void)_insertDelayedMessage:(KUSChatMessage *)chatMessage
+{
+    // Sanity check
+    if (chatMessage.oid.length == 0) {
+        return;
+    }
+    
+    // Only insert the message if it doesn't exist already
+    if ([self objectWithId:chatMessage.oid]) {
+        return;
+    }
+    
+    // Get the desired delay
+    NSTimeInterval delay = [chatMessage.createdAt timeIntervalSinceNow];
+    
+    // Immediately add it if desired
+    if (delay <= 0.0) {
+        [self upsertObjects:@[ chatMessage ]];
+        return;
+    }
+    
+    [_delayedChatMessageIds addObject:chatMessage.oid];
+    
+    __weak KUSChatMessagesDataSource *weakSelf = self;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        __strong KUSChatMessagesDataSource *strongSelf = weakSelf;
+        if (strongSelf == nil) {
+            return;
+        }
+        
+        [strongSelf->_delayedChatMessageIds removeObject:chatMessage.oid];
+        BOOL doesNotAlreadyContainMessage = ![strongSelf objectWithId:chatMessage.oid];
+        [strongSelf upsertObjects:@[ chatMessage ]];
+        if (doesNotAlreadyContainMessage) {
+            [KUSAudio playMessageReceivedSound];
+        }
+    });
+}
+
+#pragma mark - Volume Control Form Messaging
+
+- (BOOL)_shouldPreventVCFormQuestionMessage
+{
+    if (!_sessionId) {
+        return YES;
+    }
+    
+    // If we haven't loaded the chat settings data source, prevent input
+    if (!self.userSession.chatSettingsDataSource.didFetch) {
+        return YES;
+    }
+    
+    KUSChatSettings *chatSettings = self.userSession.chatSettingsDataSource.object;
+    if (!chatSettings.volumeControlEnabled) {
+        return YES;
+    }
+    
+    if (!_vcTrackingDelayCompleted) {
+        return YES;
+    }
+    
+    // If we are about to insert an artificial message, prevent input
+    if (_delayedChatMessageIds.count > 0) {
+        return YES;
+    }
+    
+    // When submitting the form, prevent sending more responses
+    if (_submittingForm) {
+        return YES;
+    }
+    
+    if (_vcFormEnd) {
+        return YES;
+    }
+    
+    
+    // Check that last message is VC form last message
+    KUSChatMessage *lastMessage = [self latestMessage];
+    if ([lastMessage.oid isEqualToString:@"vc_question_2"]) {
+        return NO;
+    }
+    
+    // Check that response of previous asked question is already entered ? if not return
+    if (_vcFormActive && !KUSChatMessageSentByUser(lastMessage) && [[self otherUserIds] count] == 0) {
+        return YES;
+    }
+    
+    return NO;
+}
+
 - (void)_insertVolumeControlFormMessageIfNecessary
 {
     // If any pre-condition not fulfilled
-    if ([self shouldPreventVCFormSendingMessage]) {
+    if ([self _shouldPreventVCFormQuestionMessage]) {
         return;
     }
     
@@ -870,153 +1018,6 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     actuallySubmitVCForm();
 }
 
-- (void)_submitFormResponses
-{
-    NSMutableArray<NSDictionary<NSString *, NSObject *> *> *messagesJSON = [[NSMutableArray alloc] init];
-
-    NSUInteger currentMessageIndex = self.count - 1;
-    KUSChatMessage *firstUserMessage = [self objectAtIndex:currentMessageIndex];
-    currentMessageIndex--;
-
-    [messagesJSON addObject:@{
-        @"input": firstUserMessage.body,
-        @"inputAt": [KUSDate stringFromDate:firstUserMessage.createdAt]
-    }];
-
-    for (KUSFormQuestion *question in _form.questions) {
-        NSMutableDictionary<NSString *, NSObject *> *formMessage = [[NSMutableDictionary alloc] init];
-
-        KUSChatMessage *questionMessage = [self objectAtIndex:currentMessageIndex];
-        currentMessageIndex--;
-
-        [formMessage setObject:question.oid forKey:@"id"];
-        [formMessage setObject:question.prompt forKey:@"prompt"];
-        [formMessage setObject:[KUSDate stringFromDate:questionMessage.createdAt] forKey:@"promptAt"];
-
-        if (KUSFormQuestionRequiresResponse(question)) {
-            KUSChatMessage *responseMessage = [self objectAtIndex:currentMessageIndex];
-            currentMessageIndex--;
-
-            [formMessage setObject:responseMessage.body forKey:@"input"];
-            [formMessage setObject:[KUSDate stringFromDate:responseMessage.createdAt] forKey:@"inputAt"];
-            if (responseMessage.value) {
-                [formMessage setObject:responseMessage.value forKey:@"value"];
-            }
-        }
-        [messagesJSON addObject:formMessage];
-    }
-
-    _submittingForm = YES;
-    KUSChatMessage *lastUserChatMessage = nil;
-    for (KUSChatMessage *chatMessage in self.allObjects) {
-        if (KUSChatMessageSentByUser(chatMessage)) {
-            lastUserChatMessage = chatMessage;
-            break;
-        }
-    }
-
-    // Logic to handle an error
-    void(^handleError)(void) = ^void() {
-        if (lastUserChatMessage) {
-            [self removeObjects:@[ lastUserChatMessage ]];
-            lastUserChatMessage.state = KUSChatMessageStateFailed;
-            [self upsertObjects:@[ lastUserChatMessage ]];
-        }
-    };
-
-    void (^actuallySubmitForm)(void) = ^void() {
-        [self.userSession.chatSessionsDataSource
-         submitFormMessages:messagesJSON
-         formId:_form.oid
-         completion:^(NSError *error, KUSChatSession *session, NSArray<KUSChatMessage *> *messages) {
-             if (error) {
-                 handleError();
-                 return;
-             }
-
-             // If the form contained an email prompt, mark the local session as having submitted email
-             if ([_form containsEmailQuestion]) {
-                 [self.userSession.userDefaults setDidCaptureEmail:YES];
-             }
-
-             // Grab the session id
-             _sessionId = session.oid;
-             _form = nil;
-             _questionIndex = -1;
-             _formQuestion = nil;
-             _submittingForm = NO;
-
-             // Replace all of the local messages with the new ones
-             [self removeObjects:self.allObjects];
-             [self upsertNewMessages:messages];
-             [_messageRetryBlocksById removeObjectForKey:lastUserChatMessage.oid];
-
-             // Insert the current messages data source into the userSession's lookup table
-             [self.userSession.chatMessagesDataSources setObject:self forKey:_sessionId];
-
-             // Notify listeners
-             for (id<KUSChatMessagesDataSourceListener> listener in [self.listeners copy]) {
-                 if ([listener respondsToSelector:@selector(chatMessagesDataSource:didCreateSessionId:)]) {
-                     [listener chatMessagesDataSource:self didCreateSessionId:_sessionId];
-                 }
-             }
-         }];
-    };
-
-    void (^retrySubmittingForm)(void) = ^void() {
-        if (lastUserChatMessage) {
-            [self removeObjects:@[ lastUserChatMessage ]];
-            lastUserChatMessage.state = KUSChatMessageStateSending;
-            [self upsertObjects:@[ lastUserChatMessage ]];
-        }
-        actuallySubmitForm();
-    };
-
-    if (lastUserChatMessage) {
-        _messageRetryBlocksById[lastUserChatMessage.oid] = retrySubmittingForm;
-    }
-    actuallySubmitForm();
-}
-
-- (void)_insertDelayedMessage:(KUSChatMessage *)chatMessage
-{
-    // Sanity check
-    if (chatMessage.oid.length == 0) {
-        return;
-    }
-
-    // Only insert the message if it doesn't exist already
-    if ([self objectWithId:chatMessage.oid]) {
-        return;
-    }
-
-    // Get the desired delay
-    NSTimeInterval delay = [chatMessage.createdAt timeIntervalSinceNow];
-
-    // Immediately add it if desired
-    if (delay <= 0.0) {
-        [self upsertObjects:@[ chatMessage ]];
-        return;
-    }
-
-    [_delayedChatMessageIds addObject:chatMessage.oid];
-
-    __weak KUSChatMessagesDataSource *weakSelf = self;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        __strong KUSChatMessagesDataSource *strongSelf = weakSelf;
-        if (strongSelf == nil) {
-            return;
-        }
-
-        [strongSelf->_delayedChatMessageIds removeObject:chatMessage.oid];
-        BOOL doesNotAlreadyContainMessage = ![strongSelf objectWithId:chatMessage.oid];
-        [strongSelf upsertObjects:@[ chatMessage ]];
-        if (doesNotAlreadyContainMessage) {
-            [KUSAudio playMessageReceivedSound];
-        }
-    });
-}
-
 - (void)_startVolumeControlTracking
 {
     if (!_sessionId) {
@@ -1111,24 +1112,30 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
                                         @"values" : options,
                                     }];
         return question;
-    } else if (index == 1) {
+    }
+    else if (index == 1) {
         NSString *propery = nil;
+        NSString *channel = previousMessage;
+        
         if ([[previousMessage lowercaseString] isEqualToString:@"email"]) {
             propery = @"customer_email";
+            channel = @"email";
         } else if ([[previousMessage lowercaseString] isEqualToString:@"voice"]) {
             propery = @"customer_phone";
+            channel = @"phone number";
         }
-        
+
         KUSFormQuestion *question = [[KUSFormQuestion alloc]
                                      initWithJSON:@{
                                         @"id" : @"vc_question_1",
                                         @"name" : @"Volume Form 1",
-                                        @"prompt" : [[NSString alloc] initWithFormat:@"Great, what's the best %@ to reach you at?", previousMessage],
+                                        @"prompt" : [[NSString alloc] initWithFormat:@"Great, what's the best %@ to reach you at?", channel],
                                         @"type" : @"response",
                                         @"property" : propery
                                     }];
         return question;
-    } else if (index == 2) {
+    }
+    else if (index == 2) {
         KUSFormQuestion *question = [[KUSFormQuestion alloc]
                                      initWithJSON:@{
                                         @"id" : @"vc_question_2",
