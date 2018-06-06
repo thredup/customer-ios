@@ -1085,7 +1085,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
          // Temporary set locked at to reflect changes in UI
          KUSChatSession *session = [self.userSession.chatSessionsDataSource objectWithId:_sessionId];
          session.lockedAt = [[NSDate alloc] init];
-         [self fetchLatest];
+         [self notifyAnnouncersDidChangeContent];
      }];
 }
         
