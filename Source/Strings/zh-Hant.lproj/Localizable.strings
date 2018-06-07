@@ -1,0 +1,31 @@
+/* 
+  Localizable.strings
+  Kustomer
+
+  Created by Hunain Shahid on 03/05/2018.
+  Copyright © 2018 Kustomer. All rights reserved.
+*/
+
+
+"com.kustomer.week" = "週";
+"com.kustomer.day" = "天";
+"com.kustomer.hour" = "小時";
+"com.kustomer.minute" = "分鐘";
+"com.kustomer.weeks" = "週";
+"com.kustomer.days" = "天";
+"com.kustomer.hours" = "小時";
+"com.kustomer.minutes" = "分鐘";
+"com.kustomer.Just now" = "現在";
+"com.kustomer.Attachment" = "附件";
+"com.kustomer.Camera" = "相機";
+"com.kustomer.Photo Library" = "照片庫";
+"com.kustomer.Cancel" = "取消";
+"com.kustomer.Something went wrong. Please try again." = "出了些問題。請再試一次。";
+"com.kustomer.Try Again" = "再試一次";
+"com.kustomer.New Conversation" = "新對話";
+"com.kustomer.Don't miss a response! Get notified by email:" = "不要錯過回應！通過電子郵件獲取通知";
+"com.kustomer.example@domain.com" = "example@domain.com";
+"com.kustomer.Type a message..." = "輸入消息...";
+"com.kustomer.Loading..." = "載入中...";
+"com.kustomer.ago" = "前";
+"com.kustomer.Chat with" = "和...聊天";

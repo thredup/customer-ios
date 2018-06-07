@@ -1,0 +1,31 @@
+/* 
+  Localizable.strings
+  Kustomer
+
+  Created by Hunain Shahid on 03/05/2018.
+  Copyright © 2018 Kustomer. All rights reserved.
+*/
+
+
+"com.kustomer.week" = "неделю";
+"com.kustomer.day" = "день";
+"com.kustomer.hour" = "час";
+"com.kustomer.minute" = "минут";
+"com.kustomer.weeks" = "недель";
+"com.kustomer.days" = "дней";
+"com.kustomer.hours" = "часов";
+"com.kustomer.minutes" = "минут";
+"com.kustomer.Just now" = "Прямо сейчас";
+"com.kustomer.Attachment" = "прикрепление";
+"com.kustomer.Camera" = "камера";
+"com.kustomer.Photo Library" = "Фотобиблиотека";
+"com.kustomer.Cancel" = "Отмена";
+"com.kustomer.Something went wrong. Please try again." = "Что-то пошло не так. Пожалуйста, попробуйте еще раз.";
+"com.kustomer.Try Again" = "Попробуй еще раз";
+"com.kustomer.New Conversation" = "Новый диалог";
+"com.kustomer.Don't miss a response! Get notified by email:" = "Не пропустите ответ! Получить уведомление по электронной почте:";
+"com.kustomer.example@domain.com" = "example@domain.com";
+"com.kustomer.Type a message..." = "Введите сообщение ...";
+"com.kustomer.Loading..." = "Loading ...";
+"com.kustomer.ago" = "тому назад";
+"com.kustomer.Chat with" = "Чат с";

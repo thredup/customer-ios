@@ -1,0 +1,31 @@
+/* 
+  Localizable.strings
+  Kustomer
+
+  Created by Hunain Shahid on 03/05/2018.
+  Copyright © 2018 Kustomer. All rights reserved.
+*/
+
+
+"com.kustomer.week" = "nädal";
+"com.kustomer.day" = "päev";
+"com.kustomer.hour" = "tunnis";
+"com.kustomer.minute" = "minut";
+"com.kustomer.weeks" = "nädalat";
+"com.kustomer.days" = "päeva";
+"com.kustomer.hours" = "tundi";
+"com.kustomer.minutes" = "minutit";
+"com.kustomer.Just now" = "Just praegu";
+"com.kustomer.Attachment" = "Manus";
+"com.kustomer.Camera" = "Kaamera";
+"com.kustomer.Photo Library" = "Fotokogu";
+"com.kustomer.Cancel" = "Loobu";
+"com.kustomer.Something went wrong. Please try again." = "Midagi läks valesti. Palun proovi uuesti.";
+"com.kustomer.Try Again" = "Proovi uuesti";
+"com.kustomer.New Conversation" = "Uus vestlus";
+"com.kustomer.Don't miss a response! Get notified by email:" = "Ära jäta vastust! Saate teatada e-posti teel:";
+"com.kustomer.example@domain.com" = "example@domain.com";
+"com.kustomer.Type a message..." = "Sisestage sõnum ...";
+"com.kustomer.Loading..." = "Laadimine ...";
+"com.kustomer.ago" = "tagasi";
+"com.kustomer.Chat with" = "Vestlema koos";

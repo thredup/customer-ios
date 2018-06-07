@@ -1,0 +1,31 @@
+/* 
+  Localizable.strings
+  Kustomer
+
+  Created by Hunain Shahid on 03/05/2018.
+  Copyright © 2018 Kustomer. All rights reserved.
+*/
+
+
+"com.kustomer.week" = "tuần";
+"com.kustomer.day" = "ngày";
+"com.kustomer.hour" = "giờ";
+"com.kustomer.minute" = "phút";
+"com.kustomer.weeks" = "tuần";
+"com.kustomer.days" = "ngày";
+"com.kustomer.hours" = "giờ";
+"com.kustomer.minutes" = "phút";
+"com.kustomer.Just now" = "Vừa nãy";
+"com.kustomer.Attachment" = "Tập tin đính kèm";
+"com.kustomer.Camera" = "Máy ảnh";
+"com.kustomer.Photo Library" = "Thư viện ảnh";
+"com.kustomer.Cancel" = "Hủy bỏ";
+"com.kustomer.Something went wrong. Please try again." = "Đã xảy ra sự cố. Vui lòng thử lại.";
+"com.kustomer.Try Again" = "Thử lại";
+"com.kustomer.New Conversation" = "Cuộc hội thoại mới";
+"com.kustomer.Don't miss a response! Get notified by email:" = "Đừng bỏ lỡ câu trả lời! Nhận thông báo qua email:";
+"com.kustomer.example@domain.com" = "example@domain.com";
+"com.kustomer.Type a message..." = "Gõ một tin nhắn...";
+"com.kustomer.Loading..." = "Tải...";
+"com.kustomer.ago" = "trước đây";
+"com.kustomer.Chat with" = "Trò chuyện với";

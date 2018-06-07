@@ -1,0 +1,31 @@
+/* 
+  Localizable.strings
+  Kustomer
+
+  Created by Hunain Shahid on 03/05/2018.
+  Copyright © 2018 Kustomer. All rights reserved.
+*/
+
+
+"com.kustomer.week" = "vecka";
+"com.kustomer.day" = "dag";
+"com.kustomer.hour" = "timme";
+"com.kustomer.minute" = "minut";
+"com.kustomer.weeks" = "veckor";
+"com.kustomer.days" = "dagar";
+"com.kustomer.hours" = "timmar";
+"com.kustomer.minutes" = "minuter";
+"com.kustomer.Just now" = "Precis nu";
+"com.kustomer.Attachment" = "Bilaga";
+"com.kustomer.Camera" = "Kamera";
+"com.kustomer.Photo Library" = "Fotobibliotek";
+"com.kustomer.Cancel" = "Annullera";
+"com.kustomer.Something went wrong. Please try again." = "Något gick fel. Var god försök igen.";
+"com.kustomer.Try Again" = "Försök igen";
+"com.kustomer.New Conversation" = "Ny konversation";
+"com.kustomer.Don't miss a response! Get notified by email:" = "Missa inte ett svar! Få anmälan via e-post:";
+"com.kustomer.example@domain.com" = "example@domain.com";
+"com.kustomer.Type a message..." = "Skriv ett meddelande...";
+"com.kustomer.Loading..." = "Läser in...";
+"com.kustomer.ago" = "sedan";
+"com.kustomer.Chat with" = "Chatta med";

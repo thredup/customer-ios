@@ -1,0 +1,31 @@
+/* 
+  Localizable.strings
+  Kustomer
+
+  Created by Hunain Shahid on 03/05/2018.
+  Copyright © 2018 Kustomer. All rights reserved.
+*/
+
+
+"com.kustomer.week" = "週間";
+"com.kustomer.day" = "日";
+"com.kustomer.hour" = "時間";
+"com.kustomer.minute" = "分";
+"com.kustomer.weeks" = "週";
+"com.kustomer.days" = "日々";
+"com.kustomer.hours" = "時間";
+"com.kustomer.minutes" = "分";
+"com.kustomer.Just now" = "ちょうど今";
+"com.kustomer.Attachment" = "アタッチメント";
+"com.kustomer.Camera" = "カメラ";
+"com.kustomer.Photo Library" = "フォトライブラリ";
+"com.kustomer.Cancel" = "キャンセル";
+"com.kustomer.Something went wrong. Please try again." = "何かが間違っていた。もう一度お試しください。";
+"com.kustomer.Try Again" = "再試行する";
+"com.kustomer.New Conversation" = "新しい会話";
+"com.kustomer.Don't miss a response! Get notified by email:" = "レスポンスをお見逃しなく！メールで通知する：";
+"com.kustomer.example@domain.com" = "example@domain.com";
+"com.kustomer.Type a message..." = "メッセージを入力してください...";
+"com.kustomer.Loading..." = "読み込んでいます...";
+"com.kustomer.ago" = "前";
+"com.kustomer.Chat with" = "とチャットする";

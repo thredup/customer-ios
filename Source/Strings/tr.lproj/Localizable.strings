@@ -1,0 +1,31 @@
+/* 
+  Localizable.strings
+  Kustomer
+
+  Created by Hunain Shahid on 03/05/2018.
+  Copyright © 2018 Kustomer. All rights reserved.
+*/
+
+
+"com.kustomer.week" = "hafta";
+"com.kustomer.day" = "gün";
+"com.kustomer.hour" = "saat";
+"com.kustomer.minute" = "dakika";
+"com.kustomer.weeks" = "haftalar";
+"com.kustomer.days" = "günler";
+"com.kustomer.hours" = "saatler";
+"com.kustomer.minutes" = "dakika";
+"com.kustomer.Just now" = "Şu anda";
+"com.kustomer.Attachment" = "Ek dosya";
+"com.kustomer.Camera" = "Kamera";
+"com.kustomer.Photo Library" = "Fotoğraf kütüphanesi";
+"com.kustomer.Cancel" = "İptal etmek";
+"com.kustomer.Something went wrong. Please try again." = "Bir şeyler yanlış gitti. Lütfen tekrar deneyin.";
+"com.kustomer.Try Again" = "Tekrar deneyin";
+"com.kustomer.New Conversation" = "Yeni Konuşma";
+"com.kustomer.Don't miss a response! Get notified by email:" = "Cevapları kaçırmayın! E-posta ile haberdar olun:";
+"com.kustomer.example@domain.com" = "example@domain.com";
+"com.kustomer.Type a message..." = "Mesaj yaz ...";
+"com.kustomer.Loading..." = "Yükleniyor...";
+"com.kustomer.ago" = "önce";
+"com.kustomer.Chat with" = "İle sohbet et";

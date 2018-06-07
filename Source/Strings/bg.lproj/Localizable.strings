@@ -1,0 +1,31 @@
+/* 
+  Localizable.strings
+  Kustomer
+
+  Created by Hunain Shahid on 03/05/2018.
+  Copyright © 2018 Kustomer. All rights reserved.
+*/
+
+
+"com.kustomer.week" = "седмица";
+"com.kustomer.day" = "ден";
+"com.kustomer.hour" = "час";
+"com.kustomer.minute" = "минута";
+"com.kustomer.weeks" = "седмици";
+"com.kustomer.days" = "дни";
+"com.kustomer.hours" = "часа";
+"com.kustomer.minutes" = "минути";
+"com.kustomer.Just now" = "Точно сега";
+"com.kustomer.Attachment" = "Прикачен файл";
+"com.kustomer.Camera" = "Камера";
+"com.kustomer.Photo Library" = "Фотография";
+"com.kustomer.Cancel" = "Отказ";
+"com.kustomer.Something went wrong. Please try again." = "Нещо се обърка. Моля, опитайте отново.";
+"com.kustomer.Try Again" = "Опитай пак";
+"com.kustomer.New Conversation" = "Ново разговор";
+"com.kustomer.Don't miss a response! Get notified by email:" = "Не пропускайте отговор! Получаване на известие по имейл:";
+"com.kustomer.example@domain.com" = "example@domain.com";
+"com.kustomer.Type a message..." = "Въведете съобщение ...";
+"com.kustomer.Loading..." = "Зареждане...";
+"com.kustomer.ago" = "преди";
+"com.kustomer.Chat with" = "Чатя с";

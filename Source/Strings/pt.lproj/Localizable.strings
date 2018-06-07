@@ -1,0 +1,31 @@
+/* 
+  Localizable.strings
+  Kustomer
+
+  Created by Hunain Shahid on 03/05/2018.
+  Copyright © 2018 Kustomer. All rights reserved.
+*/
+
+
+"com.kustomer.week" = "semana";
+"com.kustomer.day" = "dia";
+"com.kustomer.hour" = "hora";
+"com.kustomer.minute" = "minuto";
+"com.kustomer.weeks" = "semanas";
+"com.kustomer.days" = "dias";
+"com.kustomer.hours" = "horas";
+"com.kustomer.minutes" = "minutos";
+"com.kustomer.Just now" = "Agora mesmo";
+"com.kustomer.Attachment" = "Anexo";
+"com.kustomer.Camera" = "Câmera";
+"com.kustomer.Photo Library" = "Biblioteca de fotos";
+"com.kustomer.Cancel" = "Cancelar";
+"com.kustomer.Something went wrong. Please try again." = "Algo deu errado. Por favor, tente novamente.";
+"com.kustomer.Try Again" = "Tente novamente";
+"com.kustomer.New Conversation" = "Nova conversa";
+"com.kustomer.Don't miss a response! Get notified by email:" = "Não perca uma resposta! Seja notificado por email:";
+"com.kustomer.example@domain.com" = "exemplo@dominio.com";
+"com.kustomer.Type a message..." = "Digite uma mensagem...";
+"com.kustomer.Loading..." = "Carregando...";
+"com.kustomer.ago" = "atrás";
+"com.kustomer.Chat with" = "Conversar com";
