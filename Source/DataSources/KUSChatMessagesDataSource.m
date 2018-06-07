@@ -1048,7 +1048,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     
     // Automatically end chat
     if (chatSettings.markDoneAfterTimeout) {
-        NSTimeInterval delay = chatSettings.timeOut ?: 0.0f;
+        NSTimeInterval delay = (chatSettings.timeOut ?: 0.0f) + (chatSettings.promptDelay ?: 0.0f);
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             __strong KUSChatMessagesDataSource *strongSelf = weakSelf;
             if (!strongSelf) {
