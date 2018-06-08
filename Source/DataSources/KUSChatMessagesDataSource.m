@@ -967,7 +967,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
         } else if (i == 1) {
             if ([[property lowercaseString] isEqualToString:@"email"]) {
                 [formMessage setObject:@"customer_email" forKey:@"property"];
-            } else if ([[property lowercaseString] isEqualToString:@"voice"]) {
+            } else {
                 [formMessage setObject:@"customer_phone" forKey:@"property"];
             }
         }
@@ -1120,7 +1120,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
         if ([[previousMessage lowercaseString] isEqualToString:@"email"]) {
             propery = @"customer_email";
             channel = @"email";
-        } else if ([[previousMessage lowercaseString] isEqualToString:@"voice"]) {
+        } else {
             propery = @"customer_phone";
             channel = @"phone number";
         }
