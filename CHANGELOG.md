@@ -1,5 +1,11 @@
 # Changelog for Kustomer iOS SDK
 
+## 0.1.9
+
+* Added Localization features to support devices of different languages.
+* Added support for chat volume control features. 
+
+
 ## 0.1.8
 
 * Added async method `isChatAvailable` for getting the current online/offline state of your chat settings

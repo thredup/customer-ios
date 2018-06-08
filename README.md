@@ -26,7 +26,7 @@ The Kustomer iOS SDK requires a valid API Key with role `org.tracking`. See [Get
 The preferred installation method is with [CocoaPods](https://cocoapods.org). Add the following to your `Podfile`:
 
 ```ruby
-pod 'Kustomer', :git => 'https://github.com/kustomer/customer-ios.git', :tag => '0.1.8'
+pod 'Kustomer', :git => 'https://github.com/kustomer/customer-ios.git', :tag => '0.1.9'
 ```
 
 #### Carthage
@@ -34,7 +34,7 @@ pod 'Kustomer', :git => 'https://github.com/kustomer/customer-ios.git', :tag => 
 For [Carthage](https://github.com/Carthage/Carthage), add the following to your `Cartfile`:
 
 ```ogdl
-github "kustomer/customer-ios" ~> 0.1.6
+github "kustomer/customer-ios" ~> 0.1.9
 ```
 
 ## Setup
@@ -152,14 +152,14 @@ customerDescription.custom = @{ @"customAttributeStr": @"value" };
  Check the "turned on/off" status of your chat asynchronously. For example if chat is turned off, you may want to disable the button or deflect customers to contact an email)
 */
 [Kustomer isChatAvailable:^(BOOL success, BOOL enabled) {
-    // success variable show that API call is successful or not.
+    // success variable show if the API call was successful or not.
     // enabled represent chat management settings. This is only valid if success is true as well.
 }];
 ```
 
 ### Localization
 
-Kustomer SDK support both <b>Right-to-left (RTL)</b> and <b>Left-to-right (LTR)</b> formatted languages. 
+The Kustomer iOS SDK will automatically change the text strings to match the language of the device your customers are using. The SDK supports both <b>Right-to-left (RTL)</b> and <b>Left-to-right (LTR)</b> formatted languages. There are over 50 languages translated out of the box.
 
 ```objective-c
 // To print all localised keys available in SDK
@@ -168,7 +168,7 @@ Kustomer SDK support both <b>Right-to-left (RTL)</b> and <b>Left-to-right (LTR)<
 
 #### Customize existing strings
 
-If you are interested in SDK specified language but with different translation, you can customize the strings as well. For this, your project must have <b>Localizable.strings</b> file. If your project does not yet have a <b>Localizable.strings</b> file with the different language variants, create it now. <br><br>
+If you are interested in an existing SDK translated language but would like to change the translations for certain values, you can override the strings. In order to enable this this, your project must have a <b>Localizable.strings</b> file. If your project does not yet have a <b>Localizable.strings</b> file with the different language variants, you must first create it. <br><br>
 To do that:
 <ol>
 <li>In Xcode, select <b>File</b> > <b>New</b> > <b>File</b>, then select <b>Resource</b> in the iOS category in the sidebar.</li>
@@ -176,7 +176,7 @@ To do that:
 <li>Name the file <b>Localizable</b> and click Create.</li>
 </ol>
 
-To customize the SDK strings with new values:
+To customize the SDK strings with the new values:
 
 <ol>
 <li>Choose the strings to customize and add them to the <b>Localizable.strings</b> file as follows:<br>
@@ -198,19 +198,18 @@ In the new file, add translations for all of the strings available in SDK.
 
 #### Different strings file
 
-If you would like to use a different strings file to the one provided with the Support SDK, you can easily change it.
+If you would like to use a different strings file than the one provided with the Support SDK, you can easily change it.
 
-`Localizable.strings` is the standard name for strings files. If you need to use a strings file named `some-other-name.strings`, add the file to your project and register `some-other-name` as follows.
+`Localizable.strings` is the standard name for the strings files. If you need to use a strings file named `some-other-name.strings`, add the file to your project and register `some-other-name` as follows:
 
 ```objective-c
-// Register Localizable String File 
+// Register Localizable String File
 [Kustomer registerLocalizationTableName:@"some-other-name"];
 ```
 
 #### Custom language
 
-By default, SDK use mobile preffered langugage. If you want to use different language, you can override language as well. <br>
-To do that:
+By default, the Kustomer iOS SDK will use the mobile device's preferred language. If you want to override this to use a different language, you can override the language shown to your customers: <br>
 ```objective-c
 // Set Custom Language
 [Kustomer setLanguage:@"language_code"];
@@ -219,7 +218,7 @@ To do that:
 [Kustomer setLanguage:@"en"];
 ```
 
-You must set language before calling `initializeWithAPIKey` method. SDK will load only the language whose translation exists either in SDK or in project. If specified language's translation doesn't exist, SDK will try to load translation of mobile preferred languages before using default language. 
+You must set the language before calling `initializeWithAPIKey` method. The SDK will load only the language whose translation exists either in SDK or in project. If the specified language's translation doesn't exist, the SDK will try to load the translation of the mobile preferred languages before using default language.
 
 
 ### Appearance
