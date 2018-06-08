@@ -163,6 +163,8 @@
 		63F61A7E1FFAC86400E56766 /* KUSMultipleAvatarsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 63F61A7C1FFAC86400E56766 /* KUSMultipleAvatarsView.m */; };
 		6D7CDE24CE12E0916484305C /* Pods_Kustomer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4074C2A1E9213757162ED660 /* Pods_Kustomer.framework */; };
 		7C3913946A295179BE2E925B /* Pods_KustomerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D624913E5C7AD4492EF0D39B /* Pods_KustomerTests.framework */; };
+		D62F3A2620C1353200FBEA61 /* KUSClosedChatView.h in Headers */ = {isa = PBXBuildFile; fileRef = D62F3A2420C1353200FBEA61 /* KUSClosedChatView.h */; };
+		D62F3A2720C1353200FBEA61 /* KUSClosedChatView.m in Sources */ = {isa = PBXBuildFile; fileRef = D62F3A2520C1353200FBEA61 /* KUSClosedChatView.m */; };
 		D6BB946120A18537001AFCB6 /* KUSLocalization.h in Headers */ = {isa = PBXBuildFile; fileRef = D6BB945F20A18537001AFCB6 /* KUSLocalization.h */; };
 		D6BB946220A18537001AFCB6 /* KUSLocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = D6BB946020A18537001AFCB6 /* KUSLocalization.m */; };
 		D6BB946620A1AA5F001AFCB6 /* KUSLocalizationTest.m in Sources */ = {isa = PBXBuildFile; fileRef = D6BB946520A1AA5F001AFCB6 /* KUSLocalizationTest.m */; };
@@ -374,6 +376,8 @@
 		D60CA8AC209AF68700CDAA6D /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D60CA8BE209B63FC00CDAA6D /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D624913E5C7AD4492EF0D39B /* Pods_KustomerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KustomerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D62F3A2420C1353200FBEA61 /* KUSClosedChatView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KUSClosedChatView.h; sourceTree = "<group>"; };
+		D62F3A2520C1353200FBEA61 /* KUSClosedChatView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KUSClosedChatView.m; sourceTree = "<group>"; };
 		D63A817620B6040F005DF4F5 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D63A817C20B61A0D005DF4F5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D6BB945F20A18537001AFCB6 /* KUSLocalization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSLocalization.h; sourceTree = "<group>"; };
@@ -616,6 +620,8 @@
 				632665E01F945DC700ED1AB2 /* KUSChatTableView.m */,
 				63D4728F1F70AACC00C947F2 /* KUSNotificationWindow.h */,
 				63D472901F70AACC00C947F2 /* KUSNotificationWindow.m */,
+				D62F3A2420C1353200FBEA61 /* KUSClosedChatView.h */,
+				D62F3A2520C1353200FBEA61 /* KUSClosedChatView.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -811,6 +817,7 @@
 				6334BE361F0C4A1300258DAF /* KUSChatSession.h in Headers */,
 				6334BE541F0C66E200258DAF /* KUSImage.h in Headers */,
 				630236C91FD84107008B4EA8 /* KUSUserDefaults.h in Headers */,
+				D62F3A2620C1353200FBEA61 /* KUSClosedChatView.h in Headers */,
 				63EDF3D91F415797000345D8 /* KUSTrackingTokenDataSource.h in Headers */,
 				632EA5D51FF82A5900C4681C /* KUSNYTImagePhoto.h in Headers */,
 				6371779D1F43EDDC00A7F79C /* KUSAvatarImageView.h in Headers */,
@@ -1169,6 +1176,7 @@
 				630BA349203107CF00C80CD2 /* KUSClientActivityDataSource.m in Sources */,
 				633D8FDF1F22EDB800BAFAC9 /* KUSInputBar.m in Sources */,
 				D6BB946220A18537001AFCB6 /* KUSLocalization.m in Sources */,
+				D62F3A2720C1353200FBEA61 /* KUSClosedChatView.m in Sources */,
 				63D472921F70AACC00C947F2 /* KUSNotificationWindow.m in Sources */,
 				63D9C17E1F2F705100999183 /* KUSChatSettingsDataSource.m in Sources */,
 				637177AE1F46A28300A7F79C /* KUSUser.m in Sources */,

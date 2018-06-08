@@ -15,5 +15,6 @@
 + (NSAttributedString *)attributedStringFromText:(NSString *)text fontSize:(CGFloat)fontSize color:(UIColor *)color;
 
 + (BOOL)isValidEmail:(NSString *)text;
++ (BOOL)isValidPhone:(NSString *)text;
 
 @end
