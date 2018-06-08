@@ -219,7 +219,7 @@ To do that:
 [Kustomer setLanguage:@"en"];
 ```
 
-You must have to set language before calling `initializeWithAPIKey` method. SDK load only that language whose translation exists either in SDK or in project. If specified language's translation not exists, sdk try to load translation of mobile preffered languages before using default language. 
+You must set language before calling `initializeWithAPIKey` method. SDK will load only the language whose translation exists either in SDK or in project. If specified language's translation doesn't exist, SDK will try to load translation of mobile preferred languages before using default language. 
 
 
 ### Appearance

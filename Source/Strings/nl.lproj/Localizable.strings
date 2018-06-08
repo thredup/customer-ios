@@ -1,0 +1,34 @@
+/* 
+  Localizable.strings
+  Kustomer
+
+  Created by Hunain Shahid on 03/05/2018.
+  Copyright © 2018 Kustomer. All rights reserved.
+*/
+
+
+"com.kustomer.week" = "week";
+"com.kustomer.day" = "dag";
+"com.kustomer.hour" = "uur";
+"com.kustomer.minute" = "minuut";
+"com.kustomer.weeks" = "weken";
+"com.kustomer.days" = "dagen";
+"com.kustomer.hours" = "uur";
+"com.kustomer.minutes" = "notulen";
+"com.kustomer.Just now" = "Net nu";
+"com.kustomer.Attachment" = "gehechtheid";
+"com.kustomer.Camera" = "Camera";
+"com.kustomer.Photo Library" = "Fotogalerij";
+"com.kustomer.Cancel" = "Annuleer";
+"com.kustomer.Something went wrong. Please try again." = "Er is iets fout gegaan. Probeer het opnieuw.";
+"com.kustomer.Try Again" = "Probeer het nog eens";
+"com.kustomer.New Conversation" = "Nieuw gesprek";
+"com.kustomer.Don't miss a response! Get notified by email:" = "Mis geen reactie! Ontvang een melding per e-mail:";
+"com.kustomer.example@domain.com" = "example@domain.com";
+"com.kustomer.Type a message..." = "Type een bericht...";
+"com.kustomer.Loading..." = "Bezig met laden...";
+"com.kustomer.ago" = "geleden";
+"com.kustomer.Chat with" = "Kletsen met";
+"com.kustomer.CLOSED" = "GESLOTEN";
+"com.kustomer.Start a New Conversation" = "Start een nieuw gesprek";
+"com.kustomer.Thank You! We'll follow up on your request." = "Dank je! We zullen uw verzoek opvolgen.";

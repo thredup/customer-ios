@@ -1,0 +1,34 @@
+/* 
+  Localizable.strings
+  Kustomer
+
+  Created by Hunain Shahid on 03/05/2018.
+  Copyright © 2018 Kustomer. All rights reserved.
+*/
+
+
+"com.kustomer.week" = "uge";
+"com.kustomer.day" = "dag";
+"com.kustomer.hour" = "time";
+"com.kustomer.minute" = "minut";
+"com.kustomer.weeks" = "uger";
+"com.kustomer.days" = "dage";
+"com.kustomer.hours" = "timer";
+"com.kustomer.minutes" = "minutter";
+"com.kustomer.Just now" = "Lige nu";
+"com.kustomer.Attachment" = "Vedhæftet fil";
+"com.kustomer.Camera" = "Kamera";
+"com.kustomer.Photo Library" = "Foto bibliotek";
+"com.kustomer.Cancel" = "Afbestille";
+"com.kustomer.Something went wrong. Please try again." = "Noget gik galt. Prøv igen.";
+"com.kustomer.Try Again" = "Prøv igen";
+"com.kustomer.New Conversation" = "Ny samtale";
+"com.kustomer.Don't miss a response! Get notified by email:" = "Gå ikke glip af et svar! Få besked via e-mail:";
+"com.kustomer.example@domain.com" = "example@domain.com";
+"com.kustomer.Type a message..." = "Skriv en besked ...";
+"com.kustomer.Loading..." = "Indlæser...";
+"com.kustomer.ago" = "siden";
+"com.kustomer.Chat with" = "Chatte med";
+"com.kustomer.CLOSED" = "LUKKET";
+"com.kustomer.Start a New Conversation" = "Start en ny samtale";
+"com.kustomer.Thank You! We'll follow up on your request." = "Tak skal du have! Vi følger op på din anmodning.";

@@ -1,0 +1,34 @@
+/* 
+  Localizable.strings
+  Kustomer
+
+  Created by Hunain Shahid on 03/05/2018.
+  Copyright © 2018 Kustomer. All rights reserved.
+*/
+
+
+"com.kustomer.week" = "savaitę";
+"com.kustomer.day" = "diena";
+"com.kustomer.hour" = "valandą";
+"com.kustomer.minute" = "minutė";
+"com.kustomer.weeks" = "savaitės";
+"com.kustomer.days" = "dienos";
+"com.kustomer.hours" = "valandos";
+"com.kustomer.minutes" = "minutės";
+"com.kustomer.Just now" = "Dabar";
+"com.kustomer.Attachment" = "Priedas";
+"com.kustomer.Camera" = "Fotoaparatas";
+"com.kustomer.Photo Library" = "Nuotraukų biblioteka";
+"com.kustomer.Cancel" = "Atšaukti";
+"com.kustomer.Something went wrong. Please try again." = "Kažkas nutiko. Prašau, pabandykite dar kartą.";
+"com.kustomer.Try Again" = "Bandyk iš naujo";
+"com.kustomer.New Conversation" = "Nauja pokalbis";
+"com.kustomer.Don't miss a response! Get notified by email:" = "Nepraleiskite atsakymo! Gaukite pranešimą elektroniniu paštu:";
+"com.kustomer.example@domain.com" = "example@domain.com";
+"com.kustomer.Type a message..." = "Įveskite pranešimą ...";
+"com.kustomer.Loading..." = "Kraunasi ...";
+"com.kustomer.ago" = "prieš";
+"com.kustomer.Chat with" = "Kalbėtis su";
+"com.kustomer.CLOSED" = "UŽDARYTA";
+"com.kustomer.Start a New Conversation" = "Pradėkite naują pokalbį";
+"com.kustomer.Thank You! We'll follow up on your request." = "Ačiū! Mes atliksime jūsų prašymą.";

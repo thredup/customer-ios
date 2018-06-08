@@ -1,0 +1,34 @@
+/* 
+  Localizable.strings
+  Kustomer
+
+  Created by Hunain Shahid on 03/05/2018.
+  Copyright © 2018 Kustomer. All rights reserved.
+*/
+
+
+"com.kustomer.week" = "vika";
+"com.kustomer.day" = "dagur";
+"com.kustomer.hour" = "klukkustund";
+"com.kustomer.minute" = "mínútu";
+"com.kustomer.weeks" = "vikur";
+"com.kustomer.days" = "daga";
+"com.kustomer.hours" = "klukkustundir";
+"com.kustomer.minutes" = "mínútur";
+"com.kustomer.Just now" = "Rétt í þessu";
+"com.kustomer.Attachment" = "Viðhengi";
+"com.kustomer.Camera" = "Myndavél";
+"com.kustomer.Photo Library" = "Photo Library";
+"com.kustomer.Cancel" = "Hætta við";
+"com.kustomer.Something went wrong. Please try again." = "Eitthvað fór úrskeiðis. Vinsamlegast reyndu aftur.";
+"com.kustomer.Try Again" = "Reyndu aftur";
+"com.kustomer.New Conversation" = "Nýtt samtal";
+"com.kustomer.Don't miss a response! Get notified by email:" = "Ekki missa af svari! Fáðu tilkynningu í tölvupósti:";
+"com.kustomer.example@domain.com" = "example@domain.com";
+"com.kustomer.Type a message..." = "Skrifaðu skilaboð ...";
+"com.kustomer.Loading..." = "Hleð inn ...";
+"com.kustomer.ago" = "síðan";
+"com.kustomer.Chat with" = "Spjalla við";
+"com.kustomer.CLOSED" = "Lokað";
+"com.kustomer.Start a New Conversation" = "Byrja nýtt samtal";
+"com.kustomer.Thank You! We'll follow up on your request." = "Þakka þér fyrir! Við munum fylgja eftir beiðni þinni.";

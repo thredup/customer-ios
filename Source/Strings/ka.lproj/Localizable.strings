@@ -1,0 +1,34 @@
+/* 
+  Localizable.strings
+  Kustomer
+
+  Created by Hunain Shahid on 03/05/2018.
+  Copyright © 2018 Kustomer. All rights reserved.
+*/
+
+
+"com.kustomer.week" = "კვირაში";
+"com.kustomer.day" = "დღეს";
+"com.kustomer.hour" = "საათი";
+"com.kustomer.minute" = "წუთი";
+"com.kustomer.weeks" = "კვირის განმავლობაში";
+"com.kustomer.days" = "დღის განმავლობაში";
+"com.kustomer.hours" = "საათი";
+"com.kustomer.minutes" = "წუთი";
+"com.kustomer.Just now" = "ახლახანს";
+"com.kustomer.Attachment" = "დანართი";
+"com.kustomer.Camera" = "კამერა";
+"com.kustomer.Photo Library" = "ფოტო ბიბლიოთეკა";
+"com.kustomer.Cancel" = "გაუქმება";
+"com.kustomer.Something went wrong. Please try again." = "რაღაც არასწორად წავიდა. გთხოვთ კიდევ სცადეთ.";
+"com.kustomer.Try Again" = "კიდევ სცადე";
+"com.kustomer.New Conversation" = "ახალი საუბარი";
+"com.kustomer.Don't miss a response! Get notified by email:" = "არ გამოტოვოთ პასუხი! მიიღეთ შეტყობინება ელფოსტით:";
+"com.kustomer.example@domain.com" = "example@domain.com";
+"com.kustomer.Type a message..." = "გაგზავნა გაგზავნა ...";
+"com.kustomer.Loading..." = "ჩატვირთვა...";
+"com.kustomer.ago" = "წინ";
+"com.kustomer.Chat with" = "ემესიჯო";
+"com.kustomer.CLOSED" = "დახურულია";
+"com.kustomer.Start a New Conversation" = "ახალი მიმოწერის დაწყება";
+"com.kustomer.Thank You! We'll follow up on your request." = "გმადლობთ! ჩვენ მივყვებით თქვენს თხოვნას.";

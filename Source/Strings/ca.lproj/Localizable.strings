@@ -1,0 +1,34 @@
+/* 
+  Localizable.strings
+  Kustomer
+
+  Created by Hunain Shahid on 03/05/2018.
+  Copyright © 2018 Kustomer. All rights reserved.
+*/
+
+
+"com.kustomer.week" = "setmana";
+"com.kustomer.day" = "dia";
+"com.kustomer.hour" = "hores";
+"com.kustomer.minute" = "minut";
+"com.kustomer.weeks" = "setmanes";
+"com.kustomer.days" = "dies";
+"com.kustomer.hours" = "hores";
+"com.kustomer.minutes" = "minuts";
+"com.kustomer.Just now" = "Ara mateix";
+"com.kustomer.Attachment" = "Adjunt";
+"com.kustomer.Camera" = "Càmera";
+"com.kustomer.Photo Library" = "Fototeca";
+"com.kustomer.Cancel" = "Cancel · lar";
+"com.kustomer.Something went wrong. Please try again." = "Alguna cosa ha anat malament. Siusplau torna-ho a provar.";
+"com.kustomer.Try Again" = "Torna-ho a provar";
+"com.kustomer.New Conversation" = "Nova conversa";
+"com.kustomer.Don't miss a response! Get notified by email:" = "No et perdis cap resposta! Rebeu notificacions per correu electrònic:";
+"com.kustomer.example@domain.com" = "example@domain.com";
+"com.kustomer.Type a message..." = "Escriu un missatge ...";
+"com.kustomer.Loading..." = "S'està carregant ...";
+"com.kustomer.ago" = "fa";
+"com.kustomer.Chat with" = "Xatejar amb";
+"com.kustomer.CLOSED" = "TANCAT";
+"com.kustomer.Start a New Conversation" = "Comença una nova conversa";
+"com.kustomer.Thank You! We'll follow up on your request." = "Gràcies! Seguirem la vostra sol·licitud.";

@@ -32,6 +32,16 @@
         _activeFormId = NSStringFromKeyPath(json, @"attributes.activeForm");
         _pusherAccessKey = NSStringFromKeyPath(json, @"attributes.pusherAccessKey");
         _enabled = BOOLFromKeyPath(json, @"attributes.enabled");
+        
+        _waitMessage = NSStringFromKeyPath(json, @"attributes.waitMessage");
+        _customWaitMessage = NSStringFromKeyPath(json, @"attributes.volumeControl.customWaitMessage");
+        _timeOut = IntegerFromKeyPath(json, @"attributes.volumeControl.timeout");
+        _promptDelay = IntegerFromKeyPath(json, @"attributes.volumeControl.promptDelay");
+        _hideWaitOption = BOOLFromKeyPath(json, @"attributes.volumeControl.hideWaitOption");
+        _followUpChannels = NSArrayFromKeyPath(json, @"attributes.volumeControl.followUpChannels");
+        _useDynamicWaitMessage = BOOLFromKeyPath(json, @"attributes.volumeControl.useDynamicWaitMessage");
+        _markDoneAfterTimeout = BOOLFromKeyPath(json, @"attributes.volumeControl.markDoneAfterTimeout");
+        _volumeControlEnabled = BOOLFromKeyPath(json, @"attributes.volumeControl.enabled");
     }
     return self;
 }

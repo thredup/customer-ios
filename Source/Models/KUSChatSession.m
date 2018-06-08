@@ -46,6 +46,7 @@
         _createdAt = DateFromKeyPath(json, @"attributes.createdAt");
         _lastSeenAt = DateFromKeyPath(json, @"attributes.lastSeenAt");
         _lastMessageAt = DateFromKeyPath(json, @"attributes.lastMessageAt");
+        _lockedAt = DateFromKeyPath(json, @"attributes.lockedAt");
     }
     return self;
 }

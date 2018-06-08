@@ -1,0 +1,34 @@
+/* 
+  Localizable.strings
+  Kustomer
+
+  Created by Hunain Shahid on 03/05/2018.
+  Copyright © 2018 Kustomer. All rights reserved.
+*/
+
+
+"com.kustomer.week" = "týden";
+"com.kustomer.day" = "den";
+"com.kustomer.hour" = "hodina";
+"com.kustomer.minute" = "minuta";
+"com.kustomer.weeks" = "týdny";
+"com.kustomer.days" = "dnů";
+"com.kustomer.hours" = "hodin";
+"com.kustomer.minutes" = "minut";
+"com.kustomer.Just now" = "Právě teď";
+"com.kustomer.Attachment" = "Příloha";
+"com.kustomer.Camera" = "Fotoaparát";
+"com.kustomer.Photo Library" = "Fotografická knihovna";
+"com.kustomer.Cancel" = "zrušení";
+"com.kustomer.Something went wrong. Please try again." = "Něco se pokazilo. Prosím zkuste to znovu.";
+"com.kustomer.Try Again" = "Zkus to znovu";
+"com.kustomer.New Conversation" = "Nová konverzace";
+"com.kustomer.Don't miss a response! Get notified by email:" = "Nenechte si ujít odpověď! Obdržte oznámení prostřednictvím e-mailu:";
+"com.kustomer.example@domain.com" = "example@domain.com";
+"com.kustomer.Type a message..." = "Zadejte zprávu ...";
+"com.kustomer.Loading..." = "Načítání...";
+"com.kustomer.ago" = "před";
+"com.kustomer.Chat with" = "Chatovat s";
+"com.kustomer.CLOSED" = "ZAVŘENO";
+"com.kustomer.Start a New Conversation" = "Spusťte novou konverzaci";
+"com.kustomer.Thank You! We'll follow up on your request." = "Děkuji! Budeme pokračovat ve Vaší žádosti.";

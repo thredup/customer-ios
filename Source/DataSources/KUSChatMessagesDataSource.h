@@ -36,6 +36,8 @@
 - (BOOL)shouldPreventSendingMessage;
 - (KUSFormQuestion *)currentQuestion;
 - (KUSChatMessage *)latestMessage;
+- (KUSFormQuestion *)volumeControlCurrentQuestion;
+- (BOOL)isChatClosed;
 
 - (void)upsertNewMessages:(NSArray<KUSChatMessage *> *)chatMessages;
 - (void)sendMessageWithText:(NSString *)text attachments:(NSArray<UIImage *> *)attachments;

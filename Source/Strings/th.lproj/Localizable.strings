@@ -1,0 +1,34 @@
+/* 
+  Localizable.strings
+  Kustomer
+
+  Created by Hunain Shahid on 03/05/2018.
+  Copyright © 2018 Kustomer. All rights reserved.
+*/
+
+
+"com.kustomer.week" = "สัปดาห์";
+"com.kustomer.day" = "วัน";
+"com.kustomer.hour" = "ชั่วโมง";
+"com.kustomer.minute" = "นาที";
+"com.kustomer.weeks" = "สัปดาห์ที่ผ่านมา";
+"com.kustomer.days" = "วัน";
+"com.kustomer.hours" = "ชั่วโมง";
+"com.kustomer.minutes" = "นาที";
+"com.kustomer.Just now" = "ตอนนี้";
+"com.kustomer.Attachment" = "ความผูกพัน";
+"com.kustomer.Camera" = "กล้อง";
+"com.kustomer.Photo Library" = "ห้องสมุดรูปภาพ";
+"com.kustomer.Cancel" = "ยกเลิก";
+"com.kustomer.Something went wrong. Please try again." = "บางอย่างผิดพลาด. กรุณาลองอีกครั้ง.";
+"com.kustomer.Try Again" = "ลองอีกครั้ง";
+"com.kustomer.New Conversation" = "การสนทนาใหม่";
+"com.kustomer.Don't miss a response! Get notified by email:" = "อย่าพลาดการตอบสนอง! รับแจ้งทางอีเมลล์:";
+"com.kustomer.example@domain.com" = "example@domain.com";
+"com.kustomer.Type a message..." = "พิมพ์ข้อความ ...";
+"com.kustomer.Loading..." = "กำลังโหลด ...";
+"com.kustomer.ago" = "มาแล้ว";
+"com.kustomer.Chat with" = "สนทนากับ";
+"com.kustomer.CLOSED" = "ปิด";
+"com.kustomer.Start a New Conversation" = "เริ่มการสนทนาใหม่";
+"com.kustomer.Thank You! We'll follow up on your request." = "ขอขอบคุณ! เราจะติดตามคำขอของคุณต่อ";

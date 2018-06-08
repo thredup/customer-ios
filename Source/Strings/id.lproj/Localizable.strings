@@ -1,0 +1,34 @@
+/* 
+  Localizable.strings
+  Kustomer
+
+  Created by Hunain Shahid on 03/05/2018.
+  Copyright © 2018 Kustomer. All rights reserved.
+*/
+
+
+"com.kustomer.week" = "minggu";
+"com.kustomer.day" = "hari";
+"com.kustomer.hour" = "jam";
+"com.kustomer.minute" = "menit";
+"com.kustomer.weeks" = "minggu";
+"com.kustomer.days" = "hari";
+"com.kustomer.hours" = "jam";
+"com.kustomer.minutes" = "menit";
+"com.kustomer.Just now" = "Baru saja";
+"com.kustomer.Attachment" = "Lampiran";
+"com.kustomer.Camera" = "Kamera";
+"com.kustomer.Photo Library" = "Perpustakaan Foto";
+"com.kustomer.Cancel" = "Membatalkan";
+"com.kustomer.Something went wrong. Please try again." = "Ada yang salah. Silakan coba lagi.";
+"com.kustomer.Try Again" = "Coba lagi";
+"com.kustomer.New Conversation" = "Percakapan Baru";
+"com.kustomer.Don't miss a response! Get notified by email:" = "Jangan lewatkan jawaban! Dapatkan pemberitahuan melalui email:";
+"com.kustomer.example@domain.com" = "example@domain.com";
+"com.kustomer.Type a message..." = "Ketik pesan...";
+"com.kustomer.Loading..." = "Pemuatan...";
+"com.kustomer.ago" = "lalu";
+"com.kustomer.Chat with" = "Chat dengan";
+"com.kustomer.CLOSED" = "TUTUP";
+"com.kustomer.Start a New Conversation" = "Mulai Percakapan Baru";
+"com.kustomer.Thank You! We'll follow up on your request." = "Terima kasih! Kami akan menindaklanjuti permintaan Anda.";

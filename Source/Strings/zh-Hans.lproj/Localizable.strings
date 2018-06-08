@@ -1,0 +1,34 @@
+/* 
+  Localizable.strings
+  Kustomer
+
+  Created by Hunain Shahid on 03/05/2018.
+  Copyright © 2018 Kustomer. All rights reserved.
+*/
+
+
+"com.kustomer.week" = "周";
+"com.kustomer.day" = "天";
+"com.kustomer.hour" = "小时";
+"com.kustomer.minute" = "分钟";
+"com.kustomer.weeks" = "周";
+"com.kustomer.days" = "天";
+"com.kustomer.hours" = "小时";
+"com.kustomer.minutes" = "分钟";
+"com.kustomer.Just now" = "现在";
+"com.kustomer.Attachment" = "附件";
+"com.kustomer.Camera" = "相机";
+"com.kustomer.Photo Library" = "照片库";
+"com.kustomer.Cancel" = "取消";
+"com.kustomer.Something went wrong. Please try again." = "出了些问题。请再试一次。";
+"com.kustomer.Try Again" = "再试一次";
+"com.kustomer.New Conversation" = "新对话";
+"com.kustomer.Don't miss a response! Get notified by email:" = "不要错过回应！通过电子邮件获取通知";
+"com.kustomer.example@domain.com" = "example@domain.com";
+"com.kustomer.Type a message..." = "输入消息...";
+"com.kustomer.Loading..." = "载入中...";
+"com.kustomer.ago" = "前";
+"com.kustomer.Chat with" = "和...聊天";
+"com.kustomer.CLOSED" = "关闭";
+"com.kustomer.Start a New Conversation" = "开始新的对话";
+"com.kustomer.Thank You! We'll follow up on your request." = "谢谢！我们会跟进您的请求。";

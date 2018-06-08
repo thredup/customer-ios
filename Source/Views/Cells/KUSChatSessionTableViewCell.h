@@ -24,6 +24,9 @@ extern CGFloat KUSChatSessionTableViewCellHeight;
 @property (nonatomic, strong) UIColor *unreadColor UI_APPEARANCE_SELECTOR;
 @property (nonatomic, strong) UIColor *unreadBackgroundColor UI_APPEARANCE_SELECTOR;
 @property (nonatomic, strong) UIFont *unreadFont UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIColor *closedColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIFont *closedFont UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIColor *closedViewColor UI_APPEARANCE_SELECTOR;
 
 - (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier userSession:(KUSUserSession *)userSession;
 

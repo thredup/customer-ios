@@ -1,0 +1,34 @@
+/* 
+  Localizable.strings
+  Kustomer
+
+  Created by Hunain Shahid on 03/05/2018.
+  Copyright © 2018 Kustomer. All rights reserved.
+*/
+
+
+"com.kustomer.week" = "săptămână";
+"com.kustomer.day" = "zi";
+"com.kustomer.hour" = "ora";
+"com.kustomer.minute" = "minut";
+"com.kustomer.weeks" = "săptămâni";
+"com.kustomer.days" = "zi";
+"com.kustomer.hours" = "ore";
+"com.kustomer.minutes" = "minute";
+"com.kustomer.Just now" = "Chiar acum";
+"com.kustomer.Attachment" = "Atașament";
+"com.kustomer.Camera" = "aparat foto";
+"com.kustomer.Photo Library" = "Biblioteca foto";
+"com.kustomer.Cancel" = "Anulare";
+"com.kustomer.Something went wrong. Please try again." = "Ceva n-a mers bine. Vă rugăm să încercați din nou.";
+"com.kustomer.Try Again" = "Încearcă din nou";
+"com.kustomer.New Conversation" = "Conversație nouă";
+"com.kustomer.Don't miss a response! Get notified by email:" = "Nu ratați un răspuns! Obțineți notificarea prin e-mail:";
+"com.kustomer.example@domain.com" = "example@domain.com";
+"com.kustomer.Type a message..." = "Scrie un mesaj...";
+"com.kustomer.Loading..." = "Se incarca...";
+"com.kustomer.ago" = "în urmă";
+"com.kustomer.Chat with" = "Chat cu";
+"com.kustomer.CLOSED" = "ÎNCHIS";
+"com.kustomer.Start a New Conversation" = "Porniți o nouă conversație";
+"com.kustomer.Thank You! We'll follow up on your request." = "Mulțumesc! Vom urmări solicitarea dvs.";

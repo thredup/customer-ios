@@ -17,6 +17,7 @@
 @property (nonatomic, copy, readonly) NSDate *createdAt;
 @property (nonatomic, copy, readonly) NSDate *lastSeenAt;
 @property (nonatomic, copy, readonly) NSDate *lastMessageAt;
+@property (nonatomic, copy, readwrite) NSDate *lockedAt;
 
 + (KUSChatSession *)tempSessionFromChatMessage:(KUSChatMessage *)message;
 

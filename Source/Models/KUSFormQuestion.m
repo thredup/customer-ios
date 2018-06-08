@@ -44,8 +44,7 @@ static KUSFormQuestionType KUSFormQuestionTypeFromString(NSString *string)
         return KUSFormQuestionTypeMessage;
     } else if ([string isEqualToString:@"property"]) {
         return KUSFormQuestionTypeProperty;
-    }
-    else if ([string isEqualToString:@"response"]) {
+    } else if ([string isEqualToString:@"response"]) {
         return KUSFormQuestionTypeResponse;
     }
     return KUSFormQuestionTypeUnknown;
@@ -59,6 +58,10 @@ static KUSFormQuestionProperty KUSFormQuestionPropertyFromString(NSString *strin
         return KUSFormQuestionPropertyCustomerEmail;
     } else if ([string isEqualToString:@"conversation_team"]) {
         return KUSFormQuestionPropertyConversationTeam;
+    } else if ([string isEqualToString:@"customer_phone"]) {
+        return KUSFormQuestionPropertyCustomerPhone;
+    } else if ([string isEqualToString:@"followup_channel"]) {
+        return KUSFormQuestionPropertyFollowupChannel;
     }
     return KUSFormQuestionPropertyUnknown;
 }

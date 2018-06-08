@@ -1,0 +1,34 @@
+/* 
+  Localizable.strings
+  Kustomer
+
+  Created by Hunain Shahid on 03/05/2018.
+  Copyright © 2018 Kustomer. All rights reserved.
+*/
+
+
+"com.kustomer.week" = "linggo";
+"com.kustomer.day" = "araw";
+"com.kustomer.hour" = "oras";
+"com.kustomer.minute" = "minuto";
+"com.kustomer.weeks" = "linggo";
+"com.kustomer.days" = "araw";
+"com.kustomer.hours" = "oras";
+"com.kustomer.minutes" = "minuto";
+"com.kustomer.Just now" = "Ngayon lang";
+"com.kustomer.Attachment" = "Attachment";
+"com.kustomer.Camera" = "Camera";
+"com.kustomer.Photo Library" = "Photo Library";
+"com.kustomer.Cancel" = "Kanselahin";
+"com.kustomer.Something went wrong. Please try again." = "May nagkamali. Pakisubukang muli.";
+"com.kustomer.Try Again" = "Subukan muli";
+"com.kustomer.New Conversation" = "Bagong Pag-uusap";
+"com.kustomer.Don't miss a response! Get notified by email:" = "Huwag palampasin ang sagot! Maabisuhan sa pamamagitan ng email:";
+"com.kustomer.example@domain.com" = "example@domain.com";
+"com.kustomer.Type a message..." = "Mag-type ng mensahe ...";
+"com.kustomer.Loading..." = "Naglo-load ...";
+"com.kustomer.ago" = "nakaraan";
+"com.kustomer.Chat with" = "Makipag-usap kay";
+"com.kustomer.CLOSED" = "Nakasara";
+"com.kustomer.Start a New Conversation" = "Magsimula ng Bagong Pag-uusap";
+"com.kustomer.Thank You! We'll follow up on your request." = "Salamat! Susundan namin ang iyong kahilingan.";
