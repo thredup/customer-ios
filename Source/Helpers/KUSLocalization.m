@@ -149,7 +149,6 @@
     NSUInteger size = MIN([languages count], 5);
     
     for (NSUInteger i = 0; i < size; i++) {
-        
         // Check languages file of preffered language with region code
         bundle = NSBundle.mainBundle;
         bundle = [NSBundle bundleWithPath:[bundle pathForResource:languages[i] ofType:@"lproj"]];
@@ -166,19 +165,21 @@
         }
         
         // Check by removing region
-        NSString *language = [languages[i] substringWithRange:NSMakeRange(0, [languages[i] rangeOfString:@"-"].location)];
-        bundle = NSBundle.mainBundle;
-        bundle = [NSBundle bundleWithPath:[bundle pathForResource:language ofType:@"lproj"]];
-        if (bundle != nil) {
-            highestConfidentLang = language;
-            return;
-        }
-        
-        bundle = [NSBundle bundleWithIdentifier:@"com.kustomer.Kustomer"];
-        bundle = [NSBundle bundleWithPath:[bundle pathForResource:language ofType:@"lproj"]];
-        if (bundle != nil) {
-            highestConfidentLang = language;
-            return;
+        if ([languages[i] rangeOfString:@"-"].location != NSNotFound) {
+            NSString *language = [languages[i] substringWithRange:NSMakeRange(0, [languages[i] rangeOfString:@"-"].location)];
+            bundle = NSBundle.mainBundle;
+            bundle = [NSBundle bundleWithPath:[bundle pathForResource:language ofType:@"lproj"]];
+            if (bundle != nil) {
+                highestConfidentLang = language;
+                return;
+            }
+            
+            bundle = [NSBundle bundleWithIdentifier:@"com.kustomer.Kustomer"];
+            bundle = [NSBundle bundleWithPath:[bundle pathForResource:language ofType:@"lproj"]];
+            if (bundle != nil) {
+                highestConfidentLang = language;
+                return;
+            }
         }
     }
     
