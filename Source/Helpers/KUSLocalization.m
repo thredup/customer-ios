@@ -35,7 +35,7 @@
 
 - (void)printAllKeys
 {
-    NSBundle *bundle = [NSBundle bundleWithIdentifier:@"com.kustomer.Kustomer"];
+    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
     bundle = [NSBundle bundleWithPath:[bundle pathForResource:@"Strings" ofType:@"bundle"]];
     NSString *path = [bundle pathForResource:@"Localizable" ofType:@"strings"];
     NSDictionary *dictionary = [NSDictionary dictionaryWithContentsOfFile:path];
@@ -87,7 +87,7 @@
         }
     }
     
-    bundle = [NSBundle bundleWithIdentifier:@"com.kustomer.Kustomer"];
+    bundle = [NSBundle bundleForClass:[self class]];
     bundle = [NSBundle bundleWithPath:[bundle pathForResource:@"Strings" ofType:@"bundle"]];
     bundle = [NSBundle bundleWithPath:[bundle pathForResource:highestConfidentLang ofType:@"lproj"]];
     if (bundle != nil) {
@@ -97,7 +97,7 @@
         }
     }
     
-    bundle = [NSBundle bundleWithIdentifier:@"com.kustomer.Kustomer"];
+    bundle = [NSBundle bundleForClass:[self class]];
     bundle = [NSBundle bundleWithPath:[bundle pathForResource:@"Strings" ofType:@"bundle"]];
     bundle = [NSBundle bundleWithPath:[bundle pathForResource:@"Base" ofType:@"lproj"]];
     return NSLocalizedStringWithDefaultValue(customerKey, nil, bundle, key, nil);
@@ -141,7 +141,7 @@
         }
         
         // Check language file in Kustomer Bundle (if exists)
-        bundle = [NSBundle bundleWithIdentifier:@"com.kustomer.Kustomer"];
+        bundle = [NSBundle bundleForClass:[self class]];
         bundle = [NSBundle bundleWithPath:[bundle pathForResource:@"Strings" ofType:@"bundle"]];
         bundle = [NSBundle bundleWithPath:[bundle pathForResource:_language ofType:@"lproj"]];
         if (bundle != nil) {
@@ -162,7 +162,7 @@
             return;
         }
         
-        bundle = [NSBundle bundleWithIdentifier:@"com.kustomer.Kustomer"];
+        bundle = [NSBundle bundleForClass:[self class]];
         bundle = [NSBundle bundleWithPath:[bundle pathForResource:@"Strings" ofType:@"bundle"]];
         bundle = [NSBundle bundleWithPath:[bundle pathForResource:languages[i] ofType:@"lproj"]];
         if (bundle != nil) {
@@ -180,7 +180,7 @@
                 return;
             }
             
-            bundle = [NSBundle bundleWithIdentifier:@"com.kustomer.Kustomer"];
+            bundle = [NSBundle bundleForClass:[self class]];
             bundle = [NSBundle bundleWithPath:[bundle pathForResource:@"Strings" ofType:@"bundle"]];
             bundle = [NSBundle bundleWithPath:[bundle pathForResource:language ofType:@"lproj"]];
             if (bundle != nil) {
