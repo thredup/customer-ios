@@ -1,5 +1,9 @@
 # Changelog for Kustomer iOS SDK
 
+## 0.1.10
+
+* Fixed Localization files issue
+
 ## 0.1.9
 
 * Added Localization features to support devices of different languages.
