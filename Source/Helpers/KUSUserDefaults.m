@@ -12,6 +12,7 @@
 #import "KUSUserSession.h"
 
 NSString * const kDidCaptureEmailKey = @"kDidCaptureEmail";
+NSString * const kFormIdKey = @"kFormId";
 
 @implementation KUSUserDefaults {
     NSUserDefaults *_userDefaults;
@@ -59,6 +60,16 @@ NSString * const kDidCaptureEmailKey = @"kDidCaptureEmail";
 - (NSString * _Nullable)trackingToken
 {
     return [_userDefaults stringForKey:kKustomerTrackingTokenHeaderKey];
+}
+
+- (NSString *)formId
+{
+    return [_userDefaults stringForKey:kFormIdKey];
+}
+
+- (void)setFormId:(NSString *)formId
+{
+    [_userDefaults setObject:formId forKey:kFormIdKey];
 }
 
 @end

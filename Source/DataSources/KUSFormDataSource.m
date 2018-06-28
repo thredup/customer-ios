@@ -30,8 +30,10 @@
 
 - (void)performRequestWithCompletion:(KUSRequestCompletion)completion
 {
+    NSString* formId = [self.userSession.userDefaults formId];
+    
     KUSChatSettings *chatSettings = self.userSession.chatSettingsDataSource.object;
-    [self.userSession.requestManager getEndpoint:[NSString stringWithFormat:@"/c/v1/chat/forms/%@", chatSettings.activeFormId]
+    [self.userSession.requestManager getEndpoint:[NSString stringWithFormat:@"/c/v1/chat/forms/%@", formId ?: chatSettings.activeFormId]
                                    authenticated:YES
                                       completion:completion];
 }

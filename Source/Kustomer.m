@@ -142,6 +142,16 @@ static NSString *kKustomerOrgNameKey = @"orgName";
     }
 }
 
++ (NSString *)sdkVersion
+{
+    return [NSBundle bundleForClass:self].infoDictionary[@"CFBundleShortVersionString"];
+}
+
++ (void)setFormId:(NSString *)formId
+{
+    [[self sharedInstance] setFormId:formId];
+}
+
 #pragma mark - Lifecycle methods
 
 + (instancetype)sharedInstance
@@ -300,10 +310,11 @@ static KUSLogOptions _logOptions = KUSLogOptionInfo | KUSLogOptionErrors;
     [self.userSession.chatSettingsDataSource isChatAvailable:block];
 }
 
-+ (NSString *)sdkVersion
+- (void)setFormId:(NSString *)formId
 {
-    return [NSBundle bundleForClass:self].infoDictionary[@"CFBundleShortVersionString"];
+    [self.userSession.userDefaults setFormId:formId];
 }
+
 
 #pragma mark - Helper functions
 
