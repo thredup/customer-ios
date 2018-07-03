@@ -30,6 +30,7 @@
 - (void)addListener:(id<KUSChatMessagesDataSourceListener>)listener;
 
 - (NSString *)sessionId;
+- (BOOL)isAnyMessageByCurrentUser;
 - (NSString *)firstOtherUserId;
 - (NSArray<NSString *> *)otherUserIds;
 - (NSUInteger)unreadCountAfterDate:(NSDate *)date;
@@ -43,5 +44,6 @@
 - (void)sendMessageWithText:(NSString *)text attachments:(NSArray<UIImage *> *)attachments;
 - (void)sendMessageWithText:(NSString *)text attachments:(NSArray<UIImage *> *)attachments value:(NSString *)value;
 - (void)resendMessage:(KUSChatMessage *)message;
+- (void)endChat:(void (^)(BOOL))completion;
 
 @end

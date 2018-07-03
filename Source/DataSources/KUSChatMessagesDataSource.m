@@ -159,6 +159,16 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     return _sessionId;
 }
 
+- (BOOL)isAnyMessageByCurrentUser
+{
+    for (KUSChatMessage *message in self.allObjects) {
+        if (KUSChatMessageSentByUser(message)) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
 - (NSString *)firstOtherUserId
 {
     for (KUSChatMessage *message in self.allObjects) {
@@ -555,6 +565,31 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     }
 }
 
+- (void)endChat:(void (^)(BOOL))completion
+{
+    [self.userSession.requestManager
+     performRequestType:KUSRequestTypePut
+     endpoint:[[NSString alloc] initWithFormat:@"/c/v1/chat/sessions/%@", _sessionId]
+     params:@{ @"locked": @YES }
+     authenticated:YES
+     completion:^(NSError *error, NSDictionary *response) {
+         if (error) {
+             if (completion != nil) {
+                 completion(NO);
+             }
+             return;
+         }
+         
+         // Temporary set locked at to reflect changes in UI
+         KUSChatSession *session = [self.userSession.chatSessionsDataSource objectWithId:_sessionId];
+         session.lockedAt = [[NSDate alloc] init];
+         [self notifyAnnouncersDidChangeContent];
+         if (completion != nil) {
+             completion(YES);
+         }
+     }];
+}
+
 #pragma mark - KUSChatMessagesDataSourceListener methods
 
 - (void)paginatedDataSourceDidChangeContent:(KUSPaginatedDataSource *)dataSource
@@ -885,6 +920,12 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
         return;
     }
 
+    KUSChatSession *session = [self.userSession.chatSessionsDataSource objectWithId:_sessionId];
+    if (session.lockedAt) {
+        [self _endVolumeControlTracking];
+        return;
+    }
+    
     KUSChatMessage *lastMessage = [self latestMessage];
     NSString *previousMessage = lastMessage.body;
     if (_vcformQuestionIndex == 1 && [previousMessage isEqualToString:@"I'll wait"]) {
@@ -1058,7 +1099,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
             // End Control Tracking and Automatically marked it Closed, if form not end
             if (!strongSelf->_vcFormEnd) {
                 [strongSelf _endVolumeControlTracking];
-                [strongSelf _lockMessaging];
+                [strongSelf endChat:nil];
             }
         });
     }
@@ -1068,25 +1109,6 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 {
     _vcFormEnd = YES;
     _vcFormActive = NO;
-}
-
-- (void)_lockMessaging
-{
-    [self.userSession.requestManager
-     performRequestType:KUSRequestTypePut
-     endpoint:[[NSString alloc] initWithFormat:@"/c/v1/chat/sessions/%@", _sessionId]
-     params:@{ @"locked": @YES }
-     authenticated:YES
-     completion:^(NSError *error, NSDictionary *response) {
-         if (error) {
-             return;
-         }
-         
-         // Temporary set locked at to reflect changes in UI
-         KUSChatSession *session = [self.userSession.chatSessionsDataSource objectWithId:_sessionId];
-         session.lockedAt = [[NSDate alloc] init];
-         [self notifyAnnouncersDidChangeContent];
-     }];
 }
         
 - (KUSFormQuestion *)_getNextVCFormQuestion:(NSInteger)index previousMessage:(NSString *)previousMessage

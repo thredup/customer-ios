@@ -163,6 +163,10 @@
 		63F61A7E1FFAC86400E56766 /* KUSMultipleAvatarsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 63F61A7C1FFAC86400E56766 /* KUSMultipleAvatarsView.m */; };
 		6D7CDE24CE12E0916484305C /* Pods_Kustomer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4074C2A1E9213757162ED660 /* Pods_Kustomer.framework */; };
 		7C3913946A295179BE2E925B /* Pods_KustomerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D624913E5C7AD4492EF0D39B /* Pods_KustomerTests.framework */; };
+		C730E14D20E5159D00EF2AB8 /* KUSEndChatButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = C730E14C20E5159D00EF2AB8 /* KUSEndChatButtonView.m */; };
+		C730E15320E5179200EF2AB8 /* KUSEndChatButtonView.h in Headers */ = {isa = PBXBuildFile; fileRef = C730E15220E5179200EF2AB8 /* KUSEndChatButtonView.h */; };
+		C787065C20EA3D2900D54AE2 /* KUSChatEndedTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = C787065B20EA3D2900D54AE2 /* KUSChatEndedTableViewCell.h */; };
+		C787065E20EA3D7B00D54AE2 /* KUSChatEndedTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C787065D20EA3D7B00D54AE2 /* KUSChatEndedTableViewCell.m */; };
 		D6181AC920D92DB100CE7377 /* Strings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D6181AC820D92DB100CE7377 /* Strings.bundle */; };
 		D62F3A2620C1353200FBEA61 /* KUSClosedChatView.h in Headers */ = {isa = PBXBuildFile; fileRef = D62F3A2420C1353200FBEA61 /* KUSClosedChatView.h */; };
 		D62F3A2720C1353200FBEA61 /* KUSClosedChatView.m in Sources */ = {isa = PBXBuildFile; fileRef = D62F3A2520C1353200FBEA61 /* KUSClosedChatView.m */; };
@@ -373,6 +377,10 @@
 		6BBA02B9E3111B375725C25D /* Pods_KustomerExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KustomerExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F91D0EF26D550F6FA48F5E6 /* Pods-Kustomer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Kustomer.release.xcconfig"; path = "Pods/Target Support Files/Pods-Kustomer/Pods-Kustomer.release.xcconfig"; sourceTree = "<group>"; };
 		A8B9C7F846CD493168479E0A /* Pods-KustomerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KustomerTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-KustomerTests/Pods-KustomerTests.release.xcconfig"; sourceTree = "<group>"; };
+		C730E14C20E5159D00EF2AB8 /* KUSEndChatButtonView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KUSEndChatButtonView.m; sourceTree = "<group>"; };
+		C730E15220E5179200EF2AB8 /* KUSEndChatButtonView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KUSEndChatButtonView.h; sourceTree = "<group>"; };
+		C787065B20EA3D2900D54AE2 /* KUSChatEndedTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KUSChatEndedTableViewCell.h; sourceTree = "<group>"; };
+		C787065D20EA3D7B00D54AE2 /* KUSChatEndedTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KUSChatEndedTableViewCell.m; sourceTree = "<group>"; };
 		D6181AC820D92DB100CE7377 /* Strings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Strings.bundle; sourceTree = "<group>"; };
 		D624913E5C7AD4492EF0D39B /* Pods_KustomerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KustomerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D62F3A2420C1353200FBEA61 /* KUSClosedChatView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KUSClosedChatView.h; sourceTree = "<group>"; };
@@ -573,6 +581,8 @@
 				63D472901F70AACC00C947F2 /* KUSNotificationWindow.m */,
 				D62F3A2420C1353200FBEA61 /* KUSClosedChatView.h */,
 				D62F3A2520C1353200FBEA61 /* KUSClosedChatView.m */,
+				C730E15220E5179200EF2AB8 /* KUSEndChatButtonView.h */,
+				C730E14C20E5159D00EF2AB8 /* KUSEndChatButtonView.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -588,6 +598,8 @@
 				633D8FE51F239F9500BAFAC9 /* KUSChatPlaceholderTableViewCell.m */,
 				632EA5CF1FF8168700C4681C /* KUSImageAttachmentCollectionViewCell.h */,
 				632EA5D01FF8168700C4681C /* KUSImageAttachmentCollectionViewCell.m */,
+				C787065B20EA3D2900D54AE2 /* KUSChatEndedTableViewCell.h */,
+				C787065D20EA3D7B00D54AE2 /* KUSChatEndedTableViewCell.m */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -744,6 +756,7 @@
 				639FBBBD1F5F98110065AB0B /* KUSNewSessionButton.h in Headers */,
 				63035BD91F2EBCD400FBBF66 /* KUSText.h in Headers */,
 				624D7CBD1F7876440039BE90 /* KUSNavigationBarView.h in Headers */,
+				C787065C20EA3D2900D54AE2 /* KUSChatEndedTableViewCell.h in Headers */,
 				6334BE601F0C9B5100258DAF /* KUSPaginatedResponse.h in Headers */,
 				636531A51F1BBAA100433A50 /* KustomerViewController.h in Headers */,
 				63BF9C711FEB57B400E30C73 /* KUSFormDataSource.h in Headers */,
@@ -773,6 +786,7 @@
 				636531B61F1DB73B00433A50 /* KUSColor.h in Headers */,
 				633FADC41F26E7630060B4A6 /* KUSTextView.h in Headers */,
 				632665DD1F945DB800ED1AB2 /* KUSSessionsTableView.h in Headers */,
+				C730E15320E5179200EF2AB8 /* KUSEndChatButtonView.h in Headers */,
 				63EDF3D51F414A67000345D8 /* KUSRequestManager.h in Headers */,
 				6334BE491F0C5E3F00258DAF /* KUSNavigationController.h in Headers */,
 				63BF9C6D1FE95DCA00E30C73 /* KUSTeam.h in Headers */,
@@ -1130,6 +1144,7 @@
 				63BF9C721FEB57B400E30C73 /* KUSFormDataSource.m in Sources */,
 				6334BE4A1F0C5E3F00258DAF /* KUSNavigationController.m in Sources */,
 				639FBBBE1F5F98110065AB0B /* KUSNewSessionButton.m in Sources */,
+				C787065E20EA3D7B00D54AE2 /* KUSChatEndedTableViewCell.m in Sources */,
 				636531A21F1BBA7C00433A50 /* KUSSessionsViewController.m in Sources */,
 				6334BE3F1F0C4EBE00258DAF /* KUSCustomer.m in Sources */,
 				6334BE611F0C9B5100258DAF /* KUSPaginatedResponse.m in Sources */,
@@ -1165,6 +1180,7 @@
 				633D8FE71F239F9500BAFAC9 /* KUSChatPlaceholderTableViewCell.m in Sources */,
 				636531AA1F1BBCCD00433A50 /* KUSChatViewController.m in Sources */,
 				63270E9A1F4A717600E25BF5 /* KUSDate.m in Sources */,
+				C730E14D20E5159D00EF2AB8 /* KUSEndChatButtonView.m in Sources */,
 				632EA5D61FF82A5900C4681C /* KUSNYTImagePhoto.m in Sources */,
 				632665E21F945DC700ED1AB2 /* KUSChatTableView.m in Sources */,
 				6334BE371F0C4A1300258DAF /* KUSChatSession.m in Sources */,

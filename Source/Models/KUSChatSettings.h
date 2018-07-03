@@ -28,6 +28,7 @@
 @property (nonatomic, assign, readonly) BOOL useDynamicWaitMessage;
 @property (nonatomic, assign, readonly) BOOL markDoneAfterTimeout;
 @property (nonatomic, assign, readonly) BOOL volumeControlEnabled;
+@property (nonatomic, assign, readonly) BOOL closableChat;
 
 
 @end

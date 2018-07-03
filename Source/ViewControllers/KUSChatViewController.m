@@ -32,12 +32,14 @@
 #import "KUSNYTImagePhoto.h"
 #import "KUSClosedChatView.h"
 #import "KUSNewSessionButton.h"
+#import "KUSEndChatButtonView.h"
+#import "KUSChatEndedTableViewCell.h"
 
 @interface KUSChatViewController () <KUSEmailInputViewDelegate, KUSInputBarDelegate, KUSOptionPickerViewDelegate,
                                      KUSChatMessagesDataSourceListener, KUSChatMessageTableViewCellDelegate,
                                      NYTPhotosViewControllerDelegate, UITableViewDataSource, UITableViewDelegate,
                                      UINavigationControllerDelegate, UIImagePickerControllerDelegate,
-                                     KUSNavigationBarViewDelegate> {
+                                     KUSNavigationBarViewDelegate,KUSCloseChatButtonViewDelegate> {
     KUSUserSession *_userSession;
 
     BOOL _showBackButton;
@@ -57,6 +59,7 @@
 @property (nonatomic, strong) KUSClosedChatView *closedChatView;
 //@property (nonatomic, strong) KUSNewSessionButton *sessionButton;
 @property (nonatomic, strong) UIButton *sessionButton;
+@property (nonatomic, strong) KUSEndChatButtonView *closeChatButtonView;
 
 @end
 
@@ -156,6 +159,7 @@
 
     [self _checkShouldShowEmailInput];
     [self _checkShouldShowInputView];
+    [self _checkShouldShowCloseChatButtonView];
 
     // Force layout so that animated presentations start from the right state
     [self.view setNeedsLayout];
@@ -246,6 +250,14 @@
         .size.height = emailInputHeight
     };
 
+    BOOL shouldShowEmailInput = [_userSession shouldCaptureEmail] && _chatSessionId != nil;
+    CGFloat closeChatY = shouldShowEmailInput ? self.fauxNavigationBar.frame.size.height + self.emailInputView.frame.size.height : self.fauxNavigationBar.frame.size.height;
+    self.closeChatButtonView.frame = (CGRect) {
+        .origin.y = closeChatY,
+        .size.width = self.view.bounds.size.width,
+        .size.height = 46
+    };
+    
     self.tableView.frame = (CGRect) {
         .size.width = self.view.bounds.size.width,
         .size.height = MIN(inputBarY, optionPickerY)
@@ -261,6 +273,34 @@
 }
 
 #pragma mark - Internal logic methods
+
+- (void)_checkShouldShowCloseChatButtonView
+{
+    KUSChatSettings *settings = [_userSession.chatSettingsDataSource object];
+    if (settings != nil && settings.closableChat) {
+        if (_chatSessionId) {
+            KUSChatSession *session = [_userSession.chatSessionsDataSource objectWithId:_chatSessionId];
+            if (!session.lockedAt) {
+                if ([_chatMessagesDataSource isAnyMessageByCurrentUser]) {
+                    if (!self.closeChatButtonView) {
+                        self.closeChatButtonView = [[KUSEndChatButtonView alloc] init];
+                        self.closeChatButtonView.delegate = self;
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                            [self.view addSubview:self.closeChatButtonView];
+                            [self.view setNeedsLayout];
+                        });
+                        return;
+                    }
+                    return;
+                }
+            }
+        }
+    }
+    
+    [self.closeChatButtonView removeFromSuperview];
+    self.closeChatButtonView = nil;
+    [self.view setNeedsLayout];
+}
 
 - (void)_checkShouldShowEmailInput
 {
@@ -434,12 +474,12 @@
     _chatMessagesDataSource = [[KUSChatMessagesDataSource alloc] initForNewConversationWithUserSession:_userSession];
     [_chatMessagesDataSource addListener:self];
     
+    _chatSessionId = nil;
     [self.tableView reloadData];
     self.inputBarView.hidden = NO;
     [self.sessionButton removeFromSuperview];
     self.sessionButton = nil;
     
-    _chatSessionId = nil;
     self.inputBarView.allowsAttachments = NO;
     [self.fauxNavigationBar setSessionId:_chatSessionId];
     
@@ -464,6 +504,7 @@
 {
     if (dataSource == _chatMessagesDataSource) {
         [self _checkShouldShowInputView];
+        [self _checkShouldShowCloseChatButtonView];
 
         if (dataSource.count == 1) {
             [UIView animateWithDuration:0.2 animations:^{
@@ -475,7 +516,6 @@
         }
         [self.tableView reloadData];
     } else if (dataSource == _teamOptionsDataSource) {
-//        [self _checkShouldShowOptionPicker];
         [self _checkShouldShowInputView];
         [self _updateOptionsPickerOptions];
     }
@@ -506,6 +546,7 @@
     self.navigationController.interactivePopGestureRecognizer.enabled = _showBackButton;
     [self.fauxNavigationBar setShowsBackButton:YES];
     [self _checkShouldShowEmailInput];
+    [self _checkShouldShowCloseChatButtonView];
     [self.view setNeedsLayout];
 }
 
@@ -562,14 +603,30 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    KUSChatSession *session = [_userSession.chatSessionsDataSource objectWithId:_chatSessionId];
+    if (session.lockedAt) {
+        return [_chatMessagesDataSource count] + 1;
+    }
     return [_chatMessagesDataSource count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    KUSChatMessage *chatMessage = [self messageForRow:indexPath.row];
-    KUSChatMessage *previousChatMessage = [self messageBeforeRow:indexPath.row];
-    KUSChatMessage *nextChatMessage = [self messageAfterRow:indexPath.row];
+    KUSChatSession *session = [_userSession.chatSessionsDataSource objectWithId:_chatSessionId];
+    BOOL isChatEndedCell = session.lockedAt && indexPath.row == 0;
+    if (isChatEndedCell) {
+        KUSChatEndedTableViewCell *cell = (KUSChatEndedTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"chatEndedCell"];
+        if (cell == nil) {
+            cell = [[KUSChatEndedTableViewCell alloc] initWithReuseIdentifier:@"chatEndedCell"];
+            cell.transform = tableView.transform;
+        }
+        return cell;
+    }
+    
+    int adjustRowCount = session.lockedAt ? -1 : 0;
+    KUSChatMessage *chatMessage = [self messageForRow:indexPath.row+adjustRowCount];
+    KUSChatMessage *previousChatMessage = [self messageBeforeRow:indexPath.row+adjustRowCount];
+    KUSChatMessage *nextChatMessage = [self messageAfterRow:indexPath.row+adjustRowCount];
     BOOL currentUser = KUSChatMessageSentByUser(chatMessage);
 
     NSString *messageCellIdentifier = (currentUser ? @"CurrentUserMessageCell" : @"OtherUserMessageCell");
@@ -600,8 +657,15 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    KUSChatMessage *chatMessage = [self messageForRow:indexPath.row];
-    KUSChatMessage *nextChatMessage = [self messageAfterRow:indexPath.row];
+    KUSChatSession *session = [_userSession.chatSessionsDataSource objectWithId:_chatSessionId];
+    BOOL isChatEndedCell = session.lockedAt && indexPath.row == 0;
+    if (isChatEndedCell) {
+        return 50;
+    }
+    
+    int adjustRowCount = session.lockedAt ? -1 : 0;
+    KUSChatMessage *chatMessage = [self messageForRow:indexPath.row+adjustRowCount];
+    KUSChatMessage *nextChatMessage = [self messageAfterRow:indexPath.row+adjustRowCount];
     BOOL nextMessageOlderThan5Min = nextChatMessage == nil || [nextChatMessage.createdAt timeIntervalSinceDate:chatMessage.createdAt] > 5.0 * 60.0;
     CGFloat messageHeight = [KUSChatMessageTableViewCell heightForChatMessage:chatMessage maxWidth:tableView.bounds.size.width];
     if (nextMessageOlderThan5Min) {
@@ -859,6 +923,16 @@
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - KUSCloseChatButtonViewDelegate methods
+
+-(void)closeChatButtonTapped:(KUSEndChatButtonView *) closeChatButtonView
+{
+    [self showLoadingIndicator];
+    [_chatMessagesDataSource endChat:^(BOOL status) {
+        [self hideLoadingIndicator];
+    }];
 }
 
 @end
