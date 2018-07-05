@@ -565,12 +565,14 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     }
 }
 
-- (void)endChat:(void (^)(BOOL))completion
+- (void)endChat:(NSString *)reason withCompletion:(void (^)(BOOL))completion
 {
     [self.userSession.requestManager
      performRequestType:KUSRequestTypePut
      endpoint:[[NSString alloc] initWithFormat:@"/c/v1/chat/sessions/%@", _sessionId]
-     params:@{ @"locked": @YES }
+     params: @{ @"locked": @YES,
+                @"lockReason": reason
+              }
      authenticated:YES
      completion:^(NSError *error, NSDictionary *response) {
          if (error) {
@@ -1099,7 +1101,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
             // End Control Tracking and Automatically marked it Closed, if form not end
             if (!strongSelf->_vcFormEnd) {
                 [strongSelf _endVolumeControlTracking];
-                [strongSelf endChat:nil];
+                [strongSelf endChat:@"timed_out" withCompletion:nil];
             }
         });
     }

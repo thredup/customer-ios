@@ -930,7 +930,7 @@
 -(void)closeChatButtonTapped:(KUSEndChatButtonView *) closeChatButtonView
 {
     [self showLoadingIndicator];
-    [_chatMessagesDataSource endChat:^(BOOL status) {
+    [_chatMessagesDataSource endChat:@"customer_ended" withCompletion:^(BOOL status) {
         [self hideLoadingIndicator];
     }];
 }
