@@ -64,6 +64,19 @@
 
 #pragma mark - Public methods
 
+- (void)upsertNewSessions:(NSArray<KUSChatSession *> *)chatSessions
+{
+    if (chatSessions.count == 1) {
+        [self upsertObjects:chatSessions];
+    } else if (chatSessions.count > 1) {
+        NSMutableArray<KUSChatSession *> *reversedSessions = [[NSMutableArray alloc] initWithCapacity:chatSessions.count];
+        for (KUSChatSession *chatSession in chatSessions.reverseObjectEnumerator) {
+            [reversedSessions addObject:chatSession];
+        }
+        [self upsertObjects:reversedSessions];
+    }
+}
+
 - (void)createSessionWithTitle:(NSString *)title completion:(void(^)(NSError *error, KUSChatSession *session))completion
 {
     __weak KUSChatSessionsDataSource *weakSelf = self;

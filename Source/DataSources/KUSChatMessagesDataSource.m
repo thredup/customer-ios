@@ -919,12 +919,18 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     // If any message sent by Server apart from auto response or form message.
     if ([[self otherUserIds] count] > 0) {
         [self _endVolumeControlTracking];
+        
+        // Update Listeners that chat ended
+        [self notifyAnnouncersDidChangeContent];
         return;
     }
 
     KUSChatSession *session = [self.userSession.chatSessionsDataSource objectWithId:_sessionId];
     if (session.lockedAt) {
         [self _endVolumeControlTracking];
+        
+        // Update Listeners that chat ended
+        [self notifyAnnouncersDidChangeContent];
         return;
     }
     
@@ -932,6 +938,9 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     NSString *previousMessage = lastMessage.body;
     if (_vcformQuestionIndex == 1 && [previousMessage isEqualToString:@"I'll wait"]) {
         [self _endVolumeControlTracking];
+        
+        // Update Listeners that chat ended
+        [self notifyAnnouncersDidChangeContent];
         return;
     }
     

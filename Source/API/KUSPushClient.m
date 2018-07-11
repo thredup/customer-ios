@@ -103,6 +103,9 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
         [_pusherChannel bindToEventNamed:@"kustomer.app.chat.message.send"
                                             target:self
                                             action:@selector(_onPusherChatMessageSend:)];
+        [_pusherChannel bindToEventNamed:@"kustomer.app.chat.session.end"
+                                  target:self
+                                  action:@selector(_onPusherChatSessionEnd:)];
     }
 
     [self _updatePollingTimer];
@@ -217,6 +220,16 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
     }
 }
 
+- (void)_onPusherChatSessionEnd:(PTPusherEvent *)event
+{
+    NSArray<KUSChatSession *> *chatSessions = [KUSChatSession objectsWithJSON:event.data[@"data"]];
+    [_userSession.chatSessionsDataSource upsertNewSessions:chatSessions];
+    
+    KUSChatSession *chatSession = chatSessions.firstObject;
+    KUSChatMessagesDataSource *messagesDataSource = [_userSession chatMessagesDataSourceForSessionId:chatSession.oid];
+    [messagesDataSource fetchLatest];
+}
+
 #pragma mark - KUSObjectDataSourceListener methods
 
 - (void)objectDataSourceDidLoad:(KUSObjectDataSource *)dataSource
@@ -286,9 +299,16 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
                 NSDate *sessionLastSeenAt = [_userSession.chatSessionsDataSource lastSeenAtForSessionId:chatSession.oid];
                 BOOL lastSeenBeforeMessage = [chatSession.lastMessageAt compare:sessionLastSeenAt] == NSOrderedDescending;
                 BOOL lastMessageAtNewerThanLocalLastMessage = latestChatMessage == nil || [chatSession.lastMessageAt compare:latestChatMessage.createdAt] == NSOrderedDescending;
+                BOOL chatSessionSetToLock = ![chatSession.lockedAt isEqual:previousChatSession.lockedAt];
+                
+                // Check that new message arrived or not
                 if (isUpdatedSession && lastSeenBeforeMessage && lastMessageAtNewerThanLocalLastMessage) {
                     updatedSessionId = chatSession.oid;
                     [messagesDataSource addListener:self];
+                    [messagesDataSource fetchLatest];
+                }
+                // Check that session lock state changed
+                else if (chatSessionSetToLock) {
                     [messagesDataSource fetchLatest];
                 }
             } else if (_previousChatSessions != nil) {

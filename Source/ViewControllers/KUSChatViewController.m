@@ -497,6 +497,8 @@
 {
     if (dataSource == _chatMessagesDataSource) {
         [self hideLoadingIndicator];
+        [self _checkShouldShowCloseChatButtonView];
+        [self.tableView reloadData];
     }
 }
 

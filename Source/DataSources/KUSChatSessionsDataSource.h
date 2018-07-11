@@ -13,6 +13,7 @@
 @class KUSChatMessage;
 @interface KUSChatSessionsDataSource : KUSPaginatedDataSource
 
+- (void)upsertNewSessions:(NSArray<KUSChatSession *> *)chatSessions;
 - (void)createSessionWithTitle:(NSString *)title completion:(void(^)(NSError *error, KUSChatSession *session))completion;
 - (void)updateLastSeenAtForSessionId:(NSString *)sessionId completion:(void(^)(NSError *error, KUSChatSession *session))completion;
 - (void)submitFormMessages:(NSArray<NSDictionary *> *)messages
