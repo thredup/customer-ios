@@ -299,7 +299,7 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
                 NSDate *sessionLastSeenAt = [_userSession.chatSessionsDataSource lastSeenAtForSessionId:chatSession.oid];
                 BOOL lastSeenBeforeMessage = [chatSession.lastMessageAt compare:sessionLastSeenAt] == NSOrderedDescending;
                 BOOL lastMessageAtNewerThanLocalLastMessage = latestChatMessage == nil || [chatSession.lastMessageAt compare:latestChatMessage.createdAt] == NSOrderedDescending;
-                BOOL chatSessionSetToLock = ![chatSession.lockedAt isEqual:previousChatSession.lockedAt];
+                BOOL chatSessionSetToLock = chatSession.lockedAt != nil && ![chatSession.lockedAt isEqual:previousChatSession.lockedAt];
                 
                 // Check that new message arrived or not
                 if (isUpdatedSession && lastSeenBeforeMessage && lastMessageAtNewerThanLocalLastMessage) {
