@@ -250,10 +250,8 @@
         .size.height = emailInputHeight
     };
 
-    BOOL shouldShowEmailInput = [_userSession shouldCaptureEmail] && _chatSessionId != nil;
-    CGFloat closeChatY = shouldShowEmailInput ? self.fauxNavigationBar.frame.size.height + self.emailInputView.frame.size.height : self.fauxNavigationBar.frame.size.height;
     self.closeChatButtonView.frame = (CGRect) {
-        .origin.y = closeChatY,
+        .origin.y = self.fauxNavigationBar.frame.size.height,
         .size.width = self.view.bounds.size.width,
         .size.height = 46
     };
@@ -304,7 +302,9 @@
 
 - (void)_checkShouldShowEmailInput
 {
-    BOOL shouldShowEmailInput = [_userSession shouldCaptureEmail] && _chatSessionId != nil;
+    KUSChatSettings *settings = [_userSession.chatSettingsDataSource object];
+    BOOL isChatCloseable = settings != nil && settings.closableChat;
+    BOOL shouldShowEmailInput = [_userSession shouldCaptureEmail] && _chatSessionId != nil && !isChatCloseable;
     if (shouldShowEmailInput) {
         if (self.emailInputView == nil) {
             self.emailInputView = [[KUSEmailInputView alloc] init];
