@@ -1,5 +1,10 @@
 # Changelog for Kustomer iOS SDK
 
+## 0.1.11
+
+* Added end chat functionality
+* Added custom form selection mechanism
+
 ## 0.1.10
 
 * Fixed Localization files issue
