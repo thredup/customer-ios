@@ -56,9 +56,18 @@
 
 - (NSArray<NSSortDescriptor *> *)sortDescriptors
 {
+    //        [NSSortDescriptor sortDescriptorWithKey:@"sortDate" ascending:NO],
+    //        [NSSortDescriptor sortDescriptorWithKey:@"oid" ascending:NO]
     return @[
-        [NSSortDescriptor sortDescriptorWithKey:@"sortDate" ascending:NO],
-        [NSSortDescriptor sortDescriptorWithKey:@"oid" ascending:NO]
+             [NSSortDescriptor sortDescriptorWithKey:@"lockedAt" ascending:YES comparator: ^NSComparisonResult( NSDate *date1,NSDate* date2 ){
+                 
+                 if ([date1 compare:date2] == NSOrderedAscending) {
+                     return NSOrderedDescending;
+                 }
+                 return NSOrderedAscending;
+                 
+             }],
+             [NSSortDescriptor sortDescriptorWithKey:@"createdAt" ascending:NO]
     ];
 }
 
@@ -200,6 +209,17 @@
 
         [self fetchLatest];
     }
+}
+
+- (NSUInteger)openChatSessionsCount
+{
+    NSUInteger count = 0;
+    for (KUSChatSession *session in self.allObjects) {
+        if (!session.lockedAt) {
+            count += 1;
+        }
+    }
+    return count;
 }
 
 #pragma mark - Internal methods

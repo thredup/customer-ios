@@ -10,6 +10,7 @@
 
 @interface KUSImage : NSObject
 
++ (UIImage *)noImage;
 + (UIImage *)kustyImage;
 + (UIImage *)attachImage;
 + (UIImage *)sendArrowImage;

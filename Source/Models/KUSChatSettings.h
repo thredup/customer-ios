@@ -29,6 +29,7 @@
 @property (nonatomic, assign, readonly) BOOL markDoneAfterTimeout;
 @property (nonatomic, assign, readonly) BOOL volumeControlEnabled;
 @property (nonatomic, assign, readonly) BOOL closableChat;
+@property (nonatomic, assign, readonly) BOOL singleSessionChat;
 
 
 @end

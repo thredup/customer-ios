@@ -24,6 +24,11 @@
 
 #pragma mark - Public methods
 
++ (UIImage *)noImage
+{
+    return [[UIImage alloc]init];
+}
+
 + (UIImage *)attachImage
 {
     return [self imageNamed:@"paperclip_icon"];

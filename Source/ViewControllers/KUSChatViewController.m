@@ -405,11 +405,24 @@
         self.closedChatView = nil;
         
         if (self.sessionButton == nil) {
+            
+            KUSChatSettings *settings = [_userSession.chatSettingsDataSource object];
+            NSUInteger openChats = _userSession.chatSessionsDataSource.openChatSessionsCount;
+            BOOL isBackToChatButton = settings.singleSessionChat && openChats >= 1;
+            
             self.sessionButton = [[UIButton alloc] init];
             self.sessionButton.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth);
             [self.sessionButton setTitleColor:[KUSColor blueColor] forState:UIControlStateNormal];
             [self.sessionButton setTitleColor:[[KUSColor blueColor] colorWithAlphaComponent:0.5] forState:UIControlStateHighlighted];
-            [self.sessionButton setTitle:[[KUSLocalization sharedInstance] localizedString:@"Start a New Conversation"] forState:UIControlStateNormal];
+            
+            if (isBackToChatButton) {
+                [self.sessionButton setTitle:[[KUSLocalization sharedInstance] localizedString:@"Back to chat"] forState:UIControlStateNormal];
+            }
+            else
+            {
+                [self.sessionButton setTitle:[[KUSLocalization sharedInstance] localizedString:@"Start a New Conversation"] forState:UIControlStateNormal];
+            }
+            
             self.sessionButton.titleLabel.font =[UIFont boldSystemFontOfSize:14.0];
             [self.sessionButton addTarget:self
                                    action:@selector(_createSession)
@@ -470,25 +483,38 @@
 
 - (void)_createSession
 {
-    [_chatMessagesDataSource removeListener:self];
-    _chatMessagesDataSource = [[KUSChatMessagesDataSource alloc] initForNewConversationWithUserSession:_userSession];
-    [_chatMessagesDataSource addListener:self];
+    KUSChatSettings *settings = [_userSession.chatSettingsDataSource object];
+    NSUInteger openChats = _userSession.chatSessionsDataSource.openChatSessionsCount;
+    BOOL isBackToChatButton = settings.singleSessionChat && openChats >= 1;
+    if (isBackToChatButton) {
+        KUSChatSession *chatSession = [_userSession.chatSessionsDataSource objectAtIndex:0];
+        KUSChatViewController *chatViewController = [[KUSChatViewController alloc] initWithUserSession:_userSession forChatSession:chatSession];
+        [self.navigationController pushViewController:chatViewController animated:YES];
+    }
+    else
+    {
+        [_chatMessagesDataSource removeListener:self];
+        _chatMessagesDataSource = [[KUSChatMessagesDataSource alloc] initForNewConversationWithUserSession:_userSession];
+        [_chatMessagesDataSource addListener:self];
+        
+        _chatSessionId = nil;
+        [self.tableView reloadData];
+        self.inputBarView.hidden = NO;
+        [self.sessionButton removeFromSuperview];
+        self.sessionButton = nil;
+        
+        self.inputBarView.allowsAttachments = NO;
+        [self.fauxNavigationBar setSessionId:_chatSessionId];
+        
+        [self _checkShouldShowEmailInput];
+        
+        [UIView animateWithDuration:0.2 animations:^{
+            [self.view setNeedsLayout];
+            [self.view layoutIfNeeded];
+        }];
+    }
     
-    _chatSessionId = nil;
-    [self.tableView reloadData];
-    self.inputBarView.hidden = NO;
-    [self.sessionButton removeFromSuperview];
-    self.sessionButton = nil;
     
-    self.inputBarView.allowsAttachments = NO;
-    [self.fauxNavigationBar setSessionId:_chatSessionId];
-    
-    [self _checkShouldShowEmailInput];
-    
-    [UIView animateWithDuration:0.2 animations:^{
-        [self.view setNeedsLayout];
-        [self.view layoutIfNeeded];
-    }];
 }
 
 #pragma mark - KUSChatMessagesDataSourceListener methods

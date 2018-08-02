@@ -90,16 +90,10 @@
     [self.fauxNavigationBar setShowsDismissButton:YES];
     [self.view addSubview:self.fauxNavigationBar];
 
-    self.createSessionButton = [[KUSNewSessionButton alloc] init];
-    self.createSessionButton.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin
-                                                 | UIViewAutoresizingFlexibleLeftMargin
-                                                 | UIViewAutoresizingFlexibleRightMargin);
-    [self.createSessionButton addTarget:self
-                                 action:@selector(_createSession)
-                       forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.createSessionButton];
-
     _chatSessionsDataSource = _userSession.chatSessionsDataSource;
+    
+    [self _addCreateSessionBackToChatButton];
+    
     [_chatSessionsDataSource addListener:self];
     [_chatSessionsDataSource fetchLatest];
 
@@ -158,11 +152,45 @@
 
 #pragma mark - Interface element methods
 
+- (void)_addCreateSessionBackToChatButton
+{
+    KUSChatSettings *settings = [_userSession.chatSettingsDataSource object];
+    BOOL isBackToChatButton = settings.singleSessionChat && _chatSessionsDataSource.openChatSessionsCount >= 1;
+    
+    self.createSessionButton = [[KUSNewSessionButton alloc] init];
+    
+    if (isBackToChatButton) {
+        [self.createSessionButton setText:[[KUSLocalization sharedInstance] localizedString:@"Back to chat"]];
+        [self.createSessionButton setImage: [KUSImage noImage]];
+    }
+    else
+    {
+        [self.createSessionButton setText:[[KUSLocalization sharedInstance] localizedString:@"New Conversation"]];
+        [self.createSessionButton setImage: [KUSImage pencilImage]];
+    }
+    self.createSessionButton.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin
+                                                 | UIViewAutoresizingFlexibleLeftMargin
+                                                 | UIViewAutoresizingFlexibleRightMargin);
+    [self.createSessionButton addTarget:self
+                                 action:@selector(_createSession)
+                       forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.createSessionButton];
+}
+
 - (void)_createSession
 {
-    KUSChatViewController *chatViewController = [[KUSChatViewController alloc] initWithUserSession:_userSession
-                                                                       forNewSessionWithBackButton:YES];
-    [self.navigationController pushViewController:chatViewController animated:YES];
+    KUSChatSettings *settings = [_userSession.chatSettingsDataSource object];
+    BOOL isBackToChatButton = settings.singleSessionChat && _chatSessionsDataSource.openChatSessionsCount >= 1;
+    
+    if (isBackToChatButton) {
+        KUSChatSession *chatSession = [_chatSessionsDataSource objectAtIndex:0];
+        KUSChatViewController *chatViewController = [[KUSChatViewController alloc] initWithUserSession:_userSession forChatSession:chatSession];
+        [self.navigationController pushViewController:chatViewController animated:YES];
+    } else {
+        KUSChatViewController *chatViewController = [[KUSChatViewController alloc] initWithUserSession:_userSession
+                                                                           forNewSessionWithBackButton:YES];
+        [self.navigationController pushViewController:chatViewController animated:YES];
+    }
 }
 
 - (void)_dismiss
@@ -185,7 +213,7 @@
     }
     _didHandleFirstLoad = YES;
 
-    if (_chatSessionsDataSource.count == 0) {
+    if (_chatSessionsDataSource.count == 0 || _chatSessionsDataSource.openChatSessionsCount == 0) {
         // If there are no existing chat sessions, go directly to new chat screen
         KUSChatViewController *chatViewController = [[KUSChatViewController alloc] initWithUserSession:_userSession
                                                                            forNewSessionWithBackButton:NO];
@@ -209,6 +237,17 @@
 
 - (void)paginatedDataSourceDidChangeContent:(KUSPaginatedDataSource *)dataSource
 {
+    KUSChatSettings *settings = [_userSession.chatSettingsDataSource object];
+    BOOL isBackToChatButton = settings.singleSessionChat && _chatSessionsDataSource.openChatSessionsCount >= 1;
+    if (isBackToChatButton) {
+        [self.createSessionButton setText:[[KUSLocalization sharedInstance] localizedString:@"Back to chat"]];
+        [self.createSessionButton setImage: [KUSImage noImage]];
+    }
+    else
+    {
+        [self.createSessionButton setText:[[KUSLocalization sharedInstance] localizedString:@"New Conversation"]];
+        [self.createSessionButton setImage: [KUSImage pencilImage]];
+    }
     [self.tableView reloadData];
 }
 

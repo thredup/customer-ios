@@ -32,9 +32,10 @@
         _activeFormId = NSStringFromKeyPath(json, @"attributes.activeForm");
         _pusherAccessKey = NSStringFromKeyPath(json, @"attributes.pusherAccessKey");
         _enabled = BOOLFromKeyPath(json, @"attributes.enabled");
-        
         _closableChat = BOOLFromKeyPath(json, @"attributes.closableChat");
         _waitMessage = NSStringFromKeyPath(json, @"attributes.waitMessage");
+        _singleSessionChat = BOOLFromKeyPath(json, @"attributes.singleSessionChat");
+        
         _customWaitMessage = NSStringFromKeyPath(json, @"attributes.volumeControl.customWaitMessage");
         _timeOut = IntegerFromKeyPath(json, @"attributes.volumeControl.timeout");
         _promptDelay = IntegerFromKeyPath(json, @"attributes.volumeControl.promptDelay");

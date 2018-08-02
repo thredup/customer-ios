@@ -34,5 +34,6 @@
 
 // Returns the total unread message count for all sessions excluding the specified sessionId
 - (NSUInteger)totalUnreadCountExcludingSessionId:(NSString *)excludedSessionId;
+- (NSUInteger)openChatSessionsCount;
 
 @end
