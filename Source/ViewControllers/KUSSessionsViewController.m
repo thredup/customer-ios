@@ -111,6 +111,7 @@
     [super viewWillAppear:animated];
 
     [_chatSessionsDataSource fetchLatest];
+    
 }
 
 - (void)viewWillLayoutSubviews
@@ -154,13 +155,10 @@
 
 - (void)_addCreateSessionBackToChatButton
 {
-    KUSChatSettings *settings = [_userSession.chatSettingsDataSource object];
-    BOOL isBackToChatButton = settings.singleSessionChat && _chatSessionsDataSource.openChatSessionsCount >= 1;
-    
     self.createSessionButton = [[KUSNewSessionButton alloc] init];
     
-    if (isBackToChatButton) {
-        [self.createSessionButton setText:[[KUSLocalization sharedInstance] localizedString:@"Back to chat"]];
+    if ([self isBackToChatButton]) {
+        [self.createSessionButton setText:[[KUSLocalization sharedInstance] localizedString:@"Back to Chat"]];
         [self.createSessionButton setImage: [KUSImage noImage]];
     }
     else
@@ -179,10 +177,7 @@
 
 - (void)_createSession
 {
-    KUSChatSettings *settings = [_userSession.chatSettingsDataSource object];
-    BOOL isBackToChatButton = settings.singleSessionChat && _chatSessionsDataSource.openChatSessionsCount >= 1;
-    
-    if (isBackToChatButton) {
+    if ([self isBackToChatButton]) {
         KUSChatSession *chatSession = [_chatSessionsDataSource objectAtIndex:0];
         KUSChatViewController *chatViewController = [[KUSChatViewController alloc] initWithUserSession:_userSession forChatSession:chatSession];
         [self.navigationController pushViewController:chatViewController animated:YES];
@@ -202,6 +197,15 @@
 {
     [_chatSessionsDataSource fetchLatest];
     [self showLoadingIndicatorWithText:@"Loading..."];
+}
+
+#pragma mark - Helper methods
+
+- (BOOL)isBackToChatButton
+{
+    // To check the sessionButton action
+    KUSChatSettings *settings = [_userSession.chatSettingsDataSource object];
+    return (settings.singleSessionChat && _chatSessionsDataSource.openChatSessionsCount >= 1);
 }
 
 #pragma mark - Internal methods
@@ -237,10 +241,8 @@
 
 - (void)paginatedDataSourceDidChangeContent:(KUSPaginatedDataSource *)dataSource
 {
-    KUSChatSettings *settings = [_userSession.chatSettingsDataSource object];
-    BOOL isBackToChatButton = settings.singleSessionChat && _chatSessionsDataSource.openChatSessionsCount >= 1;
-    if (isBackToChatButton) {
-        [self.createSessionButton setText:[[KUSLocalization sharedInstance] localizedString:@"Back to chat"]];
+    if ([self isBackToChatButton]) {
+        [self.createSessionButton setText:[[KUSLocalization sharedInstance] localizedString:@"Back to Chat"]];
         [self.createSessionButton setImage: [KUSImage noImage]];
     }
     else

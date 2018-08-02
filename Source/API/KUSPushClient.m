@@ -225,9 +225,23 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
     NSArray<KUSChatSession *> *chatSessions = [KUSChatSession objectsWithJSON:event.data[@"data"]];
     [_userSession.chatSessionsDataSource upsertNewSessions:chatSessions];
     
-    KUSChatSession *chatSession = chatSessions.firstObject;
-    KUSChatMessagesDataSource *messagesDataSource = [_userSession chatMessagesDataSourceForSessionId:chatSession.oid];
-    [messagesDataSource fetchLatest];
+    KUSChatSettings *settings = [_userSession.chatSettingsDataSource object];
+    if (settings.singleSessionChat)
+    {
+        // To update the UI of chat
+        for (KUSChatSession *session in [_userSession.chatSessionsDataSource allObjects])
+        {
+            KUSChatMessagesDataSource *messagesDataSource = [_userSession chatMessagesDataSourceForSessionId:session.oid];
+            [messagesDataSource fetchLatest];
+        }
+    }
+    else
+    {
+        KUSChatSession *chatSession = chatSessions.firstObject;
+        KUSChatMessagesDataSource *messagesDataSource = [_userSession chatMessagesDataSourceForSessionId:chatSession.oid];
+        [messagesDataSource fetchLatest];
+    }
+    
 }
 
 #pragma mark - KUSObjectDataSourceListener methods

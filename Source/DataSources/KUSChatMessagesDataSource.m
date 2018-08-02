@@ -152,6 +152,28 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     return [super didFetchAll];
 }
 
+#pragma mark - Helper methods
+
+- (void)closeProactiveCampaignIfNecessary
+{
+    KUSChatSettings *settings = [self.userSession.chatSettingsDataSource object];
+    if (settings.singleSessionChat)
+    {
+        NSMutableDictionary<NSString *, KUSChatMessagesDataSource *> *chatSessionsDic = self.userSession.chatMessagesDataSources;
+        NSArray * chatSessions = [chatSessionsDic allValues];
+        
+        for (KUSChatSession *session in chatSessions)
+        {
+            KUSChatMessagesDataSource *chatMessagesDataSource = [self.userSession chatMessagesDataSourceForSessionId:session.sessionId];
+            if (![chatMessagesDataSource isAnyMessageByCurrentUser])
+            {
+                [self.userSession.chatSessionsDataSource updateLastSeenAtForSessionId:session.sessionId completion:nil];
+                [chatMessagesDataSource endChat:@"customer_ended" withCompletion:nil];
+            }
+        }
+    }
+}
+
 #pragma mark - Public methods
 
 - (NSString *)sessionId
@@ -505,6 +527,9 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
         for (KUSChatMessage *temporaryMessage in temporaryMessages) {
             [_messageRetryBlocksById removeObjectForKey:temporaryMessage.oid];
         }
+        
+        // TODO: add method `closeProactiveCampaignIfNecessary`
+        [self closeProactiveCampaignIfNecessary];
     };
 
     // Logic to actually send a message
@@ -581,7 +606,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
              }
              return;
          }
-         
+
          // Temporary set locked at to reflect changes in UI
          KUSChatSession *session = [self.userSession.chatSessionsDataSource objectWithId:_sessionId];
          session.lockedAt = [[NSDate alloc] init];
@@ -605,6 +630,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 {
     [self _insertAutoreplyIfNecessary];
     [self _startVolumeControlTracking];
+    
 }
 
 - (BOOL)_shouldShowAutoreply
