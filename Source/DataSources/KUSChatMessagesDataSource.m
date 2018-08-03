@@ -37,6 +37,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     BOOL _vcFormActive;
     BOOL _vcFormEnd;
     BOOL _vcChatClosed;
+    BOOL _isProactiveCampaign;
     NSMutableArray<KUSChatMessage *> *_temporaryVCMessagesResponses;
     
     NSMutableArray<void(^)(BOOL success, NSError *error)> *_onSessionCreationCallbacks;
@@ -152,9 +153,9 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     return [super didFetchAll];
 }
 
-#pragma mark - Helper methods
+#pragma mark - Internal Logic methods
 
-- (void)closeProactiveCampaignIfNecessary
+- (void)_closeProactiveCampaignIfNecessary
 {
     KUSChatSettings *settings = [self.userSession.chatSettingsDataSource object];
     if (settings.singleSessionChat)
@@ -351,6 +352,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 
 - (void)sendMessageWithText:(NSString *)text attachments:(NSArray<UIImage *> *)attachments value:(NSString *)value
 {
+    _isProactiveCampaign = ![self isAnyMessageByCurrentUser];
     KUSChatSettings *chatSettings = self.userSession.chatSettingsDataSource.object;
     if (_sessionId == nil && chatSettings.activeFormId) {
         NSAssert(attachments.count == 0, @"Should not have been able to send attachments without a _sessionId");
@@ -528,8 +530,10 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
             [_messageRetryBlocksById removeObjectForKey:temporaryMessage.oid];
         }
         
-        // TODO: add method `closeProactiveCampaignIfNecessary`
-        [self closeProactiveCampaignIfNecessary];
+        if (_isProactiveCampaign) {
+            [self _closeProactiveCampaignIfNecessary];
+        }
+
     };
 
     // Logic to actually send a message
@@ -630,6 +634,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 {
     [self _insertAutoreplyIfNecessary];
     [self _startVolumeControlTracking];
+    [self _closeProactiveCampaignIfNecessary];
     
 }
 
