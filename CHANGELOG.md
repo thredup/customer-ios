@@ -1,5 +1,9 @@
 # Changelog for Kustomer iOS SDK
 
+## 0.1.12
+
+* Added single chat functionality
+
 ## 0.1.11
 
 * Added end chat functionality
