@@ -28,7 +28,6 @@
         _teamName = NSStringFromKeyPath(json, @"attributes.teamName");
         _teamIconURL = NSURLFromKeyPath(json, @"attributes.teamIconUrl");
         _greeting = NSStringFromKeyPath(json, @"attributes.greeting");
-        _autoreply = NSStringSanitizedAutoreply(NSStringFromKeyPath(json, @"attributes.autoreply"));
         _activeFormId = NSStringFromKeyPath(json, @"attributes.activeForm");
         _pusherAccessKey = NSStringFromKeyPath(json, @"attributes.pusherAccessKey");
         _enabled = BOOLFromKeyPath(json, @"attributes.enabled");

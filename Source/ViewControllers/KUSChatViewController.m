@@ -537,15 +537,7 @@
     if (dataSource == _chatMessagesDataSource) {
         [self _checkShouldShowInputView];
         [self _checkShouldShowCloseChatButtonView];
-
-        if (dataSource.count == 1) {
-            [UIView animateWithDuration:0.2 animations:^{
-                [self.view setNeedsLayout];
-                [self.view layoutIfNeeded];
-            }];
-        } else {
-            [self.view setNeedsLayout];
-        }
+        [self.view setNeedsLayout];
         [self.tableView reloadData];
     } else if (dataSource == _teamOptionsDataSource) {
         [self _checkShouldShowInputView];

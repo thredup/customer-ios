@@ -96,8 +96,6 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     if (_form == nil && [dataSource isKindOfClass:[KUSFormDataSource class]]) {
         _form = dataSource.object;
     }
-
-    [self _insertAutoreplyIfNecessary];
     [self _insertFormMessageIfNecessary];
 }
 
@@ -160,16 +158,15 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     KUSChatSettings *settings = [self.userSession.chatSettingsDataSource object];
     if (settings.singleSessionChat)
     {
-        NSMutableDictionary<NSString *, KUSChatMessagesDataSource *> *chatSessionsDic = self.userSession.chatMessagesDataSources;
-        NSArray * chatSessions = [chatSessionsDic allValues];
+        NSMutableDictionary<NSString *, KUSChatMessagesDataSource *> *chatMessagesDSDic = self.userSession.chatMessagesDataSources;
+        NSArray * chatMessagesDatasources = [chatMessagesDSDic allValues];
         
-        for (KUSChatSession *session in chatSessions)
+        for (KUSChatMessagesDataSource *chatMsgDataSource in chatMessagesDatasources)
         {
-            KUSChatMessagesDataSource *chatMessagesDataSource = [self.userSession chatMessagesDataSourceForSessionId:session.sessionId];
-            if (![chatMessagesDataSource isAnyMessageByCurrentUser])
+            if (![chatMsgDataSource isAnyMessageByCurrentUser])
             {
-                [self.userSession.chatSessionsDataSource updateLastSeenAtForSessionId:session.sessionId completion:nil];
-                [chatMessagesDataSource endChat:@"customer_ended" withCompletion:nil];
+                [self.userSession.chatSessionsDataSource updateLastSeenAtForSessionId:chatMsgDataSource.sessionId completion:nil];
+                [chatMsgDataSource endChat:@"customer_ended" withCompletion:nil];
             }
         }
     }
@@ -625,57 +622,15 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 
 - (void)paginatedDataSourceDidChangeContent:(KUSPaginatedDataSource *)dataSource
 {
-    [self _insertAutoreplyIfNecessary];
     [self _insertFormMessageIfNecessary];
     [self _insertVolumeControlFormMessageIfNecessary];
 }
 
 - (void)chatMessagesDataSource:(KUSChatMessagesDataSource *)dataSource didCreateSessionId:(NSString *)sessionId
 {
-    [self _insertAutoreplyIfNecessary];
     [self _startVolumeControlTracking];
     [self _closeProactiveCampaignIfNecessary];
     
-}
-
-- (BOOL)_shouldShowAutoreply
-{
-    KUSChatMessage *firstMessage = self.allObjects.lastObject;
-    KUSChatMessage *secondMessage = self.count >= 2 ? [self objectAtIndex:self.count - 2] : nil;
-    KUSChatSettings *chatSettings = self.userSession.chatSettingsDataSource.object;
-    return ((chatSettings.activeFormId.length == 0 || (firstMessage.importedAt == nil && secondMessage && secondMessage.importedAt == nil))
-            && chatSettings.autoreply.length > 0
-            && [self count] > 0
-            && self.didFetchAll
-            && _sessionId.length > 0
-            && firstMessage.state == KUSChatMessageStateSent
-            && KUSChatMessageSentByUser(firstMessage));
-}
-
-- (void)_insertAutoreplyIfNecessary
-{
-    if ([self _shouldShowAutoreply]) {
-        NSString *autoreplyId = [NSString stringWithFormat:@"autoreply_%@", _sessionId];
-        // Early escape if we already have an autoreply
-        if ([self objectWithId:autoreplyId]) {
-            return;
-        }
-
-        KUSChatMessage *firstMessage = self.allObjects.lastObject;
-        KUSChatSettings *chatSettings = self.userSession.chatSettingsDataSource.object;
-        NSDate *createdAt = [firstMessage.createdAt dateByAddingTimeInterval:KUSChatAutoreplyDelay];
-        NSDictionary *json = @{
-            @"type": @"chat_message",
-            @"id": autoreplyId,
-            @"attributes": @{
-                @"body": chatSettings.autoreply,
-                @"direction": @"out",
-                @"createdAt": [KUSDate stringFromDate:createdAt]
-            }
-        };
-        KUSChatMessage *autoreplyMessage = [[KUSChatMessage alloc] initWithJSON:json];
-        [self _insertDelayedMessage:autoreplyMessage];
-    }
 }
 
 - (void)_insertFormMessageIfNecessary

@@ -49,8 +49,8 @@ typedef void (^KUSTrackingTokenCompletion)(NSError *error, NSString *trackingTok
             @"X-Kustomer": @"kustomer",                         // CORS Header
             @"Accept-Language": KUSAcceptLanguageHeaderValue(), // Accept-Language Header
             @"User-Agent": KUSUserAgentHeaderValue(),           // User-Agent Header
-            @"x-kustomer-client": @"iOS",                       // Kustomer client Header
-            @"x-kustomer-version": [Kustomer sdkVersion],       // Kustomer version Header
+            @"x-kustomer-client": @"customer-ios",              // Kustomer client Header
+            @"x-kustomer-version":  [NSString stringWithFormat:@"%@%@",@"release-v",[Kustomer sdkVersion]], // Kustomer version Header
         };
 
         _queue = dispatch_queue_create("com.kustomer.request-manager", nil);
