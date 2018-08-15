@@ -178,7 +178,7 @@
 - (void)_createSession
 {
     if ([self isBackToChatButton]) {
-        KUSChatSession *chatSession = [_chatSessionsDataSource objectAtIndex:0];
+        KUSChatSession *chatSession = [_chatSessionsDataSource mostRecentNonProactiveCampaignSession];
         KUSChatViewController *chatViewController = [[KUSChatViewController alloc] initWithUserSession:_userSession forChatSession:chatSession];
         [self.navigationController pushViewController:chatViewController animated:YES];
     } else {
@@ -205,7 +205,7 @@
 {
     // To check the sessionButton action
     KUSChatSettings *settings = [_userSession.chatSettingsDataSource object];
-    return (settings.singleSessionChat && _chatSessionsDataSource.openChatSessionsCount >= 1);
+    return (settings.singleSessionChat && (_chatSessionsDataSource.openChatSessionsCount-_chatSessionsDataSource.openProactiveCampaignsCount) >= 1);
 }
 
 #pragma mark - Internal methods

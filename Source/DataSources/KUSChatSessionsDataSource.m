@@ -222,6 +222,18 @@
     return count;
 }
 
+- (NSUInteger)openProactiveCampaignsCount
+{
+    NSUInteger count = 0;
+    for (KUSChatSession *session in self.allObjects) {
+        KUSChatMessagesDataSource *chatDataSource = [self.userSession chatMessagesDataSourceForSessionId:session.oid];
+        if (!session.lockedAt && !chatDataSource.isAnyMessageByCurrentUser) {
+            count += 1;
+        }
+    }
+    return count;
+}
+
 #pragma mark - Internal methods
 
 - (void)_flushCustomAttributes:(NSDictionary<NSString *, NSObject *> *)customAttributes toChatSessionId:(NSString *)chatSessionId
@@ -254,6 +266,25 @@
         } else if ([mostRecentMessageAt laterDate:chatSession.lastMessageAt] == chatSession.lastMessageAt) {
             mostRecentMessageAt = chatSession.lastMessageAt;
             mostRecentSession = chatSession;
+        }
+    }
+    return mostRecentSession ?: self.firstObject;
+}
+
+- (KUSChatSession *)mostRecentNonProactiveCampaignSession
+{
+    NSDate *mostRecentMessageAt = nil;
+    KUSChatSession *mostRecentSession = nil;
+    for (KUSChatSession *chatSession in self.allObjects) {
+        KUSChatMessagesDataSource *chatDataSource = [self.userSession chatMessagesDataSourceForSessionId:chatSession.oid];
+        if (chatDataSource.isAnyMessageByCurrentUser) {
+            if (mostRecentMessageAt == nil) {
+                mostRecentMessageAt = chatSession.lastMessageAt;
+                mostRecentSession = chatSession;
+            } else if ([mostRecentMessageAt laterDate:chatSession.lastMessageAt] == chatSession.lastMessageAt) {
+                mostRecentMessageAt = chatSession.lastMessageAt;
+                mostRecentSession = chatSession;
+            }
         }
     }
     return mostRecentSession ?: self.firstObject;

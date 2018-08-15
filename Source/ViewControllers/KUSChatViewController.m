@@ -481,7 +481,7 @@
     
     if ([self isBackToChatButton])
     {
-        KUSChatSession *chatSession = [_userSession.chatSessionsDataSource objectAtIndex:0];
+        KUSChatSession *chatSession = [_userSession.chatSessionsDataSource mostRecentNonProactiveCampaignSession];
         _chatSessionId = chatSession.oid;
         _chatMessagesDataSource = [_userSession chatMessagesDataSourceForSessionId:_chatSessionId];
     } else {
@@ -512,7 +512,8 @@
 {
     KUSChatSettings *settings = [_userSession.chatSettingsDataSource object];
     NSUInteger openChats = _userSession.chatSessionsDataSource.openChatSessionsCount;
-    return (settings.singleSessionChat && openChats >= 1);
+    NSUInteger proactiveChats = _userSession.chatSessionsDataSource.openProactiveCampaignsCount;
+    return (settings.singleSessionChat && (openChats-proactiveChats) >= 1);
 }
 
 #pragma mark - KUSChatMessagesDataSourceListener methods

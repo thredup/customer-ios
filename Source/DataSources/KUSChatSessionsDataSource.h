@@ -26,6 +26,9 @@
 // Returns the chat session with the most recent MessageAt
 - (KUSChatSession *)mostRecentSession;
 
+// Returns the non-proactive chat session with the most recent MessageAt
+- (KUSChatSession *)mostRecentNonProactiveCampaignSession;
+
 // Returns the latest date representing the last message received across all sessions
 - (NSDate *)lastMessageAt;
 
@@ -34,6 +37,11 @@
 
 // Returns the total unread message count for all sessions excluding the specified sessionId
 - (NSUInteger)totalUnreadCountExcludingSessionId:(NSString *)excludedSessionId;
+
+// Returns the total open chat sessions count including pro-active campaigns
 - (NSUInteger)openChatSessionsCount;
+
+// Returns the total open pro-active campaign sessions count
+- (NSUInteger)openProactiveCampaignsCount;
 
 @end
