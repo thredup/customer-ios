@@ -1,5 +1,10 @@
 # Changelog for Kustomer iOS SDK
 
+## 0.1.13
+
+* Removed autoreply logic
+* Fixed back to chat issue
+
 ## 0.1.12
 
 * Added single chat functionality
