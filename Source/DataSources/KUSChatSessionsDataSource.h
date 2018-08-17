@@ -27,7 +27,7 @@
 - (KUSChatSession *)mostRecentSession;
 
 // Returns the non-proactive chat session with the most recent MessageAt
-- (KUSChatSession *)mostRecentNonProactiveCampaignSession;
+- (KUSChatSession *)mostRecentNonProactiveCampaignOpenSession;
 
 // Returns the latest date representing the last message received across all sessions
 - (NSDate *)lastMessageAt;

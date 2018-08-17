@@ -19,7 +19,7 @@
 
 @end
 
-@interface KUSChatSessionsDataSource () <KUSChatMessagesDataSourceListener> {
+@interface KUSChatSessionsDataSource () <KUSChatMessagesDataSourceListener, KUSObjectDataSourceListener> {
     NSDictionary<NSString *, NSObject *> *_pendingCustomChatSessionAttributes;
 
     NSMutableDictionary<NSString *, NSDate *> *_localLastSeenAtBySessionId;
@@ -38,11 +38,22 @@
         _localLastSeenAtBySessionId = [[NSMutableDictionary alloc] init];
 
         [self addListener:self];
+        [self.userSession.chatSettingsDataSource addListener:self];
     }
     return self;
 }
 
 #pragma mark - KUSPaginatedDataSource methods
+
+- (void)fetchLatest
+{
+    if (!self.userSession.chatSettingsDataSource.didFetch) {
+        [self.userSession.chatSettingsDataSource fetch];
+        return;
+    }
+    
+    [super fetchLatest];
+}
 
 - (NSURL *)firstURL
 {
@@ -260,24 +271,26 @@
     NSDate *mostRecentMessageAt = nil;
     KUSChatSession *mostRecentSession = nil;
     for (KUSChatSession *chatSession in self.allObjects) {
-        if (mostRecentMessageAt == nil) {
-            mostRecentMessageAt = chatSession.lastMessageAt;
-            mostRecentSession = chatSession;
-        } else if ([mostRecentMessageAt laterDate:chatSession.lastMessageAt] == chatSession.lastMessageAt) {
-            mostRecentMessageAt = chatSession.lastMessageAt;
-            mostRecentSession = chatSession;
+        if (!chatSession.lockedAt) {
+            if (mostRecentMessageAt == nil) {
+                mostRecentMessageAt = chatSession.lastMessageAt;
+                mostRecentSession = chatSession;
+            } else if ([mostRecentMessageAt laterDate:chatSession.lastMessageAt] == chatSession.lastMessageAt) {
+                mostRecentMessageAt = chatSession.lastMessageAt;
+                mostRecentSession = chatSession;
+            }
         }
     }
     return mostRecentSession ?: self.firstObject;
 }
 
-- (KUSChatSession *)mostRecentNonProactiveCampaignSession
+- (KUSChatSession *)mostRecentNonProactiveCampaignOpenSession
 {
     NSDate *mostRecentMessageAt = nil;
     KUSChatSession *mostRecentSession = nil;
     for (KUSChatSession *chatSession in self.allObjects) {
         KUSChatMessagesDataSource *chatDataSource = [self.userSession chatMessagesDataSourceForSessionId:chatSession.oid];
-        if (chatDataSource.isAnyMessageByCurrentUser) {
+        if (!chatSession.lockedAt && chatDataSource.isAnyMessageByCurrentUser) {
             if (mostRecentMessageAt == nil) {
                 mostRecentMessageAt = chatSession.lastMessageAt;
                 mostRecentSession = chatSession;
@@ -292,7 +305,20 @@
 
 - (NSDate * _Nullable)lastMessageAt
 {
-    return [self mostRecentSession].lastMessageAt;
+    NSDate *mostRecentMessageAt = nil;
+    for (KUSChatSession *chatSession in self.allObjects) {
+        if (mostRecentMessageAt == nil) {
+            mostRecentMessageAt = chatSession.lastMessageAt;
+        } else if ([mostRecentMessageAt laterDate:chatSession.lastMessageAt] == chatSession.lastMessageAt) {
+            mostRecentMessageAt = chatSession.lastMessageAt;
+        }
+    }
+    
+    if (!mostRecentMessageAt) {
+        KUSChatSession *firstSession = self.firstObject;
+        return firstSession.lastMessageAt;
+    }
+    return mostRecentMessageAt;
 }
 
 - (NSDate * _Nullable)lastSeenAtForSessionId:(NSString *)sessionId
@@ -341,6 +367,20 @@
     } else if ([dataSource isKindOfClass:[KUSChatMessagesDataSource class]]) {
         [self sortObjects];
         [self notifyAnnouncersDidChangeContent];
+    }
+}
+
+#pragma mark - KUSObjectDataSourceListener methods
+
+- (void)objectDataSourceDidLoad:(KUSObjectDataSource *)dataSource
+{
+    [self fetchLatest];
+}
+
+- (void)objectDataSource:(KUSObjectDataSource *)dataSource didReceiveError:(NSError *)error
+{
+    if (!dataSource.didFetch) {
+        [self notifyAnnouncersDidError:error];
     }
 }
 
