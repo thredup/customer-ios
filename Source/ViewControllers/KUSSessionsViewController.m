@@ -178,7 +178,7 @@
 - (void)_createSession
 {
     if ([self isBackToChatButton]) {
-        KUSChatSession *chatSession = [_chatSessionsDataSource mostRecentNonProactiveCampaignSession];
+        KUSChatSession *chatSession = [_chatSessionsDataSource mostRecentNonProactiveCampaignOpenSession];
         KUSChatViewController *chatViewController = [[KUSChatViewController alloc] initWithUserSession:_userSession forChatSession:chatSession];
         [self.navigationController pushViewController:chatViewController animated:YES];
     } else {

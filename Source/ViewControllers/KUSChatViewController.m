@@ -74,7 +74,9 @@
         _userSession = userSession;
         _chatSessionId = session.oid;
         _chatMessagesDataSource = [_userSession chatMessagesDataSourceForSessionId:_chatSessionId];
-        _showBackButton = YES;
+        
+        KUSChatSettings *chatSettings = [[_userSession chatSettingsDataSource] object];
+        _showBackButton = !chatSettings.noHistory;
     }
     return self;
 }
@@ -481,7 +483,7 @@
     
     if ([self isBackToChatButton])
     {
-        KUSChatSession *chatSession = [_userSession.chatSessionsDataSource mostRecentNonProactiveCampaignSession];
+        KUSChatSession *chatSession = [_userSession.chatSessionsDataSource mostRecentNonProactiveCampaignOpenSession];
         _chatSessionId = chatSession.oid;
         _chatMessagesDataSource = [_userSession chatMessagesDataSourceForSessionId:_chatSessionId];
     } else {
@@ -567,9 +569,12 @@
     _chatSessionId = sessionId;
     self.inputBarView.allowsAttachments = YES;
     [self.fauxNavigationBar setSessionId:_chatSessionId];
-    _showBackButton = YES;
+    
+    KUSChatSettings *chatSettings = [[_userSession chatSettingsDataSource] object];
+    _showBackButton = !chatSettings.noHistory;
+//    _showBackButton = YES;
     self.navigationController.interactivePopGestureRecognizer.enabled = _showBackButton;
-    [self.fauxNavigationBar setShowsBackButton:YES];
+    [self.fauxNavigationBar setShowsBackButton:_showBackButton];
     [self _checkShouldShowEmailInput];
     [self _checkShouldShowCloseChatButtonView];
     [self.view setNeedsLayout];
