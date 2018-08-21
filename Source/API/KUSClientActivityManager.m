@@ -122,14 +122,36 @@
         return;
     }
 
-    _currentPageStartTime = CACurrentMediaTime();
-    [self _requestClientActivityWithCurrentPageSeconds:0];
+    // Check that settings is fetched and no history is not enabled
+    if (_userSession.chatSettingsDataSource.didFetch) {
+        KUSChatSettings *settings = [_userSession.chatSettingsDataSource object];
+        if (!settings.noHistory) {
+            _currentPageStartTime = CACurrentMediaTime();
+            [self _requestClientActivityWithCurrentPageSeconds:0];
+            return;
+        }
+    }
+    else {
+        [_userSession.chatSettingsDataSource addListener:self];
+        [_userSession.chatSettingsDataSource fetch];
+    }
 }
 
 #pragma mark - KUSObjectDataSourceListener methods
 
 - (void)objectDataSourceDidLoad:(KUSObjectDataSource *)dataSource
 {
+    if (dataSource == _userSession.chatSettingsDataSource) {
+        [_userSession.chatSettingsDataSource removeListener:self];
+        
+        KUSChatSettings *settings = [_userSession.chatSettingsDataSource object];
+        if (!settings.noHistory) {
+            _currentPageStartTime = CACurrentMediaTime();
+            [self _requestClientActivityWithCurrentPageSeconds:0];
+        }
+        return;
+    }
+    
     if (dataSource == _activityDataSource) {
         if (_activityDataSource.currentPageSeconds > 0) {
             // Tell the push client to perform a sessions list pull to check for automated messages
