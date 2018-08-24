@@ -1,5 +1,10 @@
 # Changelog for Kustomer iOS SDK
 
+
+## 0.1.14
+
+* Added no history feature
+
 ## 0.1.13
 
 * Removed autoreply logic
