@@ -1,5 +1,9 @@
 # Changelog for Kustomer iOS SDK
 
+## 0.1.16
+
+* Fixed scope of header files
+
 ## 0.1.15
 
 * Fixed carthage issue
