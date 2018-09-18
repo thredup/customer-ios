@@ -1,5 +1,9 @@
 # Changelog for Kustomer iOS SDK
 
+## 0.1.17
+
+* Fixed framework dependency issue for carthage
+
 ## 0.1.16
 
 * Fixed scope of header files
