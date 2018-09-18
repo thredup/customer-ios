@@ -1,5 +1,8 @@
 # Changelog for Kustomer iOS SDK
 
+## 0.1.15
+
+* Fixed carthage issue
 
 ## 0.1.14
 
