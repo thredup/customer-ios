@@ -1,5 +1,9 @@
 # Changelog for Kustomer iOS SDK
 
+## 0.1.18
+
+* Fixed polling logic
+
 ## 0.1.17
 
 * Fixed framework dependency issue for carthage
