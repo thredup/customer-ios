@@ -14,6 +14,7 @@
 @property (nonatomic, assign) BOOL didCaptureEmail;
 @property (nonatomic, copy, nullable) NSString *trackingToken;
 @property (nonatomic, copy, nullable) NSString *formId;
+@property (nonatomic, assign) NSInteger openChatSessionsCount;
 
 - (instancetype _Nonnull)initWithUserSession:(KUSUserSession * _Nonnull)userSession;
 - (instancetype _Nonnull)init NS_UNAVAILABLE;

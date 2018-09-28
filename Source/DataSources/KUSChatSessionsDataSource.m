@@ -350,6 +350,7 @@
 - (void)paginatedDataSourceDidChangeContent:(KUSPaginatedDataSource *)dataSource
 {
     if (dataSource == self) {
+        [self.userSession.userDefaults setOpenChatSessionsCount:[self openChatSessionsCount]];
         if (_pendingCustomChatSessionAttributes) {
             KUSChatSession *mostRecentSession = [self mostRecentSession];
             NSString *mostRecentSessionId = mostRecentSession.oid;

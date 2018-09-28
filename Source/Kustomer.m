@@ -152,6 +152,11 @@ static NSString *kKustomerOrgNameKey = @"orgName";
     [[self sharedInstance] setFormId:formId];
 }
 
++ (NSInteger)openChatsCount
+{
+    return [[self sharedInstance] openChatsCount];
+}
+
 #pragma mark - Lifecycle methods
 
 + (instancetype)sharedInstance
@@ -315,6 +320,10 @@ static KUSLogOptions _logOptions = KUSLogOptionInfo | KUSLogOptionErrors;
     [self.userSession.userDefaults setFormId:formId];
 }
 
+- (NSInteger)openChatsCount
+{
+    return [self.userSession.userDefaults openChatSessionsCount];
+}
 
 #pragma mark - Helper functions
 

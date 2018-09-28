@@ -47,6 +47,7 @@ FOUNDATION_EXPORT const unsigned char KustomerVersionString[];
 // A convenience method that will present the custom web page interface on the topmost view controller
 + (void)presentCustomWebPage:(NSString*)url;
 + (void)setFormId:(NSString *)formId;
++ (NSInteger)openChatsCount;
 
 // The current SDK version
 + (NSString *)sdkVersion;
@@ -68,5 +69,6 @@ FOUNDATION_EXPORT const unsigned char KustomerVersionString[];
 // Implement to perform custom handling and presentation of the support user interface
 // If unimplemented, Kustomer will present the support interface on the topmost view controller
 - (void)kustomerDidTapOnInAppNotification;
+
 
 @end
