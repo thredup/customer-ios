@@ -47,7 +47,9 @@ FOUNDATION_EXPORT const unsigned char KustomerVersionString[];
 // A convenience method that will present the custom web page interface on the topmost view controller
 + (void)presentCustomWebPage:(NSString*)url;
 + (void)setFormId:(NSString *)formId;
-+ (NSInteger)openChatsCount;
+
+// Returns the total number of open conversations.
++ (NSInteger)openConversationsCount;
 
 // The current SDK version
 + (NSString *)sdkVersion;
