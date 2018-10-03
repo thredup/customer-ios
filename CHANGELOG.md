@@ -1,5 +1,9 @@
 # Changelog for Kustomer iOS SDK
 
+## 0.1.19
+
+* Fixed Kustomer controller presentation style
+
 ## 0.1.18
 
 * Fixed polling logic
