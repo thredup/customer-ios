@@ -11,8 +11,6 @@
 #import "KUSColor.h"
 #import "KUSLocalization.h"
 
-static const CGFloat kKUSClosedChatViewHeight = 50.0;
-
 @interface KUSClosedChatView ()
 
 @property (nonatomic, strong) UILabel *infoLabel;
