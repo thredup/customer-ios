@@ -1,5 +1,9 @@
 # Changelog for Kustomer iOS SDK
 
+## 0.1.20
+
+* Added new method to get open conversations count
+
 ## 0.1.19
 
 * Fixed Kustomer controller presentation style
