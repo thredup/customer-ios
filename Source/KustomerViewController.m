@@ -21,10 +21,13 @@
 {
     KUSUserSession *userSession = [Kustomer sharedInstance].userSession;
     KUSSessionsViewController *sessionsViewController = [[KUSSessionsViewController alloc] initWithUserSession:userSession];
-    self = [super initWithRootViewController:sessionsViewController];
-    if (self && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        self.modalPresentationStyle = UIModalPresentationFormSheet;
+
+    if (self = [super initWithRootViewController:sessionsViewController]) {
+        self.modalPresentationStyle = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad
+        ? UIModalPresentationFormSheet
+        : UIModalPresentationOverFullScreen;
     }
+
     return self;
 }
 
