@@ -34,12 +34,14 @@
 #import "KUSNewSessionButton.h"
 #import "KUSEndChatButtonView.h"
 #import "KUSChatEndedTableViewCell.h"
+#import "KUSMLFormValuesPickerView.h"
 
 @interface KUSChatViewController () <KUSEmailInputViewDelegate, KUSInputBarDelegate, KUSOptionPickerViewDelegate,
                                      KUSChatMessagesDataSourceListener, KUSChatMessageTableViewCellDelegate,
                                      NYTPhotosViewControllerDelegate, UITableViewDataSource, UITableViewDelegate,
                                      UINavigationControllerDelegate, UIImagePickerControllerDelegate,
-                                     KUSNavigationBarViewDelegate,KUSCloseChatButtonViewDelegate> {
+                                     KUSNavigationBarViewDelegate,KUSCloseChatButtonViewDelegate,
+                                     KUSMLFormValuesPickerViewDelegate> {
     KUSUserSession *_userSession;
 
     BOOL _showBackButton;
@@ -60,6 +62,7 @@
 //@property (nonatomic, strong) KUSNewSessionButton *sessionButton;
 @property (nonatomic, strong) UIButton *sessionButton;
 @property (nonatomic, strong) KUSEndChatButtonView *closeChatButtonView;
+@property (nonatomic, strong) KUSMLFormValuesPickerView *mlFormValuesPickerView;
 
 @end
 
@@ -223,6 +226,14 @@
         .size.height = optionPickerHeight
     };
     
+    CGFloat mlFormValuesViewHeight = [self.mlFormValuesPickerView desiredHeight];
+    CGFloat mlFormValuesViewY = self.view.bounds.size.height - MAX(self.edgeInsets.bottom, _keyboardHeight) - mlFormValuesViewHeight;
+    self.mlFormValuesPickerView.frame = (CGRect) {
+        .origin.y = mlFormValuesViewY,
+        .size.width = self.view.bounds.size.width,
+        .size.height = mlFormValuesViewHeight
+    };
+    
     CGFloat closedChatViewHeight = 50.0;
     CGFloat closedChatViewY = self.view.bounds.size.height - MAX(self.edgeInsets.bottom, _keyboardHeight) - closedChatViewHeight;
     self.closedChatView.frame = (CGRect) {
@@ -260,7 +271,7 @@
     
     self.tableView.frame = (CGRect) {
         .size.width = self.view.bounds.size.width,
-        .size.height = MIN(inputBarY, optionPickerY)
+        .size.height = MIN(inputBarY, MIN(optionPickerY, mlFormValuesViewY))
     };
 
     self.tableView.contentInset = (UIEdgeInsets) {
@@ -353,6 +364,29 @@
     }
     
     KUSFormQuestion *currentQuestion = _chatMessagesDataSource.currentQuestion;
+    
+    BOOL wantsMultiLevelValuesPicker = (currentQuestion
+                                        && currentQuestion.property == KUSFormQuestionPropertyMLV);
+    if (wantsMultiLevelValuesPicker) {
+        self.inputBarView.hidden = YES;
+        if ([self.inputBarView isFirstResponder]) {
+            [self.inputBarView resignFirstResponder];
+        }
+        if (currentQuestion.formValues && currentQuestion.formValues.tree) {
+            if (currentQuestion.formValues.tree.count > 0 && self.mlFormValuesPickerView == nil) {
+                self.mlFormValuesPickerView = [[KUSMLFormValuesPickerView alloc] init];
+                self.mlFormValuesPickerView.delegate = self;
+                self.mlFormValuesPickerView.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth);
+                [self.view addSubview:self.mlFormValuesPickerView];
+                [self.mlFormValuesPickerView setMLFormValuesPicker:currentQuestion.formValues.tree with:currentQuestion.formValues.lastNodeRequired];
+                [self.view setNeedsLayout];
+                [self.view layoutIfNeeded];
+            }
+        }
+        return;
+    }
+    
+        
     wantsOptionPicker = (currentQuestion
                               && currentQuestion.property == KUSFormQuestionPropertyConversationTeam
                               && currentQuestion.values.count > 0);
@@ -387,8 +421,12 @@
         [self.closedChatView removeFromSuperview];
         self.closedChatView = nil;
         
+        [self.mlFormValuesPickerView removeFromSuperview];
+        self.mlFormValuesPickerView = nil;
+        
         [self.view setNeedsLayout];
     }
+    
 }
 
 - (void)_checkShouldShowInputView
@@ -965,4 +1003,18 @@
     }];
 }
 
+#pragma mark - KUSMLFormValuesPickerViewDelegate methods
+
+- (void)mlOptionPickerView:(KUSMLFormValuesPickerView *)pickerView didSelect:(NSString *)option with:(NSString *)optionId
+{
+    [_chatMessagesDataSource sendMessageWithText:option attachments:nil value:optionId];
+    [_inputBarView setText:nil];
+    [_inputBarView setImageAttachments:nil];
+}
+
+- (void)viewHeightDidChange
+{
+    [self.view setNeedsLayout];
+    [self.view layoutIfNeeded];
+}
 @end
