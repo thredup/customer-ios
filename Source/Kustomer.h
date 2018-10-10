@@ -22,6 +22,7 @@ FOUNDATION_EXPORT const unsigned char KustomerVersionString[];
 + (void)setDelegate:(__weak id<KustomerDelegate>)delegate;
 
 + (void)describeConversation:(NSDictionary<NSString *, NSObject *> *)customAttributes;
++ (void)describeNextConversation:(NSDictionary<NSString *, NSObject *> *)customAttributes;
 + (void)describeCustomer:(KUSCustomerDescription *)customerDescription;
 + (void)identify:(NSString *)externalToken;
 + (void)resetTracking;

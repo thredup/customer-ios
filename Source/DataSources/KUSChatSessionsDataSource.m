@@ -21,7 +21,7 @@
 
 @interface KUSChatSessionsDataSource () <KUSChatMessagesDataSourceListener, KUSObjectDataSourceListener> {
     NSDictionary<NSString *, NSObject *> *_pendingCustomChatSessionAttributes;
-
+    NSDictionary<NSString *, NSObject *> *_pendingCustomChatSessionAttributesForNextConversation;
     NSMutableDictionary<NSString *, NSDate *> *_localLastSeenAtBySessionId;
 }
 
@@ -115,6 +115,10 @@
 
          KUSChatSession *session = [[KUSChatSession alloc] initWithJSON:response[@"data"]];
          if (session) {
+             if (_pendingCustomChatSessionAttributesForNextConversation) {
+                 [self _flushCustomAttributes:_pendingCustomChatSessionAttributesForNextConversation toChatSessionId:session.oid];
+                 _pendingCustomChatSessionAttributesForNextConversation = nil;
+             }
              [weakSelf upsertObjects:@[ session ]];
          }
          if (completion) {
@@ -220,6 +224,16 @@
 
         [self fetchLatest];
     }
+}
+
+- (void)describeNextConversation:(NSDictionary<NSString *, NSObject *> *)customAttributes
+{
+    NSMutableDictionary<NSString *, NSObject *> *pendingCustomChatSessionAttributesForNextConversation = [[NSMutableDictionary alloc] init];
+    if (_pendingCustomChatSessionAttributesForNextConversation) {
+        [pendingCustomChatSessionAttributesForNextConversation addEntriesFromDictionary:_pendingCustomChatSessionAttributesForNextConversation];
+    }
+    [pendingCustomChatSessionAttributesForNextConversation addEntriesFromDictionary:customAttributes];
+    _pendingCustomChatSessionAttributesForNextConversation = pendingCustomChatSessionAttributesForNextConversation;
 }
 
 - (NSUInteger)openChatSessionsCount
