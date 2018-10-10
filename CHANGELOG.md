@@ -1,5 +1,10 @@
 # Changelog for Kustomer iOS SDK
 
+## 0.1.21
+
+* Added new method to describe next conversation
+* Fixed conversation team issue
+
 ## 0.1.20
 
 * Added new method to get open conversations count
