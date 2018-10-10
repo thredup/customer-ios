@@ -45,6 +45,11 @@ static NSString *kKustomerOrgNameKey = @"orgName";
     [[self sharedInstance] describeConversation:customAttributes];
 }
 
++ (void)describeNextConversation:(NSDictionary<NSString *, NSObject *> *)customAttributes
+{
+    [[self sharedInstance] describeNextConversation:customAttributes];
+}
+
 + (void)describeCustomer:(KUSCustomerDescription *)customerDescription
 {
     [[self sharedInstance] describeCustomer:customerDescription];
@@ -248,6 +253,15 @@ static KUSLogOptions _logOptions = KUSLogOptionInfo | KUSLogOptionErrors;
         return;
     }
     [self.userSession.chatSessionsDataSource describeActiveConversation:customAttributes];
+}
+
+- (void)describeNextConversation:(NSDictionary<NSString *, NSObject *> *)customAttributes
+{
+    NSAssert(customAttributes.count, @"Attempted to describe next conversation with no attributes set");
+    if (customAttributes.count == 0) {
+        return;
+    }
+    [self.userSession.chatSessionsDataSource describeNextConversation:customAttributes];
 }
 
 - (void)describeCustomer:(KUSCustomerDescription *)customerDescription
