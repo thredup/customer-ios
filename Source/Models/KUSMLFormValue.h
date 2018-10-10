@@ -11,8 +11,8 @@
 
 @interface KUSMLFormValue : KUSModel
 
-@property (nonatomic, copy, readonly) NSString *propertyDisplayName;
+@property (nonatomic, copy, readonly) NSString *displayName;
 @property (nonatomic, assign, readonly) BOOL lastNodeRequired;
-@property (nonatomic, copy, nullable) NSArray<KUSMLNode *> *tree;
+@property (nonatomic, copy, nullable) NSArray<KUSMLNode *> *mlNodes;
 
 @end

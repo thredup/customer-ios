@@ -28,9 +28,9 @@
 {
     self = [super initWithJSON:json];
     if (self) {
-        _propertyDisplayName = NSStringFromKeyPath(json, @"displayName");
+        _displayName = NSStringFromKeyPath(json, @"displayName");
         _lastNodeRequired = BOOLFromKeyPath(json, @"lastNodeRequired");
-        _tree = [KUSMLNode objectsWithJSONs:NSArrayFromKeyPath(json, @"tree.children")];
+        _mlNodes = [KUSMLNode objectsWithJSONs:NSArrayFromKeyPath(json, @"tree.children")];
     }
     return self;
 }

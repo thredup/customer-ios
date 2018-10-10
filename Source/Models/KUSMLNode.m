@@ -28,7 +28,7 @@
 {
     self = [super initWithJSON:json];
     if (self) {
-        _nodeDisplayName = NSStringFromKeyPath(json, @"displayName");
+        _displayName = NSStringFromKeyPath(json, @"displayName");
         _nodeId = NSStringFromKeyPath(json, @"id");
         _nodeChilds = [KUSMLNode objectsWithJSONs:NSArrayFromKeyPath(json, @"children")];
     }

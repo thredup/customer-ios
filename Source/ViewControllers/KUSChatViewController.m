@@ -372,13 +372,13 @@
         if ([self.inputBarView isFirstResponder]) {
             [self.inputBarView resignFirstResponder];
         }
-        if (currentQuestion.formValues && currentQuestion.formValues.tree) {
-            if (currentQuestion.formValues.tree.count > 0 && self.mlFormValuesPickerView == nil) {
+        if (currentQuestion.mlFormValues && currentQuestion.mlFormValues.mlNodes) {
+            if (currentQuestion.mlFormValues.mlNodes.count > 0 && self.mlFormValuesPickerView == nil) {
                 self.mlFormValuesPickerView = [[KUSMLFormValuesPickerView alloc] init];
                 self.mlFormValuesPickerView.delegate = self;
                 self.mlFormValuesPickerView.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth);
                 [self.view addSubview:self.mlFormValuesPickerView];
-                [self.mlFormValuesPickerView setMLFormValuesPicker:currentQuestion.formValues.tree with:currentQuestion.formValues.lastNodeRequired];
+                [self.mlFormValuesPickerView setMLFormValuesPicker:currentQuestion.mlFormValues.mlNodes with:currentQuestion.mlFormValues.lastNodeRequired];
                 [self.view setNeedsLayout];
                 [self.view layoutIfNeeded];
             }
@@ -1005,14 +1005,14 @@
 
 #pragma mark - KUSMLFormValuesPickerViewDelegate methods
 
-- (void)mlOptionPickerView:(KUSMLFormValuesPickerView *)pickerView didSelect:(NSString *)option with:(NSString *)optionId
+- (void)mlFormValuesPickerView:(KUSMLFormValuesPickerView *)mlFormValuesPickerView didSelect:(NSString *)option with:(NSString *)optionId
 {
     [_chatMessagesDataSource sendMessageWithText:option attachments:nil value:optionId];
     [_inputBarView setText:nil];
     [_inputBarView setImageAttachments:nil];
 }
 
-- (void)viewHeightDidChange
+- (void)mlFormValuesPickerViewHeightDidChange:(KUSMLFormValuesPickerView *)mlFormValuesPickerView
 {
     [self.view setNeedsLayout];
     [self.view layoutIfNeeded];

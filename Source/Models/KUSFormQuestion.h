@@ -34,7 +34,7 @@ typedef NS_ENUM(NSInteger, KUSFormQuestionProperty) {
 @property (nonatomic, assign, readonly) KUSFormQuestionType type;
 @property (nonatomic, assign, readonly) KUSFormQuestionProperty property;
 @property (nonatomic, assign, readonly) BOOL skipIfSatisfied;
-@property (nonatomic, copy, readonly) KUSMLFormValue *formValues;
+@property (nonatomic, copy, readonly) KUSMLFormValue *mlFormValues;
 
 @end
 

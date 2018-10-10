@@ -35,8 +35,8 @@
         _property = KUSFormQuestionPropertyFromString(NSStringFromKeyPath(json, @"property"));
         if (_property == KUSFormQuestionPropertyMLV) {
             NSMutableDictionary *dic = [[NSMutableDictionary alloc]initWithDictionary:[json valueForKeyPath:@"valueMeta"]];
-               [dic setObject:@"1" forKey:@"id"];
-             _formValues = [[KUSMLFormValue alloc] initWithJSON: dic];
+            [dic setObject:@"1" forKey:@"id"];
+            _mlFormValues = [[KUSMLFormValue alloc] initWithJSON: dic];
         }
         _values = NSArrayFromKeyPath(json, @"values");
     }

@@ -13,25 +13,19 @@
 @protocol KUSMLFormValuesPickerViewDelegate <NSObject>
 
 @optional
-- (void)mlOptionPickerView:(KUSMLFormValuesPickerView *)pickerView didSelect:(NSString *)option with:(NSString *)optionId;
-- (void)viewHeightDidChange;
+- (void)mlFormValuesPickerView:(KUSMLFormValuesPickerView *)mlFormValuesPickerView didSelect:(NSString *)option with:(NSString *)optionId;
+- (void)mlFormValuesPickerViewHeightDidChange:(KUSMLFormValuesPickerView *)mlFormValuesPickerView;
 
 @end
 
 @interface KUSMLFormValuesPickerView : UIView
 
-@property (nonatomic, strong) UIColor *horizontalSeparatorColor UI_APPEARANCE_SELECTOR;
-@property (nonatomic, strong) UIColor *verticalSeparatorColor UI_APPEARANCE_SELECTOR;
-@property (nonatomic, strong) UIColor *viewBackgroundColor UI_APPEARANCE_SELECTOR;
-@property (nonatomic, strong) UIColor *selectedOptionsTextColor UI_APPEARANCE_SELECTOR;
-@property (nonatomic, strong) UIColor *highlightedSelectedOptionTextColor UI_APPEARANCE_SELECTOR;
-@property (nonatomic, strong) UIFont *textFont UI_APPEARANCE_SELECTOR;
-@property (nonatomic, strong) UIColor *sendButtonColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIColor *separatorColor UI_APPEARANCE_SELECTOR;
 
 @property (nonatomic, weak) id<KUSMLFormValuesPickerViewDelegate> delegate;
 @property (nonatomic, strong, readonly) UIButton *sendButton;
 
 - (CGFloat)desiredHeight;
-- (void)setMLFormValuesPicker:(NSArray<KUSMLNode *> *)valueTree with:(BOOL)lastNodeRequired;
+- (void)setMLFormValuesPicker:(NSArray<KUSMLNode *> *)mlFormValues with:(BOOL)lastNodeRequired;
 
 @end
