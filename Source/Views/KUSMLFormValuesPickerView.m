@@ -173,7 +173,7 @@ static NSString *kCellIdentifier = @"MLFormValueCell";
 
 - (CGFloat)getCollectionViewHeight
 {
-    CGSize size = [self getCellSizeWithText:@"FontHeight"];
+    CGSize size = [self getCellSizeWithText:[[KUSLocalization sharedInstance] localizedString:@"Home"]];
     return size.height;
 }
 
@@ -202,8 +202,7 @@ static NSString *kCellIdentifier = @"MLFormValueCell";
     else {
         _needOptionPicker = YES;
         NSMutableArray<NSString *> *currentOptionsValues = [[NSMutableArray alloc]initWithCapacity:_currentOptionsToShow.count];
-        for (KUSMLNode* option in _currentOptionsToShow)
-        {
+        for (KUSMLNode* option in _currentOptionsToShow) {
             [currentOptionsValues addObject:option.displayName];
         }
         [_optionPickerView setOptions:currentOptionsValues];
