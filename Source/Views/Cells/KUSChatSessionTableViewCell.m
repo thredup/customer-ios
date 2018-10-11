@@ -108,7 +108,7 @@ CGFloat KUSChatSessionTableViewCellHeight = 88.0;
 
         _closedLabel = [[UILabel alloc] init];
         _closedLabel.text = [[KUSLocalization sharedInstance] localizedString:@"CLOSED"];
-        _closedLabel.textAlignment = NSTextAlignmentRight;
+        _closedLabel.textAlignment = isRTL ? NSTextAlignmentLeft : NSTextAlignmentRight;
         _closedLabel.adjustsFontSizeToFitWidth = YES;
         _closedLabel.minimumScaleFactor = 10.0 / 12.0;
         [self.contentView addSubview:_closedLabel];
@@ -175,7 +175,8 @@ CGFloat KUSChatSessionTableViewCellHeight = 88.0;
     // Setting Text Alignment after value settings
     BOOL isRTL = [[KUSLocalization sharedInstance] isCurrentLanguageRTL];
     _subtitleLabel.textAlignment = isRTL ? NSTextAlignmentRight : NSTextAlignmentLeft;
-
+    _closedLabel.textAlignment = isRTL ? NSTextAlignmentLeft : NSTextAlignmentRight;
+    
     // Date text (from last message date, or session created at)
     NSDate *sessionDate = latestTextMessage.createdAt ?: _chatSession.createdAt;
     self.dateLabel.text = [KUSDate humanReadableTextFromDate:sessionDate];
@@ -266,7 +267,7 @@ CGFloat KUSChatSessionTableViewCellHeight = 88.0;
     
     CGFloat closeHeight = ceil(self.closedLabel.font.lineHeight);
     self.closedLabel.frame = (CGRect) {
-        .origin.x = self.bounds.size.width - rightMargin - 90.0,
+        .origin.x = isRTL ? rightMargin : self.bounds.size.width - rightMargin - 90.0,
         .origin.y = (self.bounds.size.height / 2.0) - dateHeight - 4.0,
         .size.width = 90.0,
         .size.height = closeHeight

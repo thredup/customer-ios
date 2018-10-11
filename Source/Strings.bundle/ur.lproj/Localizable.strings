@@ -32,3 +32,8 @@
 "com.kustomer.CLOSED" = "بند";
 "com.kustomer.Start a New Conversation" = "نئی گفتگو شروع کریں";
 "com.kustomer.Thank You! We'll follow up on your request." = "آپ کا شکریہ! ہم آپ کی درخواست پر عمل کریں گے";
+"com.kustomer.CHAT HAS ENDED" = "چیٹ ختم ہو گیا ہے";
+"com.kustomer.END CHAT" = "آخر بات چیت";
+"com.kustomer.Back to chat" = "چیٹ میں واپسی";
+"com.kustomer.Home" = "گھر";
+"com.kustomer.Please select an item" = "ایک آئٹم منتخب کریں";

@@ -32,3 +32,8 @@
 "com.kustomer.CLOSED" = "ЗАКРЫТО";
 "com.kustomer.Start a New Conversation" = "Начать новый разговор";
 "com.kustomer.Thank You! We'll follow up on your request." = "Спасибо! Мы будем следить за вашей просьбой.";
+"com.kustomer.CHAT HAS ENDED" = "Чат закончился";
+"com.kustomer.END CHAT" = "Конец чат";
+"com.kustomer.Back to chat" = "Вернуться в чат";
+"com.kustomer.Home" = "Главная";
+"com.kustomer.Please select an item" = "Выберите элемент";

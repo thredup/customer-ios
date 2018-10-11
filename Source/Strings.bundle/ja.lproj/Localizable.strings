@@ -32,3 +32,8 @@
 "com.kustomer.CLOSED" = "閉まっている";
 "com.kustomer.Start a New Conversation" = "新しい会話を開始する";
 "com.kustomer.Thank You! We'll follow up on your request." = "ありがとうございました！私たちはあなたの要求をフォローアップします。";
+"com.kustomer.CHAT HAS ENDED" = "チャットが終了しました";
+"com.kustomer.END CHAT" = "チャットを終了";
+"com.kustomer.Back to chat" = "チャットに戻る";
+"com.kustomer.Home" = "ホーム";
+"com.kustomer.Please select an item" = "アイテムを選択してください";

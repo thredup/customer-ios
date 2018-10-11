@@ -32,3 +32,8 @@
 "com.kustomer.CLOSED" = "ΚΛΕΙΣΤΟ";
 "com.kustomer.Start a New Conversation" = "Ξεκινήστε μια νέα συνομιλία";
 "com.kustomer.Thank You! We'll follow up on your request." = "Ευχαριστώ! Θα ακολουθήσουμε το αίτημά σας.";
+"com.kustomer.CHAT HAS ENDED" = "Η συνομιλία έχει λήξει";
+"com.kustomer.END CHAT" = "Τερματισμός συνομιλίας";
+"com.kustomer.Back to chat" = "Επιστροφή στη συζήτηση";
+"com.kustomer.Home" = "Σπίτι";
+"com.kustomer.Please select an item" = "Επιλέξτε ένα στοιχείο";

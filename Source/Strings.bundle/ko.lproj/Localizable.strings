@@ -32,3 +32,8 @@
 "com.kustomer.CLOSED" = "닫은";
 "com.kustomer.Start a New Conversation" = "새 대화 시작하기";
 "com.kustomer.Thank You! We'll follow up on your request." = "고맙습니다! 귀하의 요청에 대해 후속 조치를 취하겠습니다.";
+"com.kustomer.CHAT HAS ENDED" = "채팅이 종료되었습니다.";
+"com.kustomer.END CHAT" = "채팅 종료";
+"com.kustomer.Back to chat" = "채팅으로 돌아 가기";
+"com.kustomer.Home" = "집";
+"com.kustomer.Please select an item" = "항목을 선택하십시오.";

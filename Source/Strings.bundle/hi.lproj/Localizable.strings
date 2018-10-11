@@ -32,3 +32,8 @@
 "com.kustomer.CLOSED" = "बन्द है";
 "com.kustomer.Start a New Conversation" = "एक नया वार्तालाप शुरू करें";
 "com.kustomer.Thank You! We'll follow up on your request." = "धन्यवाद! हम आपके अनुरोध पर अनुवर्ती करेंगे।";
+"com.kustomer.CHAT HAS ENDED" = "चैट समाप्त हो गया है";
+"com.kustomer.END CHAT" = "बातचीत बंद करें";
+"com.kustomer.Back to chat" = "चैट पर वापस";
+"com.kustomer.Home" = "होम";
+"com.kustomer.Please select an item" = "कृपया एक आइटम का चयन करें";

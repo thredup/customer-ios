@@ -32,3 +32,8 @@
 "com.kustomer.CLOSED" = "ЗАТВОРЕНО";
 "com.kustomer.Start a New Conversation" = "Започните нови разговор";
 "com.kustomer.Thank You! We'll follow up on your request." = "Хвала вам! Пратит ћемо ваш захтев.";
+"com.kustomer.CHAT HAS ENDED" = "Цхат је окончан";
+"com.kustomer.END CHAT" = "Заврши ћаскање";
+"com.kustomer.Back to chat" = "Назад у ћаскање";
+"com.kustomer.Home" = "Кућа";
+"com.kustomer.Please select an item" = "Изаберите ставку";

@@ -32,3 +32,8 @@
 "com.kustomer.CLOSED" = "ZÁRVA";
 "com.kustomer.Start a New Conversation" = "Új beszélgetés indítása";
 "com.kustomer.Thank You! We'll follow up on your request." = "Köszönöm! Követjük a kérését.";
+"com.kustomer.CHAT HAS ENDED" = "A csevegés befejeződött";
+"com.kustomer.END CHAT" = "Csevegés befejezése";
+"com.kustomer.Back to chat" = "Vissza a csevegésre";
+"com.kustomer.Home" = "itthon";
+"com.kustomer.Please select an item" = "Kérjük, válasszon ki egy elemet";

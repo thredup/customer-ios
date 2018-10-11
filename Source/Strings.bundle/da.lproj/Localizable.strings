@@ -32,3 +32,8 @@
 "com.kustomer.CLOSED" = "LUKKET";
 "com.kustomer.Start a New Conversation" = "Start en ny samtale";
 "com.kustomer.Thank You! We'll follow up on your request." = "Tak skal du have! Vi følger op på din anmodning.";
+"com.kustomer.CHAT HAS ENDED" = "Chat er afsluttet";
+"com.kustomer.END CHAT" = "Afslut Chat";
+"com.kustomer.Back to chat" = "Tilbage til chat";
+"com.kustomer.Home" = "Hjem";
+"com.kustomer.Please select an item" = "Vælg venligst et emne";

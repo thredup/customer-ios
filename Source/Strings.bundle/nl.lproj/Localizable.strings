@@ -32,3 +32,8 @@
 "com.kustomer.CLOSED" = "GESLOTEN";
 "com.kustomer.Start a New Conversation" = "Start een nieuw gesprek";
 "com.kustomer.Thank You! We'll follow up on your request." = "Dank je! We zullen uw verzoek opvolgen.";
+"com.kustomer.CHAT HAS ENDED" = "Chat is beëindigd";
+"com.kustomer.END CHAT" = "Einde gesprek";
+"com.kustomer.Back to chat" = "Terug naar chat";
+"com.kustomer.Home" = "Huis";
+"com.kustomer.Please select an item" = "Selecteer een item";

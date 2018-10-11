@@ -32,3 +32,8 @@
 "com.kustomer.CLOSED" = "ЗАЧИНЕНО";
 "com.kustomer.Start a New Conversation" = "Почніть нову бесіду";
 "com.kustomer.Thank You! We'll follow up on your request." = "Дякую! Ми розглянемо ваш запит.";
+"com.kustomer.CHAT HAS ENDED" = "Чат закінчився";
+"com.kustomer.END CHAT" = "Завершити чат";
+"com.kustomer.Back to chat" = "Повернутися до чату";
+"com.kustomer.Home" = "Будинок";
+"com.kustomer.Please select an item" = "Будь ласка, виберіть предмет";

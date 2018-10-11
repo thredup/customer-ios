@@ -32,3 +32,8 @@
 "com.kustomer.CLOSED" = "STÄNGD";
 "com.kustomer.Start a New Conversation" = "Starta en ny konversation";
 "com.kustomer.Thank You! We'll follow up on your request." = "Tack! Vi följer upp din förfrågan.";
+"com.kustomer.CHAT HAS ENDED" = "Chatten har slutat";
+"com.kustomer.END CHAT" = "Avsluta chat";
+"com.kustomer.Back to chat" = "Tillbaka till chatt";
+"com.kustomer.Home" = "Hem";
+"com.kustomer.Please select an item" = "Var god välj ett objekt";

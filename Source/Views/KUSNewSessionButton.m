@@ -62,13 +62,11 @@ static const CGFloat kSessionButtonHeight = 44.0;
     _image = image;
     [self setImage:_image forState:UIControlStateNormal];
     [self setImage:_image forState:UIControlStateHighlighted];
-    if ([[KUSLocalization sharedInstance] isCurrentLanguageRTL])
-    {
-        [self setTitleEdgeInsets:UIEdgeInsetsMake(0.0, 0.0, 0.0, 5.0)];
-        [self setImageEdgeInsets:UIEdgeInsetsMake(0.0, 5.0, 0.0, 0.0)];
+    if ([[KUSLocalization sharedInstance] isCurrentLanguageRTL]) {
+        [self setTitleEdgeInsets:UIEdgeInsetsMake(0.0, 0.0, 0.0, self.imageView.frame.size.width + 5.0)];
+        [self setImageEdgeInsets:UIEdgeInsetsMake(0.0, self.titleLabel.frame.size.width + self.imageView.frame.size.width + 10, 0.0, -self.titleLabel.frame.size.width)];
     }
-    else
-    {
+    else {
         [self setTitleEdgeInsets:UIEdgeInsetsMake(0.0, 5.0, 0.0, 0.0)];
         [self setImageEdgeInsets:UIEdgeInsetsMake(0.0, 0.0, 0.0, 5.0)];
     }

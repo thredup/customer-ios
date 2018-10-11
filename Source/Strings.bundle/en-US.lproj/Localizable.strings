@@ -32,3 +32,8 @@
 "com.kustomer.CLOSED" = "CLOSED";
 "com.kustomer.Start a New Conversation" = "Start a New Conversation";
 "com.kustomer.Thank You! We'll follow up on your request." = "Thank You! We'll follow up on your request.";
+"com.kustomer.CHAT HAS ENDED" = "CHAT HAS ENDED";
+"com.kustomer.END CHAT" = "END CHAT";
+"com.kustomer.Back to chat" = "Back to chat";
+"com.kustomer.Home" = "Home";
+"com.kustomer.Please select an item" = "Please select an item";

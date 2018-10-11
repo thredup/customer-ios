@@ -32,3 +32,8 @@
 "com.kustomer.CLOSED" = "ZATVORENÉ";
 "com.kustomer.Start a New Conversation" = "Spustite novú konverzáciu";
 "com.kustomer.Thank You! We'll follow up on your request." = "Ďakujem! Budeme sledovať vašu žiadosť.";
+"com.kustomer.CHAT HAS ENDED" = "Rozhovor sa skončil";
+"com.kustomer.END CHAT" = "Ukončiť rozhovor";
+"com.kustomer.Back to chat" = "Späť na rozhovor";
+"com.kustomer.Home" = "Domov";
+"com.kustomer.Please select an item" = "Vyberte položku";

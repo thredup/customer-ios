@@ -32,3 +32,8 @@
 "com.kustomer.CLOSED" = "關閉";
 "com.kustomer.Start a New Conversation" = "開始新的對話";
 "com.kustomer.Thank You! We'll follow up on your request." = "謝謝！我們會跟進您的請求。";
+"com.kustomer.CHAT HAS ENDED" = "聊天已經結束";
+"com.kustomer.END CHAT" = "結束聊天";
+"com.kustomer.Back to chat" = "回去聊天";
+"com.kustomer.Home" = "家";
+"com.kustomer.Please select an item" = "請選擇一個項目";

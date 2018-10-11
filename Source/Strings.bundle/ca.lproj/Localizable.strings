@@ -32,3 +32,8 @@
 "com.kustomer.CLOSED" = "TANCAT";
 "com.kustomer.Start a New Conversation" = "Comença una nova conversa";
 "com.kustomer.Thank You! We'll follow up on your request." = "Gràcies! Seguirem la vostra sol·licitud.";
+"com.kustomer.CHAT HAS ENDED" = "S'ha acabat el xat";
+"com.kustomer.END CHAT" = "Finalitza el xat";
+"com.kustomer.Back to chat" = "Tornar al xat";
+"com.kustomer.Home" = "Inici";
+"com.kustomer.Please select an item" = "Seleccioneu un element";
