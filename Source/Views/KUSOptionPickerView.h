@@ -17,7 +17,7 @@
 @end
 
 @class KUSPaginatedDataSource;
-@interface KUSOptionPickerView : UIView
+@interface KUSOptionPickerView : UIScrollView
 
 @property (nonatomic, strong) UIColor *separatorColor UI_APPEARANCE_SELECTOR;
 @property (nonatomic, strong) UIColor *borderColor UI_APPEARANCE_SELECTOR;

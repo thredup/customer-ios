@@ -22,6 +22,7 @@ static const CGFloat kKUSOptionPickerViewMinimumButtonWidth = 100.0;
     UIActivityIndicatorView *_loadingView;
 
     NSArray<UIButton *> *_optionButtons;
+    CGFloat contentViewHeight;
 }
 
 @end
@@ -76,6 +77,8 @@ static const CGFloat kKUSOptionPickerViewMinimumButtonWidth = 100.0;
         .x = self.bounds.size.width / 2.0,
         .y = self.bounds.size.height / 2.0
     };
+    
+    self.contentSize = CGSizeMake(self.bounds.size.width, contentViewHeight);
 
     CGPoint buttonOffset = CGPointMake(kKUSOptionPickerViewButtonPadding, kKUSOptionPickerViewButtonPadding);
     CGFloat previousButtonHeight = 0.0;
@@ -114,7 +117,9 @@ static const CGFloat kKUSOptionPickerViewMinimumButtonWidth = 100.0;
         buttonOffset.x += kKUSOptionPickerViewButtonPadding + buttonSize.width;
         previousButtonHeight = buttonSize.height;
     }
-    return MAX(kKUSOptionPickerViewMinimumHeight, buttonOffset.y + previousButtonHeight + kKUSOptionPickerViewButtonPadding);
+    contentViewHeight = MAX(kKUSOptionPickerViewMinimumHeight, buttonOffset.y + previousButtonHeight + kKUSOptionPickerViewButtonPadding);
+    CGFloat mainScreenHeight = [UIScreen mainScreen].bounds.size.height;
+    return MIN(contentViewHeight, mainScreenHeight/2);
 }
 
 - (void)setOptions:(NSArray<NSString *> *)options
