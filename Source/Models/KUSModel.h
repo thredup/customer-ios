@@ -26,6 +26,7 @@
 - (instancetype _Nonnull)init NS_UNAVAILABLE;
 + (instancetype _Nonnull)new NS_UNAVAILABLE;
 - (NSDictionary *_Nonnull)originalJSON;
+- (void)addIncludedWithJSON:(NSArray<NSDictionary *> *_Nullable)json;
 
 NSURL *_Nullable NSURLFromKeyPath(NSDictionary * _Nullable dict, NSString * _Nonnull keyPath);
 NSString *_Nullable NSStringFromKeyPath(NSDictionary * _Nullable dict, NSString * _Nonnull keyPath);
