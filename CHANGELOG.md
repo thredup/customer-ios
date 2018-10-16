@@ -1,5 +1,10 @@
 # Changelog for Kustomer iOS SDK
 
+## 0.1.22
+
+* Added un-localized strings
+* Fixed describe next conversation issue with forms
+
 ## 0.1.21
 
 * Added new method to describe next conversation
