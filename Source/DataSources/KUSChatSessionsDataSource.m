@@ -199,6 +199,10 @@
          }
 
          if (chatSession) {
+             if (_pendingCustomChatSessionAttributesForNextConversation) {
+                 [self _flushCustomAttributes:_pendingCustomChatSessionAttributesForNextConversation toChatSessionId:chatSession.oid];
+                 _pendingCustomChatSessionAttributesForNextConversation = nil;
+             }
              [weakSelf upsertObjects:@[ chatSession ]];
          }
          if (completion) {
