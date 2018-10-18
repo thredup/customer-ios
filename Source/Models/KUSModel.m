@@ -98,6 +98,11 @@
     return _rawJSON;
 }
 
+- (void)addIncludedWithJSON:(NSArray<NSDictionary *> *_Nullable)json
+{
+    // TODO: Need to rethink how can we improve this function
+}
+
 #pragma mark - Helper methods
 
 NSURL *_Nullable NSURLFromKeyPath(NSDictionary * _Nullable dict, NSString * _Nonnull keyPath)

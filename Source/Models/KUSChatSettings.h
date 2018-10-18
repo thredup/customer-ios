@@ -8,6 +8,12 @@
 
 #import "KUSModel.h"
 
+typedef NS_ENUM(NSInteger, KUSBusinessHoursAvailability) {
+    KUSBusinessHoursAvailabilityOnline,
+    KUSBusinessHoursAvailabilityOffline,
+    KUSBusinessHoursAvailabilityHideChat,
+};
+
 @class KUSChatMessage;
 @interface KUSChatSettings : KUSModel
 
@@ -17,6 +23,10 @@
 @property (nonatomic, copy, readonly) NSString *activeFormId;
 @property (nonatomic, copy, readonly) NSString *pusherAccessKey;
 @property (nonatomic, assign, readonly) BOOL enabled;
+
+@property (nonatomic, assign, readonly) KUSBusinessHoursAvailability availability;
+@property (nonatomic, copy, readonly) NSString *offhoursImageUrl;
+@property (nonatomic, copy, readonly) NSString *offhoursMessage;
 
 @property (nonatomic, copy, readonly) NSString *waitMessage;
 @property (nonatomic, copy, readonly) NSString *customWaitMessage;

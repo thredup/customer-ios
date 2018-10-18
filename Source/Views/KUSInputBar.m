@@ -15,6 +15,7 @@
 #import "KUSTextView.h"
 #import "KUSImageAttachmentCollectionViewCell.h"
 #import "KUSLocalization.h"
+#import "KUSUserSession.h"
 
 static const CGFloat kKUSInputBarMinimumHeight = 50.0;
 static const CGFloat kKUSInputBarPadding = 3.0;
@@ -32,7 +33,9 @@ static const CGFloat kKUSMaximumImagePixelCount = 1000000.0;
 
 static NSString *kCellIdentifier = @"ImageAttachment";
 
-@interface KUSInputBar () <KUSImageAttachmentCollectionViewCellDelegate, KUSTextViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate> {
+@interface KUSInputBar () <KUSImageAttachmentCollectionViewCellDelegate, KUSTextViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, KUSObjectDataSourceListener> {
+    KUSUserSession *_userSession;
+    
     CGFloat _lastDesiredHeight;
     NSMutableArray<UIImage *> *_imageAttachments;
 }
@@ -66,10 +69,15 @@ static NSString *kCellIdentifier = @"ImageAttachment";
 
 #pragma mark - Lifecycle methods
 
-- (instancetype)initWithFrame:(CGRect)frame
+- (instancetype)initWithUserSession:(KUSUserSession *)userSession;
 {
-    self = [super initWithFrame:frame];
+    self = [super init];
     if (self) {
+        _userSession = userSession;
+        [_userSession.chatSettingsDataSource addListener:self];
+        [_userSession.scheduleDataSource addListener:self];
+        [self _updatePlaceholder];
+        
         _imageAttachments = [[NSMutableArray alloc] init];
 
         _separatorView = [[UIView alloc] init];
@@ -113,6 +121,19 @@ static NSString *kCellIdentifier = @"ImageAttachment";
     return self;
 }
 
+#pragma mark - Internal methods
+
+- (void)_updatePlaceholder
+{
+    KUSChatSettings *chatSettings = [_userSession.chatSettingsDataSource object];
+    if (chatSettings.availability != KUSBusinessHoursAvailabilityOnline && ![_userSession.scheduleDataSource isActiveBusinessHours]) {
+        _textView.placeholder = [[KUSLocalization sharedInstance] localizedString:@"Leave a message..."];
+    }
+    else {
+        [self setPlaceholder: _placeholder == nil ? [[KUSInputBar appearance] placeholder] : _placeholder];
+    }
+}
+
 #pragma mark - UIView methods
 
 - (void)layoutSubviews
@@ -154,6 +175,8 @@ static NSString *kCellIdentifier = @"ImageAttachment";
         .size.width = self.bounds.size.width - CGRectGetWidth(self.sendButton.frame) - MAX(CGRectGetWidth(self.attachmentButton.frame), 10.0),
         .size.height = desiredTextHeight
     };
+    
+    [self _updatePlaceholder];
 }
 
 #pragma mark - Public methods
@@ -369,6 +392,13 @@ static NSString *kCellIdentifier = @"ImageAttachment";
 - (void)imageAttachmentCollectionViewCellDidTapRemove:(KUSImageAttachmentCollectionViewCell *)cell
 {
     [self _removeImage:cell.image];
+}
+
+#pragma mark - KUSObjectDataSourceListener
+
+- (void)objectDataSourceDidLoad:(KUSObjectDataSource *)dataSource
+{
+    [self _updatePlaceholder];
 }
 
 #pragma mark - UIAppearance methods

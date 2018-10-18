@@ -8,7 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+
 @protocol KUSInputBarDelegate;
+@class KUSUserSession;
 @interface KUSInputBar : UIView
 
 @property (nonatomic, strong) UIColor *separatorColor UI_APPEARANCE_SELECTOR;
@@ -27,6 +29,11 @@
 @property (nonatomic, copy) NSString *text;
 @property (nonatomic, assign) BOOL allowsAttachments;
 @property (nonatomic, copy) NSArray<UIImage *> *imageAttachments;
+
+- (instancetype)initWithUserSession:(KUSUserSession *)userSession;
+- (instancetype)init NS_UNAVAILABLE;
+- (instancetype)initWithFrame:(CGRect)frame NS_UNAVAILABLE;
+
 - (void)attachImage:(UIImage *)image;
 
 - (CGFloat)desiredHeight;

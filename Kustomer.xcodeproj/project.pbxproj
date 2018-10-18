@@ -168,11 +168,18 @@
 		C787065C20EA3D2900D54AE2 /* KUSChatEndedTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = C787065B20EA3D2900D54AE2 /* KUSChatEndedTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C787065E20EA3D7B00D54AE2 /* KUSChatEndedTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C787065D20EA3D7B00D54AE2 /* KUSChatEndedTableViewCell.m */; };
 		D6181AC920D92DB100CE7377 /* Strings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D6181AC820D92DB100CE7377 /* Strings.bundle */; };
+		D61F927C2174D0B300C65B9F /* KUSScheduleDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = D61F927A2174D0B300C65B9F /* KUSScheduleDataSource.m */; };
+		D61F927F2174D94700C65B9F /* KUSSchedule.h in Headers */ = {isa = PBXBuildFile; fileRef = D61F927D2174D94700C65B9F /* KUSSchedule.h */; };
+		D61F92802174D94700C65B9F /* KUSSchedule.m in Sources */ = {isa = PBXBuildFile; fileRef = D61F927E2174D94700C65B9F /* KUSSchedule.m */; };
+		D61F92822174DF8700C65B9F /* KUSScheduleDataSource.h in Headers */ = {isa = PBXBuildFile; fileRef = D61F92812174DF8600C65B9F /* KUSScheduleDataSource.h */; };
+		D61F92852174EF7200C65B9F /* KUSHoliday.h in Headers */ = {isa = PBXBuildFile; fileRef = D61F92832174EF7200C65B9F /* KUSHoliday.h */; };
+		D61F92862174EF7200C65B9F /* KUSHoliday.m in Sources */ = {isa = PBXBuildFile; fileRef = D61F92842174EF7200C65B9F /* KUSHoliday.m */; };
 		D62F3A2620C1353200FBEA61 /* KUSClosedChatView.h in Headers */ = {isa = PBXBuildFile; fileRef = D62F3A2420C1353200FBEA61 /* KUSClosedChatView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D62F3A2720C1353200FBEA61 /* KUSClosedChatView.m in Sources */ = {isa = PBXBuildFile; fileRef = D62F3A2520C1353200FBEA61 /* KUSClosedChatView.m */; };
 		D6BB946120A18537001AFCB6 /* KUSLocalization.h in Headers */ = {isa = PBXBuildFile; fileRef = D6BB945F20A18537001AFCB6 /* KUSLocalization.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D6BB946220A18537001AFCB6 /* KUSLocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = D6BB946020A18537001AFCB6 /* KUSLocalization.m */; };
 		D6BB946620A1AA5F001AFCB6 /* KUSLocalizationTest.m in Sources */ = {isa = PBXBuildFile; fileRef = D6BB946520A1AA5F001AFCB6 /* KUSLocalizationTest.m */; };
+		D6CF21802178CA8B00126AAC /* away_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D6CF217F2178CA8B00126AAC /* away_image@2x.png */; };
 		FC5BDC34DC026F04AE056627 /* Pods_KustomerExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BBA02B9E3111B375725C25D /* Pods_KustomerExample.framework */; };
 /* End PBXBuildFile section */
 
@@ -382,12 +389,19 @@
 		C787065B20EA3D2900D54AE2 /* KUSChatEndedTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KUSChatEndedTableViewCell.h; sourceTree = "<group>"; };
 		C787065D20EA3D7B00D54AE2 /* KUSChatEndedTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KUSChatEndedTableViewCell.m; sourceTree = "<group>"; };
 		D6181AC820D92DB100CE7377 /* Strings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Strings.bundle; sourceTree = "<group>"; };
+		D61F927A2174D0B300C65B9F /* KUSScheduleDataSource.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KUSScheduleDataSource.m; sourceTree = "<group>"; };
+		D61F927D2174D94700C65B9F /* KUSSchedule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KUSSchedule.h; sourceTree = "<group>"; };
+		D61F927E2174D94700C65B9F /* KUSSchedule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KUSSchedule.m; sourceTree = "<group>"; };
+		D61F92812174DF8600C65B9F /* KUSScheduleDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSScheduleDataSource.h; sourceTree = "<group>"; };
+		D61F92832174EF7200C65B9F /* KUSHoliday.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KUSHoliday.h; sourceTree = "<group>"; };
+		D61F92842174EF7200C65B9F /* KUSHoliday.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KUSHoliday.m; sourceTree = "<group>"; };
 		D624913E5C7AD4492EF0D39B /* Pods_KustomerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KustomerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D62F3A2420C1353200FBEA61 /* KUSClosedChatView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KUSClosedChatView.h; sourceTree = "<group>"; };
 		D62F3A2520C1353200FBEA61 /* KUSClosedChatView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KUSClosedChatView.m; sourceTree = "<group>"; };
 		D6BB945F20A18537001AFCB6 /* KUSLocalization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSLocalization.h; sourceTree = "<group>"; };
 		D6BB946020A18537001AFCB6 /* KUSLocalization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSLocalization.m; sourceTree = "<group>"; };
 		D6BB946520A1AA5F001AFCB6 /* KUSLocalizationTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSLocalizationTest.m; sourceTree = "<group>"; };
+		D6CF217F2178CA8B00126AAC /* away_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "away_image@2x.png"; sourceTree = "<group>"; };
 		FAEBB4868A9AF9DB8C939E87 /* Pods-KustomerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KustomerTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-KustomerTests/Pods-KustomerTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -456,6 +470,10 @@
 				632EA5D41FF82A5900C4681C /* KUSNYTImagePhoto.m */,
 				6394DFF71FA57C21006F2899 /* KUSCustomerDescription.h */,
 				6394DFF81FA57C21006F2899 /* KUSCustomerDescription.m */,
+				D61F927D2174D94700C65B9F /* KUSSchedule.h */,
+				D61F927E2174D94700C65B9F /* KUSSchedule.m */,
+				D61F92832174EF7200C65B9F /* KUSHoliday.h */,
+				D61F92842174EF7200C65B9F /* KUSHoliday.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -532,6 +550,8 @@
 				637177A81F46A0DA00A7F79C /* KUSUserDataSource.m */,
 				63D472931F71561100C947F2 /* KUSDelegateProxy.h */,
 				63D472941F71561100C947F2 /* KUSDelegateProxy.m */,
+				D61F92812174DF8600C65B9F /* KUSScheduleDataSource.h */,
+				D61F927A2174D0B300C65B9F /* KUSScheduleDataSource.m */,
 			);
 			path = DataSources;
 			sourceTree = "<group>";
@@ -539,6 +559,7 @@
 		636531AB1F1C4B9700433A50 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				D6CF217F2178CA8B00126AAC /* away_image@2x.png */,
 				636531AD1F1C4B9700433A50 /* kusty@2x.png */,
 				63D9C1811F3046DA00999183 /* up_arrow@2x.png */,
 				63D9C1831F304A7600999183 /* pencil_image@2x.png */,
@@ -764,6 +785,7 @@
 				63F61A7D1FFAC86400E56766 /* KUSMultipleAvatarsView.h in Headers */,
 				633D8FE61F239F9500BAFAC9 /* KUSChatPlaceholderTableViewCell.h in Headers */,
 				63B9CDB21F0890B400120F3E /* Kustomer.h in Headers */,
+				D61F92822174DF8700C65B9F /* KUSScheduleDataSource.h in Headers */,
 				637177AD1F46A28300A7F79C /* KUSUser.h in Headers */,
 				637177A91F46A0DA00A7F79C /* KUSUserDataSource.h in Headers */,
 				636531A11F1BBA7C00433A50 /* KUSSessionsViewController.h in Headers */,
@@ -776,6 +798,7 @@
 				D62F3A2620C1353200FBEA61 /* KUSClosedChatView.h in Headers */,
 				63EDF3D91F415797000345D8 /* KUSTrackingTokenDataSource.h in Headers */,
 				632EA5D51FF82A5900C4681C /* KUSNYTImagePhoto.h in Headers */,
+				D61F927F2174D94700C65B9F /* KUSSchedule.h in Headers */,
 				6371779D1F43EDDC00A7F79C /* KUSAvatarImageView.h in Headers */,
 				63DC734D1F5336BA00683DE8 /* KUSNYTChatMessagePhoto.h in Headers */,
 				632EA5CD1FF70CD400C4681C /* KUSOptionPickerView.h in Headers */,
@@ -806,6 +829,7 @@
 				632665E11F945DC700ED1AB2 /* KUSChatTableView.h in Headers */,
 				636531B21F1C593D00433A50 /* KUSChatMessageTableViewCell.h in Headers */,
 				630BA348203107CF00C80CD2 /* KUSClientActivityDataSource.h in Headers */,
+				D61F92852174EF7200C65B9F /* KUSHoliday.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -978,6 +1002,7 @@
 				63DC73621F57B44900683DE8 /* message_received.m4a in Resources */,
 				D6181AC920D92DB100CE7377 /* Strings.bundle in Resources */,
 				63D9C1841F304A7600999183 /* pencil_image@2x.png in Resources */,
+				D6CF21802178CA8B00126AAC /* away_image@2x.png in Resources */,
 				636531AF1F1C4B9700433A50 /* kusty@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1131,6 +1156,7 @@
 				63F61A7A1FF99D3100E56766 /* KUSUpload.m in Sources */,
 				63DC73601F57B1AC00683DE8 /* KUSAudio.m in Sources */,
 				630BA349203107CF00C80CD2 /* KUSClientActivityDataSource.m in Sources */,
+				D61F92802174D94700C65B9F /* KUSSchedule.m in Sources */,
 				633D8FDF1F22EDB800BAFAC9 /* KUSInputBar.m in Sources */,
 				D6BB946220A18537001AFCB6 /* KUSLocalization.m in Sources */,
 				D62F3A2720C1353200FBEA61 /* KUSClosedChatView.m in Sources */,
@@ -1161,6 +1187,7 @@
 				63035BDA1F2EBCD400FBBF66 /* KUSText.m in Sources */,
 				633FADC51F26E7630060B4A6 /* KUSTextView.m in Sources */,
 				632EA5DA1FF8952500C4681C /* KUSFadingButton.m in Sources */,
+				D61F92862174EF7200C65B9F /* KUSHoliday.m in Sources */,
 				631E3F361F52497A00FAA33F /* KUSEmailInputView.m in Sources */,
 				637177AA1F46A0DA00A7F79C /* KUSUserDataSource.m in Sources */,
 				63EDF3D61F414A67000345D8 /* KUSRequestManager.m in Sources */,
@@ -1181,6 +1208,7 @@
 				636531AA1F1BBCCD00433A50 /* KUSChatViewController.m in Sources */,
 				63270E9A1F4A717600E25BF5 /* KUSDate.m in Sources */,
 				C730E14D20E5159D00EF2AB8 /* KUSEndChatButtonView.m in Sources */,
+				D61F927C2174D0B300C65B9F /* KUSScheduleDataSource.m in Sources */,
 				632EA5D61FF82A5900C4681C /* KUSNYTImagePhoto.m in Sources */,
 				632665E21F945DC700ED1AB2 /* KUSChatTableView.m in Sources */,
 				6334BE371F0C4A1300258DAF /* KUSChatSession.m in Sources */,

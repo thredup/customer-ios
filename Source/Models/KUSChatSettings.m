@@ -45,8 +45,21 @@
         _markDoneAfterTimeout = BOOLFromKeyPath(json, @"attributes.volumeControl.markDoneAfterTimeout");
         _volumeControlEnabled = BOOLFromKeyPath(json, @"attributes.volumeControl.enabled");
         
+        _offhoursMessage = NSStringFromKeyPath(json, @"attributes.offhoursMessage");
+        _offhoursImageUrl = NSStringFromKeyPath(json, @"attributes.offhoursImageUrl");
+        _availability = KUSBusinessHoursAvailabilityFromString(NSStringFromKeyPath(json, @"attributes.offhoursDisplay"));
     }
     return self;
+}
+
+static KUSBusinessHoursAvailability KUSBusinessHoursAvailabilityFromString(NSString *string)
+{
+    if ([string isEqualToString:@"online"]) {
+        return KUSBusinessHoursAvailabilityOnline;
+    } else if ([string isEqualToString:@"offline"]) {
+        return KUSBusinessHoursAvailabilityOffline;
+    }
+    return KUSBusinessHoursAvailabilityHideChat;
 }
 
 #pragma mark - Convenience methods
