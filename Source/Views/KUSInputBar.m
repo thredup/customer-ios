@@ -125,8 +125,7 @@ static NSString *kCellIdentifier = @"ImageAttachment";
 
 - (void)_updatePlaceholder
 {
-    KUSChatSettings *chatSettings = [_userSession.chatSettingsDataSource object];
-    if (chatSettings.availability != KUSBusinessHoursAvailabilityOnline && ![_userSession.scheduleDataSource isActiveBusinessHours]) {
+    if (![_userSession.scheduleDataSource isActiveBusinessHours]) {
         _textView.placeholder = [[KUSLocalization sharedInstance] localizedString:@"Leave a message..."];
     }
     else {

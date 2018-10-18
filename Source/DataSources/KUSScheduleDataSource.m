@@ -38,6 +38,11 @@
 
 - (BOOL)isActiveBusinessHours
 {
+    KUSChatSettings *chatSettings = self.userSession.chatSettingsDataSource.object;
+    if (chatSettings.availability == KUSBusinessHoursAvailabilityOnline) {
+        return YES;
+    }
+    
     KUSSchedule *businessHours = [self object];
     if (businessHours.enabled) {
         // Check that current date is not in holiday date and time

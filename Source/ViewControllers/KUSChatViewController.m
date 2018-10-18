@@ -91,9 +91,7 @@
         _chatMessagesDataSource = [[KUSChatMessagesDataSource alloc] initForNewConversationWithUserSession:_userSession];
         _showBackButton = showBackButton;
         
-        KUSChatSettings *chatSettings = _userSession.chatSettingsDataSource.object;
-        _showNonBusinessHoursImage = chatSettings.availability != KUSBusinessHoursAvailabilityOnline &&
-                                    ![_userSession.scheduleDataSource isActiveBusinessHours];
+        _showNonBusinessHoursImage = ![_userSession.scheduleDataSource isActiveBusinessHours];
     }
     return self;
 }
@@ -517,9 +515,7 @@
         _chatSessionId = nil;
         self.inputBarView.allowsAttachments = NO;
         
-        KUSChatSettings *chatSettings = _userSession.chatSettingsDataSource.object;
-        _showNonBusinessHoursImage = chatSettings.availability != KUSBusinessHoursAvailabilityOnline &&
-                                    ![_userSession.scheduleDataSource isActiveBusinessHours];
+        _showNonBusinessHoursImage = ![_userSession.scheduleDataSource isActiveBusinessHours];
         self.nonBusinessHourImageView.hidden = !_showNonBusinessHoursImage;
     }
     

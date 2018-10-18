@@ -20,6 +20,7 @@ static const CGFloat kSessionButtonHeight = 44.0;
 @interface KUSNewSessionButton () <KUSObjectDataSourceListener, KUSPaginatedDataSourceListener> {
     KUSUserSession *_userSession;
     
+    BOOL isAlreadyLoaded;
 }
 @end
 
@@ -47,6 +48,7 @@ static const CGFloat kSessionButtonHeight = 44.0;
     self = [super init];
     if (self) {
         _userSession = userSession;
+        isAlreadyLoaded = NO;
         
         [_userSession.chatSessionsDataSource addListener:self];
         [_userSession.chatSettingsDataSource addListener:self];
@@ -59,7 +61,11 @@ static const CGFloat kSessionButtonHeight = 44.0;
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    [self _updateButton];
+    
+    if (!isAlreadyLoaded) {
+        isAlreadyLoaded = YES;
+        [self _updateButton];
+    }
 }
 
 - (CGSize)intrinsicContentSize
@@ -79,8 +85,7 @@ static const CGFloat kSessionButtonHeight = 44.0;
         [self _updateImageAndInsets:[KUSImage noImage]];
     }
     else {
-        KUSChatSettings *chatSettings = [_userSession.chatSettingsDataSource object];
-        if (chatSettings.availability != KUSBusinessHoursAvailabilityOnline && ![_userSession.scheduleDataSource isActiveBusinessHours]) {
+        if (![_userSession.scheduleDataSource isActiveBusinessHours]) {
             [self setTitle:[[KUSLocalization sharedInstance] localizedString:@"Leave a message"] forState:UIControlStateNormal];
             [self setImage:_image == nil ? [[KUSNewSessionButton appearance] image] : _image];
         }

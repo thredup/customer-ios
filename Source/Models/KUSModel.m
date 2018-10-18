@@ -98,10 +98,9 @@
     return _rawJSON;
 }
 
-- (void)addIncludedWithJSON:(NSArray<NSDictionary *> *_Nullable)json
-{
-    // TODO: Need to rethink how can we improve this function
-}
+#pragma mark - sub class methods
+
+- (void)addIncludedWithJSON:(NSArray<NSDictionary *> *_Nullable)json { }
 
 #pragma mark - Helper methods
 

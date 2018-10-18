@@ -775,10 +775,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
              }
              
              // Set variable for business hours
-             KUSChatSettings *settings = self.userSession.chatSettingsDataSource.object;
-             if (settings.availability != KUSBusinessHoursAvailabilityOnline &&
-                 ![self.userSession.scheduleDataSource isActiveBusinessHours] &&
-                 _form.questions.count > 0) {
+             if (![self.userSession.scheduleDataSource isActiveBusinessHours] && _form.questions.count > 0) {
                  _nonBusinessHours = YES;
              }
              
@@ -1084,8 +1081,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     }
     
     // Check if business hours enabled and not in business hours
-    if (chatSettings.availability != KUSBusinessHoursAvailabilityOnline &&
-        ![self.userSession.scheduleDataSource isActiveBusinessHours]) {
+    if (![self.userSession.scheduleDataSource isActiveBusinessHours]) {
         return;
     }
     

@@ -271,7 +271,7 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
     _nameLabel.text = responderName;
     
     if (self.extraLarge) {
-        if (chatSettings.availability != KUSBusinessHoursAvailabilityOnline && ![_userSession.scheduleDataSource isActiveBusinessHours]) {
+        if (![_userSession.scheduleDataSource isActiveBusinessHours]) {
             _greetingLabel.text = chatSettings.offhoursMessage;
         } else {
             _greetingLabel.text = chatSettings.greeting;
@@ -279,7 +279,7 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
         
         _waitingLabel.text = chatSettings.useDynamicWaitMessage ? chatSettings.waitMessage : chatSettings.customWaitMessage;
     } else {
-        if (chatSettings.availability != KUSBusinessHoursAvailabilityOnline && ![_userSession.scheduleDataSource isActiveBusinessHours]) {
+        if (![_userSession.scheduleDataSource isActiveBusinessHours]) {
             _greetingLabel.text = chatSettings.offhoursMessage;
         } else if (chatSettings.volumeControlEnabled) {
             _greetingLabel.text = chatSettings.useDynamicWaitMessage ? chatSettings.waitMessage : chatSettings.customWaitMessage;
