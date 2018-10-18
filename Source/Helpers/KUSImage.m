@@ -59,6 +59,11 @@
     return [self imageNamed:@"error_icon"];
 }
 
++ (UIImage *)awayImage
+{
+    return [self imageNamed:@"away_image"];
+}
+
 + (UIImage *)attachImageWithSize:(CGSize)size
 {
     UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);

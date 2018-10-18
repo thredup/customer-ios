@@ -21,7 +21,7 @@
 @property (nonatomic, strong, null_resettable) KUSChatSettingsDataSource *chatSettingsDataSource;
 @property (nonatomic, strong, null_resettable) KUSTrackingTokenDataSource *trackingTokenDataSource;
 @property (nonatomic, strong, null_resettable) KUSFormDataSource *formDataSource;
-@property (nonatomic, strong, null_resettable) KUSScheduleDataSource *businessHoursDataSource;
+@property (nonatomic, strong, null_resettable) KUSScheduleDataSource *scheduleDataSource;
 
 @property (nonatomic, strong, null_resettable) NSMutableDictionary<NSString *, KUSUserDataSource *> *userDataSources;
 @property (nonatomic, strong, null_resettable) NSMutableDictionary<NSString *, KUSChatMessagesDataSource *> *chatMessagesDataSources;
@@ -57,7 +57,7 @@
         }
 
         [self.chatSettingsDataSource fetch];
-        [self.businessHoursDataSource fetch];
+        [self.scheduleDataSource fetch];
         [self pushClient];
 
         [self.chatSessionsDataSource addListener:self];
@@ -105,12 +105,12 @@
     return _formDataSource;
 }
 
-- (KUSScheduleDataSource *)businessHoursDataSource
+- (KUSScheduleDataSource *)scheduleDataSource
 {
-    if (_businessHoursDataSource == nil) {
-        _businessHoursDataSource = [[KUSScheduleDataSource alloc] initWithUserSession:self];
+    if (_scheduleDataSource == nil) {
+        _scheduleDataSource = [[KUSScheduleDataSource alloc] initWithUserSession:self];
     }
-    return _businessHoursDataSource;
+    return _scheduleDataSource;
 }
 
 - (NSMutableDictionary<NSString *, KUSUserDataSource *> *)userDataSources

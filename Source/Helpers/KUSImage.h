@@ -17,6 +17,7 @@
 + (UIImage *)checkmarkImage;
 + (UIImage *)pencilImage;
 + (UIImage *)errorImage;
++ (UIImage *)awayImage;
 
 + (UIImage *)attachImageWithSize:(CGSize)size;
 + (UIImage *)sendImageWithSize:(CGSize)size color:(UIColor *)color;

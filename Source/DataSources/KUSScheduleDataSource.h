@@ -11,4 +11,6 @@
 
 @interface KUSScheduleDataSource : KUSObjectDataSource
 
+- (BOOL)isActiveBusinessHours;
+
 @end

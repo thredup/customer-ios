@@ -36,4 +36,37 @@
     return [KUSSchedule class];
 }
 
+- (BOOL)isActiveBusinessHours
+{
+    KUSSchedule *businessHours = [self object];
+    if (businessHours.enabled) {
+        // Check that current date is not in holiday date and time
+        NSDate *now = [NSDate date];
+        for (KUSHoliday *holiday in businessHours.holidays) {
+            if (holiday.enabled) {
+                NSComparisonResult startDateResult = [now compare:holiday.startDate];
+                NSComparisonResult endDateResult = [now compare:holiday.endDate];
+                if ((startDateResult == NSOrderedDescending || startDateResult == NSOrderedSame) &&
+                    (endDateResult == NSOrderedAscending || startDateResult == NSOrderedSame)) {
+                    return NO;
+                }
+            }
+        }
+        
+        // Get Week Day
+        NSCalendar* cal = [NSCalendar currentCalendar];
+        NSDateComponents *components = [cal components:(NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitWeekday) fromDate:now];
+        NSInteger weekday = [components weekday] - 1; // -1 is to make Sunday '0'
+        NSInteger minutes = [components hour] * 60 + [components minute];
+        
+        NSArray<NSNumber *> *businessHoursRange = [businessHours.hours[[NSString stringWithFormat:@"%ld", (long)weekday]] firstObject];
+        if (businessHoursRange && businessHoursRange.count == 2 &&
+            [businessHoursRange[0] integerValue] <= minutes && [businessHoursRange[1]  integerValue] >= minutes) {
+            return YES;
+        }
+        return NO;
+    }
+    return YES;
+}
+
 @end

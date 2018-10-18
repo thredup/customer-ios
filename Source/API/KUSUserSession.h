@@ -39,7 +39,7 @@
 - (KUSChatSettingsDataSource *)chatSettingsDataSource;
 - (KUSTrackingTokenDataSource *)trackingTokenDataSource;
 - (KUSFormDataSource *)formDataSource;
-- (KUSScheduleDataSource *)businessHoursDataSource;
+- (KUSScheduleDataSource *)scheduleDataSource;
 
 - (KUSChatMessagesDataSource *)chatMessagesDataSourceForSessionId:(NSString *)sessionId;
 - (KUSUserDataSource *)userDataSourceForUserId:(NSString *)userId;

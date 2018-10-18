@@ -179,6 +179,7 @@
 		D6BB946120A18537001AFCB6 /* KUSLocalization.h in Headers */ = {isa = PBXBuildFile; fileRef = D6BB945F20A18537001AFCB6 /* KUSLocalization.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D6BB946220A18537001AFCB6 /* KUSLocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = D6BB946020A18537001AFCB6 /* KUSLocalization.m */; };
 		D6BB946620A1AA5F001AFCB6 /* KUSLocalizationTest.m in Sources */ = {isa = PBXBuildFile; fileRef = D6BB946520A1AA5F001AFCB6 /* KUSLocalizationTest.m */; };
+		D6CF21802178CA8B00126AAC /* away_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D6CF217F2178CA8B00126AAC /* away_image@2x.png */; };
 		FC5BDC34DC026F04AE056627 /* Pods_KustomerExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BBA02B9E3111B375725C25D /* Pods_KustomerExample.framework */; };
 /* End PBXBuildFile section */
 
@@ -400,6 +401,7 @@
 		D6BB945F20A18537001AFCB6 /* KUSLocalization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSLocalization.h; sourceTree = "<group>"; };
 		D6BB946020A18537001AFCB6 /* KUSLocalization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSLocalization.m; sourceTree = "<group>"; };
 		D6BB946520A1AA5F001AFCB6 /* KUSLocalizationTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUSLocalizationTest.m; sourceTree = "<group>"; };
+		D6CF217F2178CA8B00126AAC /* away_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "away_image@2x.png"; sourceTree = "<group>"; };
 		FAEBB4868A9AF9DB8C939E87 /* Pods-KustomerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KustomerTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-KustomerTests/Pods-KustomerTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -557,6 +559,7 @@
 		636531AB1F1C4B9700433A50 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				D6CF217F2178CA8B00126AAC /* away_image@2x.png */,
 				636531AD1F1C4B9700433A50 /* kusty@2x.png */,
 				63D9C1811F3046DA00999183 /* up_arrow@2x.png */,
 				63D9C1831F304A7600999183 /* pencil_image@2x.png */,
@@ -999,6 +1002,7 @@
 				63DC73621F57B44900683DE8 /* message_received.m4a in Resources */,
 				D6181AC920D92DB100CE7377 /* Strings.bundle in Resources */,
 				63D9C1841F304A7600999183 /* pencil_image@2x.png in Resources */,
+				D6CF21802178CA8B00126AAC /* away_image@2x.png in Resources */,
 				636531AF1F1C4B9700433A50 /* kusty@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
