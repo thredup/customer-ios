@@ -64,10 +64,13 @@
         NSInteger weekday = [components weekday] - 1; // -1 is to make Sunday '0'
         NSInteger minutes = [components hour] * 60 + [components minute];
         
-        NSArray<NSNumber *> *businessHoursRange = [businessHours.hours[[NSString stringWithFormat:@"%ld", (long)weekday]] firstObject];
-        if (businessHoursRange && businessHoursRange.count == 2 &&
-            [businessHoursRange[0] integerValue] <= minutes && [businessHoursRange[1]  integerValue] >= minutes) {
-            return YES;
+        NSArray<NSArray<NSNumber *> *> *businessHoursOfCurrentDay = businessHours.hours[[NSString stringWithFormat:@"%ld", (long)weekday]];
+        if (businessHoursOfCurrentDay != nil && businessHoursOfCurrentDay != (id)[NSNull null]) {
+            NSArray<NSNumber *> *businessHoursRange = [businessHoursOfCurrentDay firstObject];
+            if (businessHoursRange && businessHoursRange.count == 2 &&
+                [businessHoursRange[0] integerValue] <= minutes && [businessHoursRange[1]  integerValue] >= minutes) {
+                return YES;
+            }
         }
         return NO;
     }
