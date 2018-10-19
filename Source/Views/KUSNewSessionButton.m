@@ -53,7 +53,7 @@ static const CGFloat kSessionButtonHeight = 44.0;
         [_userSession.chatSessionsDataSource addListener:self];
         [_userSession.chatSettingsDataSource addListener:self];
         [_userSession.scheduleDataSource addListener:self];
-        [self _updateButton];
+        [self updateButton];
     }
     return self;
 }
@@ -64,7 +64,7 @@ static const CGFloat kSessionButtonHeight = 44.0;
     
     if (!isAlreadyLoaded) {
         isAlreadyLoaded = YES;
-        [self _updateButton];
+        [self updateButton];
     }
 }
 
@@ -78,23 +78,7 @@ static const CGFloat kSessionButtonHeight = 44.0;
 
 #pragma mark - Internal methods
 
-- (void)_updateButton
-{
-    if ([self isBackToChat]) {
-        [self setTitle:[[KUSLocalization sharedInstance] localizedString:@"Back to Chat"] forState:UIControlStateNormal];
-        [self _updateImageAndInsets:[KUSImage noImage]];
-    }
-    else {
-        if (![_userSession.scheduleDataSource isActiveBusinessHours]) {
-            [self setTitle:[[KUSLocalization sharedInstance] localizedString:@"Leave a message"] forState:UIControlStateNormal];
-            [self setImage:_image == nil ? [[KUSNewSessionButton appearance] image] : _image];
-        }
-        else {
-            [self setText:_text == nil ? [[KUSNewSessionButton appearance] text] : _text];
-            [self setImage:_image == nil ? [[KUSNewSessionButton appearance] image] : _image];
-        }
-    }
-}
+
 
 - (void)_updateImageAndInsets:(UIImage *)image
 {
@@ -112,6 +96,24 @@ static const CGFloat kSessionButtonHeight = 44.0;
 
 #pragma mark - Public methods
 
+- (void)updateButton
+{
+    if ([self isBackToChat]) {
+        [self setTitle:[[KUSLocalization sharedInstance] localizedString:@"Back to Chat"] forState:UIControlStateNormal];
+        [self _updateImageAndInsets:[KUSImage noImage]];
+    }
+    else {
+        if (![_userSession.scheduleDataSource isActiveBusinessHours]) {
+            [self setTitle:[[KUSLocalization sharedInstance] localizedString:@"Leave a message"] forState:UIControlStateNormal];
+            [self setImage:_image == nil ? [[KUSNewSessionButton appearance] image] : _image];
+        }
+        else {
+            [self setText:_text == nil ? [[KUSNewSessionButton appearance] text] : _text];
+            [self setImage:_image == nil ? [[KUSNewSessionButton appearance] image] : _image];
+        }
+    }
+}
+
 - (BOOL)isBackToChat
 {
     KUSChatSettings *settings = [_userSession.chatSettingsDataSource object];
@@ -122,14 +124,14 @@ static const CGFloat kSessionButtonHeight = 44.0;
 
 - (void)objectDataSourceDidLoad:(KUSObjectDataSource *)dataSource
 {
-    [self _updateButton];
+    [self updateButton];
 }
 
 #pragma mark - KUSPaginatedDataSourceListener methods
 
 - (void)paginatedDataSourceDidChangeContent:(KUSPaginatedDataSource *)dataSource
 {
-    [self _updateButton];
+    [self updateButton];
 }
 
 #pragma mark - UIAppearance methods

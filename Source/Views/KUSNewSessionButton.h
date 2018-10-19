@@ -23,5 +23,6 @@
 - (instancetype)init NS_UNAVAILABLE;
 
 - (BOOL)isBackToChat;
+- (void)updateButton;
 
 @end

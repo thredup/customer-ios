@@ -116,6 +116,7 @@
 {
     [super viewWillAppear:animated];
 
+    [_createSessionButton updateButton];
     [_chatSessionsDataSource fetchLatest];
 }
 

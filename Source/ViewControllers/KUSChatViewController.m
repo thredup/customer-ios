@@ -555,10 +555,11 @@
 - (void)paginatedDataSourceDidChangeContent:(KUSPaginatedDataSource *)dataSource
 {
     if (dataSource == _chatMessagesDataSource) {
+        [self.tableView reloadData];
         [self _checkShouldShowInputView];
         [self _checkShouldShowCloseChatButtonView];
         [self.view setNeedsLayout];
-        [self.tableView reloadData];
+        
         
         _showNonBusinessHoursImage = NO;
         self.nonBusinessHourImageView.hidden = !_showNonBusinessHoursImage;
