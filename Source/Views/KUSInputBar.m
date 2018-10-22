@@ -126,7 +126,7 @@ static NSString *kCellIdentifier = @"ImageAttachment";
 - (void)_updatePlaceholder
 {
     if (![_userSession.scheduleDataSource isActiveBusinessHours]) {
-        _textView.placeholder = [[KUSLocalization sharedInstance] localizedString:@"Leave a message..."];
+        _textView.placeholder = [[[KUSLocalization sharedInstance] localizedString:@"Leave a message"] stringByAppendingString:@" ..."];
     }
     else {
         [self setPlaceholder: _placeholder == nil ? [[KUSInputBar appearance] placeholder] : _placeholder];
