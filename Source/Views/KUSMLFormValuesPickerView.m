@@ -48,6 +48,7 @@ static NSString *kCellIdentifier = @"MLFormValueCell";
     if (self == [KUSMLFormValuesPickerView class]) {
         KUSMLFormValuesPickerView *appearance = [KUSMLFormValuesPickerView appearance];
         [appearance setSeparatorColor:[KUSColor lightGrayColor]];
+        [appearance setBackgroundColor:[UIColor whiteColor]];
     }
 }
 
@@ -74,7 +75,6 @@ static NSString *kCellIdentifier = @"MLFormValueCell";
         _mlSelectedValueCollectionView.alwaysBounceHorizontal = NO;
         _mlSelectedValueCollectionView.bounces = NO;
         _mlSelectedValueCollectionView.bouncesZoom = NO;
-        _mlSelectedValueCollectionView.backgroundColor = [UIColor whiteColor];
         _mlSelectedValueCollectionView.showsHorizontalScrollIndicator = NO;
         _mlSelectedValueCollectionView.dataSource = self;
         _mlSelectedValueCollectionView.delegate = self;
@@ -301,6 +301,12 @@ static NSString *kCellIdentifier = @"MLFormValueCell";
 }
 
 #pragma mark - UIAppearance methods
+
+- (void)setBackgroundColor:(UIColor *)backgroundColor
+{
+    self.backgroundColor = backgroundColor;
+    _mlSelectedValueCollectionView.backgroundColor = backgroundColor;
+}
 
 - (void)setSeparatorColor:(UIColor *)separatorColor
 {
