@@ -14,7 +14,6 @@
 @property (nonatomic, strong) UIColor *textColor UI_APPEARANCE_SELECTOR;
 @property (nonatomic, strong) UIColor *selectedTextColor UI_APPEARANCE_SELECTOR;
 @property (nonatomic, strong) UIColor *separatorColor UI_APPEARANCE_SELECTOR;
-//@property (nonatomic, strong) NSString *value;
 
 - (void)setMLFormValue:(NSString *)value withSeparator:(BOOL)separator andSelectedTextColor:(BOOL)selectedTextColor;
 @end

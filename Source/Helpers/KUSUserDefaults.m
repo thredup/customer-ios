@@ -13,6 +13,7 @@
 
 NSString * const kDidCaptureEmailKey = @"kDidCaptureEmail";
 NSString * const kFormIdKey = @"kFormId";
+NSString * const kOpenChatSessionsCountKey = @"kOpenChatSessionsCount";
 
 @implementation KUSUserDefaults {
     NSUserDefaults *_userDefaults;
@@ -72,4 +73,13 @@ NSString * const kFormIdKey = @"kFormId";
     [_userDefaults setObject:formId forKey:kFormIdKey];
 }
 
+- (NSInteger)openChatSessionsCount
+{
+    return [_userDefaults integerForKey:kOpenChatSessionsCountKey];
+}
+
+- (void)setOpenChatSessionsCount:(NSInteger)openChatSessionsCount
+{
+    [_userDefaults setInteger:openChatSessionsCount forKey:kOpenChatSessionsCountKey];
+}
 @end

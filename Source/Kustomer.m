@@ -45,6 +45,11 @@ static NSString *kKustomerOrgNameKey = @"orgName";
     [[self sharedInstance] describeConversation:customAttributes];
 }
 
++ (void)describeNextConversation:(NSDictionary<NSString *, NSObject *> *)customAttributes
+{
+    [[self sharedInstance] describeNextConversation:customAttributes];
+}
+
 + (void)describeCustomer:(KUSCustomerDescription *)customerDescription
 {
     [[self sharedInstance] describeCustomer:customerDescription];
@@ -152,6 +157,11 @@ static NSString *kKustomerOrgNameKey = @"orgName";
     [[self sharedInstance] setFormId:formId];
 }
 
++ (NSInteger)openConversationsCount
+{
+    return [[self sharedInstance] openConversationsCount];
+}
+
 #pragma mark - Lifecycle methods
 
 + (instancetype)sharedInstance
@@ -245,6 +255,15 @@ static KUSLogOptions _logOptions = KUSLogOptionInfo | KUSLogOptionErrors;
     [self.userSession.chatSessionsDataSource describeActiveConversation:customAttributes];
 }
 
+- (void)describeNextConversation:(NSDictionary<NSString *, NSObject *> *)customAttributes
+{
+    NSAssert(customAttributes.count, @"Attempted to describe next conversation with no attributes set");
+    if (customAttributes.count == 0) {
+        return;
+    }
+    [self.userSession.chatSessionsDataSource describeNextConversation:customAttributes];
+}
+
 - (void)describeCustomer:(KUSCustomerDescription *)customerDescription
 {
     [self.userSession describeCustomer:customerDescription completion:nil];
@@ -315,6 +334,10 @@ static KUSLogOptions _logOptions = KUSLogOptionInfo | KUSLogOptionErrors;
     [self.userSession.userDefaults setFormId:formId];
 }
 
+- (NSInteger)openConversationsCount
+{
+    return [self.userSession.userDefaults openChatSessionsCount];
+}
 
 #pragma mark - Helper functions
 

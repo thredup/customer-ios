@@ -1,5 +1,27 @@
 # Changelog for Kustomer iOS SDK
 
+## 0.1.22
+
+* Added un-localized strings
+* Fixed describe next conversation issue with forms
+
+## 0.1.21
+
+* Added new method to describe next conversation
+* Fixed conversation team issue
+
+## 0.1.20
+
+* Added new method to get open conversations count
+
+## 0.1.19
+
+* Fixed Kustomer controller presentation style
+
+## 0.1.18
+
+* Fixed polling logic
+
 ## 0.1.17
 
 * Fixed framework dependency issue for carthage

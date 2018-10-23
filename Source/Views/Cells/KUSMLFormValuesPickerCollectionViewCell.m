@@ -10,8 +10,8 @@
 #import "KUSColor.h"
 #import "KUSLocalization.h"
 
-static const CGFloat kKUSMLFormValuesPickerVerticalSeparatorWidth = 3.0;
-static const CGFloat kKUSMLFormValuesPickerVerticalSeparatorPadding = 8.0;
+static const CGFloat kKUSMLFormValuesPickerSeparatorWidth = 3.0;
+static const CGFloat kKUSMLFormValuesPickerSeparatorPadding = 8.0;
 
 @implementation KUSMLFormValuesPickerCollectionViewCell {
     UILabel *_valueLabel;
@@ -58,15 +58,15 @@ static const CGFloat kKUSMLFormValuesPickerVerticalSeparatorPadding = 8.0;
     
     BOOL isRTL = [[KUSLocalization sharedInstance] isCurrentLanguageRTL];
     _separator.frame = (CGRect) {
-        .origin.x = isRTL ? self.bounds.size.width - kKUSMLFormValuesPickerVerticalSeparatorWidth : self.bounds.origin.x,
-        .origin.y = self.bounds.origin.y + kKUSMLFormValuesPickerVerticalSeparatorPadding,
-        .size.width = kKUSMLFormValuesPickerVerticalSeparatorWidth,
-        .size.height = self.bounds.size.height - (kKUSMLFormValuesPickerVerticalSeparatorPadding * 2)
+        .origin.x = isRTL ? self.bounds.size.width - kKUSMLFormValuesPickerSeparatorWidth : self.bounds.origin.x,
+        .origin.y = self.bounds.origin.y + kKUSMLFormValuesPickerSeparatorPadding,
+        .size.width = kKUSMLFormValuesPickerSeparatorWidth,
+        .size.height = self.bounds.size.height - (kKUSMLFormValuesPickerSeparatorPadding * 2)
     };
     _valueLabel.frame = (CGRect) {
-        .origin.x = isRTL ? self.bounds.origin.x : self.bounds.origin.x + kKUSMLFormValuesPickerVerticalSeparatorWidth,
+        .origin.x = isRTL ? self.bounds.origin.x : self.bounds.origin.x + kKUSMLFormValuesPickerSeparatorWidth,
         .origin.y = self.bounds.origin.y,
-        .size.width = self.bounds.size.width - kKUSMLFormValuesPickerVerticalSeparatorWidth,
+        .size.width = self.bounds.size.width - kKUSMLFormValuesPickerSeparatorWidth,
         .size.height = self.bounds.size.height
     };
     _valueLabel.textColor = isSelected ? _selectedTextColor : _textColor;

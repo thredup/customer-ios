@@ -32,3 +32,9 @@
 "com.kustomer.CLOSED" = "ปิด";
 "com.kustomer.Start a New Conversation" = "เริ่มการสนทนาใหม่";
 "com.kustomer.Thank You! We'll follow up on your request." = "ขอขอบคุณ! เราจะติดตามคำขอของคุณต่อ";
+"com.kustomer.CHAT HAS ENDED" = "แชทสิ้นสุดลงแล้ว";
+"com.kustomer.END CHAT" = "สิ้นสุดการแชท";
+"com.kustomer.Back to chat" = "กลับไปแชท";
+"com.kustomer.Home" = "บ้าน";
+"com.kustomer.Please select an item" = "โปรดเลือกรายการ";
+"com.kustomer.Leave a message" = "ฝากข้อความ";

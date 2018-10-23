@@ -235,7 +235,7 @@ static NSString *kCellIdentifier = @"MLFormValueCell";
         [cell setMLFormValue:[[KUSLocalization sharedInstance] localizedString:@"Please select an item"] withSeparator:NO andSelectedTextColor:NO];
     }
     else {
-        BOOL isFirst = indexPath.row == 0 ?: NO;
+        BOOL isFirst = indexPath.row == 0;
         BOOL isLast = indexPath.row == _selectedValuesStack.count;
         if (isFirst) {
             [cell setMLFormValue:[[KUSLocalization sharedInstance] localizedString:@"Home"] withSeparator:NO andSelectedTextColor:NO];

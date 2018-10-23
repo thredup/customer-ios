@@ -65,6 +65,7 @@
         strongSelf.requestMarker = nil;
 
         KUSModel *model = [[[strongSelf modelClass] alloc] initWithJSON:response[@"data"]];
+        [model addIncludedWithJSON:response[@"included"]];
 
         strongSelf.isFetching = NO;
         if (error || model == nil) {

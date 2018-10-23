@@ -32,3 +32,9 @@
 "com.kustomer.CLOSED" = "关闭";
 "com.kustomer.Start a New Conversation" = "开始新的对话";
 "com.kustomer.Thank You! We'll follow up on your request." = "谢谢！我们会跟进您的请求。";
+"com.kustomer.CHAT HAS ENDED" = "聊天已经结束";
+"com.kustomer.END CHAT" = "结束聊天";
+"com.kustomer.Back to chat" = "回去聊天";
+"com.kustomer.Home" = "家";
+"com.kustomer.Please select an item" = "请选择一个项目";
+"com.kustomer.Leave a message" = "留言";

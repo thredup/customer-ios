@@ -32,3 +32,9 @@
 "com.kustomer.CLOSED" = "Lokað";
 "com.kustomer.Start a New Conversation" = "Byrja nýtt samtal";
 "com.kustomer.Thank You! We'll follow up on your request." = "Þakka þér fyrir! Við munum fylgja eftir beiðni þinni.";
+"com.kustomer.CHAT HAS ENDED" = "Spjallið er lokið";
+"com.kustomer.END CHAT" = "Lokaðu spjalli";
+"com.kustomer.Back to chat" = "Aftur í spjall";
+"com.kustomer.Home" = "Heim";
+"com.kustomer.Please select an item" = "Vinsamlegast veldu hlut";
+"com.kustomer.Leave a message" = "Skildu eftir skilaboð";

@@ -40,6 +40,8 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     BOOL _isProactiveCampaign;
     NSMutableArray<KUSChatMessage *> *_temporaryVCMessagesResponses;
     
+    BOOL _nonBusinessHours;
+    
     NSMutableArray<void(^)(BOOL success, NSError *error)> *_onSessionCreationCallbacks;
     NSMutableDictionary<NSString *, void(^)(void)> *_messageRetryBlocksById;
 }
@@ -58,6 +60,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
         _vcformQuestionIndex = 0;
         _vcFormActive = NO;
         _vcChatClosed = NO;
+        _nonBusinessHours = NO;
         _temporaryVCMessagesResponses = [[NSMutableArray alloc] init];
         _delayedChatMessageIds = [[NSMutableSet alloc] init];
         _messageRetryBlocksById = [[NSMutableDictionary alloc] init];
@@ -298,6 +301,11 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 
 - (BOOL)isChatClosed
 {
+    // For business hours
+    if (_nonBusinessHours) {
+        return true;
+    }
+    
     if (_vcFormActive) {
         return false;
     }
@@ -766,6 +774,11 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
                  [self.userSession.userDefaults setDidCaptureEmail:YES];
              }
              
+             // Set variable for business hours
+             if (![self.userSession.scheduleDataSource isActiveBusinessHours] && _form.questions.count > 0) {
+                 _nonBusinessHours = YES;
+             }
+             
              // Grab the session id
              _sessionId = session.oid;
              _form = nil;
@@ -1064,6 +1077,11 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     
     KUSChatSettings *chatSettings = self.userSession.chatSettingsDataSource.object;
     if (!chatSettings.volumeControlEnabled) {
+        return;
+    }
+    
+    // Check if business hours enabled and not in business hours
+    if (![self.userSession.scheduleDataSource isActiveBusinessHours]) {
         return;
     }
     

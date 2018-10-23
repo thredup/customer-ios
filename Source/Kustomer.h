@@ -22,6 +22,7 @@ FOUNDATION_EXPORT const unsigned char KustomerVersionString[];
 + (void)setDelegate:(__weak id<KustomerDelegate>)delegate;
 
 + (void)describeConversation:(NSDictionary<NSString *, NSObject *> *)customAttributes;
++ (void)describeNextConversation:(NSDictionary<NSString *, NSObject *> *)customAttributes;
 + (void)describeCustomer:(KUSCustomerDescription *)customerDescription;
 + (void)identify:(NSString *)externalToken;
 + (void)resetTracking;
@@ -48,6 +49,9 @@ FOUNDATION_EXPORT const unsigned char KustomerVersionString[];
 + (void)presentCustomWebPage:(NSString*)url;
 + (void)setFormId:(NSString *)formId;
 
+// Returns the total number of open conversations.
++ (NSInteger)openConversationsCount;
+
 // The current SDK version
 + (NSString *)sdkVersion;
 
@@ -68,5 +72,6 @@ FOUNDATION_EXPORT const unsigned char KustomerVersionString[];
 // Implement to perform custom handling and presentation of the support user interface
 // If unimplemented, Kustomer will present the support interface on the topmost view controller
 - (void)kustomerDidTapOnInAppNotification;
+
 
 @end

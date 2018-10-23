@@ -32,3 +32,9 @@
 "com.kustomer.CLOSED" = "GESCHLOSSEN";
 "com.kustomer.Start a New Conversation" = "Starten Sie eine neue Unterhaltung";
 "com.kustomer.Thank You! We'll follow up on your request." = "Danke! Wir werden auf Ihre Anfrage folgen.";
+"com.kustomer.CHAT HAS ENDED" = "Der Chat ist beendet";
+"com.kustomer.END CHAT" = "Ende des Gesprächs";
+"com.kustomer.Back to chat" = "Zurück zum Chat";
+"com.kustomer.Home" = "Zuhause";
+"com.kustomer.Please select an item" = "Bitte wählen Sie einen Artikel";
+"com.kustomer.Leave a message" = "Hinterlass eine Nachricht";

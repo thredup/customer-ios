@@ -32,3 +32,9 @@
 "com.kustomer.CLOSED" = "Slēgts";
 "com.kustomer.Start a New Conversation" = "Sāciet jaunu sarunu";
 "com.kustomer.Thank You! We'll follow up on your request." = "Paldies! Mēs veiksim jūsu pieprasījumu.";
+"com.kustomer.CHAT HAS ENDED" = "Tērzēšana ir beigusies";
+"com.kustomer.END CHAT" = "Beigt tērzēšanu";
+"com.kustomer.Back to chat" = "Atpakaļ uz tērzēšanu";
+"com.kustomer.Home" = "Mājas";
+"com.kustomer.Please select an item" = "Lūdzu, atlasiet vienumu";
+"com.kustomer.Leave a message" = "Atstāj ziņu";

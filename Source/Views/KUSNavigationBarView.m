@@ -127,6 +127,7 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
 
         [_userSession.chatSessionsDataSource addListener:self];
         [_userSession.chatSettingsDataSource addListener:self];
+        [_userSession.scheduleDataSource addListener:self];
         [self _updateTextLabels];
         [self _updateBackButtonBadge];
     }
@@ -171,9 +172,8 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
                 .size.height = 13.0
             };
             
-            KUSChatSettings *chatSettings = [_userSession.chatSettingsDataSource object];
-            _greetingLabel.hidden = chatSettings.volumeControlEnabled;
-            _waitingLabel.hidden = !chatSettings.volumeControlEnabled;
+            _greetingLabel.hidden = NO;
+            _waitingLabel.hidden = YES;
 
         } else {
             KUSChatSettings *chatSettings = [_userSession.chatSettingsDataSource object];
@@ -208,7 +208,7 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
                 .size.height = 16.0
             };
             
-            _greetingLabel.hidden = NO;
+//            _greetingLabel.hidden = NO;
             _waitingLabel.hidden = !chatSettings.volumeControlEnabled;
         }
     } else {
@@ -244,6 +244,8 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
         .origin.y = _topInset,
         .size = kKUSNavigationBarDismissButtonSize
     };
+    
+    [self _updateTextLabels];
 }
 
 #pragma mark - Internal methods
@@ -267,8 +269,24 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
         responderName = chatSettings.teamName.length ? chatSettings.teamName : _userSession.organizationName;
     }
     _nameLabel.text = responderName;
-    _greetingLabel.text = chatSettings.greeting;
-    _waitingLabel.text = chatSettings.useDynamicWaitMessage ? chatSettings.waitMessage : chatSettings.customWaitMessage;
+    
+    if (self.extraLarge) {
+        if (![_userSession.scheduleDataSource isActiveBusinessHours]) {
+            _greetingLabel.text = chatSettings.offhoursMessage;
+        } else {
+            _greetingLabel.text = chatSettings.greeting;
+        }
+        
+        _waitingLabel.text = chatSettings.useDynamicWaitMessage ? chatSettings.waitMessage : chatSettings.customWaitMessage;
+    } else {
+        if (![_userSession.scheduleDataSource isActiveBusinessHours]) {
+            _greetingLabel.text = chatSettings.offhoursMessage;
+        } else if (chatSettings.volumeControlEnabled) {
+            _greetingLabel.text = chatSettings.useDynamicWaitMessage ? chatSettings.waitMessage : chatSettings.customWaitMessage;
+        } else {
+            _greetingLabel.text = chatSettings.greeting;
+        }
+    }
 }
 
 - (void)_updateBackButtonBadge

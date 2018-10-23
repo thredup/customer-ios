@@ -21,6 +21,7 @@
 #import "KUSCustomerDescription.h"
 #import "KUSClientActivityManager.h"
 #import "KUSLocalization.h"
+#import "KUSScheduleDataSource.h"
 
 @interface KUSUserSession : NSObject
 
@@ -38,6 +39,7 @@
 - (KUSChatSettingsDataSource *)chatSettingsDataSource;
 - (KUSTrackingTokenDataSource *)trackingTokenDataSource;
 - (KUSFormDataSource *)formDataSource;
+- (KUSScheduleDataSource *)scheduleDataSource;
 
 - (KUSChatMessagesDataSource *)chatMessagesDataSourceForSessionId:(NSString *)sessionId;
 - (KUSUserDataSource *)userDataSourceForUserId:(NSString *)userId;

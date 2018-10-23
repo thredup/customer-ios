@@ -32,3 +32,9 @@
 "com.kustomer.CLOSED" = "Suletud";
 "com.kustomer.Start a New Conversation" = "Alusta uut vestlust";
 "com.kustomer.Thank You! We'll follow up on your request." = "Aitäh! Järgime teie soovi.";
+"com.kustomer.CHAT HAS ENDED" = "Vestlus on lõppenud";
+"com.kustomer.END CHAT" = "Lõpeta vestlus";
+"com.kustomer.Back to chat" = "Tagasi vestlema";
+"com.kustomer.Home" = "Kodu";
+"com.kustomer.Please select an item" = "Palun valige üksus";
+"com.kustomer.Leave a message" = "Jäta sõnum";

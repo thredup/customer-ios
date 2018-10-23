@@ -10,6 +10,7 @@
 
 #import <NYTPhotoViewer/NYTPhotosViewController.h>
 #import <SafariServices/SafariServices.h>
+#import <SDWebImage/UIImageView+WebCache.h>
 
 #import "KUSChatSession.h"
 #import "KUSUserSession.h"
@@ -31,10 +32,10 @@
 #import "KUSNYTChatMessagePhoto.h"
 #import "KUSNYTImagePhoto.h"
 #import "KUSClosedChatView.h"
-#import "KUSNewSessionButton.h"
 #import "KUSEndChatButtonView.h"
 #import "KUSChatEndedTableViewCell.h"
 #import "KUSMLFormValuesPickerView.h"
+#import "KUSNewSessionButton.h"
 
 @interface KUSChatViewController () <KUSEmailInputViewDelegate, KUSInputBarDelegate, KUSOptionPickerViewDelegate,
                                      KUSChatMessagesDataSourceListener, KUSChatMessageTableViewCellDelegate,
@@ -45,6 +46,7 @@
     KUSUserSession *_userSession;
 
     BOOL _showBackButton;
+    BOOL _showNonBusinessHoursImage;
     NSString *_chatSessionId;
     KUSChatMessagesDataSource *_chatMessagesDataSource;
 
@@ -54,13 +56,13 @@
 }
 
 @property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) UIImageView *nonBusinessHourImageView;
 @property (nonatomic, strong) KUSEmailInputView *emailInputView;
 @property (nonatomic, strong) KUSInputBar *inputBarView;
 @property (nonatomic, strong) KUSOptionPickerView *optionPickerView;
 @property (nonatomic, strong) KUSNavigationBarView *fauxNavigationBar;
 @property (nonatomic, strong) KUSClosedChatView *closedChatView;
-//@property (nonatomic, strong) KUSNewSessionButton *sessionButton;
-@property (nonatomic, strong) UIButton *sessionButton;
+@property (nonatomic, strong) KUSNewSessionButton *sessionButton;
 @property (nonatomic, strong) KUSEndChatButtonView *closeChatButtonView;
 @property (nonatomic, strong) KUSMLFormValuesPickerView *mlFormValuesPickerView;
 
@@ -91,6 +93,8 @@
         _userSession = userSession;
         _chatMessagesDataSource = [[KUSChatMessagesDataSource alloc] initForNewConversationWithUserSession:_userSession];
         _showBackButton = showBackButton;
+        
+        _showNonBusinessHoursImage = ![_userSession.scheduleDataSource isActiveBusinessHours];
     }
     return self;
 }
@@ -127,7 +131,20 @@
 #else
     self.automaticallyAdjustsScrollViewInsets = NO;
 #endif
-
+    
+    KUSChatSettings *chatSettings = _userSession.chatSettingsDataSource.object;
+    self.nonBusinessHourImageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
+    self.nonBusinessHourImageView.contentMode = UIViewContentModeScaleAspectFit;
+    if (chatSettings.offhoursImageUrl && ![chatSettings.offhoursImageUrl isEqualToString:@""]) {
+        NSURL *imageUrl = [[NSURL alloc] initWithString:chatSettings.offhoursImageUrl];
+        [self.nonBusinessHourImageView sd_setImageWithURL:imageUrl];
+    }
+    else {
+        self.nonBusinessHourImageView.image = [KUSImage awayImage];
+    }
+    self.nonBusinessHourImageView.hidden = !_showNonBusinessHoursImage;
+    [self.view addSubview:self.nonBusinessHourImageView];
+    
     self.navigationController.interactivePopGestureRecognizer.enabled = _showBackButton;
     self.fauxNavigationBar = [[KUSNavigationBarView alloc] initWithUserSession:_userSession];
     self.fauxNavigationBar.delegate = self;
@@ -137,7 +154,7 @@
     [self.fauxNavigationBar setShowsDismissButton:YES];
     [self.view addSubview:self.fauxNavigationBar];
 
-    self.inputBarView = [[KUSInputBar alloc] init];
+    self.inputBarView = [[KUSInputBar alloc] initWithUserSession:_userSession];
     self.inputBarView.delegate = self;
     self.inputBarView.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth);
     self.inputBarView.allowsAttachments = _chatSessionId != nil;
@@ -185,7 +202,7 @@
 
     // Only bring up the keyboard if the chat is being presented/pushed
     if (self.isBeingPresented || self.isMovingToParentViewController) {
-        if (!_inputBarView.hidden) {
+        if (!_inputBarView.hidden && !_showNonBusinessHoursImage) {
             [_inputBarView becomeFirstResponder];
         }
     }
@@ -280,6 +297,14 @@
     };
     self.tableView.scrollIndicatorInsets = (UIEdgeInsets) {
         .bottom = navigationBarHeight + self.emailInputView.frame.size.height
+    };
+    
+    CGFloat nonBusinessHourImagePadding = 50;
+    self.nonBusinessHourImageView.frame = (CGRect) {
+        .origin.x = nonBusinessHourImagePadding,
+        .origin.y = self.fauxNavigationBar.frame.size.height + nonBusinessHourImagePadding,
+        .size.width = self.view.bounds.size.width - (nonBusinessHourImagePadding * 2),
+        .size.height = self.view.bounds.size.height - self.fauxNavigationBar.frame.size.height - 50 - (nonBusinessHourImagePadding * 2)
     };
 }
 
@@ -446,18 +471,17 @@
         
         if (self.sessionButton == nil) {
             
-            self.sessionButton = [[UIButton alloc] init];
-            self.sessionButton.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth);
-            [self.sessionButton setTitleColor:[KUSColor blueColor] forState:UIControlStateNormal];
+            self.sessionButton = [[KUSNewSessionButton alloc] initWithUserSession:_userSession];
+            [self.sessionButton setTextColor:[KUSColor blueColor]];
+            [self.sessionButton setBackgroundColor:[UIColor whiteColor]];
+            [self.sessionButton setColor:nil];
+            [self.sessionButton setHasShadow:NO];
+            [self.sessionButton setText:[[KUSLocalization sharedInstance] localizedString:@"Start a New Conversation"]];
+            [self.sessionButton setImage:[KUSImage noImage]];
+            [self.sessionButton setTextFont:[UIFont boldSystemFontOfSize:14.0]];
             [self.sessionButton setTitleColor:[[KUSColor blueColor] colorWithAlphaComponent:0.5] forState:UIControlStateHighlighted];
             
-            if ([self isBackToChatButton]) {
-                [self.sessionButton setTitle:[[KUSLocalization sharedInstance] localizedString:@"Back to Chat"] forState:UIControlStateNormal];
-            } else {
-                [self.sessionButton setTitle:[[KUSLocalization sharedInstance] localizedString:@"Start a New Conversation"] forState:UIControlStateNormal];
-            }
-            
-            self.sessionButton.titleLabel.font =[UIFont boldSystemFontOfSize:14.0];
+            self.sessionButton.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth);
             [self.sessionButton addTarget:self
                                    action:@selector(_createSession)
                          forControlEvents:UIControlEventTouchUpInside];
@@ -519,7 +543,7 @@
 {
     [_chatMessagesDataSource removeListener:self];
     
-    if ([self isBackToChatButton])
+    if ([self.sessionButton isBackToChat])
     {
         KUSChatSession *chatSession = [_userSession.chatSessionsDataSource mostRecentNonProactiveCampaignOpenSession];
         _chatSessionId = chatSession.oid;
@@ -528,6 +552,9 @@
         _chatMessagesDataSource = [[KUSChatMessagesDataSource alloc] initForNewConversationWithUserSession:_userSession];
         _chatSessionId = nil;
         self.inputBarView.allowsAttachments = NO;
+        
+        _showNonBusinessHoursImage = ![_userSession.scheduleDataSource isActiveBusinessHours];
+        self.nonBusinessHourImageView.hidden = !_showNonBusinessHoursImage;
     }
     
     [_chatMessagesDataSource addListener:self];
@@ -548,14 +575,6 @@
     
 }
 
-- (BOOL)isBackToChatButton
-{
-    KUSChatSettings *settings = [_userSession.chatSettingsDataSource object];
-    NSUInteger openChats = _userSession.chatSessionsDataSource.openChatSessionsCount;
-    NSUInteger proactiveChats = _userSession.chatSessionsDataSource.openProactiveCampaignsCount;
-    return (settings.singleSessionChat && (openChats-proactiveChats) >= 1);
-}
-
 #pragma mark - KUSChatMessagesDataSourceListener methods
 
 - (void)paginatedDataSourceDidLoad:(KUSPaginatedDataSource *)dataSource
@@ -564,22 +583,25 @@
         [self hideLoadingIndicator];
         [self _checkShouldShowCloseChatButtonView];
         
-        if ([self isBackToChatButton]) {
-            [self.sessionButton setTitle:[[KUSLocalization sharedInstance] localizedString:@"Back to Chat"] forState:UIControlStateNormal];
-        } else {
-            [self.sessionButton setTitle:[[KUSLocalization sharedInstance] localizedString:@"Start a New Conversation"] forState:UIControlStateNormal];
-        }
         [self.tableView reloadData];
+        
+        _showNonBusinessHoursImage = NO;
+        self.nonBusinessHourImageView.hidden = !_showNonBusinessHoursImage;
     }
 }
 
 - (void)paginatedDataSourceDidChangeContent:(KUSPaginatedDataSource *)dataSource
 {
     if (dataSource == _chatMessagesDataSource) {
+        [self.tableView reloadData];
         [self _checkShouldShowInputView];
         [self _checkShouldShowCloseChatButtonView];
         [self.view setNeedsLayout];
-        [self.tableView reloadData];
+        
+        
+        _showNonBusinessHoursImage = NO;
+        self.nonBusinessHourImageView.hidden = !_showNonBusinessHoursImage;
+        
     } else if (dataSource == _teamOptionsDataSource) {
         [self _checkShouldShowInputView];
         [self _updateOptionsPickerOptions];
@@ -610,7 +632,7 @@
     
     KUSChatSettings *chatSettings = [[_userSession chatSettingsDataSource] object];
     _showBackButton = !chatSettings.noHistory;
-//    _showBackButton = YES;
+
     self.navigationController.interactivePopGestureRecognizer.enabled = _showBackButton;
     [self.fauxNavigationBar setShowsBackButton:_showBackButton];
     [self _checkShouldShowEmailInput];
@@ -837,17 +859,13 @@
 
 - (void)optionPickerView:(KUSOptionPickerView *)pickerView didSelectOption:(NSString *)option
 {
-    NSString *value = nil;
     KUSTeam *team = nil;
     NSUInteger optionIndex = [pickerView.options indexOfObject:option];
     KUSFormQuestion *currentQuestion = _chatMessagesDataSource.currentQuestion;
-    if (optionIndex != NSNotFound && optionIndex < currentQuestion.values.count) {
-        value = currentQuestion.values[optionIndex];
-    }
-    if (optionIndex != NSNotFound && optionIndex < _teamOptionsDataSource.count) {
+    if (optionIndex != NSNotFound && currentQuestion.property == KUSFormQuestionPropertyConversationTeam && optionIndex < _teamOptionsDataSource.count) {
         team = [_teamOptionsDataSource objectAtIndex:optionIndex];
     }
-    [_chatMessagesDataSource sendMessageWithText:team.displayName ?: option attachments:nil value:value ?: team.oid];
+    [_chatMessagesDataSource sendMessageWithText:team.displayName ?: option attachments:nil value: team.oid] ;
 }
 
 #pragma mark - KUSInputBarDelegate methods

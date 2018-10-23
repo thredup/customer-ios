@@ -32,3 +32,9 @@
 "com.kustomer.CLOSED" = "KAPALI";
 "com.kustomer.Start a New Conversation" = "Yeni Bir Konuşma Başlat";
 "com.kustomer.Thank You! We'll follow up on your request." = "Teşekkür ederim! İsteğinizi takip edeceğiz.";
+"com.kustomer.CHAT HAS ENDED" = "Sohbet bitti";
+"com.kustomer.END CHAT" = "Sohbeti bitir";
+"com.kustomer.Back to chat" = "Sohbete geri dön";
+"com.kustomer.Home" = "Ev";
+"com.kustomer.Please select an item" = "Lütfen bir ürün seçiniz";
+"com.kustomer.Leave a message" = "Mesaj bırakın";
