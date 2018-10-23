@@ -1,5 +1,9 @@
 # Changelog for Kustomer iOS SDK
 
+## 0.1.23
+
+* Added business hours feature
+
 ## 0.1.22
 
 * Added un-localized strings
