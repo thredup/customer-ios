@@ -33,6 +33,11 @@
         _skipIfSatisfied = BOOLFromKeyPath(json, @"skipIfSatisfied");
         _type = KUSFormQuestionTypeFromString(NSStringFromKeyPath(json, @"type"));
         _property = KUSFormQuestionPropertyFromString(NSStringFromKeyPath(json, @"property"));
+        if (_property == KUSFormQuestionPropertyMLV) {
+            NSMutableDictionary *dic = [[NSMutableDictionary alloc]initWithDictionary:[json valueForKeyPath:@"valueMeta"]];
+            [dic setObject:@"1" forKey:@"id"];
+            _mlFormValues = [[KUSMLFormValue alloc] initWithJSON: dic];
+        }
         _values = NSArrayFromKeyPath(json, @"values");
     }
     return self;
@@ -62,6 +67,8 @@ static KUSFormQuestionProperty KUSFormQuestionPropertyFromString(NSString *strin
         return KUSFormQuestionPropertyCustomerPhone;
     } else if ([string isEqualToString:@"followup_channel"]) {
         return KUSFormQuestionPropertyFollowupChannel;
+    } else if ([string hasSuffix:@"Tree"]) {
+        return KUSFormQuestionPropertyMLV;
     }
     return KUSFormQuestionPropertyUnknown;
 }

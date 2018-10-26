@@ -7,6 +7,7 @@
 //
 
 #import "KUSModel.h"
+#import "KUSMLFormValue.h"
 
 typedef NS_ENUM(NSInteger, KUSFormQuestionType) {
     KUSFormQuestionTypeUnknown = -1,
@@ -21,7 +22,8 @@ typedef NS_ENUM(NSInteger, KUSFormQuestionProperty) {
     KUSFormQuestionPropertyCustomerEmail,
     KUSFormQuestionPropertyConversationTeam,
     KUSFormQuestionPropertyCustomerPhone,
-    KUSFormQuestionPropertyFollowupChannel
+    KUSFormQuestionPropertyFollowupChannel,
+    KUSFormQuestionPropertyMLV
 };
 
 @interface KUSFormQuestion : KUSModel
@@ -32,6 +34,7 @@ typedef NS_ENUM(NSInteger, KUSFormQuestionProperty) {
 @property (nonatomic, assign, readonly) KUSFormQuestionType type;
 @property (nonatomic, assign, readonly) KUSFormQuestionProperty property;
 @property (nonatomic, assign, readonly) BOOL skipIfSatisfied;
+@property (nonatomic, copy, readonly) KUSMLFormValue *mlFormValues;
 
 @end
 

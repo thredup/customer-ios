@@ -99,7 +99,7 @@ static const CGFloat kSessionButtonHeight = 44.0;
 - (void)updateButton
 {
     if ([self isBackToChat]) {
-        [self setTitle:[[KUSLocalization sharedInstance] localizedString:@"Back to Chat"] forState:UIControlStateNormal];
+        [self setTitle:[[KUSLocalization sharedInstance] localizedString:@"Back to chat"] forState:UIControlStateNormal];
         [self _updateImageAndInsets:[KUSImage noImage]];
     }
     else {
