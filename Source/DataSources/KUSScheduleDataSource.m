@@ -13,7 +13,7 @@
 
 #pragma mark - Lifecycle methods
 
-- (instancetype)initWithUserSession:(KUSUserSession *)userSession userId:(NSString *)userId
+- (instancetype)initWithUserSession:(KUSUserSession *)userSession
 {
     self = [super initWithUserSession:userSession];
     if (self) {
@@ -49,10 +49,10 @@
         NSDate *now = [NSDate date];
         for (KUSHoliday *holiday in businessHours.holidays) {
             if (holiday.enabled) {
-                NSComparisonResult startDateResult = [now compare:holiday.startDate];
-                NSComparisonResult endDateResult = [now compare:holiday.endDate];
-                if ((startDateResult == NSOrderedDescending || startDateResult == NSOrderedSame) &&
-                    (endDateResult == NSOrderedAscending || startDateResult == NSOrderedSame)) {
+                BOOL greaterThanStartDate = [[holiday.startDate earlierDate:now] isEqualToDate:holiday.startDate];
+                BOOL lessThanEndDate = [[now earlierDate:holiday.endDate] isEqualToDate:now];
+                BOOL isHoliday = greaterThanStartDate && lessThanEndDate;
+                if (isHoliday) {
                     return NO;
                 }
             }
