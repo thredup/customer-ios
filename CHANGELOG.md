@@ -1,5 +1,9 @@
 # Changelog for Kustomer iOS SDK
 
+## 0.1.24
+
+* Added multi-level form messaging support
+
 ## 0.1.23
 
 * Added business hours feature
