@@ -166,6 +166,13 @@ customerDescription.custom = @{ @"customAttributeStr": @"value" };
 }];
 ```
 
+```objective-c
+/*
+ Show/Hide the "New Conversation" button in closed chat. By default, "Start New Conversation" button will appear in closed chat listing. You can update the settings by this method.
+*/
+[Kustomer showNewConversationButtonInsideChat:NO];
+```
+
 ### Localization
 
 The Kustomer iOS SDK will automatically change the text strings to match the language of the device your customers are using. The SDK supports both <b>Right-to-left (RTL)</b> and <b>Left-to-right (LTR)</b> formatted languages. There are over 50 languages translated out of the box.

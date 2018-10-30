@@ -15,6 +15,7 @@
 @property (nonatomic, copy, nullable) NSString *trackingToken;
 @property (nonatomic, copy, nullable) NSString *formId;
 @property (nonatomic, assign) NSInteger openChatSessionsCount;
+@property (nonatomic, assign) BOOL shouldHideNewConversationButtonInsideChat;
 
 - (instancetype _Nonnull)initWithUserSession:(KUSUserSession * _Nonnull)userSession;
 - (instancetype _Nonnull)init NS_UNAVAILABLE;

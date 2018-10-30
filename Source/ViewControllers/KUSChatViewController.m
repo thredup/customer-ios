@@ -286,14 +286,18 @@
         .size.height = 46
     };
     
+    // Update table view frame if "Start New Conversation" is hidden
+    KUSChatSession *session = [_userSession.chatSessionsDataSource objectWithId:_chatSessionId];
+    BOOL shouldHideStartNewConversation = session.lockedAt && _userSession.userDefaults.shouldHideNewConversationButtonInsideChat;
+    
     self.tableView.frame = (CGRect) {
         .size.width = self.view.bounds.size.width,
-        .size.height = MIN(inputBarY, MIN(optionPickerY, mlFormValuesViewY))
+        .size.height = shouldHideStartNewConversation ? self.view.frame.size.height : MIN(inputBarY, MIN(optionPickerY, mlFormValuesViewY))
     };
 
     self.tableView.contentInset = (UIEdgeInsets) {
         .top = 4.0,
-        .bottom = navigationBarHeight + self.emailInputView.frame.size.height + 4.0
+        .bottom = navigationBarHeight + MAX(self.emailInputView.frame.size.height, self.closeChatButtonView.frame.size.height) + 4.0
     };
     self.tableView.scrollIndicatorInsets = (UIEdgeInsets) {
         .bottom = navigationBarHeight + self.emailInputView.frame.size.height
@@ -469,24 +473,34 @@
         [self.closedChatView removeFromSuperview];
         self.closedChatView = nil;
         
-        if (self.sessionButton == nil) {
+        if (_userSession.userDefaults.shouldHideNewConversationButtonInsideChat) {
+            if (self.sessionButton != nil) {
+                [self.sessionButton removeFromSuperview];
+                self.sessionButton = nil;
+            }
             
-            self.sessionButton = [[KUSNewSessionButton alloc] initWithUserSession:_userSession];
-            [self.sessionButton setTextColor:[KUSColor blueColor]];
-            [self.sessionButton setBackgroundColor:[UIColor whiteColor]];
-            [self.sessionButton setColor:nil];
-            [self.sessionButton setHasShadow:NO];
-            [self.sessionButton setText:[[KUSLocalization sharedInstance] localizedString:@"Start a New Conversation"]];
-            [self.sessionButton setImage:[KUSImage noImage]];
-            [self.sessionButton setTextFont:[UIFont boldSystemFontOfSize:14.0]];
-            [self.sessionButton setTitleColor:[[KUSColor blueColor] colorWithAlphaComponent:0.5] forState:UIControlStateHighlighted];
-            
-            self.sessionButton.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth);
-            [self.sessionButton addTarget:self
-                                   action:@selector(_createSession)
-                         forControlEvents:UIControlEventTouchUpInside];
-            [self.view addSubview:self.sessionButton];
             [self.view setNeedsLayout];
+        }
+        else {
+            if (self.sessionButton == nil) {
+                
+                self.sessionButton = [[KUSNewSessionButton alloc] initWithUserSession:_userSession];
+                [self.sessionButton setTextColor:[KUSColor blueColor]];
+                [self.sessionButton setBackgroundColor:[UIColor whiteColor]];
+                [self.sessionButton setColor:nil];
+                [self.sessionButton setHasShadow:NO];
+                [self.sessionButton setText:[[KUSLocalization sharedInstance] localizedString:@"Start a New Conversation"]];
+                [self.sessionButton setImage:[KUSImage noImage]];
+                [self.sessionButton setTextFont:[UIFont boldSystemFontOfSize:14.0]];
+                [self.sessionButton setTitleColor:[[KUSColor blueColor] colorWithAlphaComponent:0.5] forState:UIControlStateHighlighted];
+                
+                self.sessionButton.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth);
+                [self.sessionButton addTarget:self
+                                       action:@selector(_createSession)
+                             forControlEvents:UIControlEventTouchUpInside];
+                [self.view addSubview:self.sessionButton];
+                [self.view setNeedsLayout];
+            }
         }
         
         return;

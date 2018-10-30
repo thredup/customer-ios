@@ -14,6 +14,7 @@
 NSString * const kDidCaptureEmailKey = @"kDidCaptureEmail";
 NSString * const kFormIdKey = @"kFormId";
 NSString * const kOpenChatSessionsCountKey = @"kOpenChatSessionsCount";
+NSString * const kShouldHideNewConversationButtonKey = @"kShouldHideNewConversationButton";
 
 @implementation KUSUserDefaults {
     NSUserDefaults *_userDefaults;
@@ -81,5 +82,15 @@ NSString * const kOpenChatSessionsCountKey = @"kOpenChatSessionsCount";
 - (void)setOpenChatSessionsCount:(NSInteger)openChatSessionsCount
 {
     [_userDefaults setInteger:openChatSessionsCount forKey:kOpenChatSessionsCountKey];
+}
+
+- (BOOL)shouldHideNewConversationButtonInsideChat
+{
+    return [_userDefaults boolForKey:kShouldHideNewConversationButtonKey];
+}
+
+- (void)setShouldHideNewConversationButtonInsideChat:(BOOL)shouldHideNewConversationButtonInsideChat
+{
+    [_userDefaults setBool:shouldHideNewConversationButtonInsideChat forKey:kShouldHideNewConversationButtonKey];
 }
 @end

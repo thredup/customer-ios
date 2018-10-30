@@ -162,6 +162,11 @@ static NSString *kKustomerOrgNameKey = @"orgName";
     return [[self sharedInstance] openConversationsCount];
 }
 
++ (void)showNewConversationButtonInsideChat:(BOOL)status
+{
+    [[self sharedInstance] showNewConversationButtonInsideChat:status];
+}
+
 #pragma mark - Lifecycle methods
 
 + (instancetype)sharedInstance
@@ -337,6 +342,11 @@ static KUSLogOptions _logOptions = KUSLogOptionInfo | KUSLogOptionErrors;
 - (NSInteger)openConversationsCount
 {
     return [self.userSession.userDefaults openChatSessionsCount];
+}
+
+- (void)showNewConversationButtonInsideChat:(BOOL)status
+{
+    [self.userSession.userDefaults setShouldHideNewConversationButtonInsideChat:!status];
 }
 
 #pragma mark - Helper functions
