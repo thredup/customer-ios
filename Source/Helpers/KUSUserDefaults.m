@@ -84,13 +84,13 @@ NSString * const kShouldHideNewConversationButtonKey = @"kShouldHideNewConversat
     [_userDefaults setInteger:openChatSessionsCount forKey:kOpenChatSessionsCountKey];
 }
 
-- (BOOL)shouldHideNewConversationButtonInsideChat
+- (BOOL)shouldHideNewConversationButtonInClosedChat
 {
     return [_userDefaults boolForKey:kShouldHideNewConversationButtonKey];
 }
 
-- (void)setShouldHideNewConversationButtonInsideChat:(BOOL)shouldHideNewConversationButtonInsideChat
+- (void)setShouldHideNewConversationButtonInClosedChat:(BOOL)shouldHideNewConversationButtonInClosedChat
 {
-    [_userDefaults setBool:shouldHideNewConversationButtonInsideChat forKey:kShouldHideNewConversationButtonKey];
+    [_userDefaults setBool:shouldHideNewConversationButtonInClosedChat forKey:kShouldHideNewConversationButtonKey];
 }
 @end

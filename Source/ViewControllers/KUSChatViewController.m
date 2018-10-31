@@ -288,7 +288,7 @@
     
     // Update table view frame if "Start New Conversation" is hidden
     KUSChatSession *session = [_userSession.chatSessionsDataSource objectWithId:_chatSessionId];
-    BOOL shouldHideStartNewConversation = session.lockedAt && _userSession.userDefaults.shouldHideNewConversationButtonInsideChat;
+    BOOL shouldHideStartNewConversation = session.lockedAt && _userSession.userDefaults.shouldHideNewConversationButtonInClosedChat;
     
     self.tableView.frame = (CGRect) {
         .size.width = self.view.bounds.size.width,
@@ -473,7 +473,7 @@
         [self.closedChatView removeFromSuperview];
         self.closedChatView = nil;
         
-        if (_userSession.userDefaults.shouldHideNewConversationButtonInsideChat) {
+        if (_userSession.userDefaults.shouldHideNewConversationButtonInClosedChat) {
             if (self.sessionButton != nil) {
                 [self.sessionButton removeFromSuperview];
                 self.sessionButton = nil;

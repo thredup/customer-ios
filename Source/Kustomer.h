@@ -55,8 +55,8 @@ FOUNDATION_EXPORT const unsigned char KustomerVersionString[];
 // The current SDK version
 + (NSString *)sdkVersion;
 
-// Show/Hide new conversation button inside chat
-+ (void)showNewConversationButtonInsideChat:(BOOL)status;
+// Show/Hide new conversation button in closed chat
++ (void)hideNewConversationButtonInClosedChat:(BOOL)status;
 
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)new NS_UNAVAILABLE;

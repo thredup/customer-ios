@@ -170,7 +170,7 @@ customerDescription.custom = @{ @"customAttributeStr": @"value" };
 /*
  Show/Hide the "New Conversation" button in closed chat. By default, "Start New Conversation" button will appear in closed chat listing. You can update the settings by this method.
 */
-[Kustomer showNewConversationButtonInsideChat:NO];
+[Kustomer hideNewConversationButtonInClosedChat:YES];
 ```
 
 ### Localization
