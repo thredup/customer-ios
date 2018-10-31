@@ -1,5 +1,9 @@
 # Changelog for Kustomer iOS SDK
 
+## 0.1.25
+
+* Added hide new conversation button in closed chat listing
+
 ## 0.1.24
 
 * Added multi-level form messaging support
