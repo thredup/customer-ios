@@ -44,6 +44,8 @@
         _useDynamicWaitMessage = BOOLFromKeyPath(json, @"attributes.volumeControl.useDynamicWaitMessage");
         _markDoneAfterTimeout = BOOLFromKeyPath(json, @"attributes.volumeControl.markDoneAfterTimeout");
         _volumeControlEnabled = BOOLFromKeyPath(json, @"attributes.volumeControl.enabled");
+        _volumeControlMode = KUSVolumeControlModeFromString(NSStringFromKeyPath(json, @"attributes.volumeControl.mode"));
+        _upfrontWaitThreshold = IntegerFromKeyPath(json, @"attributes.volumeControl.upfrontWaitThreshold");
         
         _offhoursMessage = NSStringFromKeyPath(json, @"attributes.offhoursMessage");
         _offhoursImageUrl = NSStringFromKeyPath(json, @"attributes.offhoursImageUrl");
@@ -60,6 +62,16 @@ static KUSBusinessHoursAvailability KUSBusinessHoursAvailabilityFromString(NSStr
         return KUSBusinessHoursAvailabilityOffline;
     }
     return KUSBusinessHoursAvailabilityHideChat;
+}
+
+static KUSVolumeControlMode KUSVolumeControlModeFromString(NSString *string)
+{
+    if ([string isEqualToString:@"upfront"]) {
+        return KUSVolumeControlModeUpfront;
+    } else if ([string isEqualToString:@"delayed"]) {
+        return KUSVolumeControlModeDelayed;
+    }
+    return KUSVolumeControlModeUnknown;
 }
 
 #pragma mark - Convenience methods

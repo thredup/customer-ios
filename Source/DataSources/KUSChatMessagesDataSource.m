@@ -14,12 +14,13 @@
 #import "KUSUserSession_Private.h"
 #import "KUSDate.h"
 #import "KUSUpload.h"
+#import "KUSSessionQueuePollingManager.h"
 
 #import <SDWebImage/SDImageCache.h>
 
 static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 
-@interface KUSChatMessagesDataSource () <KUSChatMessagesDataSourceListener, KUSObjectDataSourceListener> {
+@interface KUSChatMessagesDataSource () <KUSChatMessagesDataSourceListener, KUSObjectDataSourceListener, KUSSessionQueuePollingListener> {
     NSString *_Nullable _sessionId;
     BOOL _createdLocally;
 
@@ -41,6 +42,8 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     NSMutableArray<KUSChatMessage *> *_temporaryVCMessagesResponses;
     
     BOOL _nonBusinessHours;
+    
+    KUSSessionQueuePollingManager *sessionQueuePollingManager;
     
     NSMutableArray<void(^)(BOOL success, NSError *error)> *_onSessionCreationCallbacks;
     NSMutableDictionary<NSString *, void(^)(void)> *_messageRetryBlocksById;
@@ -152,6 +155,39 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
         return YES;
     }
     return [super didFetchAll];
+}
+
+#pragma mark - KUSSessionQueuePollingListener methods
+
+- (void)sessionQueuePollingManagerDidStartPolling:(KUSSessionQueuePollingManager *)manager
+{
+    // Automatically end chat
+    KUSChatSettings *chatSettings = self.userSession.chatSettingsDataSource.object;
+    __weak KUSChatMessagesDataSource *weakSelf = self;
+    
+    if (chatSettings.markDoneAfterTimeout) {
+        NSTimeInterval delay = (chatSettings.timeOut ?: 0.0f);
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            __strong KUSChatMessagesDataSource *strongSelf = weakSelf;
+            if (!strongSelf) {
+                return;
+            }
+            
+            // End Control Tracking and Automatically marked it Closed, if form not end
+            if (!strongSelf->_vcFormEnd) {
+                [strongSelf _endVolumeControlTracking];
+                [strongSelf endChat:@"timed_out" withCompletion:nil];
+            }
+        });
+    }
+}
+
+- (void)sessionQueuePollingManager:(KUSSessionQueuePollingManager *)manager didUpdateSessionQueue:(KUSSessionQueue *)sessionQueue
+{
+    if (!_vcTrackingDelayCompleted && sessionQueue.estimatedWaitTimeSeconds != 0) {
+        _vcTrackingDelayCompleted = YES;
+        [self _insertVolumeControlFormMessageIfNecessary];
+    }
 }
 
 #pragma mark - Internal Logic methods
@@ -440,6 +476,9 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
                  _sessionId = session.oid;
                  _creatingSession = NO;
 
+                 // Create queue polling manager for volume control form
+                 sessionQueuePollingManager = [[KUSSessionQueuePollingManager alloc] initWithUserSession:self.userSession sessionId:session.oid];
+                 
                  // Insert the current messages data source into the userSession's lookup table
                  [self.userSession.chatMessagesDataSources setObject:self forKey:session.oid];
 
@@ -619,11 +658,20 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
          // Temporary set locked at to reflect changes in UI
          KUSChatSession *session = [self.userSession.chatSessionsDataSource objectWithId:_sessionId];
          session.lockedAt = [[NSDate alloc] init];
+         
+         // Cancel Volume Control Polling if necessary
+         [sessionQueuePollingManager cancelPolling];
+         
          [self notifyAnnouncersDidChangeContent];
          if (completion != nil) {
              completion(YES);
          }
      }];
+}
+
+- (KUSSessionQueuePollingManager *)sessionQueuePollingManager
+{
+    return sessionQueuePollingManager;
 }
 
 #pragma mark - KUSChatMessagesDataSourceListener methods
@@ -790,6 +838,9 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
              [self removeObjects:self.allObjects];
              [self upsertNewMessages:messages];
              [_messageRetryBlocksById removeObjectForKey:lastUserChatMessage.oid];
+             
+             // Create queue polling manager for volume control form
+             sessionQueuePollingManager = [[KUSSessionQueuePollingManager alloc] initWithUserSession:self.userSession sessionId:_sessionId];
              
              // Insert the current messages data source into the userSession's lookup table
              [self.userSession.chatMessagesDataSources setObject:self forKey:_sessionId];
@@ -1063,6 +1114,9 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
              
              _vcChatClosed = YES;
              _submittingForm = NO;
+             
+             // Cancel Volume Control Polling if necessary
+             [sessionQueuePollingManager cancelPolling];
          }];
     };
     
@@ -1090,33 +1144,40 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     }
     _vcTrackingStarted = YES;
     
-    __weak KUSChatMessagesDataSource *weakSelf = self;
-    NSTimeInterval delay = chatSettings.promptDelay ?: 0.0f;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        __strong KUSChatMessagesDataSource *strongSelf = weakSelf;
-        if (!strongSelf) {
-            return;
-        }
+    if (chatSettings.volumeControlMode == KUSVolumeControlModeDelayed) {
         
-        strongSelf->_vcTrackingDelayCompleted = YES;
-        [strongSelf _insertVolumeControlFormMessageIfNecessary];
-    });
-    
-    // Automatically end chat
-    if (chatSettings.markDoneAfterTimeout) {
-        NSTimeInterval delay = (chatSettings.timeOut ?: 0.0f) + (chatSettings.promptDelay ?: 0.0f);
+        __weak KUSChatMessagesDataSource *weakSelf = self;
+        NSTimeInterval delay = chatSettings.promptDelay ?: 0.0f;
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             __strong KUSChatMessagesDataSource *strongSelf = weakSelf;
             if (!strongSelf) {
                 return;
             }
             
-            // End Control Tracking and Automatically marked it Closed, if form not end
-            if (!strongSelf->_vcFormEnd) {
-                [strongSelf _endVolumeControlTracking];
-                [strongSelf endChat:@"timed_out" withCompletion:nil];
-            }
+            strongSelf->_vcTrackingDelayCompleted = YES;
+            [strongSelf _insertVolumeControlFormMessageIfNecessary];
         });
+        
+        // Automatically end chat
+        if (chatSettings.markDoneAfterTimeout) {
+            NSTimeInterval delay = (chatSettings.timeOut ?: 0.0f) + (chatSettings.promptDelay ?: 0.0f);
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                __strong KUSChatMessagesDataSource *strongSelf = weakSelf;
+                if (!strongSelf) {
+                    return;
+                }
+                
+                // End Control Tracking and Automatically marked it Closed, if form not end
+                if (!strongSelf->_vcFormEnd) {
+                    [strongSelf _endVolumeControlTracking];
+                    [strongSelf endChat:@"timed_out" withCompletion:nil];
+                }
+            });
+        }
+    }
+    else if (chatSettings.volumeControlMode == KUSVolumeControlModeUpfront) {
+        [sessionQueuePollingManager addListener:self];
+        [sessionQueuePollingManager startPolling];
     }
 }
 
@@ -1139,12 +1200,20 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
             [options addObject:@"I'll wait"];
         }
         
+        NSString *prompt = @"Sorry, it looks like no one has become available in the time we expected. Please select an alternate contact method for us to followup with you…";
+        KUSSessionQueue *sessionQueue = [sessionQueuePollingManager sessionQueue];
+        
+        if (chatSettings.volumeControlMode == KUSVolumeControlModeUpfront &&
+            sessionQueue.estimatedWaitTimeSeconds != 0) {
+            NSString *humanReadableTextFromSeconds = [KUSDate humanReadableTextFromSeconds:sessionQueue.estimatedWaitTimeSeconds];
+            prompt = [[NSString alloc] initWithFormat:@"Our current wait time is approximately %@. You can choose to wait for the next available agent or select an alternative contact method for us to follow up with you.", humanReadableTextFromSeconds];
+        }
+        
         KUSFormQuestion *question = [[KUSFormQuestion alloc]
                                      initWithJSON:@{
                                         @"id" : @"vc_question_0",
                                         @"name" : @"Volume Form 0",
-                                        @"prompt" : @"Sorry, it looks like no one has become available in the time we expected. Please select an alternate contact method for us to followup with you…",
-                                        @"type" : @"property",
+                                        @"prompt" : prompt,
                                         @"property" : @"followup_channel",
                                         @"values" : options,
                                     }];

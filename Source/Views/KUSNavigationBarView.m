@@ -13,6 +13,8 @@
 #import "KUSImage.h"
 #import "KUSFadingButton.h"
 #import "KUSUserSession.h"
+#import "KUSSessionQueuePollingManager.h"
+#import "KUSDate.h"
 
 static const CGFloat kKUSNavigationBarHeight = 44.0;
 
@@ -21,7 +23,7 @@ static const CGSize kKUSNavigationBarBackImageSize = { 12.0, 21.0 };
 static const CGSize kKUSNavigationBarDismissButtonSize = { 49.0, kKUSNavigationBarHeight };
 static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
 
-@interface KUSNavigationBarView () <KUSObjectDataSourceListener, KUSChatMessagesDataSourceListener> {
+@interface KUSNavigationBarView () <KUSObjectDataSourceListener, KUSChatMessagesDataSourceListener, KUSSessionQueuePollingListener> {
     KUSUserSession *_userSession;
     KUSChatMessagesDataSource *_chatMessagesDataSource;
     KUSUserDataSource *_userDataSource;
@@ -35,6 +37,8 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
     UIButton *_backButton;
     UILabel *_unreadCountLabel;
     UIButton *_dismissButton;
+    
+    NSString *_waitingMessage;
 }
 
 @end
@@ -277,12 +281,26 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
             _greetingLabel.text = chatSettings.greeting;
         }
         
-        _waitingLabel.text = chatSettings.useDynamicWaitMessage ? chatSettings.waitMessage : chatSettings.customWaitMessage;
+        // Update Waiting Message
+        if (_waitingMessage) {
+            _waitingLabel.text = _waitingMessage;
+        } else if (chatSettings.useDynamicWaitMessage) {
+            _waitingLabel.text = chatSettings.waitMessage;
+        } else {
+            _waitingLabel.text = chatSettings.customWaitMessage;
+        }
+        
     } else {
         if (![_userSession.scheduleDataSource isActiveBusinessHours]) {
             _greetingLabel.text = chatSettings.offhoursMessage;
         } else if (chatSettings.volumeControlEnabled) {
-            _greetingLabel.text = chatSettings.useDynamicWaitMessage ? chatSettings.waitMessage : chatSettings.customWaitMessage;
+            if (_waitingMessage) {
+                _greetingLabel.text = _waitingMessage;
+            } else if (chatSettings.useDynamicWaitMessage) {
+                _greetingLabel.text = chatSettings.waitMessage;
+            } else {
+                _greetingLabel.text = chatSettings.customWaitMessage;
+            }
         } else {
             _greetingLabel.text = chatSettings.greeting;
         }
@@ -317,6 +335,16 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
     }
 }
 
+- (NSString *)_getMessageFromSeconds:(NSTimeInterval)seconds
+{
+    if (seconds == 0) {
+        return @"Someone should be with you momentarily";
+    } else {
+        NSString *waitTime = [KUSDate humanReadableTextFromSeconds:seconds];
+        return [[NSString alloc] initWithFormat:@"Your expected wait time is %@", waitTime];
+    }
+}
+
 #pragma mark - Public methods
 
 - (CGFloat)desiredHeight
@@ -336,10 +364,22 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
     _sessionId = [sessionId copy];
     [self setNeedsLayout];
 
+    [_chatMessagesDataSource.sessionQueuePollingManager removeListener:self];
     [_chatMessagesDataSource removeListener:self];
+    
     _chatMessagesDataSource = [_userSession chatMessagesDataSourceForSessionId:_sessionId];
     [_chatMessagesDataSource addListener:self];
+    [_chatMessagesDataSource.sessionQueuePollingManager addListener:self];
     [_avatarsView setUserIds:_chatMessagesDataSource.otherUserIds];
+
+    BOOL isVolumeControlPollingActive = _chatMessagesDataSource.sessionQueuePollingManager != nil &&
+                                        _chatMessagesDataSource.sessionQueuePollingManager.isPollingStarted &&
+                                        !_chatMessagesDataSource.sessionQueuePollingManager.isPollingCanceled;
+    if (isVolumeControlPollingActive) {
+        KUSSessionQueue *sessionQueue = [_chatMessagesDataSource.sessionQueuePollingManager sessionQueue];
+        _waitingMessage = [self _getMessageFromSeconds:sessionQueue.estimatedWaitTimeSeconds];
+    }
+    
     [self _updateTextLabels];
     [self _updateBackButtonBadge];
 }
@@ -379,6 +419,19 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
     } else if (dataSource == _userSession.chatSessionsDataSource) {
         [self _updateBackButtonBadge];
     }
+}
+
+#pragma mark - KUSPaginatedDataSourceListener methods
+- (void)sessionQueuePollingManager:(KUSSessionQueuePollingManager *)manager didUpdateSessionQueue:(KUSSessionQueue *)sessionQueue
+{
+    _waitingMessage = [self _getMessageFromSeconds:sessionQueue.estimatedWaitTimeSeconds];
+    [self _updateTextLabels];
+}
+
+- (void)sessionQueuePollingManagerDidCancelPolling:(KUSSessionQueuePollingManager *)manager
+{
+    _waitingMessage = nil;
+    [self _updateTextLabels];
 }
 
 #pragma mark - UIAppearance methods

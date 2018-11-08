@@ -10,6 +10,7 @@
 
 #import "KUSChatMessage.h"
 #import "KUSFormQuestion.h"
+#import "KUSSessionQueuePollingManager.h"
 
 #import <UIKit/UIKit.h>
 
@@ -39,6 +40,7 @@
 - (KUSChatMessage *)latestMessage;
 - (KUSFormQuestion *)volumeControlCurrentQuestion;
 - (BOOL)isChatClosed;
+- (KUSSessionQueuePollingManager *)sessionQueuePollingManager;
 
 - (void)upsertNewMessages:(NSArray<KUSChatMessage *> *)chatMessages;
 - (void)sendMessageWithText:(NSString *)text attachments:(NSArray<UIImage *> *)attachments;

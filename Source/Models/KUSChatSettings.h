@@ -14,6 +14,12 @@ typedef NS_ENUM(NSInteger, KUSBusinessHoursAvailability) {
     KUSBusinessHoursAvailabilityHideChat,
 };
 
+typedef NS_ENUM(NSInteger, KUSVolumeControlMode) {
+    KUSVolumeControlModeUnknown,
+    KUSVolumeControlModeDelayed,
+    KUSVolumeControlModeUpfront
+};
+
 @class KUSChatMessage;
 @interface KUSChatSettings : KUSModel
 
@@ -40,6 +46,8 @@ typedef NS_ENUM(NSInteger, KUSBusinessHoursAvailability) {
 @property (nonatomic, assign, readonly) BOOL closableChat;
 @property (nonatomic, assign, readonly) BOOL singleSessionChat;
 @property (nonatomic, assign, readonly) BOOL noHistory;
+@property (nonatomic, assign, readonly) KUSVolumeControlMode volumeControlMode;
+@property (nonatomic, assign, readonly) NSInteger upfrontWaitThreshold;
 
 
 @end

@@ -42,6 +42,23 @@ const NSTimeInterval kDaysPerWeek = 7.0;
     }
 }
 
++ (NSString *)humanReadableTextFromSeconds:(NSUInteger)seconds
+{
+    if (seconds < kSecondsPerMinute * kMinutesPerHour) {
+        int minutes = (int)ceil(seconds / kSecondsPerMinute);
+        return [[NSString alloc] initWithFormat:@"%d minute%@", minutes, minutes > 1 ? @"s" : @""];
+    } else if (seconds < kSecondsPerMinute * kMinutesPerHour * kHoursPerDay) {
+        int hours = (int)ceil(seconds / (kSecondsPerMinute * kMinutesPerHour));
+        return [[NSString alloc] initWithFormat:@"%d hour%@", hours, hours > 1 ? @"s" : @""];
+    } else if (seconds < kSecondsPerMinute * kMinutesPerHour * kHoursPerDay * kDaysPerWeek) {
+        int days = (int)ceil(seconds / (kSecondsPerMinute * kMinutesPerHour * kHoursPerDay));
+        return [[NSString alloc] initWithFormat:@"%d day%@", days, days > 1 ? @"s" : @""];
+    } else {
+        int weeks = (int)ceil(seconds / (kSecondsPerMinute * kMinutesPerHour * kHoursPerDay * kDaysPerWeek));
+        return [[NSString alloc] initWithFormat:@"%d week%@", weeks, weeks > 1 ? @"s" : @""];
+    }
+}
+
 + (NSString *)messageTimestampTextFromDate:(NSDate *)date
 {
     return [_ShortRelativeDateFormatter() stringFromDate:date];

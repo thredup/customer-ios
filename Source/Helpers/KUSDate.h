@@ -11,6 +11,7 @@
 @interface KUSDate : NSObject
 
 + (NSString *)humanReadableTextFromDate:(NSDate *)date;
++ (NSString *)humanReadableTextFromSeconds:(NSUInteger)seconds;
 + (NSString *)messageTimestampTextFromDate:(NSDate *)date;
 
 + (NSDate *)dateFromString:(NSString *)string;
