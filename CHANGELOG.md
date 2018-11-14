@@ -1,5 +1,9 @@
 # Changelog for Kustomer iOS SDK
 
+## 0.1.26
+
+* Added upfront volume control tracking support
+
 ## 0.1.25
 
 * Added hide new conversation button in closed chat listing
