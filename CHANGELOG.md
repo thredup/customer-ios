@@ -1,5 +1,10 @@
 # Changelog for Kustomer iOS SDK
 
+## 0.1.27
+
+* Added 'swahili' language support
+* Updated documentation
+
 ## 0.1.26
 
 * Added upfront volume control tracking support
