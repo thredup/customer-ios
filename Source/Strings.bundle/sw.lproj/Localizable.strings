@@ -1,0 +1,40 @@
+/* 
+  Localizable.strings
+  Kustomer
+
+  Created by Hunain Shahid on 16/11/2018.
+  Copyright © 2018 Kustomer. All rights reserved.
+*/
+
+
+"com.kustomer.week" = "wiki";
+"com.kustomer.day" = "siku";
+"com.kustomer.hour" = "saa";
+"com.kustomer.minute" = "dakika";
+"com.kustomer.weeks" = "weeks";
+"com.kustomer.days" = "wiki";
+"com.kustomer.hours" = "masaa";
+"com.kustomer.minutes" = "dakika";
+"com.kustomer.Just now" = "sasa hivi";
+"com.kustomer.Attachment" = "kiambatisho";
+"com.kustomer.Camera" = "kamera";
+"com.kustomer.Photo Library" = "Maktaba ya Picha";
+"com.kustomer.Cancel" = "Futa";
+"com.kustomer.Something went wrong. Please try again." = "Kitu kilichokosa. Tafadhali jaribu tena.";
+"com.kustomer.Try Again" = "Jaribu tena";
+"com.kustomer.New Conversation" = "Mazungumzo mapya";
+"com.kustomer.Don't miss a response! Get notified by email:" = "Usikose jibu! Pata taarifa kwa barua pepe:";
+"com.kustomer.example@domain.com" = "mfano@domain.com";
+"com.kustomer.Type a message..." = "Andika ujumbe...";
+"com.kustomer.Loading..." = "Inapakia...";
+"com.kustomer.ago" = "iliyopita";
+"com.kustomer.Chat with" = "Ongea na";
+"com.kustomer.CLOSED" = "IMEFUNGWA";
+"com.kustomer.Start a New Conversation" = "Anza Majadiliano Mapya";
+"com.kustomer.Thank You! We'll follow up on your request." = "Asante! Tutafuatilia ombi lako.";
+"com.kustomer.CHAT HAS ENDED" = "MAZUNGMZO YAMEISHA";
+"com.kustomer.END CHAT" = "kumaliza mazungumzo";
+"com.kustomer.Back to chat" = "Rudi kwenye kuzungumza";
+"com.kustomer.Home" = "nyumbani";
+"com.kustomer.Please select an item" = "Tafadhali chagua kipengee";
+"com.kustomer.Leave a message" = "Acha ujumbe";

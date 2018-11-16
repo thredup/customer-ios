@@ -173,6 +173,27 @@ customerDescription.custom = @{ @"customAttributeStr": @"value" };
 [Kustomer hideNewConversationButtonInClosedChat:YES];
 ```
 
+```objective-c
+/*
+ Return the total number of open conversations.
+*/
+[Kustomer openConversationsCount];
+```
+
+```objective-c
+/*
+ Return the current count of un-read messages. It might not be immediately available. 
+*/
+[Kustomer unreadMessageCount];
+```
+
+```objective-c
+/*
+ Override the conversation form directly from the sdk by setting the form id. 
+*/
+[Kustomer setFormId:FORM_ID];
+```
+
 ### Localization
 
 The Kustomer iOS SDK will automatically change the text strings to match the language of the device your customers are using. The SDK supports both <b>Right-to-left (RTL)</b> and <b>Left-to-right (LTR)</b> formatted languages. There are over 50 languages translated out of the box.
