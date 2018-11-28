@@ -30,6 +30,10 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
 
     NSMutableDictionary<NSString *, KUSChatSession *> *_previousChatSessions;
     NSString *_pendingNotificationSessionId;
+    
+    BOOL _isPusherTrackingStarted;
+    BOOL _shouldConnect;
+    NSDate *_lastActivity;
 }
 
 @end
@@ -43,6 +47,8 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
     self = [super init];
     if (self) {
         _userSession = userSession;
+        _shouldConnect = NO;
+        _isPusherTrackingStarted = NO;
 
         [_userSession.chatSessionsDataSource addListener:self];
         [_userSession.chatSettingsDataSource addListener:self];
@@ -91,16 +97,23 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
         [self _shouldBeConnectedToPusher:^(BOOL shouldConnect) {
             if (shouldConnect) {
                 [_pusherClient connect];
+                [self _updatePollingTimer];
                 
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(KUSShouldConnectToPusherRecencyThreshold * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [self _connectToChannelsIfNecessary];
-                });
+                // Update pusher state only once
+                if (!_isPusherTrackingStarted) {
+                    _isPusherTrackingStarted = YES;
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(KUSShouldConnectToPusherRecencyThreshold * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        _isPusherTrackingStarted = NO;
+                        [self _connectToChannelsIfNecessary];
+                    });
+                }
             } else {
                 [_pusherClient disconnect];
+                [self _updatePollingTimer];
             }
         }];
     } else {
-        [_pusherClient disconnect];
+        [self _updatePollingTimer];
     }
     
     NSString *pusherChannelName = [self _pusherChannelName];
@@ -113,54 +126,54 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
                                   target:self
                                   action:@selector(_onPusherChatSessionEnd:)];
     }
-    
-    [self _updatePollingTimer];
 }
 
 - (void)_updatePollingTimer
 {
     // Connect or disconnect from pusher
-    [self _shouldBeConnectedToPusher:^(BOOL shouldConnect) {
-        if (shouldConnect) {
-            if (_pusherClient.connection.connected) {
-                // Stop polling
-                if (_pollingTimer) {
-                    [_pollingTimer invalidate];
-                    _pollingTimer = nil;
-                    KUSLogPusher(@"Stopped polling timer");
-                }
-            } else {
-                // We are not yet connected to pusher, setup an active polling timer
-                // (in the event that connecting to pusher fails)
-                if (_pollingTimer == nil || _pollingTimer.timeInterval != KUSActivePollingTimerInterval) {
-                    [_pollingTimer invalidate];
-                    _pollingTimer = [KUSWeakTimer scheduledTimerWithTimeInterval:KUSActivePollingTimerInterval
-                                                                          target:self
-                                                                        selector:@selector(_onPollTick)
-                                                                         repeats:YES];
-                    KUSLogPusher(@"Started active polling timer");
-                }
+    if (_shouldConnect) {
+        if (_pusherClient.connection.connected) {
+            // Stop polling
+            if (_pollingTimer) {
+                [_pollingTimer invalidate];
+                _pollingTimer = nil;
+                KUSLogPusher(@"Stopped polling timer");
             }
         } else {
-            // Make sure we're polling lazily
-            if (_pollingTimer == nil || _pollingTimer.timeInterval != KUSLazyPollingTimerInterval) {
+            // We are not yet connected to pusher, setup an active polling timer
+            // (in the event that connecting to pusher fails)
+            if (_pollingTimer == nil || _pollingTimer.timeInterval != KUSActivePollingTimerInterval) {
                 [_pollingTimer invalidate];
-                _pollingTimer = [KUSWeakTimer scheduledTimerWithTimeInterval:KUSLazyPollingTimerInterval
+                _pollingTimer = [KUSWeakTimer scheduledTimerWithTimeInterval:KUSActivePollingTimerInterval
                                                                       target:self
                                                                     selector:@selector(_onPollTick)
                                                                      repeats:YES];
-                KUSLogPusher(@"Started lazy polling timer");
-                
-                // Tick immediately
-                [_pollingTimer fire];
+                KUSLogPusher(@"Started active polling timer");
             }
         }
-    }];
+    } else {
+        // Make sure we're polling lazily
+        if (_pollingTimer == nil || _pollingTimer.timeInterval != KUSLazyPollingTimerInterval) {
+            [_pollingTimer invalidate];
+            _pollingTimer = [KUSWeakTimer scheduledTimerWithTimeInterval:KUSLazyPollingTimerInterval
+                                                                  target:self
+                                                                selector:@selector(_onPollTick)
+                                                                 repeats:YES];
+            KUSLogPusher(@"Started lazy polling timer");
+            
+            // Tick immediately
+            [_pollingTimer fire];
+        }
+    }
 }
 
 - (void)_onPollTick
 {
-    [_userSession.chatSessionsDataSource fetchLatest];
+    [self _checkSessionUpdated:^(BOOL sessionUpdated) {
+        if (sessionUpdated) {
+            [_userSession.chatSessionsDataSource fetchLatest];
+        }
+    }];
 }
 
 - (void)_notifyForUpdatedChatSession:(NSString *)chatSessionId
@@ -186,33 +199,50 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
 - (void)_shouldBeConnectedToPusher:(void (^) (BOOL shouldConnect))completion
 {
     if (_supportViewControllerPresented) {
+        _shouldConnect = YES;
         completion(YES);
         return;
     }
+    
+    [self _fetchLastActivity:^(NSDate *lastActivity) {
+        BOOL connect = lastActivity && [lastActivity timeIntervalSinceNow] > -KUSShouldConnectToPusherRecencyThreshold;
+        
+        _shouldConnect = connect;
+        completion(connect);
+    }];
+}
+
+- (void)_checkSessionUpdated:(void (^) (BOOL sessionUpdated))completion
+{
+    [self _fetchLastActivity:^(NSDate *lastActivity) {
+        BOOL sessionUpdated = ([_lastActivity compare:lastActivity] != NSOrderedSame);
+        
+        _lastActivity = lastActivity;
+        completion(sessionUpdated);
+    }];
+}
+
+- (void)_fetchLastActivity:(void (^) (NSDate* lastActivity))completion
+{
     // Fetch last activity time of the client
     [_userSession.requestManager
      getEndpoint:@"/c/v1/chat/customers/stats"
      authenticated:YES
      completion:^(NSError *error, NSDictionary *response) {
-            NSDictionary* json = response[@"data"];
-            NSDate* lastActivity = DateFromKeyPath(json, @"attributes.lastActivity");
-            BOOL connect = lastActivity && [lastActivity timeIntervalSinceNow] > -KUSShouldConnectToPusherRecencyThreshold;
-            completion(connect);
-    }];
+         NSDictionary* json = response[@"data"];
+         NSDate* lastActivity = DateFromKeyPath(json, @"attributes.lastActivity");
+         completion(lastActivity);
+     }];
 }
-
-
 
 #pragma mark - Public methods
 
 - (void)onClientActivityTick
 {
     // We only need to poll for client activity changes if we are not connected to the socket
-    [self _shouldBeConnectedToPusher:^(BOOL shouldConnect) {
-        if (!shouldConnect) {
-            [self _onPollTick];
-        }
-    }];
+    if (!_pusherClient.connection.connected) {
+        [self _onPollTick];
+    }
 }
 
 #pragma mark - Property methods
