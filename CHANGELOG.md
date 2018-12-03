@@ -1,5 +1,10 @@
 # Changelog for Kustomer iOS SDK
 
+## 0.1.28
+
+* Fixed pusher logic
+* Fixed 'End Chat' button translation in Spanish
+
 ## 0.1.27
 
 * Added 'swahili' language support
