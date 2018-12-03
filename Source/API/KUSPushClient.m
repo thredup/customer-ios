@@ -210,7 +210,7 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
          NSDate* lastActivity = DateFromKeyPath(json, @"attributes.lastActivity");
          
          BOOL shouldConnect = lastActivity && [lastActivity timeIntervalSinceNow] > -KUSShouldConnectToPusherRecencyThreshold;
-         BOOL sessionUpdated = _lastActivity == nil || ([_lastActivity compare:lastActivity] != NSOrderedSame);
+         BOOL sessionUpdated = (_lastActivity == nil && lastActivity != nil) || ([_lastActivity compare:lastActivity] != NSOrderedSame);
          
          _shouldConnect = shouldConnect;
          _sessionUpdated = sessionUpdated;
