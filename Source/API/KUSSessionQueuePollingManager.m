@@ -64,16 +64,15 @@ const NSTimeInterval kOneMinute = 60.0;
 
 - (NSTimeInterval)_getPollingIntervalFromEstimatedWaitTime:(NSTimeInterval)estimatedWaitTimeSeconds
 {
-    NSTimeInterval waitTime = (NSTimeInterval)estimatedWaitTimeSeconds / 60;
     NSTimeInterval delay = 0;
-    if (waitTime < kOneMinute) {
+    if (estimatedWaitTimeSeconds < kOneMinute) {
         delay = 0.1 * kOneMinute;
-    } else if (waitTime < 5 * kOneMinute) {
+    } else if (estimatedWaitTimeSeconds < 5 * kOneMinute) {
         delay = 0.5 * kOneMinute;
-    } else if (waitTime < 10 * kOneMinute) {
+    } else if (estimatedWaitTimeSeconds < 10 * kOneMinute) {
         delay = kOneMinute;
     } else {
-        delay = 0.1 * waitTime;
+        delay = 0.1 * estimatedWaitTimeSeconds;
     }
     
     return delay;
@@ -171,8 +170,8 @@ const NSTimeInterval kOneMinute = 60.0;
     [self notifyAnnouncersDidUpdatePolling:sessionQueue];
     
     // Fetch queue object after specific delay if necessary
-    NSTimeInterval waitTime = (NSTimeInterval)sessionQueue.estimatedWaitTimeSeconds / 60;
-    if (waitTime == 0) {
+    if (sessionQueue.estimatedWaitTimeSeconds == 0) {
+        [self notifyAnnouncersDidEndPolling];
         return;
     }
     

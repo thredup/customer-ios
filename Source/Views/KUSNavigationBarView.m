@@ -335,16 +335,6 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
     }
 }
 
-- (NSString *)_getMessageFromSeconds:(NSTimeInterval)seconds
-{
-    if (seconds == 0) {
-        return @"Someone should be with you momentarily";
-    } else {
-        NSString *waitTime = [KUSDate humanReadableTextFromSeconds:seconds];
-        return [[NSString alloc] initWithFormat:@"Your expected wait time is %@", waitTime];
-    }
-}
-
 #pragma mark - Public methods
 
 - (CGFloat)desiredHeight
@@ -377,7 +367,7 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
                                         !_chatMessagesDataSource.sessionQueuePollingManager.isPollingCanceled;
     if (isVolumeControlPollingActive) {
         KUSSessionQueue *sessionQueue = [_chatMessagesDataSource.sessionQueuePollingManager sessionQueue];
-        _waitingMessage = [self _getMessageFromSeconds:sessionQueue.estimatedWaitTimeSeconds];
+        _waitingMessage = [KUSDate humanReadableUpfrontVolumeControlWaitingTimeFromSeconds:sessionQueue.estimatedWaitTimeSeconds];
     }
     
     [self _updateTextLabels];
@@ -424,7 +414,7 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
 #pragma mark - KUSPaginatedDataSourceListener methods
 - (void)sessionQueuePollingManager:(KUSSessionQueuePollingManager *)manager didUpdateSessionQueue:(KUSSessionQueue *)sessionQueue
 {
-    _waitingMessage = [self _getMessageFromSeconds:sessionQueue.estimatedWaitTimeSeconds];
+    _waitingMessage = [KUSDate humanReadableUpfrontVolumeControlWaitingTimeFromSeconds:sessionQueue.estimatedWaitTimeSeconds];
     [self _updateTextLabels];
 }
 

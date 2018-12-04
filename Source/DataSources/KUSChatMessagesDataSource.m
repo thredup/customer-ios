@@ -159,34 +159,33 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 
 #pragma mark - KUSSessionQueuePollingListener methods
 
-- (void)sessionQueuePollingManagerDidStartPolling:(KUSSessionQueuePollingManager *)manager
-{
-    // Automatically end chat
-    KUSChatSettings *chatSettings = self.userSession.chatSettingsDataSource.object;
-    __weak KUSChatMessagesDataSource *weakSelf = self;
-    
-    if (chatSettings.markDoneAfterTimeout) {
-        NSTimeInterval delay = (chatSettings.timeOut ?: 0.0f);
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            __strong KUSChatMessagesDataSource *strongSelf = weakSelf;
-            if (!strongSelf) {
-                return;
-            }
-            
-            // End Control Tracking and Automatically marked it Closed, if form not end
-            if (!strongSelf->_vcFormEnd) {
-                [strongSelf _endVolumeControlTracking];
-                [strongSelf endChat:@"timed_out" withCompletion:nil];
-            }
-        });
-    }
-}
-
 - (void)sessionQueuePollingManager:(KUSSessionQueuePollingManager *)manager didUpdateSessionQueue:(KUSSessionQueue *)sessionQueue
 {
-    if (!_vcTrackingDelayCompleted && sessionQueue.estimatedWaitTimeSeconds != 0) {
+    KUSChatSettings *chatSettings           = self.userSession.chatSettingsDataSource.object;
+    BOOL estimatedWaitTimeIsOverThreshold   = sessionQueue.estimatedWaitTimeSeconds != 0 &&
+                                              sessionQueue.estimatedWaitTimeSeconds > chatSettings.upfrontWaitThreshold;
+    
+    if (!_vcTrackingDelayCompleted && estimatedWaitTimeIsOverThreshold) {
         _vcTrackingDelayCompleted = YES;
         [self _insertVolumeControlFormMessageIfNecessary];
+        
+        // Start tracking to automatically done conversation
+        __weak KUSChatMessagesDataSource *weakSelf = self;
+        if (chatSettings.markDoneAfterTimeout) {
+            NSTimeInterval delay = (chatSettings.timeOut ?: 0.0f);
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                __strong KUSChatMessagesDataSource *strongSelf = weakSelf;
+                if (!strongSelf) {
+                    return;
+                }
+                
+                // End Control Tracking and Automatically marked it Closed, if form not end
+                if (!strongSelf->_vcFormEnd) {
+                    [strongSelf _endVolumeControlTracking];
+                    [strongSelf endChat:@"timed_out" withCompletion:nil];
+                }
+            });
+        }
     }
 }
 

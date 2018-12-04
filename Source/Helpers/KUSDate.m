@@ -44,18 +44,27 @@ const NSTimeInterval kDaysPerWeek = 7.0;
 
 + (NSString *)humanReadableTextFromSeconds:(NSUInteger)seconds
 {
-    if (seconds < kSecondsPerMinute * kMinutesPerHour) {
+    if (seconds < kSecondsPerMinute) {
+        return _textWithCountAndUnit(seconds, @"second");
+    } else if (seconds < kSecondsPerMinute * kMinutesPerHour) {
         int minutes = (int)ceil(seconds / kSecondsPerMinute);
-        return [[NSString alloc] initWithFormat:@"%d minute%@", minutes, minutes > 1 ? @"s" : @""];
+        return _textWithCountAndUnit(minutes, @"minute");
     } else if (seconds < kSecondsPerMinute * kMinutesPerHour * kHoursPerDay) {
         int hours = (int)ceil(seconds / (kSecondsPerMinute * kMinutesPerHour));
-        return [[NSString alloc] initWithFormat:@"%d hour%@", hours, hours > 1 ? @"s" : @""];
-    } else if (seconds < kSecondsPerMinute * kMinutesPerHour * kHoursPerDay * kDaysPerWeek) {
-        int days = (int)ceil(seconds / (kSecondsPerMinute * kMinutesPerHour * kHoursPerDay));
-        return [[NSString alloc] initWithFormat:@"%d day%@", days, days > 1 ? @"s" : @""];
+        return _textWithCountAndUnit(hours, @"hour");
     } else {
-        int weeks = (int)ceil(seconds / (kSecondsPerMinute * kMinutesPerHour * kHoursPerDay * kDaysPerWeek));
-        return [[NSString alloc] initWithFormat:@"%d week%@", weeks, weeks > 1 ? @"s" : @""];
+        return [[KUSLocalization sharedInstance] localizedString:@"greater than one day"];
+    }
+}
+
++ (NSString *)humanReadableUpfrontVolumeControlWaitingTimeFromSeconds:(NSUInteger)seconds
+{
+    if (seconds == 0) {
+        return [[KUSLocalization sharedInstance] localizedString:@"Someone should be with you momentarily"];
+    } else {
+        NSString *waitTime = [KUSDate humanReadableTextFromSeconds:seconds];
+        NSString *localizedMessage = [[KUSLocalization sharedInstance] localizedString:@"Your expected wait time is"];
+        return [[NSString alloc] initWithFormat:@"%@ %@", localizedMessage, waitTime];
     }
 }
 
@@ -96,6 +105,13 @@ static NSString *_AgoTextWithCountAndUnit(NSTimeInterval unitCount, NSString *un
     NSString* ago = [[KUSLocalization sharedInstance] localizedString:@"ago"];
     NSString* localizedUnit = [[KUSLocalization sharedInstance] localizedString:[NSString stringWithFormat:@"%@%@", unit, (integerUnit > 1 ? @"s": @"")]];
     return [NSString stringWithFormat:@"%i %@ %@", integerUnit, localizedUnit, ago];
+}
+
+static NSString *_textWithCountAndUnit(NSTimeInterval unitCount, NSString *unit)
+{
+    int integerUnit = (int)round(unitCount);
+    NSString* localizedUnit = [[KUSLocalization sharedInstance] localizedString:[NSString stringWithFormat:@"%@%@", unit, (integerUnit > 1 ? @"s": @"")]];
+    return [NSString stringWithFormat:@"%i %@", integerUnit, localizedUnit];
 }
 
 static NSDateFormatter *_ISO8601DateFormatterFromDate(void)

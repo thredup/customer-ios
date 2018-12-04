@@ -12,6 +12,7 @@
 
 + (NSString *)humanReadableTextFromDate:(NSDate *)date;
 + (NSString *)humanReadableTextFromSeconds:(NSUInteger)seconds;
++ (NSString *)humanReadableUpfrontVolumeControlWaitingTimeFromSeconds:(NSUInteger)seconds;
 + (NSString *)messageTimestampTextFromDate:(NSDate *)date;
 
 + (NSDate *)dateFromString:(NSString *)string;
