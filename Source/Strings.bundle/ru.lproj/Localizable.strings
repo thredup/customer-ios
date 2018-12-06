@@ -38,3 +38,14 @@
 "com.kustomer.Home" = "Главная";
 "com.kustomer.Please select an item" = "Выберите элемент";
 "com.kustomer.Leave a message" = "Оставить сообщение";
+"com.kustomer.greater than one day" = "более одного дня";
+"com.kustomer.Someone should be with you momentarily" = "Кто-то должен быть с вами на мгновение";
+"com.kustomer.Your expected wait time is" = "Ожидаемое время ожидания";
+"com.kustomer.second" = "второй";
+"com.kustomer.seconds" = "секунд";
+"com.kustomer.Our current wait time is approximately" = "Наше текущее время ожидания приблизительно";
+"com.kustomer.upfront_volume_control_alternative_method_question" = "Вы можете подождать следующего доступного агента или выбрать альтернативу контактный метод для нас, чтобы следить за вами.";
+"com.kustomer.volume_control_alternative_method_question" = "Извините, похоже, что никто не стал доступен в то время, которое мы ожидали. Пожалуйста, выберите альтернативный метод контакта для нас, чтобы следить за вами ...";
+"com.kustomer.volume_control_email_question" = "Замечательно, что для вас самое лучшее письмо?";
+"com.kustomer.volume_control_phone_question" = "Отлично, какой лучший номер телефона для вас?";
+"com.kustomer.volume_control_thankyou_response" = "Спасибо. Мы скоро свяжемся с вами.";

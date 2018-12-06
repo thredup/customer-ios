@@ -38,3 +38,14 @@
 "com.kustomer.Home" = "Casa";
 "com.kustomer.Please select an item" = "Por favor seleccione un artículo";
 "com.kustomer.Leave a message" = "Deja un mensaje";
+"com.kustomer.greater than one day" = "más de un día";
+"com.kustomer.Someone should be with you momentarily" = "Alguien debería estar contigo momentáneamente";
+"com.kustomer.Your expected wait time is" = "Su tiempo de espera esperado es";
+"com.kustomer.second" = "segundo";
+"com.kustomer.seconds" = "segundos";
+"com.kustomer.Our current wait time is approximately" = "Nuestro tiempo de espera actual es de aproximadamente";
+"com.kustomer.upfront_volume_control_alternative_method_question" = "Puede elegir esperar al siguiente agente disponible o seleccionar una alternativa Método de contacto para que podamos hacer un seguimiento con usted.";
+"com.kustomer.volume_control_alternative_method_question" = "Lo sentimos, parece que nadie ha estado disponible en el tiempo que esperábamos. Por favor seleccione un método de contacto alternativo para que podamos seguir con usted ...";
+"com.kustomer.volume_control_email_question" = "Genial, ¿cuál es el mejor correo electrónico para contactarte?";
+"com.kustomer.volume_control_phone_question" = "Genial, ¿cuál es el mejor número de teléfono para contactarte?";
+"com.kustomer.volume_control_thankyou_response" = "Gracias. Nos pondremos en contacto con usted en breve.";

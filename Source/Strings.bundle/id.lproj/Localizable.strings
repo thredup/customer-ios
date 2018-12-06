@@ -38,3 +38,14 @@
 "com.kustomer.Home" = "Rumah";
 "com.kustomer.Please select an item" = "Silakan pilih item";
 "com.kustomer.Leave a message" = "Tinggalkan pesan";
+"com.kustomer.greater than one day" = "lebih dari satu hari";
+"com.kustomer.Someone should be with you momentarily" = "Seseorang harus bersamamu sebentar lagi";
+"com.kustomer.Your expected wait time is" = "Waktu tunggu yang Anda harapkan adalah";
+"com.kustomer.second" = "kedua";
+"com.kustomer.seconds" = "detik";
+"com.kustomer.Our current wait time is approximately" = "Waktu tunggu kami saat ini kurang lebih";
+"com.kustomer.upfront_volume_control_alternative_method_question" = "Anda dapat memilih untuk menunggu agen berikutnya yang tersedia atau pilih alternatif metode kontak bagi kami untuk menindaklanjuti dengan Anda.";
+"com.kustomer.volume_control_alternative_method_question" = "Maaf, sepertinya belum ada yang tersedia pada saat kami harapkan. Silakan pilih metode kontak alternatif bagi kami untuk menindaklanjutinya dengan Anda ...";
+"com.kustomer.volume_control_email_question" = "Hebat, apa email terbaik untuk menghubungi Anda di?";
+"com.kustomer.volume_control_phone_question" = "Hebat, berapa nomor telepon terbaik untuk dihubungi?";
+"com.kustomer.volume_control_thankyou_response" = "Terima kasih. Kami akan segera menghubungi Anda.";

@@ -38,3 +38,14 @@
 "com.kustomer.Home" = "Acasă";
 "com.kustomer.Please select an item" = "Selectați un element";
 "com.kustomer.Leave a message" = "Lăsați un mesaj";
+"com.kustomer.greater than one day" = "mai mult de o zi";
+"com.kustomer.Someone should be with you momentarily" = "Cineva ar trebui să fie cu tine pentru moment";
+"com.kustomer.Your expected wait time is" = "Timpul așteptat de așteptare este";
+"com.kustomer.second" = "al doilea";
+"com.kustomer.seconds" = "secunde";
+"com.kustomer.Our current wait time is approximately" = "Timpul nostru de așteptare este aproximativ";
+"com.kustomer.upfront_volume_control_alternative_method_question" = "Puteți alege să așteptați următorul agent disponibil sau să selectați o alternativă modalitate de contact pentru ca noi să urmărim cu dvs.";
+"com.kustomer.volume_control_alternative_method_question" = "Ne pare rău, se pare că nimeni nu a devenit disponibil în perioada în care ne-am așteptat. Selectați o metodă de contact alternativă pentru a vă urma cu dvs. ...";
+"com.kustomer.volume_control_email_question" = "Ce e cel mai bun e-mail pentru a te contacta?";
+"com.kustomer.volume_control_phone_question" = "Grozav, care este cel mai bun număr de telefon la care te afli?";
+"com.kustomer.volume_control_thankyou_response" = "Mulțumesc. Ne vom întoarce în curând.";

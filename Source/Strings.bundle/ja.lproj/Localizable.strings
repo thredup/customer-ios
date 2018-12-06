@@ -38,3 +38,14 @@
 "com.kustomer.Home" = "ホーム";
 "com.kustomer.Please select an item" = "アイテムを選択してください";
 "com.kustomer.Leave a message" = "伝言を残す";
+"com.kustomer.greater than one day" = "1日以上";
+"com.kustomer.Someone should be with you momentarily" = "誰かがあなたと一瞬一緒にいるはずです";
+"com.kustomer.Your expected wait time is" = "あなたの予想待ち時間は";
+"com.kustomer.second" = "二番目";
+"com.kustomer.seconds" = "秒";
+"com.kustomer.Our current wait time is approximately" = "現在の待ち時間は約";
+"com.kustomer.upfront_volume_control_alternative_method_question" = "次に使用可能なエージェントを待つか、代替エージェントを選択することができます 私たちがあなたにフォローアップする連絡方法。";
+"com.kustomer.volume_control_alternative_method_question" = "申し訳ありませんが、期待した時間に誰も利用できなくなったようです。あなたにフォローアップするための代替連絡方法を選択してください...";
+"com.kustomer.volume_control_email_question" = "偉大な、あなたに届く最高の電子メールは何ですか？";
+"com.kustomer.volume_control_phone_question" = "あなたに連絡するのに最適な電話番号は何ですか？";
+"com.kustomer.volume_control_thankyou_response" = "ありがとうございました。私たちはまもなくあなたに連絡します。";

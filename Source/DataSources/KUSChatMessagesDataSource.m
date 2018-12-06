@@ -166,43 +166,56 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
                                               sessionQueue.estimatedWaitTimeSeconds > chatSettings.upfrontWaitThreshold;
     
     if (!_vcTrackingDelayCompleted && estimatedWaitTimeIsOverThreshold) {
-        _vcTrackingDelayCompleted = YES;
-        [self _insertVolumeControlFormMessageIfNecessary];
+        [self _startVolumeControlFormTrackingAfterDelay:0.0f];
         
-        // Start tracking to automatically done conversation
-        __weak KUSChatMessagesDataSource *weakSelf = self;
         if (chatSettings.markDoneAfterTimeout) {
-            NSTimeInterval delay = (chatSettings.timeOut ?: 0.0f);
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                __strong KUSChatMessagesDataSource *strongSelf = weakSelf;
-                if (!strongSelf) {
-                    return;
-                }
-                
-                // End Control Tracking and Automatically marked it Closed, if form not end
-                if (!strongSelf->_vcFormEnd) {
-                    [strongSelf _endVolumeControlTracking];
-                    [strongSelf endChat:@"timed_out" withCompletion:nil];
-                }
-            });
+            [self _endVolumeControlFormAfterDelayIfNecessary:(chatSettings.timeOut ?: 0.0f)];
         }
     }
 }
 
 #pragma mark - Internal Logic methods
 
+- (void)_startVolumeControlFormTrackingAfterDelay:(NSTimeInterval)delay
+{
+    __weak KUSChatMessagesDataSource *weakSelf = self;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        __strong KUSChatMessagesDataSource *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
+        
+        strongSelf->_vcTrackingDelayCompleted = YES;
+        [strongSelf _insertVolumeControlFormMessageIfNecessary];
+    });
+}
+
+- (void)_endVolumeControlFormAfterDelayIfNecessary:(NSTimeInterval)delay
+{
+    __weak KUSChatMessagesDataSource *weakSelf = self;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        __strong KUSChatMessagesDataSource *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
+        
+        // End Control Tracking and Automatically marked it Closed, if form not end
+        if (!strongSelf->_vcFormEnd) {
+            [strongSelf _endVolumeControlTracking];
+            [strongSelf endChat:@"timed_out" withCompletion:nil];
+        }
+    });
+}
+
 - (void)_closeProactiveCampaignIfNecessary
 {
     KUSChatSettings *settings = [self.userSession.chatSettingsDataSource object];
-    if (settings.singleSessionChat)
-    {
+    if (settings.singleSessionChat) {
         NSMutableDictionary<NSString *, KUSChatMessagesDataSource *> *chatMessagesDSDic = self.userSession.chatMessagesDataSources;
         NSArray * chatMessagesDatasources = [chatMessagesDSDic allValues];
         
-        for (KUSChatMessagesDataSource *chatMsgDataSource in chatMessagesDatasources)
-        {
-            if (![chatMsgDataSource isAnyMessageByCurrentUser])
-            {
+        for (KUSChatMessagesDataSource *chatMsgDataSource in chatMessagesDatasources) {
+            if (![chatMsgDataSource isAnyMessageByCurrentUser]) {
                 [self.userSession.chatSessionsDataSource updateLastSeenAtForSessionId:chatMsgDataSource.sessionId completion:nil];
                 [chatMsgDataSource endChat:@"customer_ended" withCompletion:nil];
             }
@@ -1144,34 +1157,13 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     _vcTrackingStarted = YES;
     
     if (chatSettings.volumeControlMode == KUSVolumeControlModeDelayed) {
-        
-        __weak KUSChatMessagesDataSource *weakSelf = self;
         NSTimeInterval delay = chatSettings.promptDelay ?: 0.0f;
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            __strong KUSChatMessagesDataSource *strongSelf = weakSelf;
-            if (!strongSelf) {
-                return;
-            }
-            
-            strongSelf->_vcTrackingDelayCompleted = YES;
-            [strongSelf _insertVolumeControlFormMessageIfNecessary];
-        });
+        [self _startVolumeControlFormTrackingAfterDelay:delay];
         
         // Automatically end chat
         if (chatSettings.markDoneAfterTimeout) {
-            NSTimeInterval delay = (chatSettings.timeOut ?: 0.0f) + (chatSettings.promptDelay ?: 0.0f);
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                __strong KUSChatMessagesDataSource *strongSelf = weakSelf;
-                if (!strongSelf) {
-                    return;
-                }
-                
-                // End Control Tracking and Automatically marked it Closed, if form not end
-                if (!strongSelf->_vcFormEnd) {
-                    [strongSelf _endVolumeControlTracking];
-                    [strongSelf endChat:@"timed_out" withCompletion:nil];
-                }
-            });
+            delay = (chatSettings.timeOut ?: 0.0f) + (chatSettings.promptDelay ?: 0.0f);
+            [self _endVolumeControlFormAfterDelayIfNecessary:delay];
         }
     }
     else if (chatSettings.volumeControlMode == KUSVolumeControlModeUpfront) {
@@ -1199,13 +1191,17 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
             [options addObject:@"I'll wait"];
         }
         
-        NSString *prompt = @"Sorry, it looks like no one has become available in the time we expected. Please select an alternate contact method for us to followup with you…";
+        //volume_control_alternative_method_question
+        NSString *prompt = [[KUSLocalization sharedInstance] localizedString:@"volume_control_alternative_method_question"];
         KUSSessionQueue *sessionQueue = [sessionQueuePollingManager sessionQueue];
         
         if (chatSettings.volumeControlMode == KUSVolumeControlModeUpfront &&
             sessionQueue.estimatedWaitTimeSeconds != 0) {
+            NSString *currentWaitTime = [[KUSLocalization sharedInstance] localizedString:@"Our current wait time is approximately"];
+            NSString *upfrontAlternatePrompt = [[KUSLocalization sharedInstance] localizedString:@"upfront_volume_control_alternative_method_question"];
+            
             NSString *humanReadableTextFromSeconds = [KUSDate humanReadableTextFromSeconds:sessionQueue.estimatedWaitTimeSeconds];
-            prompt = [[NSString alloc] initWithFormat:@"Our current wait time is approximately %@. You can choose to wait for the next available agent or select an alternative contact method for us to follow up with you.", humanReadableTextFromSeconds];
+            prompt = [[NSString alloc] initWithFormat:@"%@ %@. %@", currentWaitTime, humanReadableTextFromSeconds, upfrontAlternatePrompt];
         }
         
         KUSFormQuestion *question = [[KUSFormQuestion alloc]
@@ -1220,32 +1216,36 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     }
     else if (index == 1) {
         NSString *propery = nil;
+        NSString *prompt = nil;
         NSString *channel = previousMessage;
         
         if ([[previousMessage lowercaseString] isEqualToString:@"email"]) {
             propery = @"customer_email";
             channel = @"email";
+            prompt = [[KUSLocalization sharedInstance] localizedString:@"volume_control_email_question"];
         } else {
             propery = @"customer_phone";
             channel = @"phone number";
+            prompt = [[KUSLocalization sharedInstance] localizedString:@"volume_control_phone_question"];
         }
 
         KUSFormQuestion *question = [[KUSFormQuestion alloc]
                                      initWithJSON:@{
                                         @"id" : @"vc_question_1",
                                         @"name" : @"Volume Form 1",
-                                        @"prompt" : [[NSString alloc] initWithFormat:@"Great, what's the best %@ to reach you at?", channel],
+                                        @"prompt" : prompt,
                                         @"type" : @"response",
                                         @"property" : propery
                                     }];
         return question;
     }
     else if (index == 2) {
+        NSString *message = [[KUSLocalization sharedInstance] localizedString:@"volume_control_thankyou_response"];
         KUSFormQuestion *question = [[KUSFormQuestion alloc]
                                      initWithJSON:@{
                                         @"id" : @"vc_question_2",
                                         @"name" : @"Volume Form 2",
-                                        @"prompt" : @"Thank you. We'll get back to you shortly.",
+                                        @"prompt" : message,
                                         @"type" : @"message"
                                     }];
         return question;

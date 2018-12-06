@@ -38,3 +38,14 @@
 "com.kustomer.Home" = "Bahay";
 "com.kustomer.Please select an item" = "Mangyaring pumili ng isang item";
 "com.kustomer.Leave a message" = "Mag-iwan ng mensahe";
+"com.kustomer.greater than one day" = "mas malaki kaysa sa isang araw";
+"com.kustomer.Someone should be with you momentarily" = "Ang isang tao ay dapat kasama mo sa ilang sandali";
+"com.kustomer.Your expected wait time is" = "Ang iyong inaasahang oras ng paghihintay ay";
+"com.kustomer.second" = "pangalawa";
+"com.kustomer.seconds" = "segundo";
+"com.kustomer.Our current wait time is approximately" = "Ang aming kasalukuyang oras ng paghihintay ay humigit-kumulang";
+"com.kustomer.upfront_volume_control_alternative_method_question" = "Maaari mong piliin na maghintay para sa susunod na magagamit na ahente o pumili ng isang alternatibo paraan ng pakikipag-ugnay para sa amin upang mag-follow up sa iyo.";
+"com.kustomer.volume_control_alternative_method_question" = "Paumanhin, mukhang walang sinuman ang magagamit sa oras na inaasahan namin. Mangyaring pumili ng alternatibong paraan ng pakikipag-ugnay para sa amin upang mag-follow up sa iyo ...";
+"com.kustomer.volume_control_email_question" = "Mahusay, ano ang pinakamahusay na email upang maabot ka sa?";
+"com.kustomer.volume_control_phone_question" = "Mahusay, ano ang pinakamahusay na numero ng telepono upang maabot ka sa?";
+"com.kustomer.volume_control_thankyou_response" = "Salamat. Kami ay babalik sa iyo sa ilang sandali.";

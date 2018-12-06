@@ -38,3 +38,14 @@
 "com.kustomer.Home" = "집";
 "com.kustomer.Please select an item" = "항목을 선택하십시오.";
 "com.kustomer.Leave a message" = "메시지 남기기";
+"com.kustomer.greater than one day" = "1 일 이상";
+"com.kustomer.Someone should be with you momentarily" = "누군가 당신과 잠시 같이 있어야합니다.";
+"com.kustomer.Your expected wait time is" = "예상 대기 시간 :";
+"com.kustomer.second" = "둘째";
+"com.kustomer.seconds" = "초";
+"com.kustomer.Our current wait time is approximately" = "우리의 현재 대기 시간은 약입니다";
+"com.kustomer.upfront_volume_control_alternative_method_question" = "다음으로 사용할 수있는 상담원을 기다리거나 대안을 선택할 수 있습니다. 연락 방법을 알려주십시오.";
+"com.kustomer.volume_control_alternative_method_question" = "죄송합니다. 예상 한 시간에 아무도 사용할 수 없게 된 것 같습니다. 후속 조치를 취할 대체 연락처 방법을 선택하십시오 ...";
+"com.kustomer.volume_control_email_question" = "좋아요, 연락 할 수있는 가장 좋은 이메일은 무엇입니까?";
+"com.kustomer.volume_control_phone_question" = "좋아, 너를 만날 수있는 최고의 전화 번호는 뭐니?";
+"com.kustomer.volume_control_thankyou_response" = "고맙습니다. 곧 다시 연락 드리겠습니다.";

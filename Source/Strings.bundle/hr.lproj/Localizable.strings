@@ -38,3 +38,14 @@
 "com.kustomer.Home" = "Dom";
 "com.kustomer.Please select an item" = "Odaberite stavku";
 "com.kustomer.Leave a message" = "Ostavite poruku";
+"com.kustomer.greater than one day" = "veći od jednog dana";
+"com.kustomer.Someone should be with you momentarily" = "Netko bi trebao biti s tobom na trenutak";
+"com.kustomer.Your expected wait time is" = "Vaše očekivano vrijeme čekanja je";
+"com.kustomer.second" = "drugi";
+"com.kustomer.seconds" = "sekundi";
+"com.kustomer.Our current wait time is approximately" = "Trenutačno vrijeme čekanja iznosi približno";
+"com.kustomer.upfront_volume_control_alternative_method_question" = "Možete odabrati čekanje za sljedeće dostupne agente ili odabrati alternativu kontaktirajte nas kako bismo vas pratili.";
+"com.kustomer.volume_control_alternative_method_question" = "Nažalost, izgleda da nitko nije postala dostupan u vrijeme koje smo očekivali. Odaberite alternativni način kontakta kako bismo vas pratili ...";
+"com.kustomer.volume_control_email_question" = "Izvrsno, koja je najbolja e-adresa za vas?";
+"com.kustomer.volume_control_phone_question" = "Izvrsno, koji je najbolji telefonski broj koji će vas stići?";
+"com.kustomer.volume_control_thankyou_response" = "Hvala vam. Vratit ćemo vam se uskoro.";

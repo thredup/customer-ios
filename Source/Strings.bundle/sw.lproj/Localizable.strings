@@ -38,3 +38,14 @@
 "com.kustomer.Home" = "nyumbani";
 "com.kustomer.Please select an item" = "Tafadhali chagua kipengee";
 "com.kustomer.Leave a message" = "Acha ujumbe";
+"com.kustomer.greater than one day" = "zaidi ya siku moja";
+"com.kustomer.Someone should be with you momentarily" = "Mtu anapaswa kuwa na wewe kwa wakati";
+"com.kustomer.Your expected wait time is" = "Wakati wako wa kusubiri uliotarajiwa ni";
+"com.kustomer.second" = "pili";
+"com.kustomer.seconds" = "sekunde";
+"com.kustomer.Our current wait time is approximately" = "Wakati wetu wa kusubiri sasa ni takribani";
+"com.kustomer.upfront_volume_control_alternative_method_question" = "Unaweza kuchagua kusubiri wakala unaofuata au chagua mbadala fanya njia ya kuwasiliana na wewe.";
+"com.kustomer.volume_control_alternative_method_question" = "Samahani, inaonekana kama hakuna mtu aliyepatikana wakati tunatarajia. Tafadhali chagua mbinu mbadala ya kuwasiliana na sisi kufuatilia na wewe ...";
+"com.kustomer.volume_control_email_question" = "Kubwa, ni barua pepe bora gani kufikia wewe?";
+"com.kustomer.volume_control_phone_question" = "Kubwa, nambari bora ya simu kufikia wewe ni nani?";
+"com.kustomer.volume_control_thankyou_response" = "Asante. Tutakuja tena kwa muda mfupi.";

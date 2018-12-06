@@ -38,3 +38,14 @@
 "com.kustomer.Home" = "Hjem";
 "com.kustomer.Please select an item" = "Vælg venligst et emne";
 "com.kustomer.Leave a message" = "Læg en besked";
+"com.kustomer.greater than one day" = "mere end en dag";
+"com.kustomer.Someone should be with you momentarily" = "Nogen skal være med dig i øjeblikket";
+"com.kustomer.Your expected wait time is" = "Din forventede ventetid er";
+"com.kustomer.second" = "sekund";
+"com.kustomer.seconds" = "sekunder";
+"com.kustomer.Our current wait time is approximately" = "Vores nuværende ventetid er ca.";
+"com.kustomer.upfront_volume_control_alternative_method_question" = "Du kan vælge at vente på den næste tilgængelige agent eller vælge et alternativ kontakt metode til os at følge op med dig.";
+"com.kustomer.volume_control_alternative_method_question" = "Beklager, det ser ud til, at ingen er blevet tilgængelige på den tid, vi forventede. Vælg venligst en alternativ kontaktmetode til at følge op med dig ...";
+"com.kustomer.volume_control_email_question" = "Great, hvad er den bedste e-mail for at nå dig på?";
+"com.kustomer.volume_control_phone_question" = "Great, hvad er det bedste telefonnummer for at nå dig på?";
+"com.kustomer.volume_control_thankyou_response" = "Tak skal du have. Vi kommer snart tilbage til dig.";

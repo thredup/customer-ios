@@ -38,3 +38,14 @@
 "com.kustomer.Home" = "Σπίτι";
 "com.kustomer.Please select an item" = "Επιλέξτε ένα στοιχείο";
 "com.kustomer.Leave a message" = "Αφήστε ένα μήνυμα";
+"com.kustomer.greater than one day" = "μεγαλύτερη από μία ημέρα";
+"com.kustomer.Someone should be with you momentarily" = "Κάποιος πρέπει να είναι μαζί σας για λίγο";
+"com.kustomer.Your expected wait time is" = "Ο αναμενόμενος χρόνος αναμονής σας είναι";
+"com.kustomer.second" = "δεύτερος";
+"com.kustomer.seconds" = "δευτερολέπτων";
+"com.kustomer.Our current wait time is approximately" = "Ο τρέχων χρόνος αναμονής είναι περίπου";
+"com.kustomer.upfront_volume_control_alternative_method_question" = "Μπορείτε να επιλέξετε να περιμένετε τον επόμενο διαθέσιμο παράγοντα ή να επιλέξετε μια εναλλακτική λύση επικοινωνήστε μαζί μας για να επικοινωνήσουμε μαζί σας.";
+"com.kustomer.volume_control_alternative_method_question" = "Λυπούμαστε, φαίνεται ότι κανείς δεν είναι διαθέσιμος στο χρόνο που περίμενε. Επιλέξτε μια εναλλακτική μέθοδο επαφής για να ακολουθήσουμε μαζί σας ...";
+"com.kustomer.volume_control_email_question" = "Μεγάλη, ποιο είναι το καλύτερο ηλεκτρονικό μήνυμα για να σας φτάσω;";
+"com.kustomer.volume_control_phone_question" = "Μεγάλη, ποιος είναι ο καλύτερος αριθμός τηλεφώνου για να σας φτάσει;";
+"com.kustomer.volume_control_thankyou_response" = "Ευχαριστώ. Θα σας επιστρέψουμε σύντομα.";

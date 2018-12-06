@@ -38,3 +38,14 @@
 "com.kustomer.Home" = "Nhà";
 "com.kustomer.Please select an item" = "Vui lòng chọn một mục";
 "com.kustomer.Leave a message" = "Để lại lời nhắn";
+"com.kustomer.greater than one day" = "lớn hơn một ngày";
+"com.kustomer.Someone should be with you momentarily" = "Ai đó nên ở bên bạn một lát";
+"com.kustomer.Your expected wait time is" = "Thời gian chờ đợi dự kiến ​​của bạn là";
+"com.kustomer.second" = "thứ hai";
+"com.kustomer.seconds" = "giây";
+"com.kustomer.Our current wait time is approximately" = "Thời gian chờ hiện tại của chúng tôi là khoảng";
+"com.kustomer.upfront_volume_control_alternative_method_question" = "Bạn có thể chọn chờ đại lý hiện có tiếp theo hoặc chọn một phương án thay thế phương thức liên hệ để chúng tôi theo dõi bạn.";
+"com.kustomer.volume_control_alternative_method_question" = "Xin lỗi, có vẻ như không ai có sẵn trong thời gian chúng tôi mong đợi. Vui lòng chọn một phương thức liên lạc thay thế để chúng tôi theo dõi với bạn…";
+"com.kustomer.volume_control_email_question" = "Tuyệt vời, email tốt nhất để liên hệ với bạn là gì?";
+"com.kustomer.volume_control_phone_question" = "Tuyệt vời, số điện thoại tốt nhất để liên hệ với bạn là gì?";
+"com.kustomer.volume_control_thankyou_response" = "Cảm ơn bạn. Chúng tôi sẽ sớm liên hệ lại với bạn.";

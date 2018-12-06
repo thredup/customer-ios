@@ -38,3 +38,14 @@
 "com.kustomer.Home" = "Heim";
 "com.kustomer.Please select an item" = "Vinsamlegast veldu hlut";
 "com.kustomer.Leave a message" = "Skildu eftir skilaboð";
+"com.kustomer.greater than one day" = "meira en einn dagur";
+"com.kustomer.Someone should be with you momentarily" = "Einhver ætti að vera með þér í augnablikinu";
+"com.kustomer.Your expected wait time is" = "Búist er við biðtíma þínum";
+"com.kustomer.second" = "annað";
+"com.kustomer.seconds" = "sekúndur";
+"com.kustomer.Our current wait time is approximately" = "Núverandi biðtími okkar er um það bil";
+"com.kustomer.upfront_volume_control_alternative_method_question" = "Þú getur valið að bíða eftir næsta umboðsmanni eða velja valkost samskiptaaðferð fyrir okkur að fylgja eftir með þér.";
+"com.kustomer.volume_control_alternative_method_question" = "Því miður, það virðist sem enginn hefur orðið laus við þann tíma sem við búumst við. Vinsamlegast veldu aðra samskiptaaðferð til að fylgjast með þér ...";
+"com.kustomer.volume_control_email_question" = "Frábær, hvað er besti tölvupósturinn til að ná þér á?";
+"com.kustomer.volume_control_phone_question" = "Frábær, hvað er besta símanúmerið til að ná þér á?";
+"com.kustomer.volume_control_thankyou_response" = "Þakka þér fyrir. Við munum komast aftur til þín fljótlega.";

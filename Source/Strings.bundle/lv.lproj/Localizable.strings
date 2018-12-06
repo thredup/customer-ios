@@ -38,3 +38,14 @@
 "com.kustomer.Home" = "Mājas";
 "com.kustomer.Please select an item" = "Lūdzu, atlasiet vienumu";
 "com.kustomer.Leave a message" = "Atstāj ziņu";
+"com.kustomer.greater than one day" = "vairāk par vienu dienu";
+"com.kustomer.Someone should be with you momentarily" = "Kādam jābūt īslaicīgam ar tevi";
+"com.kustomer.Your expected wait time is" = "Jūsu paredzamais gaidīšanas laiks ir";
+"com.kustomer.second" = "otrais";
+"com.kustomer.seconds" = "sekundes";
+"com.kustomer.Our current wait time is approximately" = "Mūsu pašreizējais gaidīšanas laiks ir apmēram";
+"com.kustomer.upfront_volume_control_alternative_method_question" = "Jūs varat izvēlēties gaidīt nākamo pieejamo aģentu vai izvēlēties alternatīvu sazinieties ar mums, lai sekotu līdzi jums.";
+"com.kustomer.volume_control_alternative_method_question" = "Diemžēl šķiet, ka gaidāmajā brīdī neviens nav kļuvis pieejams. Lūdzu, izvēlieties alternatīvu kontaktu metodi, lai mēs varētu jums sekot ...";
+"com.kustomer.volume_control_email_question" = "Lieliski, kāds ir labākais e-pasts, lai jūs varētu sazināties?";
+"com.kustomer.volume_control_phone_question" = "Lieliski, kāds ir labākais tālruņa numurs, lai jūs varētu sazināties?";
+"com.kustomer.volume_control_thankyou_response" = "Paldies. Mēs tuvākajā laikā atgriezīsimies pie jums.";

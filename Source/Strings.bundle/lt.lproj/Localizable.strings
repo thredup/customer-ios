@@ -38,3 +38,14 @@
 "com.kustomer.Home" = "Namai";
 "com.kustomer.Please select an item" = "Pasirinkite elementą";
 "com.kustomer.Leave a message" = "Palik žinutę";
+"com.kustomer.greater than one day" = "daugiau nei viena diena";
+"com.kustomer.Someone should be with you momentarily" = "Kažkas turėtų būti su tavimi akimirksniu";
+"com.kustomer.Your expected wait time is" = "Jūsų laukiamas laukimo laikas yra";
+"com.kustomer.second" = "antra";
+"com.kustomer.seconds" = "sekundes";
+"com.kustomer.Our current wait time is approximately" = "Mūsų dabartinis laukimo laikas yra maždaug";
+"com.kustomer.upfront_volume_control_alternative_method_question" = "Galite pasirinkti palaukti kito turimo agento ar pasirinkti alternatyvą susisiekite su mumis, kad galėtume su jumis sekti.";
+"com.kustomer.volume_control_alternative_method_question" = "Atsiprašome, atrodo, kad niekas netapo mūsų tikėtino laiko. Prašome pasirinkti alternatyvų kontaktinį metodą, kad galėtume sekti su jumis ...";
+"com.kustomer.volume_control_email_question" = "Puiku, koks geriausias el. Laiškas jus pasiekė?";
+"com.kustomer.volume_control_phone_question" = "Puikus, koks geriausias telefono numeris jums pasiekti?";
+"com.kustomer.volume_control_thankyou_response" = "Ačiū. Mes netrukus susisieksime su jumis.";

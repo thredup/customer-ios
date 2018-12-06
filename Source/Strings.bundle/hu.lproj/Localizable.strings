@@ -38,3 +38,14 @@
 "com.kustomer.Home" = "itthon";
 "com.kustomer.Please select an item" = "Kérjük, válasszon ki egy elemet";
 "com.kustomer.Leave a message" = "Hagyjon üzenetet";
+"com.kustomer.greater than one day" = "több mint egy nap";
+"com.kustomer.Someone should be with you momentarily" = "Valaki pillanatok alatt veled kell lennie";
+"com.kustomer.Your expected wait time is" = "A várható várakozási idő";
+"com.kustomer.second" = "második";
+"com.kustomer.seconds" = "másodperc";
+"com.kustomer.Our current wait time is approximately" = "Jelenlegi várakozásunk közelítőleg nagy";
+"com.kustomer.upfront_volume_control_alternative_method_question" = "Kiválaszthatja, hogy megvárja a következő rendelkezésre álló ügynököt, vagy válasszon alternatívát kapcsolat módja számunkra, hogy kövesse veled.";
+"com.kustomer.volume_control_alternative_method_question" = "Sajnálom, úgy tűnik, hogy senki sem érkezett a várt időpontban. Kérjük, válasszon ki egy alternatív kapcsolattartási módszert, hogy követhessünk veled ...";
+"com.kustomer.volume_control_email_question" = "Nagyszerű, mi a legjobb e-mail, amivel elérheted?";
+"com.kustomer.volume_control_phone_question" = "Nagyszerű, mi a legjobb telefonszám, amivel elérheted?";
+"com.kustomer.volume_control_thankyou_response" = "Köszönöm. Rövidesen visszajutunk hozzánk.";

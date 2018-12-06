@@ -38,3 +38,14 @@
 "com.kustomer.Home" = "होम";
 "com.kustomer.Please select an item" = "कृपया एक आइटम का चयन करें";
 "com.kustomer.Leave a message" = "एक संदेश छोड़ें";
+"com.kustomer.greater than one day" = "एक दिन से अधिक";
+"com.kustomer.Someone should be with you momentarily" = "किसी को क्षणिक रूप से आपके साथ होना चाहिए";
+"com.kustomer.Your expected wait time is" = "आपका अपेक्षित प्रतीक्षा समय है";
+"com.kustomer.second" = "दूसरा";
+"com.kustomer.seconds" = "सेकंड";
+"com.kustomer.Our current wait time is approximately" = "हमारा वर्तमान प्रतीक्षा समय लगभग है";
+"com.kustomer.upfront_volume_control_alternative_method_question" = "आप अगले उपलब्ध एजेंट की प्रतीक्षा कर सकते हैं या एक विकल्प का चयन कर सकते हैं आपके साथ अनुवर्ती करने के लिए हमसे संपर्क करें।";
+"com.kustomer.volume_control_alternative_method_question" = "क्षमा करें, ऐसा लगता है कि हमारे द्वारा अपेक्षित समय में कोई भी उपलब्ध नहीं हुआ है। कृपया आपके साथ अनुवर्ती करने के लिए वैकल्पिक संपर्क विधि का चयन करें ...";
+"com.kustomer.volume_control_email_question" = "बढ़िया, आप तक पहुंचने के लिए सबसे अच्छा ईमेल क्या है?";
+"com.kustomer.volume_control_phone_question" = "बढ़िया, आप तक पहुंचने के लिए सबसे अच्छा फोन नंबर क्या है?";
+"com.kustomer.volume_control_thankyou_response" = "धन्यवाद। हम जल्द ही आपसे संपर्क करेंगे।";

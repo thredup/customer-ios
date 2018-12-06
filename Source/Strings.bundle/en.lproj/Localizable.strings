@@ -38,3 +38,14 @@
 "com.kustomer.Home" = "Home";
 "com.kustomer.Please select an item" = "Please select an item";
 "com.kustomer.Leave a message" = "Leave a message";
+"com.kustomer.greater than one day" = "greater than one day";
+"com.kustomer.Someone should be with you momentarily" = "Someone should be with you momentarily";
+"com.kustomer.Your expected wait time is" = "Your expected wait time is";
+"com.kustomer.second" = "second";
+"com.kustomer.seconds" = "seconds";
+"com.kustomer.Our current wait time is approximately" = "Our current wait time is approximately";
+"com.kustomer.upfront_volume_control_alternative_method_question" = "You can choose to wait for the next available agent or select an alternative contact method for us to follow up with you.";
+"com.kustomer.volume_control_alternative_method_question" = "Sorry, it looks like no one has become available in the time we expected. Please select an alternate contact method for us to followup with you…";
+"com.kustomer.volume_control_email_question" = "Great, what's the best email to reach you at?";
+"com.kustomer.volume_control_phone_question" = "Great, what's the best phone number to reach you at?";
+"com.kustomer.volume_control_thankyou_response" = "Thank you. We'll get back to you shortly.";

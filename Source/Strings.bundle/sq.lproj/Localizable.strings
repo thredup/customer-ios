@@ -38,3 +38,14 @@
 "com.kustomer.Home" = "shtëpi";
 "com.kustomer.Please select an item" = "Ju lutemi zgjidhni një artikull";
 "com.kustomer.Leave a message" = "Lini një mesazh";
+"com.kustomer.greater than one day" = "më shumë se një ditë";
+"com.kustomer.Someone should be with you momentarily" = "Dikush duhet të jetë me ju momentalisht";
+"com.kustomer.Your expected wait time is" = "Koha juaj e pritshme e pritjes është";
+"com.kustomer.second" = "i dytë";
+"com.kustomer.seconds" = "sekonda";
+"com.kustomer.Our current wait time is approximately" = "Koha aktuale e pritjes është afërsisht";
+"com.kustomer.upfront_volume_control_alternative_method_question" = "Ju mund të zgjidhni të prisni agjentin tjetër në dispozicion ose zgjidhni një alternativë Metoda e kontaktit për ne që të përcjellim me ju.";
+"com.kustomer.volume_control_alternative_method_question" = "Na vjen keq, duket sikur askush nuk është vënë në dispozicion në kohën që prisnim. Ju lutemi zgjidhni një metodë alternative të kontaktit për ne për të ndjekur me ju ...";
+"com.kustomer.volume_control_email_question" = "E madhe, cila është e-mailja më e mirë për të arritur tek ju?";
+"com.kustomer.volume_control_phone_question" = "E madhe, cili është numri më i mirë i telefonit për të arritur tek ju?";
+"com.kustomer.volume_control_thankyou_response" = "Faleminderit. Ne do të kthehemi tek ju së shpejti.";

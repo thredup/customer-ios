@@ -38,3 +38,14 @@
 "com.kustomer.Home" = "მთავარი";
 "com.kustomer.Please select an item" = "გთხოვთ, აირჩიოთ ერთეული";
 "com.kustomer.Leave a message" = "Დატოვე შეტყობინება";
+"com.kustomer.greater than one day" = "ერთ დღეს მეტი";
+"com.kustomer.Someone should be with you momentarily" = "ვიღაცამ შენთან ერთად უნდა იყოს";
+"com.kustomer.Your expected wait time is" = "თქვენი მოსალოდნელია დაველოდოთ დრო";
+"com.kustomer.second" = "მეორე";
+"com.kustomer.seconds" = "წამი";
+"com.kustomer.Our current wait time is approximately" = "ჩვენი ამჟამინდელი ლოდინის დრო დაახლოებით";
+"com.kustomer.upfront_volume_control_alternative_method_question" = "შეგიძლიათ აირჩიოთ შემდეგი ხელმისაწვდომი აგენტისთვის ან აირჩიოთ ალტერნატივა დაგვიკავშირდით ჩვენთან ერთად.";
+"com.kustomer.volume_control_alternative_method_question" = "უკაცრავად, როგორც ჩანს, ვერავინ ვერ მოხვდა ჩვენთვის მოსალოდნელ დროს. გთხოვთ, აირჩიოთ ალტერნატიული კონტაქტების მეთოდი ჩვენთან ერთად.";
+"com.kustomer.volume_control_email_question" = "დიდი, რა არის საუკეთესო ელფოსტის მიღწევა თქვენთან?";
+"com.kustomer.volume_control_phone_question" = "დიდი, რა არის საუკეთესო ტელეფონის ნომერი, რომ მიგიწვდინოთ?";
+"com.kustomer.volume_control_thankyou_response" = "Გმადლობთ. ჩვენ ცოტა ხნით დავბრუნდებით.";

@@ -38,3 +38,14 @@
 "com.kustomer.Home" = "Huis";
 "com.kustomer.Please select an item" = "Selecteer een item";
 "com.kustomer.Leave a message" = "Laat een bericht achter";
+"com.kustomer.greater than one day" = "meer dan één dag";
+"com.kustomer.Someone should be with you momentarily" = "Iemand zou even bij je moeten zijn";
+"com.kustomer.Your expected wait time is" = "Uw verwachte wachttijd is";
+"com.kustomer.second" = "tweede";
+"com.kustomer.seconds" = "seconden";
+"com.kustomer.Our current wait time is approximately" = "Onze huidige wachttijd is ongeveer";
+"com.kustomer.upfront_volume_control_alternative_method_question" = "U kunt ervoor kiezen om te wachten op de volgende beschikbare agent of een alternatief te selecteren contactmethode die wij kunnen opvolgen.";
+"com.kustomer.volume_control_alternative_method_question" = "Sorry, het lijkt erop dat niemand beschikbaar is gekomen op het moment dat we het verwachtten. Selecteer een alternatieve contactmethode die we kunnen opvolgen ...";
+"com.kustomer.volume_control_email_question" = "Geweldig, wat is de beste e-mail om je te bereiken?";
+"com.kustomer.volume_control_phone_question" = "Geweldig, wat is het beste telefoonnummer om je te bereiken?";
+"com.kustomer.volume_control_thankyou_response" = "Dank je. We nemen zo snel mogelijk contact met u op.";

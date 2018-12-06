@@ -38,3 +38,14 @@
 "com.kustomer.Home" = "Kodu";
 "com.kustomer.Please select an item" = "Palun valige üksus";
 "com.kustomer.Leave a message" = "Jäta sõnum";
+"com.kustomer.greater than one day" = "suurem kui üks päev";
+"com.kustomer.Someone should be with you momentarily" = "Keegi peaks olema sinuga hetkeks";
+"com.kustomer.Your expected wait time is" = "Oodatav ooteaeg on";
+"com.kustomer.second" = "teine";
+"com.kustomer.seconds" = "sekundit";
+"com.kustomer.Our current wait time is approximately" = "Meie praegune ooteaeg on umbes";
+"com.kustomer.upfront_volume_control_alternative_method_question" = "Võite oodata järgmise saadaval oleva agendi või valida alternatiiv võtke meiega ühendust, et jälgida teiega ühendust.";
+"com.kustomer.volume_control_alternative_method_question" = "Kahjuks tundub, et keegi ei ole kasutusele oodatud. Palun vali alternatiivne kontaktiviis, mida saaksime teiega jälgida ...";
+"com.kustomer.volume_control_email_question" = "Hea, mis on parim e-kiri, et jõuda teie juurde?";
+"com.kustomer.volume_control_phone_question" = "Suur, mis on parim telefoninumber, et jõuda teid?";
+"com.kustomer.volume_control_thankyou_response" = "Aitäh. Me lähme peatselt teie juurde.";

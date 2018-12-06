@@ -38,3 +38,14 @@
 "com.kustomer.Home" = "Domov";
 "com.kustomer.Please select an item" = "Vyberte položku";
 "com.kustomer.Leave a message" = "Zanechajte správu";
+"com.kustomer.greater than one day" = "viac ako jeden deň";
+"com.kustomer.Someone should be with you momentarily" = "Niekto by mal byť na chvíľu s vami";
+"com.kustomer.Your expected wait time is" = "Váš očakávaný čas čakania je";
+"com.kustomer.second" = "druhý";
+"com.kustomer.seconds" = "sekundy";
+"com.kustomer.Our current wait time is approximately" = "Aktuálny čas čakania je približne";
+"com.kustomer.upfront_volume_control_alternative_method_question" = "Môžete si vybrať čakanie na ďalší dostupný agent alebo vybrať alternatívu kontaktné metódy, aby sme vás mohli sledovať.";
+"com.kustomer.volume_control_alternative_method_question" = "Je nám ľúto, zdá sa, že nikto nebol k dispozícii v čase, ktorý sme očakávali. Vyberte alternatívnu metódu kontaktov, aby sme s vami mohli sledovať ...";
+"com.kustomer.volume_control_email_question" = "Skvelý, aký je najlepší e-mail na vás?";
+"com.kustomer.volume_control_phone_question" = "Skvelé, aké je najlepšie telefónne číslo, na ktoré sa chcete dostať?";
+"com.kustomer.volume_control_thankyou_response" = "Ďakujem. Dostávame sa k vám krátko.";

@@ -38,3 +38,14 @@
 "com.kustomer.Home" = "Ev";
 "com.kustomer.Please select an item" = "Lütfen bir ürün seçiniz";
 "com.kustomer.Leave a message" = "Mesaj bırakın";
+"com.kustomer.greater than one day" = "bir günden fazla";
+"com.kustomer.Someone should be with you momentarily" = "Bir an önce seninle birlikte olmalı";
+"com.kustomer.Your expected wait time is" = "Beklenen bekleme süreniz";
+"com.kustomer.second" = "ikinci";
+"com.kustomer.seconds" = "saniye";
+"com.kustomer.Our current wait time is approximately" = "Mevcut bekleme süremiz yaklaşık olarak";
+"com.kustomer.upfront_volume_control_alternative_method_question" = "Bir sonraki müsait aracı beklemeyi veya bir alternatif seçmeyi seçebilirsiniz. Sizinle takip etmek için iletişim yöntemi.";
+"com.kustomer.volume_control_alternative_method_question" = "Üzgünüz, beklediğimiz zamanda kimsenin müsait olmadığı anlaşılıyor. Lütfen sizinle takip edebilmek için alternatif bir iletişim yöntemi seçin…";
+"com.kustomer.volume_control_email_question" = "Harika, size ulaşacak en iyi e-posta nedir?";
+"com.kustomer.volume_control_phone_question" = "Harika, size ulaşacak en iyi telefon numarası nedir?";
+"com.kustomer.volume_control_thankyou_response" = "Teşekkür ederim. Kısa bir süre sonra size geri döneceğiz.";

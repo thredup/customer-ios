@@ -38,3 +38,14 @@
 "com.kustomer.Home" = "家";
 "com.kustomer.Please select an item" = "请选择一个项目";
 "com.kustomer.Leave a message" = "留言";
+"com.kustomer.greater than one day" = "超过一天";
+"com.kustomer.Someone should be with you momentarily" = "有人应该和你在一起";
+"com.kustomer.Your expected wait time is" = "您预计的等待时间是";
+"com.kustomer.second" = "第二";
+"com.kustomer.seconds" = "秒";
+"com.kustomer.Our current wait time is approximately" = "我们目前的等待时间大约是";
+"com.kustomer.upfront_volume_control_alternative_method_question" = "您可以选择等待下一个可用代理或选择其他代理 联系方式让我们跟进你。";
+"com.kustomer.volume_control_alternative_method_question" = "对不起，在我们预期的时间里似乎没有人可用。请选择其他联系方式，以便我们跟进...";
+"com.kustomer.volume_control_email_question" = "太棒了，什么是最好的电子邮件给你？";
+"com.kustomer.volume_control_phone_question" = "很棒，有什么最适合您的电话号码？";
+"com.kustomer.volume_control_thankyou_response" = "谢谢。我们很快就会回复你。";
