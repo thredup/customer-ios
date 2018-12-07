@@ -1,5 +1,11 @@
 # Changelog for Kustomer iOS SDK
 
+## 0.1.29
+
+* Fixed upfront volume control polling issue
+* Update upfront volume control display message
+* Added localization support for volume control and upfront volume control forms
+
 ## 0.1.28
 
 * Fixed pusher logic
