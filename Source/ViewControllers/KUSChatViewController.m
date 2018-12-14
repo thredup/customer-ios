@@ -415,6 +415,25 @@
         return;
     }
     
+    wantsOptionPicker = (currentQuestion
+                         && currentQuestion.property == KUSFormQuestionPropertyValues
+                         && currentQuestion.values.count > 0);
+    if (wantsOptionPicker) {
+        self.inputBarView.hidden = YES;
+        if ([self.inputBarView isFirstResponder]) {
+            [self.inputBarView resignFirstResponder];
+        }
+        
+        if (self.optionPickerView == nil) {
+            self.optionPickerView = [[KUSOptionPickerView alloc] init];
+            self.optionPickerView.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth);
+            self.optionPickerView.delegate = self;
+            [self.view addSubview:self.optionPickerView];
+            [self _updateOptionsPickerOptions];
+        }
+        return;
+    }
+    
         
     wantsOptionPicker = (currentQuestion
                               && currentQuestion.property == KUSFormQuestionPropertyConversationTeam
@@ -537,6 +556,18 @@
                               && vcCurrentQuestion.values.count > 0);
     if (wantsOptionPicker) {
         [self.optionPickerView setOptions:vcCurrentQuestion.values];
+        [self.view setNeedsLayout];
+        [self.view layoutIfNeeded];
+        
+        return;
+    }
+    
+    KUSFormQuestion *currentQuestion = _chatMessagesDataSource.currentQuestion;
+    wantsOptionPicker = (currentQuestion
+                         && currentQuestion.property == KUSFormQuestionPropertyValues
+                         && currentQuestion.values.count > 0);
+    if (wantsOptionPicker) {
+        [self.optionPickerView setOptions:currentQuestion.values];
         [self.view setNeedsLayout];
         [self.view layoutIfNeeded];
         

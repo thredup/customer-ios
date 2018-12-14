@@ -69,6 +69,8 @@ static KUSFormQuestionProperty KUSFormQuestionPropertyFromString(NSString *strin
         return KUSFormQuestionPropertyFollowupChannel;
     } else if ([string hasSuffix:@"Tree"]) {
         return KUSFormQuestionPropertyMLV;
+    } else if ([string hasSuffix:@"Str"]) {
+        return KUSFormQuestionPropertyValues;
     }
     return KUSFormQuestionPropertyUnknown;
 }

@@ -23,7 +23,8 @@ typedef NS_ENUM(NSInteger, KUSFormQuestionProperty) {
     KUSFormQuestionPropertyConversationTeam,
     KUSFormQuestionPropertyCustomerPhone,
     KUSFormQuestionPropertyFollowupChannel,
-    KUSFormQuestionPropertyMLV
+    KUSFormQuestionPropertyMLV,
+    KUSFormQuestionPropertyValues
 };
 
 @interface KUSFormQuestion : KUSModel
