@@ -1,5 +1,11 @@
 # Changelog for Kustomer iOS SDK
 
+## 0.1.30
+
+* Added option values support in form messaging
+* Added 'Twi' language support
+* Updated End Chat button translation in various languages
+
 ## 0.1.29
 
 * Fixed upfront volume control polling issue
