@@ -99,6 +99,19 @@
     return self;
 }
 
+- (instancetype)initWithUserSession:(KUSUserSession *)userSession forNewSessionWithMessage:(NSString *)message
+{
+    self = [super init];
+    if (self) {
+        _userSession = userSession;
+        _chatMessagesDataSource = [[KUSChatMessagesDataSource alloc] initForNewConversationWithUserSession:_userSession];
+        KUSChatSettings *chatSettings = [[_userSession chatSettingsDataSource] object];
+        _showBackButton = !chatSettings.noHistory;
+        [_chatMessagesDataSource sendMessageWithText:message attachments:nil];
+    }
+    return self;
+}
+
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];

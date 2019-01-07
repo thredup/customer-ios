@@ -167,6 +167,17 @@ static NSString *kKustomerOrgNameKey = @"orgName";
     [[self sharedInstance] hideNewConversationButtonInClosedChat:status];
 }
 
++ (void)createChatSessionWith:(NSString *) message andCustomAttributes:(NSDictionary<NSString *, NSObject *> *)customAttributes
+{
+    [[self sharedInstance] createChatSessionWith:message andCustomAttributes:customAttributes];
+}
+
++ (void)createChatSessionWith:(NSString *) message
+{
+    [Kustomer createChatSessionWith:message andCustomAttributes: nil];
+}
+
+
 #pragma mark - Lifecycle methods
 
 + (instancetype)sharedInstance
@@ -347,6 +358,21 @@ static KUSLogOptions _logOptions = KUSLogOptionInfo | KUSLogOptionErrors;
 - (void)hideNewConversationButtonInClosedChat:(BOOL)status
 {
     [self.userSession.userDefaults setShouldHideNewConversationButtonInClosedChat:status];
+}
+
+- (void)createChatSessionWith:(NSString *) message andCustomAttributes:(NSDictionary<NSString *, NSObject *> *)customAttributes
+{
+    NSAssert(message.length, @"Requires a valid message to create chat session.");
+    if (message.length == 0) {
+        return;
+    }
+    [self.userSession.chatSessionsDataSource setMessageToCreateNewChatSession:message];
+    
+    if (customAttributes.count) {
+        [self describeNextConversation:customAttributes];
+    }
+    
+    [Kustomer presentSupport];
 }
 
 #pragma mark - Helper functions

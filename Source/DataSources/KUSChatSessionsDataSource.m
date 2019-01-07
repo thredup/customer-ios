@@ -263,6 +263,11 @@
     return count;
 }
 
+- (void)setMessageToCreateNewChatSession:(NSString *)messageToCreateNewChatSession
+{
+    _messageToCreateNewChatSession = [messageToCreateNewChatSession copy];
+}
+
 #pragma mark - Internal methods
 
 - (void)_flushCustomAttributes:(NSDictionary<NSString *, NSObject *> *)customAttributes toChatSessionId:(NSString *)chatSessionId

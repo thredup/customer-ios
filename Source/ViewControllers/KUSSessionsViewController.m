@@ -103,7 +103,7 @@
     [_chatSessionsDataSource addListener:self];
     [_chatSessionsDataSource fetchLatest];
 
-    if (_chatSessionsDataSource.didFetch) {
+    if (_chatSessionsDataSource.didFetch || _chatSessionsDataSource.messageToCreateNewChatSession != nil) {
         [self _handleFirstLoadIfNecessary];
     } else {
         self.tableView.hidden = YES;
@@ -197,7 +197,13 @@
         return;
     }
     _didHandleFirstLoad = YES;
-
+    
+    if (_chatSessionsDataSource.messageToCreateNewChatSession != nil) {
+        KUSChatViewController *chatViewController = [[KUSChatViewController alloc] initWithUserSession:_userSession forNewSessionWithMessage:_chatSessionsDataSource.messageToCreateNewChatSession];
+        [self.navigationController pushViewController:chatViewController animated:NO];
+        return;
+    }
+    
     if (_chatSessionsDataSource.count == 0 || _chatSessionsDataSource.openChatSessionsCount == 0) {
         // If there are no existing chat sessions, go directly to new chat screen
         KUSChatViewController *chatViewController = [[KUSChatViewController alloc] initWithUserSession:_userSession

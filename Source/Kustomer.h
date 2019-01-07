@@ -58,6 +58,10 @@ FOUNDATION_EXPORT const unsigned char KustomerVersionString[];
 // Show/Hide new conversation button in closed chat
 + (void)hideNewConversationButtonInClosedChat:(BOOL)status;
 
+// Set message and custom attributes to create new chatSession them
++ (void)createChatSessionWith:(NSString *) message andCustomAttributes:(NSDictionary<NSString *, NSObject *> *)customAttributes;
++ (void)createChatSessionWith:(NSString *) message;
+
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)new NS_UNAVAILABLE;
 

@@ -400,7 +400,15 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 
 - (void)sendMessageWithText:(NSString *)text attachments:(NSArray<UIImage *> *)attachments
 {
-    [self sendMessageWithText:text attachments:attachments value:nil];
+    BOOL isMessageToStartNewChatSession = self.userSession.chatSessionsDataSource.messageToCreateNewChatSession != nil;
+    if (isMessageToStartNewChatSession) {
+        [self.userSession.chatSessionsDataSource setMessageToCreateNewChatSession:nil];
+
+        [self _actuallySendMessageWithText:text attachments:attachments];
+    }
+    else {
+        [self sendMessageWithText:text attachments:attachments value:nil];
+    }
 }
 
 - (void)sendMessageWithText:(NSString *)text attachments:(NSArray<UIImage *> *)attachments value:(NSString *)value
