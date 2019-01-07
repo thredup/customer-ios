@@ -41,6 +41,8 @@ FOUNDATION_EXPORT const unsigned char KustomerVersionString[];
 
 // A convenience method that will present the support interface on the topmost view controller
 + (void)presentSupport;
++ (void)presentSupportWithMessage:(NSString *) message customAttributes:(NSDictionary<NSString *, NSObject *> *)customAttributes;
++ (void)presentSupportWith:(NSString *) message;
 
 // A convenience method that will present the knowledgebase interface on the topmost view controller
 + (void)presentKnowledgeBase;
@@ -57,10 +59,6 @@ FOUNDATION_EXPORT const unsigned char KustomerVersionString[];
 
 // Show/Hide new conversation button in closed chat
 + (void)hideNewConversationButtonInClosedChat:(BOOL)status;
-
-// Set message and custom attributes to create new chatSession them
-+ (void)createChatSessionWith:(NSString *) message andCustomAttributes:(NSDictionary<NSString *, NSObject *> *)customAttributes;
-+ (void)createChatSessionWith:(NSString *) message;
 
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)new NS_UNAVAILABLE;

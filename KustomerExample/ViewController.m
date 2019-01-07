@@ -127,7 +127,8 @@
 
 - (void)_presentKnowledgeBase
 {
-    [Kustomer presentKnowledgeBase];
+//    [Kustomer presentKnowledgeBase];
+    [Kustomer presentSupportWithMessage:@"Oh Yes!! Its working?" customAttributes:@{ @"companyStr" : @"Brainx" }];
 }
 
 - (void)_presentSupport

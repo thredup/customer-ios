@@ -103,7 +103,9 @@
     [_chatSessionsDataSource addListener:self];
     [_chatSessionsDataSource fetchLatest];
 
-    if (_chatSessionsDataSource.didFetch || _chatSessionsDataSource.messageToCreateNewChatSession != nil) {
+    BOOL shouldCreateNewSessionWithMessage = _chatSessionsDataSource.messageToCreateNewChatSession != nil;
+    
+    if (_chatSessionsDataSource.didFetch || shouldCreateNewSessionWithMessage) {
         [self _handleFirstLoadIfNecessary];
     } else {
         self.tableView.hidden = YES;
@@ -198,7 +200,8 @@
     }
     _didHandleFirstLoad = YES;
     
-    if (_chatSessionsDataSource.messageToCreateNewChatSession != nil) {
+    BOOL shouldCreateNewSessionWithMessage = _chatSessionsDataSource.messageToCreateNewChatSession != nil;
+    if (shouldCreateNewSessionWithMessage) {
         KUSChatViewController *chatViewController = [[KUSChatViewController alloc] initWithUserSession:_userSession forNewSessionWithMessage:_chatSessionsDataSource.messageToCreateNewChatSession];
         [self.navigationController pushViewController:chatViewController animated:NO];
         return;
