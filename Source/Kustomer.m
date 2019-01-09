@@ -169,10 +169,10 @@ static NSString *kKustomerOrgNameKey = @"orgName";
 
 + (void)presentSupportWithMessage:(NSString *) message customAttributes:(NSDictionary<NSString *, NSObject *> *)customAttributes
 {
-    [[self sharedInstance] presentSupportWith:message andCustomAttributes:customAttributes];
+    [[self sharedInstance] presentSupportWithMessage:message customAttributes:customAttributes];
 }
 
-+ (void)presentSupportWith:(NSString *) message
++ (void)presentSupportWithMessage:(NSString *) message
 {
     [Kustomer presentSupportWithMessage:message customAttributes: nil];
 }
@@ -360,7 +360,7 @@ static KUSLogOptions _logOptions = KUSLogOptionInfo | KUSLogOptionErrors;
     [self.userSession.userDefaults setShouldHideNewConversationButtonInClosedChat:status];
 }
 
-- (void)presentSupportWith:(NSString *) message andCustomAttributes:(NSDictionary<NSString *, NSObject *> *)customAttributes
+- (void)presentSupportWithMessage:(NSString *) message customAttributes:(NSDictionary<NSString *, NSObject *> *)customAttributes
 {
     NSAssert(message.length, @"Requires a valid message to create chat session.");
     if (message.length == 0) {
