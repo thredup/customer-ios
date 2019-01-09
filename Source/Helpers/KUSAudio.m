@@ -59,6 +59,11 @@
 
 - (void)_playMessageReceivedSound
 {
+    if (_playingAudioPlayers.count == 0) {
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryAmbient
+                                         withOptions:AVAudioSessionCategoryOptionDuckOthers
+                                               error:nil];
+    }
     NSURL *fileURL = [[NSBundle bundleForClass:[self class]] URLForResource:@"message_received" withExtension:@"m4a"];
     NSError *audioError;
     AVAudioPlayer *audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:fileURL error:&audioError];
@@ -76,6 +81,11 @@
     player.delegate = nil;
     [player stop];
     [_playingAudioPlayers removeObject:player];
+    if (_playingAudioPlayers.count == 0) {
+        [[AVAudioSession sharedInstance] setActive:NO
+                                         withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation
+                                         error:nil];
+    }
 }
 
 @end

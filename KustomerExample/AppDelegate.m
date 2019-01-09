@@ -8,7 +8,7 @@
 
 #import "AppDelegate.h"
 #import "ViewController.h"
-#import <AVFoundation/AVFoundation.h>
+
 #import "Kustomer.h"
 
 #error A valid API key is required
@@ -19,7 +19,6 @@ static NSString *const kKustomerAPIKey = @"API_KEY";
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [Kustomer initializeWithAPIKey:kKustomerAPIKey];
-    [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryAmbient error:nil];
     
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.rootViewController = [[ViewController alloc] init];
