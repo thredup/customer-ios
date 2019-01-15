@@ -105,9 +105,9 @@
     if (self) {
         _userSession = userSession;
         _chatMessagesDataSource = [[KUSChatMessagesDataSource alloc] initForNewConversationWithUserSession:_userSession];
-        KUSChatSettings *chatSettings = [[_userSession chatSettingsDataSource] object];
-        _showBackButton = !chatSettings.noHistory;
+        _showBackButton = NO;
         [_chatMessagesDataSource sendMessageWithText:message attachments:nil];
+        [_userSession.chatSessionsDataSource setMessageToCreateNewChatSession:nil];
     }
     return self;
 }
