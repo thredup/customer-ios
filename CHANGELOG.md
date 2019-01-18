@@ -1,5 +1,10 @@
 # Changelog for Kustomer iOS SDK
 
+## 0.1.31
+
+* Added `presentSupportWithMessage` functionality
+* Fixed the background music stop issue
+
 ## 0.1.30
 
 * Added option values support in form messaging
