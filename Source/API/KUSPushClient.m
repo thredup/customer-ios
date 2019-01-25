@@ -103,6 +103,11 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
                 _isPusherTrackingStarted = NO;
                 
                 [self _updateStats:^{
+                    // Get latest session on update to avoid packet loss during socket connection
+                    if (_sessionUpdated) {
+                        [_userSession.chatSessionsDataSource fetchLatest];
+                    }
+                    
                     [self _connectToChannelsIfNecessary];
                 }];
             });
@@ -224,7 +229,7 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
 - (void)onClientActivityTick
 {
     // We only need to poll for client activity changes if we are not connected to the socket
-    if (!_pusherClient.connection.connected) {
+    if (!_pusherClient.connection.connected || !_pusherChannel.isSubscribed) {
         [self _onPollTick];
     }
 }
