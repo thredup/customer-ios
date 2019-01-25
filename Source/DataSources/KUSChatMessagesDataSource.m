@@ -589,6 +589,9 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
         if (_isProactiveCampaign) {
             [self _closeProactiveCampaignIfNecessary];
         }
+        
+        // Update the locally session last seen
+        [self.userSession.chatSessionsDataSource updateLocallyLastSeenAtForSessionId:_sessionId];
 
     };
 
@@ -863,6 +866,9 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
                      [listener chatMessagesDataSource:self didCreateSessionId:_sessionId];
                  }
              }
+             
+             // Update last seen locally for the session
+             [self.userSession.chatSessionsDataSource updateLocallyLastSeenAtForSessionId:_sessionId];
          }];
     };
     

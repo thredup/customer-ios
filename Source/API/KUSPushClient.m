@@ -129,7 +129,7 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
 {
     // Connect or disconnect from pusher
     if ([self _shouldBeConnectedToPusher]) {
-        if (_pusherClient.connection.connected) {
+        if (_pusherClient.connection.connected && _pusherChannel.isSubscribed) {
             // Stop polling
             if (_pollingTimer) {
                 [_pollingTimer invalidate];
@@ -417,11 +417,15 @@ withAuthOperation:(PTPusherChannelAuthorizationOperation *)operation
 - (void)pusher:(PTPusher *)pusher didSubscribeToChannel:(PTPusherChannel *)channel
 {
     KUSLogPusher(@"Pusher did subscribe to channel: %@", channel.name);
+    
+    [self _updatePollingTimer];
 }
 
 - (void)pusher:(PTPusher *)pusher didFailToSubscribeToChannel:(PTPusherChannel *)channel withError:(NSError *)error
 {
     KUSLogPusherError(@"Pusher did fail to subscribe to channel: %@ with error: %@", channel.name, error);
+    
+    [self _updatePollingTimer];
 }
 
 @end
