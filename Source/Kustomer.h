@@ -24,7 +24,7 @@ FOUNDATION_EXPORT const unsigned char KustomerVersionString[];
 + (void)describeConversation:(NSDictionary<NSString *, NSObject *> *)customAttributes;
 + (void)describeNextConversation:(NSDictionary<NSString *, NSObject *> *)customAttributes;
 + (void)describeCustomer:(KUSCustomerDescription *)customerDescription;
-+ (void)identify:(NSString *)externalToken;
++ (void)identify:(nonnull NSString *)externalToken callback:(void (^_Nullable)(void))handler;
 + (void)resetTracking;
 
 + (void)setCurrentPageName:(NSString *)currentPageName;
