@@ -34,6 +34,7 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
     BOOL _isPusherTrackingStarted;
     BOOL _shouldConnect;
     BOOL _sessionUpdated;
+    BOOL _isPusherLossPackets;
     NSDate *_lastActivity;
 }
 
@@ -105,6 +106,7 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
                 [self _updateStats:^{
                     // Get latest session on update to avoid packet loss during socket connection
                     if (_sessionUpdated) {
+                        _isPusherLossPackets = YES;
                         [_userSession.chatSessionsDataSource fetchLatest];
                     }
                     
@@ -336,12 +338,13 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
 {
     if (dataSource == _userSession.chatSessionsDataSource) {
         // Only consider new messages here if we're actively polling
-        if (_pollingTimer == nil) {
+        if (_pollingTimer == nil && !_isPusherLossPackets) {
             // But update the state of _previousChatSessions
             [self _updatePreviousChatSessions];
             return;
         }
 
+        _isPusherLossPackets = NO;
         NSString *updatedSessionId = nil;
         NSArray<KUSChatSession *> *newChatSessions = _userSession.chatSessionsDataSource.allObjects;
         for (KUSChatSession *chatSession in newChatSessions) {
