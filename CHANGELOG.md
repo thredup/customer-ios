@@ -1,5 +1,8 @@
 # Changelog for Kustomer iOS SDK
 
+## 0.1.33
+
+* Fixed the pod issue
 
 ## 0.1.32
 
