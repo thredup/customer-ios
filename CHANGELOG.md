@@ -1,5 +1,11 @@
 # Changelog for Kustomer iOS SDK
 
+
+## 0.1.32
+
+* Added a callback handler for identify method
+* Fixed pusher logic
+
 ## 0.1.31
 
 * Added `presentSupportWithMessage` functionality

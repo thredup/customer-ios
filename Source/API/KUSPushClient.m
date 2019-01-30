@@ -34,6 +34,7 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
     BOOL _isPusherTrackingStarted;
     BOOL _shouldConnect;
     BOOL _sessionUpdated;
+    BOOL _didPusherLossPackets;
     NSDate *_lastActivity;
 }
 
@@ -103,6 +104,12 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
                 _isPusherTrackingStarted = NO;
                 
                 [self _updateStats:^{
+                    // Get latest session on update to avoid packet loss during socket connection
+                    if (_sessionUpdated) {
+                        _didPusherLossPackets = YES;
+                        [_userSession.chatSessionsDataSource fetchLatest];
+                    }
+                    
                     [self _connectToChannelsIfNecessary];
                 }];
             });
@@ -129,7 +136,7 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
 {
     // Connect or disconnect from pusher
     if ([self _shouldBeConnectedToPusher]) {
-        if (_pusherClient.connection.connected) {
+        if (_pusherClient.connection.connected && _pusherChannel.isSubscribed) {
             // Stop polling
             if (_pollingTimer) {
                 [_pollingTimer invalidate];
@@ -224,7 +231,7 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
 - (void)onClientActivityTick
 {
     // We only need to poll for client activity changes if we are not connected to the socket
-    if (!_pusherClient.connection.connected) {
+    if (!_pusherClient.connection.connected || !_pusherChannel.isSubscribed) {
         [self _onPollTick];
     }
 }
@@ -331,12 +338,13 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
 {
     if (dataSource == _userSession.chatSessionsDataSource) {
         // Only consider new messages here if we're actively polling
-        if (_pollingTimer == nil) {
+        if (_pollingTimer == nil && !_didPusherLossPackets) {
             // But update the state of _previousChatSessions
             [self _updatePreviousChatSessions];
             return;
         }
 
+        _didPusherLossPackets = NO;
         NSString *updatedSessionId = nil;
         NSArray<KUSChatSession *> *newChatSessions = _userSession.chatSessionsDataSource.allObjects;
         for (KUSChatSession *chatSession in newChatSessions) {
@@ -417,11 +425,15 @@ withAuthOperation:(PTPusherChannelAuthorizationOperation *)operation
 - (void)pusher:(PTPusher *)pusher didSubscribeToChannel:(PTPusherChannel *)channel
 {
     KUSLogPusher(@"Pusher did subscribe to channel: %@", channel.name);
+    
+    [self _updatePollingTimer];
 }
 
 - (void)pusher:(PTPusher *)pusher didFailToSubscribeToChannel:(PTPusherChannel *)channel withError:(NSError *)error
 {
     KUSLogPusherError(@"Pusher did fail to subscribe to channel: %@ with error: %@", channel.name, error);
+    
+    [self _updatePollingTimer];
 }
 
 @end

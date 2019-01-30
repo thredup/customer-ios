@@ -166,6 +166,14 @@
      }];
 }
 
+- (void)updateLocallyLastSeenAtForSessionId:(NSString *)sessionId
+{
+    if (sessionId.length == 0) {
+        return;
+    }
+    [_localLastSeenAtBySessionId setObject:[NSDate date] forKey:sessionId];
+}
+
 - (void)submitFormMessages:(NSArray<NSDictionary *> *)messages
                     formId:(NSString *)formId
                 completion:(void (^)(NSError *, KUSChatSession *, NSArray<KUSChatMessage *> *))completion
