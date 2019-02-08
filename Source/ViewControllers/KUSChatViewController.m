@@ -8,6 +8,7 @@
 
 #import "KUSChatViewController.h"
 
+#import "NYTPhotoViewer/NYTPhotoViewerArrayDataSource.h"
 #import <NYTPhotoViewer/NYTPhotosViewController.h>
 #import <SafariServices/SafariServices.h>
 #import <SDWebImage/UIImageView+WebCache.h>
@@ -65,6 +66,7 @@
 @property (nonatomic, strong) KUSNewSessionButton *sessionButton;
 @property (nonatomic, strong) KUSEndChatButtonView *closeChatButtonView;
 @property (nonatomic, strong) KUSMLFormValuesPickerView *mlFormValuesPickerView;
+@property (nonatomic, strong) NYTPhotoViewerArrayDataSource *nytPhotosDataSource;
 
 @end
 
@@ -887,9 +889,8 @@
     }
 
     [_inputBarView resignFirstResponder];
-
-    NYTPhotosViewController *photosViewController = [[NYTPhotosViewController alloc] initWithPhotos:photos initialPhoto:initialPhoto];
-    photosViewController.delegate = self;
+    _nytPhotosDataSource = [[NYTPhotoViewerArrayDataSource alloc] initWithPhotos:photos];
+    NYTPhotosViewController *photosViewController = [[NYTPhotosViewController alloc] initWithDataSource:_nytPhotosDataSource initialPhoto:initialPhoto delegate:self];
     [self presentViewController:photosViewController animated:YES completion:nil];
 }
 
@@ -1032,8 +1033,8 @@
         }
     }
 
-    NYTPhotosViewController *photosViewController = [[NYTPhotosViewController alloc] initWithPhotos:photos initialPhoto:initialPhoto];
-    photosViewController.delegate = self;
+    _nytPhotosDataSource = [[NYTPhotoViewerArrayDataSource alloc] initWithPhotos:photos];
+    NYTPhotosViewController *photosViewController = [[NYTPhotosViewController alloc] initWithDataSource:_nytPhotosDataSource initialPhoto:initialPhoto delegate:self];
     [self presentViewController:photosViewController animated:YES completion:nil];
 }
 
