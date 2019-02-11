@@ -115,18 +115,7 @@
 
          KUSChatSession *session = [[KUSChatSession alloc] initWithJSON:response[@"data"]];
          if (session) {
-             BOOL hasChatSessionAttributes = _pendingCustomChatSessionAttributes || _pendingCustomChatSessionAttributesForNextConversation;
-             if (hasChatSessionAttributes) {
-                 NSMutableDictionary<NSString *, NSObject *> *pendingCustomChatSessionAttributes = [[NSMutableDictionary alloc] init];
-                 if (_pendingCustomChatSessionAttributes) {
-                     [pendingCustomChatSessionAttributes addEntriesFromDictionary:_pendingCustomChatSessionAttributes];
-                 }
-                 if (_pendingCustomChatSessionAttributesForNextConversation) {
-                     [pendingCustomChatSessionAttributes addEntriesFromDictionary:_pendingCustomChatSessionAttributesForNextConversation];
-                     _pendingCustomChatSessionAttributesForNextConversation = nil;
-                 }
-                 [self _flushCustomAttributes:pendingCustomChatSessionAttributes toChatSessionId:session.oid];
-             }
+             [self _checkShouldFlushCustomAttributesToChatSessionId:session.oid];
              [weakSelf upsertObjects:@[ session ]];
          }
          if (completion) {
@@ -215,18 +204,7 @@
          }
 
          if (chatSession) {
-             BOOL hasChatSessionAttributes = _pendingCustomChatSessionAttributes || _pendingCustomChatSessionAttributesForNextConversation;
-             if (hasChatSessionAttributes) {
-                 NSMutableDictionary<NSString *, NSObject *> *pendingCustomChatSessionAttributes = [[NSMutableDictionary alloc] init];
-                 if (_pendingCustomChatSessionAttributes) {
-                     [pendingCustomChatSessionAttributes addEntriesFromDictionary:_pendingCustomChatSessionAttributes];
-                 }
-                 if (_pendingCustomChatSessionAttributesForNextConversation) {
-                     [pendingCustomChatSessionAttributes addEntriesFromDictionary:_pendingCustomChatSessionAttributesForNextConversation];
-                     _pendingCustomChatSessionAttributesForNextConversation = nil;
-                 }
-                 [self _flushCustomAttributes:pendingCustomChatSessionAttributes toChatSessionId:chatSession.oid];
-             }
+             [self _checkShouldFlushCustomAttributesToChatSessionId:chatSession.oid];
              [weakSelf upsertObjects:@[ chatSession ]];
          }
          if (completion) {
@@ -290,6 +268,22 @@
 }
 
 #pragma mark - Internal methods
+
+- (void)_checkShouldFlushCustomAttributesToChatSessionId:(NSString *)chatSessionId
+{
+    BOOL hasChatSessionAttributes = _pendingCustomChatSessionAttributes || _pendingCustomChatSessionAttributesForNextConversation;
+    if (hasChatSessionAttributes) {
+        NSMutableDictionary<NSString *, NSObject *> *pendingCustomChatSessionAttributes = [[NSMutableDictionary alloc] init];
+        if (_pendingCustomChatSessionAttributes) {
+            [pendingCustomChatSessionAttributes addEntriesFromDictionary:_pendingCustomChatSessionAttributes];
+        }
+        if (_pendingCustomChatSessionAttributesForNextConversation) {
+            [pendingCustomChatSessionAttributes addEntriesFromDictionary:_pendingCustomChatSessionAttributesForNextConversation];
+            _pendingCustomChatSessionAttributesForNextConversation = nil;
+        }
+        [self _flushCustomAttributes:pendingCustomChatSessionAttributes toChatSessionId:chatSessionId];
+    }
+}
 
 - (void)_flushCustomAttributes:(NSDictionary<NSString *, NSObject *> *)customAttributes toChatSessionId:(NSString *)chatSessionId
 {
