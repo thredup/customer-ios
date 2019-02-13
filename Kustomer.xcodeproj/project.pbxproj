@@ -163,6 +163,7 @@
 		63F61A7E1FFAC86400E56766 /* KUSMultipleAvatarsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 63F61A7C1FFAC86400E56766 /* KUSMultipleAvatarsView.m */; };
 		6D7CDE24CE12E0916484305C /* Pods_Kustomer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4074C2A1E9213757162ED660 /* Pods_Kustomer.framework */; };
 		7C3913946A295179BE2E925B /* Pods_KustomerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D624913E5C7AD4492EF0D39B /* Pods_KustomerTests.framework */; };
+		C70A6ACE2212EC53004B4F9C /* KUSDescribeConversationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C70A6ACD2212EC53004B4F9C /* KUSDescribeConversationTests.m */; };
 		C730E14D20E5159D00EF2AB8 /* KUSEndChatButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = C730E14C20E5159D00EF2AB8 /* KUSEndChatButtonView.m */; };
 		C730E15320E5179200EF2AB8 /* KUSEndChatButtonView.h in Headers */ = {isa = PBXBuildFile; fileRef = C730E15220E5179200EF2AB8 /* KUSEndChatButtonView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C77880FB216CDBAC006375BC /* KUSMLFormValuesPickerCollectionViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = C77880F9216CDBAC006375BC /* KUSMLFormValuesPickerCollectionViewCell.h */; };
@@ -398,6 +399,7 @@
 		6BBA02B9E3111B375725C25D /* Pods_KustomerExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KustomerExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F91D0EF26D550F6FA48F5E6 /* Pods-Kustomer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Kustomer.release.xcconfig"; path = "Pods/Target Support Files/Pods-Kustomer/Pods-Kustomer.release.xcconfig"; sourceTree = "<group>"; };
 		A8B9C7F846CD493168479E0A /* Pods-KustomerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KustomerTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-KustomerTests/Pods-KustomerTests.release.xcconfig"; sourceTree = "<group>"; };
+		C70A6ACD2212EC53004B4F9C /* KUSDescribeConversationTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KUSDescribeConversationTests.m; sourceTree = "<group>"; };
 		C730E14C20E5159D00EF2AB8 /* KUSEndChatButtonView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KUSEndChatButtonView.m; sourceTree = "<group>"; };
 		C730E15220E5179200EF2AB8 /* KUSEndChatButtonView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KUSEndChatButtonView.h; sourceTree = "<group>"; };
 		C77880F9216CDBAC006375BC /* KUSMLFormValuesPickerCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUSMLFormValuesPickerCollectionViewCell.h; sourceTree = "<group>"; };
@@ -702,6 +704,7 @@
 				6398E04E1FC2316F00001050 /* KUSChatSettingsTest.m */,
 				630BA340203005F500C80CD2 /* KUSClientActivityTest.m */,
 				636EA62F1F9D4FD100340B66 /* KUSDelegateProxyTests.m */,
+				C70A6ACD2212EC53004B4F9C /* KUSDescribeConversationTests.m */,
 				63B9CDA11F088E8800120F3E /* Info.plist */,
 			);
 			path = KustomerTests;
@@ -1111,13 +1114,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-KustomerTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		7EFAB52A05029F56315F77F8 /* [CP] Check Pods Manifest.lock */ = {
@@ -1126,13 +1132,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-KustomerExample-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		8A8C63B0A37684977FB8C44B /* [CP] Embed Pods Frameworks */ = {
@@ -1141,9 +1150,26 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-KustomerTests/Pods-KustomerTests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/FLAnimatedImage/FLAnimatedImage.framework",
+				"${BUILT_PRODUCTS_DIR}/NYTPhotoViewer/NYTPhotoViewer.framework",
+				"${BUILT_PRODUCTS_DIR}/OCMock/OCMock.framework",
+				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
+				"${BUILT_PRODUCTS_DIR}/SocketRocket/SocketRocket.framework",
+				"${BUILT_PRODUCTS_DIR}/TSMarkdownParser/TSMarkdownParser.framework",
+				"${BUILT_PRODUCTS_DIR}/TTTAttributedLabel/TTTAttributedLabel.framework",
+				"${BUILT_PRODUCTS_DIR}/libPusher/Pusher.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FLAnimatedImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NYTPhotoViewer.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OCMock.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketRocket.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TSMarkdownParser.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TTTAttributedLabel.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Pusher.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1156,9 +1182,26 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-KustomerExample/Pods-KustomerExample-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/FLAnimatedImage/FLAnimatedImage.framework",
+				"${BUILT_PRODUCTS_DIR}/NYTPhotoViewer/NYTPhotoViewer.framework",
+				"${BUILT_PRODUCTS_DIR}/OCMock/OCMock.framework",
+				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
+				"${BUILT_PRODUCTS_DIR}/SocketRocket/SocketRocket.framework",
+				"${BUILT_PRODUCTS_DIR}/TSMarkdownParser/TSMarkdownParser.framework",
+				"${BUILT_PRODUCTS_DIR}/TTTAttributedLabel/TTTAttributedLabel.framework",
+				"${BUILT_PRODUCTS_DIR}/libPusher/Pusher.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FLAnimatedImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NYTPhotoViewer.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OCMock.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketRocket.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TSMarkdownParser.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TTTAttributedLabel.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Pusher.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1171,13 +1214,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Kustomer-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F2860007970B2D1AFA26F4B7 /* [CP] Copy Pods Resources */ = {
@@ -1288,6 +1334,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				63B9CDA01F088E8800120F3E /* KustomerTests.m in Sources */,
+				C70A6ACE2212EC53004B4F9C /* KUSDescribeConversationTests.m in Sources */,
 				630BA341203005F500C80CD2 /* KUSClientActivityTest.m in Sources */,
 				6398E04F1FC2316F00001050 /* KUSChatSettingsTest.m in Sources */,
 				636EA62A1F9D12BE00340B66 /* KUSDateTests.m in Sources */,
