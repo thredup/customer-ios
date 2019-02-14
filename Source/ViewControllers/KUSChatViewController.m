@@ -538,7 +538,7 @@
         return;
     }
     
-    BOOL wantsClosedView = _chatMessagesDataSource.isChatClosed;
+    BOOL wantsClosedView = _chatMessagesDataSource.isChatClosed && ([_chatMessagesDataSource otherUserIds].count == 0);
     if (wantsClosedView) {
         self.inputBarView.hidden = YES;
         if ([self.inputBarView isFirstResponder]) {
