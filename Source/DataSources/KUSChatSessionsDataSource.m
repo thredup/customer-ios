@@ -115,10 +115,7 @@
 
          KUSChatSession *session = [[KUSChatSession alloc] initWithJSON:response[@"data"]];
          if (session) {
-             if (_pendingCustomChatSessionAttributesForNextConversation) {
-                 [self _flushCustomAttributes:_pendingCustomChatSessionAttributesForNextConversation toChatSessionId:session.oid];
-                 _pendingCustomChatSessionAttributesForNextConversation = nil;
-             }
+             [self _checkShouldFlushCustomAttributesToChatSessionId:session.oid];
              [weakSelf upsertObjects:@[ session ]];
          }
          if (completion) {
@@ -207,10 +204,7 @@
          }
 
          if (chatSession) {
-             if (_pendingCustomChatSessionAttributesForNextConversation) {
-                 [self _flushCustomAttributes:_pendingCustomChatSessionAttributesForNextConversation toChatSessionId:chatSession.oid];
-                 _pendingCustomChatSessionAttributesForNextConversation = nil;
-             }
+             [self _checkShouldFlushCustomAttributesToChatSessionId:chatSession.oid];
              [weakSelf upsertObjects:@[ chatSession ]];
          }
          if (completion) {
@@ -221,20 +215,17 @@
 
 - (void)describeActiveConversation:(NSDictionary<NSString *, NSObject *> *)customAttributes
 {
+    NSMutableDictionary<NSString *, NSObject *> *pendingCustomChatSessionAttributes = [[NSMutableDictionary alloc] init];
+    if (_pendingCustomChatSessionAttributes) {
+        [pendingCustomChatSessionAttributes addEntriesFromDictionary:_pendingCustomChatSessionAttributes];
+    }
+    [pendingCustomChatSessionAttributes addEntriesFromDictionary:customAttributes];
+    _pendingCustomChatSessionAttributes = pendingCustomChatSessionAttributes;
+    
     KUSChatSession *mostRecentSession = [self mostRecentSession];
     NSString *mostRecentSessionId = mostRecentSession.oid;
     if (mostRecentSessionId) {
-        [self _flushCustomAttributes:customAttributes toChatSessionId:mostRecentSessionId];
-    } else {
-        // Merge previously queued custom attributes with the latest custom attributes
-        NSMutableDictionary<NSString *, NSObject *> *pendingCustomChatSessionAttributes = [[NSMutableDictionary alloc] init];
-        if (_pendingCustomChatSessionAttributes) {
-            [pendingCustomChatSessionAttributes addEntriesFromDictionary:_pendingCustomChatSessionAttributes];
-        }
-        [pendingCustomChatSessionAttributes addEntriesFromDictionary:customAttributes];
-        _pendingCustomChatSessionAttributes = pendingCustomChatSessionAttributes;
-
-        [self fetchLatest];
+        [self _flushCustomAttributes:_pendingCustomChatSessionAttributes toChatSessionId:mostRecentSessionId];
     }
 }
 
@@ -277,6 +268,22 @@
 }
 
 #pragma mark - Internal methods
+
+- (void)_checkShouldFlushCustomAttributesToChatSessionId:(NSString *)chatSessionId
+{
+    BOOL hasChatSessionAttributes = _pendingCustomChatSessionAttributes || _pendingCustomChatSessionAttributesForNextConversation;
+    if (hasChatSessionAttributes) {
+        NSMutableDictionary<NSString *, NSObject *> *pendingCustomChatSessionAttributes = [[NSMutableDictionary alloc] init];
+        if (_pendingCustomChatSessionAttributes) {
+            [pendingCustomChatSessionAttributes addEntriesFromDictionary:_pendingCustomChatSessionAttributes];
+        }
+        if (_pendingCustomChatSessionAttributesForNextConversation) {
+            [pendingCustomChatSessionAttributes addEntriesFromDictionary:_pendingCustomChatSessionAttributesForNextConversation];
+            _pendingCustomChatSessionAttributesForNextConversation = nil;
+        }
+        [self _flushCustomAttributes:pendingCustomChatSessionAttributes toChatSessionId:chatSessionId];
+    }
+}
 
 - (void)_flushCustomAttributes:(NSDictionary<NSString *, NSObject *> *)customAttributes toChatSessionId:(NSString *)chatSessionId
 {
@@ -382,15 +389,6 @@
 {
     if (dataSource == self) {
         [self.userSession.userDefaults setOpenChatSessionsCount:[self openChatSessionsCount]];
-        if (_pendingCustomChatSessionAttributes) {
-            KUSChatSession *mostRecentSession = [self mostRecentSession];
-            NSString *mostRecentSessionId = mostRecentSession.oid;
-            if (mostRecentSessionId) {
-                [self _flushCustomAttributes:_pendingCustomChatSessionAttributes toChatSessionId:mostRecentSessionId];
-                _pendingCustomChatSessionAttributes = nil;
-            }
-        }
-
         NSArray<NSString *> *sessionIds = [self.allObjects valueForKeyPath:@"@unionOfObjects.oid"];
         for (NSString *sessionId in sessionIds) {
             KUSChatMessagesDataSource *messagesDataSource = [self.userSession chatMessagesDataSourceForSessionId:sessionId];
