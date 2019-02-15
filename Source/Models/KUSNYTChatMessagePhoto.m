@@ -41,7 +41,7 @@
              }
              weakSelf.image = image;
              weakSelf.imageData = data;
-             [weakSelf.photosController updateImageForPhoto:weakSelf];
+             [weakSelf.photosController updatePhoto:weakSelf];
          }];
     }
     return self;

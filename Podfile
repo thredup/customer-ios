@@ -8,7 +8,7 @@ target 'Kustomer' do
   pod 'TSMarkdownParser', '>= 2.0.0', '< 3.0.0'
   pod 'SDWebImage', '>= 4.0.0', '< 5.0.0'
   pod 'TTTAttributedLabel', '>= 2.0.0', '< 3.0.0'
-  pod 'NYTPhotoViewer', '>= 1.0.0', '< 2.0.0'
+  pod 'NYTPhotoViewer', '2.0.0'
   pod 'OCMock', '~> 3.4'
   target 'KustomerTests' do
     inherit! :search_paths
