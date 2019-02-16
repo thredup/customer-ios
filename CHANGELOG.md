@@ -1,5 +1,13 @@
 # Changelog for Kustomer iOS SDK
 
+## 0.1.34
+
+Release Date: 02/17/2019
+
+* Updated NYTPhotoViewer library dependency to 2.0.0
+* Updated Pusher connection logic to maximum rely on pusher and removed the unnecessary API calls
+* Fixed the input field issue in case of non-business hours and chat is temporarily closed and message received from the agent
+
 ## 0.1.33
 
 * Fixed the pod issue
