@@ -1,5 +1,11 @@
 # Changelog for Kustomer iOS SDK
 
+## 0.1.35
+
+Release Date: 02/21/2019
+
+* Fixed the multiple business hours issue
+
 ## 0.1.34
 
 Release Date: 02/17/2019
