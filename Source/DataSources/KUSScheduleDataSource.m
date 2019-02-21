@@ -66,10 +66,12 @@
         
         NSArray<NSArray<NSNumber *> *> *businessHoursOfCurrentDay = businessHours.hours[[NSString stringWithFormat:@"%ld", (long)weekday]];
         if (businessHoursOfCurrentDay != nil && businessHoursOfCurrentDay != (id)[NSNull null]) {
-            NSArray<NSNumber *> *businessHoursRange = [businessHoursOfCurrentDay firstObject];
-            if (businessHoursRange && businessHoursRange.count == 2 &&
-                [businessHoursRange[0] integerValue] <= minutes && [businessHoursRange[1]  integerValue] >= minutes) {
-                return YES;
+            for (int i = 0; i < [businessHoursOfCurrentDay count]; i++) {
+                NSArray<NSNumber *> *businessHoursRange = [businessHoursOfCurrentDay objectAtIndex:i];
+                if (businessHoursRange && businessHoursRange.count == 2 &&
+                    [businessHoursRange[0] integerValue] <= minutes && [businessHoursRange[1]  integerValue] >= minutes) {
+                    return YES;
+                }
             }
         }
         return NO;
