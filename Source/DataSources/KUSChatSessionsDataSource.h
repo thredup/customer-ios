@@ -10,6 +10,8 @@
 
 #import "KUSChatSession.h"
 
+#define kKUSTempSessionId @"temp_session_id"
+
 @class KUSChatMessage;
 @interface KUSChatSessionsDataSource : KUSPaginatedDataSource
 

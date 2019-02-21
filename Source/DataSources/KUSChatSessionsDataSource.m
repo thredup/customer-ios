@@ -141,6 +141,15 @@
     NSDate *lastSeenAtDate = [NSDate date];
     [_localLastSeenAtBySessionId setObject:lastSeenAtDate forKey:sessionId];
     NSString *lastSeenAtString = [KUSDate stringFromDate:lastSeenAtDate];
+    
+    BOOL isLocalSession = [sessionId isEqualToString:kKUSTempSessionId];
+    if (isLocalSession) {
+        KUSChatSession *session = [self objectWithId:sessionId];
+        [self removeObjects:@[session]];
+        session.lastSeenAt = lastSeenAtDate;
+        [self upsertObjects:@[session]];
+        return;
+    }
 
     __weak KUSChatSessionsDataSource *weakSelf = self;
     [self.userSession.requestManager
