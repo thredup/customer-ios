@@ -223,9 +223,7 @@ static NSString *kCellIdentifier = @"ImageAttachment";
         UIImage *resizedImage = [KUSImage resizeImage:image toFixedPixelCount:kKUSMaximumImagePixelCount];
         [_imageAttachments addObject:resizedImage];
     }
-    [self _checkIfDesiredHeightDidChange];
-    [_imageCollectionView reloadData];
-    [self setNeedsLayout];
+    [self _updateAttachmentsView];
 }
 
 - (NSArray<UIImage *> *)imageAttachments
@@ -237,9 +235,7 @@ static NSString *kCellIdentifier = @"ImageAttachment";
 {
     UIImage *resizedImage = [KUSImage resizeImage:image toFixedPixelCount:kKUSMaximumImagePixelCount];
     [_imageAttachments addObject:resizedImage];
-    [self _checkIfDesiredHeightDidChange];
-    [_imageCollectionView reloadData];
-    [self setNeedsLayout];
+    [self _updateAttachmentsView];
 
     dispatch_async(dispatch_get_main_queue(), ^{
         // Scroll the image collection view all the way to the right
@@ -251,9 +247,7 @@ static NSString *kCellIdentifier = @"ImageAttachment";
 - (void)_removeImage:(UIImage *)image
 {
     [_imageAttachments removeObject:image];
-    [self _checkIfDesiredHeightDidChange];
-    [_imageCollectionView reloadData];
-    [self setNeedsLayout];
+    [self _updateAttachmentsView];
 }
 
 #pragma mark - UIResponder methods
@@ -326,6 +320,13 @@ static NSString *kCellIdentifier = @"ImageAttachment";
             [self.delegate inputBarDesiredHeightDidChange:self];
         }
     }
+}
+
+- (void)_updateAttachmentsView
+{
+    [self _checkIfDesiredHeightDidChange];
+    [_imageCollectionView reloadData];
+    [self setNeedsLayout];
 }
 
 #pragma mark - KUSTextViewDelegate methods

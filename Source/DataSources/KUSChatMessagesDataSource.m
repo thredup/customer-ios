@@ -230,9 +230,14 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     return _sessionId;
 }
 
-- (BOOL) isActualSessionExist
+- (BOOL)isActualSessionExist
 {
     return _sessionId && ![_sessionId isEqual:kKUSTempSessionId];
+}
+
+- (BOOL)shouldAllowAttachments
+{
+    return [self isActualSessionExist] && !_vcFormActive;
 }
 
 - (BOOL)isAnyMessageByCurrentUser

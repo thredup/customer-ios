@@ -171,7 +171,8 @@
     self.inputBarView = [[KUSInputBar alloc] initWithUserSession:_userSession];
     self.inputBarView.delegate = self;
     self.inputBarView.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth);
-    self.inputBarView.allowsAttachments = [self getValidChatSessionId] != nil;
+    
+    self.inputBarView.allowsAttachments = [_chatMessagesDataSource shouldAllowAttachments];
     [self.view addSubview:self.inputBarView];
 
     [_chatMessagesDataSource addListener:self];
@@ -661,7 +662,11 @@
         [self _checkShouldShowInputView];
         [self _checkShouldShowCloseChatButtonView];
         [self.view setNeedsLayout];
-        
+        BOOL shouldAllowAttachments = [_chatMessagesDataSource shouldAllowAttachments];
+        if (!shouldAllowAttachments) {
+            [_inputBarView setImageAttachments:nil];
+        }
+        self.inputBarView.allowsAttachments = shouldAllowAttachments;
         
         _showNonBusinessHoursImage = NO;
         self.nonBusinessHourImageView.hidden = !_showNonBusinessHoursImage;
