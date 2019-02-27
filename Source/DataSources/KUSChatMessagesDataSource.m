@@ -121,7 +121,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 
 - (NSURL *)firstURL
 {
-    if (_sessionId) {
+    if ([self isActualSessionExist]) {
         NSString *endpoint = [NSString stringWithFormat:@"/c/v1/chat/sessions/%@/messages", _sessionId];
         return [self.userSession.requestManager URLForEndpoint:endpoint];
     }
@@ -230,6 +230,11 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     return _sessionId;
 }
 
+- (BOOL) isActualSessionExist
+{
+    return _sessionId && ![_sessionId isEqual:kKUSTempSessionId];
+}
+
 - (BOOL)isAnyMessageByCurrentUser
 {
     for (KUSChatMessage *message in self.allObjects) {
@@ -302,7 +307,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 
     // If the user sent their first message and it is not yet sent, prevent input
     KUSChatMessage *firstMessage = self.allObjects.lastObject;
-    if (_sessionId == nil
+    if (![self isActualSessionExist]
         && [self count] == 1
         && firstMessage.state != KUSChatMessageStateSent) {
         return YES;
@@ -313,7 +318,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 
 - (KUSFormQuestion *)currentQuestion
 {
-    if (_sessionId) {
+    if ([self isActualSessionExist]) {
         return nil;
     }
     if (KUSChatMessageSentByUser([self latestMessage])) {
@@ -327,7 +332,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     if (!_vcFormActive) {
         return nil;
     }
-    if (!_sessionId) {
+    if (![self isActualSessionExist]) {
         return nil;
     }
     
@@ -357,7 +362,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     if (_vcFormActive) {
         return false;
     }
-    if (!_sessionId) {
+    if (![self isActualSessionExist]) {
         return false;
     }
     
@@ -407,27 +412,60 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 {
     _isProactiveCampaign = ![self isAnyMessageByCurrentUser];
     KUSChatSettings *chatSettings = self.userSession.chatSettingsDataSource.object;
-    if (_sessionId == nil && chatSettings.activeFormId) {
+    if (chatSettings.activeFormId && ![self isActualSessionExist]) {
         NSAssert(attachments.count == 0, @"Should not have been able to send attachments without a _sessionId");
+        
+        
+        if (_sessionId == nil) {
+            NSDictionary *json = @{
+                   @"type": @"chat_message",
+                   @"id": [[NSUUID UUID] UUIDString],
+                   @"attributes": @{
+                       @"body": text,
+                       @"direction": @"in",
+                       @"createdAt": [KUSDate stringFromDate:[NSDate date]]
+                    },
+                   @"relationships": @{
+                       @"session" : @{
+                           @"data": @{
+                               @"id": kKUSTempSessionId
+                               }
+                           }
+                       }
+            };
 
-        NSDictionary *json = @{
-            @"type": @"chat_message",
-            @"id": [[NSUUID UUID] UUIDString],
-            @"attributes": @{
-                @"body": text,
-                @"direction": @"in",
-                @"createdAt": [KUSDate stringFromDate:[NSDate date]]
+            KUSChatMessage *temporaryMessage = [[KUSChatMessage alloc] initWithJSON: json];
+            KUSChatSession *temporarySession = [KUSChatSession tempSessionFromChatMessage:temporaryMessage];
+            [self upsertNewMessages: @[ temporaryMessage ]];
+            [self.userSession.chatSessionsDataSource upsertNewSessions:@[ temporarySession ]];
+            _sessionId = kKUSTempSessionId;
+            [self.userSession.chatMessagesDataSources setObject:self forKey:_sessionId];
+            // Notify listeners
+            for (id<KUSChatMessagesDataSourceListener> listener in [self.listeners copy]) {
+                if ([listener respondsToSelector:@selector(chatMessagesDataSource:didCreateSessionId:)]) {
+                    [listener chatMessagesDataSource:self didCreateSessionId:kKUSTempSessionId];
+                }
             }
-        };
-        NSArray<KUSChatMessage *> *temporaryMessages = [KUSChatMessage objectsWithJSON:json];
-        for (KUSChatMessage *temporaryMessage in temporaryMessages) {
-            temporaryMessage.value = value;
-        }
-        [self upsertNewMessages:temporaryMessages];
 
+            
+        } else if ([_sessionId  isEqual: kKUSTempSessionId]) {
+            NSDictionary *json = @{
+                                   @"type": @"chat_message",
+                                   @"id": [[NSUUID UUID] UUIDString],
+                                   @"attributes": @{
+                                           @"body": text,
+                                           @"direction": @"in",
+                                           @"createdAt": [KUSDate stringFromDate:[NSDate date]]
+                                           }
+                                   };
+            KUSChatMessage *temporaryMessage = [[KUSChatMessage alloc] initWithJSON: json];
+            temporaryMessage.value = value;
+            [self upsertNewMessages: @[ temporaryMessage ]];
+        }
+        
         return;
     }
-    else if  (_sessionId != nil && _vcFormActive) {
+    else if  ([self isActualSessionExist] && _vcFormActive) {
         NSAssert(attachments.count == 0, @"Should not have been able to send attachments without a _sessionId");
         
         NSDictionary *json = @{
@@ -455,7 +493,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 
 - (void)_createSessionIfNecessaryWithTitle:(NSString *)title completion:(void(^)(BOOL success, NSError *error))completion
 {
-    if (_sessionId) {
+    if ([self isActualSessionExist]) {
         if (completion) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 completion(YES, nil);
@@ -713,7 +751,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     if ([self count] == 0) {
         return;
     }
-    if (_sessionId) {
+    if ([self isActualSessionExist]) {
         return;
     }
     if (_form == nil) {
@@ -842,6 +880,11 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
                  _nonBusinessHours = YES;
              }
              
+             if (![self isActualSessionExist]) {
+                 KUSChatSession *tempSession = [self.userSession.chatSessionsDataSource objectWithId:_sessionId];
+                 [self.userSession.chatMessagesDataSources removeObjectForKey:_sessionId];
+                 [self.userSession.chatSessionsDataSource removeObjects: @[tempSession]];
+             }
              // Grab the session id
              _sessionId = session.oid;
              _form = nil;
@@ -930,7 +973,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 
 - (BOOL)_shouldPreventVCFormQuestionMessage
 {
-    if (!_sessionId) {
+    if (![self isActualSessionExist]) {
         return YES;
     }
     
@@ -1143,7 +1186,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 
 - (void)_startVolumeControlTracking
 {
-    if (!_sessionId) {
+    if (![self isActualSessionExist]) {
         return;
     }
     

@@ -68,6 +68,7 @@
 @property (nonatomic, strong) KUSMLFormValuesPickerView *mlFormValuesPickerView;
 @property (nonatomic, strong) NYTPhotoViewerArrayDataSource *nytPhotosDataSource;
 
+
 @end
 
 @implementation KUSChatViewController
@@ -172,7 +173,7 @@
     self.inputBarView = [[KUSInputBar alloc] initWithUserSession:_userSession];
     self.inputBarView.delegate = self;
     self.inputBarView.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth);
-    self.inputBarView.allowsAttachments = _chatSessionId != nil;
+    self.inputBarView.allowsAttachments = [self getValidChatSessionId] != nil;
     [self.view addSubview:self.inputBarView];
 
     [_chatMessagesDataSource addListener:self];
@@ -302,7 +303,7 @@
     };
     
     // Update table view frame if "Start New Conversation" is hidden
-    KUSChatSession *session = [_userSession.chatSessionsDataSource objectWithId:_chatSessionId];
+    KUSChatSession *session = [_userSession.chatSessionsDataSource objectWithId:[self getValidChatSessionId]];
     BOOL shouldHideStartNewConversation = session.lockedAt && _userSession.userDefaults.shouldHideNewConversationButtonInClosedChat;
     
     self.tableView.frame = (CGRect) {
@@ -329,12 +330,17 @@
 
 #pragma mark - Internal logic methods
 
+- (NSString *)getValidChatSessionId
+{
+    return [_chatSessionId isEqual:kKUSTempSessionId] ? nil : _chatSessionId;
+}
+
 - (void)_checkShouldShowCloseChatButtonView
 {
     KUSChatSettings *settings = [_userSession.chatSettingsDataSource object];
     if (settings != nil && settings.closableChat) {
-        if (_chatSessionId) {
-            KUSChatSession *session = [_userSession.chatSessionsDataSource objectWithId:_chatSessionId];
+        if ([self getValidChatSessionId]) {
+            KUSChatSession *session = [_userSession.chatSessionsDataSource objectWithId:[self getValidChatSessionId]];
             if (!session.lockedAt) {
                 if ([_chatMessagesDataSource isAnyMessageByCurrentUser]) {
                     if (!self.closeChatButtonView) {
@@ -361,7 +367,7 @@
 {
     KUSChatSettings *settings = [_userSession.chatSettingsDataSource object];
     BOOL isChatCloseable = settings != nil && settings.closableChat;
-    BOOL shouldShowEmailInput = [_userSession shouldCaptureEmail] && _chatSessionId != nil && !isChatCloseable;
+    BOOL shouldShowEmailInput = [_userSession shouldCaptureEmail] && [self getValidChatSessionId] != nil && !isChatCloseable;
     if (shouldShowEmailInput) {
         if (self.emailInputView == nil) {
             self.emailInputView = [[KUSEmailInputView alloc] init];
@@ -378,7 +384,7 @@
 
 - (void)_checkShouldShowOptionPicker
 {
-    KUSChatSession *session = [_userSession.chatSessionsDataSource objectWithId:_chatSessionId];
+    KUSChatSession *session = [_userSession.chatSessionsDataSource objectWithId:[self getValidChatSessionId]];
     if (session.lockedAt) {
         return;
     }
@@ -494,7 +500,7 @@
 
 - (void)_checkShouldShowInputView
 {
-    KUSChatSession *session = [_userSession.chatSessionsDataSource objectWithId:_chatSessionId];
+    KUSChatSession *session = [_userSession.chatSessionsDataSource objectWithId:[self getValidChatSessionId]];
     if (session.lockedAt) {
         self.inputBarView.hidden = YES;
         if ([self.inputBarView isFirstResponder]) {
@@ -687,7 +693,7 @@
 - (void)chatMessagesDataSource:(KUSChatMessagesDataSource *)dataSource didCreateSessionId:(NSString *)sessionId
 {
     _chatSessionId = sessionId;
-    self.inputBarView.allowsAttachments = YES;
+    self.inputBarView.allowsAttachments = [self getValidChatSessionId] != nil;
     [self.fauxNavigationBar setSessionId:_chatSessionId];
     
     KUSChatSettings *chatSettings = [[_userSession chatSettingsDataSource] object];
@@ -753,7 +759,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    KUSChatSession *session = [_userSession.chatSessionsDataSource objectWithId:_chatSessionId];
+    KUSChatSession *session = [_userSession.chatSessionsDataSource objectWithId:[self getValidChatSessionId]];
     if (session.lockedAt) {
         return [_chatMessagesDataSource count] + 1;
     }
@@ -762,7 +768,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    KUSChatSession *session = [_userSession.chatSessionsDataSource objectWithId:_chatSessionId];
+    KUSChatSession *session = [_userSession.chatSessionsDataSource objectWithId:[self getValidChatSessionId]];
     BOOL isChatEndedCell = session.lockedAt && indexPath.row == 0;
     if (isChatEndedCell) {
         KUSChatEndedTableViewCell *cell = (KUSChatEndedTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"chatEndedCell"];
@@ -807,7 +813,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    KUSChatSession *session = [_userSession.chatSessionsDataSource objectWithId:_chatSessionId];
+    KUSChatSession *session = [_userSession.chatSessionsDataSource objectWithId:[self getValidChatSessionId]];
     BOOL isChatEndedCell = session.lockedAt && indexPath.row == 0;
     if (isChatEndedCell) {
         return 50;

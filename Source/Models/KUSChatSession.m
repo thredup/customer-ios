@@ -9,6 +9,7 @@
 #import "KUSChatSession.h"
 
 #import "KUSChatMessage.h"
+#import "KUSDate.h"
 
 @implementation KUSChatSession
 
@@ -26,9 +27,9 @@
         @"type": [self modelType],
         @"attributes": @{
             @"preview": message.body ?: @"",
-            @"createdAt": message.createdAt ?: [NSDate date],
-            @"lastSeenAt": message.createdAt ?: [NSDate date],
-            @"lastMessageAt": message.createdAt ?: [NSDate date],
+            @"createdAt": [KUSDate stringFromDate:message.createdAt ?: [NSDate date]] ,
+            @"lastSeenAt": [KUSDate stringFromDate:message.createdAt ?: [NSDate date]],
+            @"lastMessageAt": [KUSDate stringFromDate:message.createdAt ?: [NSDate date]],
         }
     };
     return [[KUSChatSession alloc] initWithJSON:json];
