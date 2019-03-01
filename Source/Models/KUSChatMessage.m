@@ -75,58 +75,60 @@ static NSString *KUSUnescapeBackslashesFromString(NSString *string)
     __block NSUInteger lastId = 0;
     __block NSUInteger lastLocation = 0;
 
-    [regex
-     enumerateMatchesInString:body
-     options:kNilOptions
-     range:NSMakeRange(0, body.length)
-     usingBlock:^(NSTextCheckingResult *match, NSMatchingFlags flags, BOOL *stop){
-         NSDataDetector *detector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error:NULL];
-         NSArray<NSTextCheckingResult *> *linkMatches = [detector matchesInString:body
-                                                                          options:kNilOptions
-                                                                            range:match.range];
-         NSTextCheckingResult *linkMatch = linkMatches.firstObject;
-         if (linkMatch) {
-             NSString *matchedText = KUSUnescapeBackslashesFromString([body substringWithRange:linkMatch.range]);
-             NSURL *matchedURL = [NSURL URLWithString:matchedText];
-             if (matchedURL) {
-                 NSMutableDictionary *mutablePreviousJSON = [json mutableCopy];
-                 [mutablePreviousJSON setObject:[NSString stringWithFormat:@"%@_%lu", standardChatMessage.oid, (unsigned long)lastId] forKey:@"id"];
-                 NSString *previousText = [body substringWithRange:NSMakeRange(lastLocation, match.range.location - lastLocation)];
-                 previousText = [previousText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-                 if (previousText.length) {
-                     KUSChatMessage *previousChatMessage = [[KUSChatMessage alloc] initWithJSON:mutablePreviousJSON];
-                     if (previousChatMessage) {
-                         previousChatMessage->_body = previousText;
-                         [chatMessages addObject:previousChatMessage];
-                         lastId++;
+    if (body != nil) {
+        [regex
+         enumerateMatchesInString:body
+         options:kNilOptions
+         range:NSMakeRange(0, body.length)
+         usingBlock:^(NSTextCheckingResult *match, NSMatchingFlags flags, BOOL *stop){
+             NSDataDetector *detector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error:NULL];
+             NSArray<NSTextCheckingResult *> *linkMatches = [detector matchesInString:body
+                                                                              options:kNilOptions
+                                                                                range:match.range];
+             NSTextCheckingResult *linkMatch = linkMatches.firstObject;
+             if (linkMatch) {
+                 NSString *matchedText = KUSUnescapeBackslashesFromString([body substringWithRange:linkMatch.range]);
+                 NSURL *matchedURL = [NSURL URLWithString:matchedText];
+                 if (matchedURL) {
+                     NSMutableDictionary *mutablePreviousJSON = [json mutableCopy];
+                     [mutablePreviousJSON setObject:[NSString stringWithFormat:@"%@_%lu", standardChatMessage.oid, (unsigned long)lastId] forKey:@"id"];
+                     NSString *previousText = [body substringWithRange:NSMakeRange(lastLocation, match.range.location - lastLocation)];
+                     previousText = [previousText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                     if (previousText.length) {
+                         KUSChatMessage *previousChatMessage = [[KUSChatMessage alloc] initWithJSON:mutablePreviousJSON];
+                         if (previousChatMessage) {
+                             previousChatMessage->_body = previousText;
+                             [chatMessages addObject:previousChatMessage];
+                             lastId++;
+                         }
                      }
+
+                     NSMutableDictionary *mutableImageJSON = [json mutableCopy];
+                     [mutableImageJSON setObject:[NSString stringWithFormat:@"%@_%lu", standardChatMessage.oid, (unsigned long)lastId] forKey:@"id"];
+                     KUSChatMessage *imageMessage = [[KUSChatMessage alloc] initWithJSON:mutableImageJSON
+                                                                                   type:KUSChatMessageTypeImage
+                                                                               imageURL:matchedURL];
+                     imageMessage->_body = matchedText;
+                     [chatMessages addObject:imageMessage];
+                     lastLocation = match.range.location + match.range.length;
                  }
-
-                 NSMutableDictionary *mutableImageJSON = [json mutableCopy];
-                 [mutableImageJSON setObject:[NSString stringWithFormat:@"%@_%lu", standardChatMessage.oid, (unsigned long)lastId] forKey:@"id"];
-                 KUSChatMessage *imageMessage = [[KUSChatMessage alloc] initWithJSON:mutableImageJSON
-                                                                               type:KUSChatMessageTypeImage
-                                                                           imageURL:matchedURL];
-                 imageMessage->_body = matchedText;
-                 [chatMessages addObject:imageMessage];
-                 lastLocation = match.range.location + match.range.length;
              }
-         }
-     }];
+         }];
 
-    if (chatMessages.count == 0) {
-        [chatMessages addObject:standardChatMessage];
-    } else {
-        NSMutableDictionary *mutablePreviousJSON = [json mutableCopy];
-        [mutablePreviousJSON setObject:[NSString stringWithFormat:@"%@_%lu", standardChatMessage.oid, (unsigned long)lastId] forKey:@"id"];
-        NSString *previousText = [body substringWithRange:NSMakeRange(lastLocation, body.length - lastLocation)];
-        previousText = [previousText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-        if (previousText.length) {
-            KUSChatMessage *previousChatMessage = [[KUSChatMessage alloc] initWithJSON:mutablePreviousJSON];
-            if (previousChatMessage) {
-                previousChatMessage->_body = previousText;
-                [chatMessages addObject:previousChatMessage];
-                lastId++;
+        if (chatMessages.count == 0) {
+            [chatMessages addObject:standardChatMessage];
+        } else {
+            NSMutableDictionary *mutablePreviousJSON = [json mutableCopy];
+            [mutablePreviousJSON setObject:[NSString stringWithFormat:@"%@_%lu", standardChatMessage.oid, (unsigned long)lastId] forKey:@"id"];
+            NSString *previousText = [body substringWithRange:NSMakeRange(lastLocation, body.length - lastLocation)];
+            previousText = [previousText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            if (previousText.length) {
+                KUSChatMessage *previousChatMessage = [[KUSChatMessage alloc] initWithJSON:mutablePreviousJSON];
+                if (previousChatMessage) {
+                    previousChatMessage->_body = previousText;
+                    [chatMessages addObject:previousChatMessage];
+                    lastId++;
+                }
             }
         }
     }

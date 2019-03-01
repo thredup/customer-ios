@@ -952,7 +952,7 @@
     if (currentQuestion && currentQuestion.property == KUSFormQuestionPropertyCustomerEmail) {
         return [KUSText isValidEmail:inputBar.text];
     }
-    return inputBar.text.length > 0;
+    return YES;
 }
 
 - (void)inputBarDidPressSend:(KUSInputBar *)inputBar

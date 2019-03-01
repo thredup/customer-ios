@@ -290,7 +290,8 @@ static NSString *kCellIdentifier = @"ImageAttachment";
 - (void)_pressSend
 {
     NSString *text = self.text;
-    if (text.length == 0) {
+    BOOL shouldSend = [_imageAttachments count] || text.length > 0;
+    if (!shouldSend) {
         return;
     }
     if ([self.delegate respondsToSelector:@selector(inputBarDidPressSend:)]) {
@@ -301,7 +302,7 @@ static NSString *kCellIdentifier = @"ImageAttachment";
 - (void)_updateSendButton
 {
     NSString *text = self.text;
-    BOOL shouldEnableSend = text.length > 0;
+    BOOL shouldEnableSend = [_imageAttachments count] || text.length > 0;
     if (shouldEnableSend && [self.delegate respondsToSelector:@selector(inputBarShouldEnableSend:)]) {
         shouldEnableSend = [self.delegate inputBarShouldEnableSend:self];
     }
@@ -327,6 +328,7 @@ static NSString *kCellIdentifier = @"ImageAttachment";
     [self _checkIfDesiredHeightDidChange];
     [_imageCollectionView reloadData];
     [self setNeedsLayout];
+    [self _updateSendButton];
 }
 
 #pragma mark - KUSTextViewDelegate methods
