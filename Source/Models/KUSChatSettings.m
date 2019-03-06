@@ -54,7 +54,9 @@
     return self;
 }
 
-static KUSBusinessHoursAvailability KUSBusinessHoursAvailabilityFromString(NSString *string)
+#pragma mark - Convenience methods
+
+KUSBusinessHoursAvailability KUSBusinessHoursAvailabilityFromString(NSString *string)
 {
     if ([string isEqualToString:@"online"]) {
         return KUSBusinessHoursAvailabilityOnline;
@@ -64,7 +66,7 @@ static KUSBusinessHoursAvailability KUSBusinessHoursAvailabilityFromString(NSStr
     return KUSBusinessHoursAvailabilityHideChat;
 }
 
-static KUSVolumeControlMode KUSVolumeControlModeFromString(NSString *string)
+KUSVolumeControlMode KUSVolumeControlModeFromString(NSString *string)
 {
     if ([string isEqualToString:@"upfront"]) {
         return KUSVolumeControlModeUpfront;
@@ -72,18 +74,6 @@ static KUSVolumeControlMode KUSVolumeControlModeFromString(NSString *string)
         return KUSVolumeControlModeDelayed;
     }
     return KUSVolumeControlModeUnknown;
-}
-
-#pragma mark - Convenience methods
-
-NSString *_Nullable NSStringSanitizedAutoreply(NSString * _Nullable autoreply)
-{
-    NSCharacterSet *whitespaceAndNewlineCharacterSet = [NSCharacterSet whitespaceAndNewlineCharacterSet];
-    NSString *trimmedAutoreply = [autoreply stringByTrimmingCharactersInSet:whitespaceAndNewlineCharacterSet];
-    if (trimmedAutoreply.length > 0) {
-        return trimmedAutoreply;
-    }
-    return nil;
 }
 
 @end
