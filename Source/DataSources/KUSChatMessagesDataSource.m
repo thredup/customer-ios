@@ -569,11 +569,10 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
         [cachedImageKeys addObject:imageKey];
     }
 
-    NSDictionary *json = @{
+    NSMutableDictionary *json = [[NSMutableDictionary alloc] initWithDictionary:@{
         @"type": @"chat_message",
         @"id": tempMessageId,
         @"attributes": @{
-            @"body": text,
             @"direction": @"in",
             @"createdAt": [KUSDate stringFromDate:[NSDate date]]
         },
@@ -582,7 +581,11 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
                 @"data": attachmentObjects
             }
         }
-    };
+    }];
+    if (text.length != 0) {
+        [json setObject:text forKey:@"attributes.body"];
+    }
+    
     NSArray<KUSChatMessage *> *temporaryMessages = [KUSChatMessage objectsWithJSON:json];
 
     // Insert the messages
@@ -605,10 +608,11 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 
         // Store the local image data in our cache for the remote image urls
         KUSChatMessage *firstMessage = finalMessages.firstObject;
+        NSString *messageId = [firstMessage.oid componentsSeparatedByString:@"_"].firstObject ?: firstMessage.oid;
         for (NSUInteger i = 0; i < firstMessage.attachmentIds.count; i++) {
             UIImage *attachment = [attachments objectAtIndex:i];
             NSString *attachmentId = [firstMessage.attachmentIds objectAtIndex:i];
-            NSURL *attachmentURL = [KUSChatMessage attachmentURLForMessageId:firstMessage.oid attachmentId:attachmentId];
+            NSURL *attachmentURL = [KUSChatMessage attachmentURLForMessageId:messageId attachmentId:attachmentId];
             [[SDImageCache sharedImageCache] storeImage:attachment
                                                  forKey:attachmentURL.absoluteString
                                                  toDisk:YES
@@ -651,10 +655,18 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
              }
 
              NSArray<NSString *> *attachmentIds = [attachments valueForKeyPath:@"@unionOfObjects.oid"];
+             NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithDictionary:@{
+                 @"session": _sessionId,
+                 @"attachments": attachmentIds
+             }];
+             if (text.length != 0) {
+                 [params setObject:text forKey:@"body"];
+             }
+             
              [self.userSession.requestManager
               performRequestType:KUSRequestTypePost
               endpoint:@"/c/v1/chat/messages"
-              params:@{ @"body": text, @"session": _sessionId, @"attachments": attachmentIds }
+              params:params
               authenticated:YES
               completion:^(NSError *error, NSDictionary *response) {
                   if (error) {
