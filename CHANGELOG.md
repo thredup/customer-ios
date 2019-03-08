@@ -1,5 +1,14 @@
 # Changelog for Kustomer iOS SDK
 
+## 0.1.36
+
+Release Date: 03/08/2019
+
+* Keeping conversational assistant form state when exiting away from the chat sdk
+* Hide attachment icon on volume control input prompts
+* Allowed chat messages with only attachments, message body not required 
+* Update Romanian translation for 'Chat Has Ended'
+
 ## 0.1.35
 
 Release Date: 02/21/2019
