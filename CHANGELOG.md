@@ -1,5 +1,11 @@
 # Changelog for Kustomer iOS SDK
 
+## 0.1.37
+
+Release Date: 03/13/2019
+
+* Silent a crash in image picker
+
 ## 0.1.36
 
 Release Date: 03/08/2019
