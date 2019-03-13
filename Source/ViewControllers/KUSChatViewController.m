@@ -1067,13 +1067,15 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
-
-    UIImage *originalImage = [info valueForKey:UIImagePickerControllerOriginalImage];
-    UIImage *editedImage = [info valueForKey:UIImagePickerControllerEditedImage];
-    UIImage *chosenImage = editedImage ?: originalImage;
-
-    [self.inputBarView attachImage:chosenImage];
+    [picker dismissViewControllerAnimated:YES completion:^ {
+        UIImage *originalImage = [info valueForKey:UIImagePickerControllerOriginalImage];
+        UIImage *editedImage = [info valueForKey:UIImagePickerControllerEditedImage];
+        UIImage *chosenImage = editedImage ?: originalImage;
+    
+        if (chosenImage != nil) {
+            [self.inputBarView attachImage:chosenImage];
+        }
+    }];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
