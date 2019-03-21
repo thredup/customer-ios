@@ -38,7 +38,14 @@
             [dic setObject:@"1" forKey:@"id"];
             _mlFormValues = [[KUSMLFormValue alloc] initWithJSON: dic];
         }
-        _values = NSArrayFromKeyPath(json, @"values");
+        NSArray<NSString *> *values = NSArrayFromKeyPath(json, @"values");
+        if (values.count) {
+            NSMutableArray<NSString *> *mappedValues = [[NSMutableArray alloc] initWithCapacity:values.count];
+            for (NSString *value in values) {
+                [mappedValues addObject:[[NSString alloc] initWithFormat:@"%@", value]];
+            }
+            _values =  mappedValues;
+        }
     }
     return self;
 }
@@ -69,7 +76,7 @@ static KUSFormQuestionProperty KUSFormQuestionPropertyFromString(NSString *strin
         return KUSFormQuestionPropertyFollowupChannel;
     } else if ([string hasSuffix:@"Tree"]) {
         return KUSFormQuestionPropertyMLV;
-    } else if ([string hasSuffix:@"Str"]) {
+    } else if ([string hasSuffix:@"Str"] || [string hasSuffix:@"Num"]) {
         return KUSFormQuestionPropertyValues;
     }
     return KUSFormQuestionPropertyUnknown;
