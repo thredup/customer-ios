@@ -111,6 +111,7 @@ static NSString *KUSUnescapeBackslashesFromString(NSString *string)
                      imageMessage->_body = matchedText;
                      [chatMessages addObject:imageMessage];
                      lastLocation = match.range.location + match.range.length;
+                     lastId++;
                  }
              }
          }];
