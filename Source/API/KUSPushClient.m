@@ -213,6 +213,82 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
      }];
 }
 
+- (void)_fetchMessageById:(NSString *)messageId AndSessionId:(NSString *)sessionId
+{
+    NSString *messageEndpoint = [NSString stringWithFormat:@"/c/v1/chat/sessions/%@/messages/%@", sessionId, messageId];
+    [_userSession.requestManager
+     getEndpoint:messageEndpoint
+     authenticated:YES
+     completion:^(NSError *error, NSDictionary *response) {
+         if (error != nil) {
+             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                 [self _fetchMessageById:messageId AndSessionId:sessionId];
+             });
+             return;
+         }
+         NSDictionary* json = response[@"data"];
+         NSArray<KUSChatMessage *> *chatMessages = [KUSChatMessage objectsWithJSON:json];
+         [self _upsertMessagesAndNotify:chatMessages];
+     }];
+}
+
+- (void)_fetchSessionById:(NSString *)sessionId
+{
+    [_userSession.requestManager
+     getEndpoint: @"/c/v1/chat/sessions"
+     authenticated:YES
+     completion:^(NSError *error, NSDictionary *response) {
+         if (error != nil) {
+             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                 [self _fetchSessionById:sessionId];
+             });
+             return;
+         }
+         NSArray<KUSChatSession *> *chatSessions = [KUSChatSession objectsWithJSONs:response[@"data"]];
+         for (KUSChatSession *session in chatSessions)
+         {
+             if ([sessionId isEqualToString:session.oid]) {
+                 [self _upsertSessions:@[session]];
+                 break;
+             }
+         }
+     }];
+}
+
+- (void)_upsertMessagesAndNotify:(NSArray<KUSChatMessage *> *)chatMessages
+{
+    KUSChatMessage *chatMessage = chatMessages.firstObject;
+    KUSChatMessagesDataSource *messagesDataSource = [_userSession chatMessagesDataSourceForSessionId:chatMessage.sessionId];
+
+    // Upsert the messages, but don't notify if we already have the objects
+    BOOL doesNotAlreadyContainMessage = ![messagesDataSource objectWithId:chatMessage.oid];
+    [messagesDataSource upsertNewMessages:chatMessages];
+    if (doesNotAlreadyContainMessage) {
+        [self _notifyForUpdatedChatSession:chatMessage.sessionId];
+    }
+}
+
+- (void)_upsertSessions:(NSArray<KUSChatSession *> *)chatSessions
+{
+    [_userSession.chatSessionsDataSource upsertNewSessions:chatSessions];
+    KUSChatSettings *settings = [_userSession.chatSettingsDataSource object];
+    if (settings.singleSessionChat)
+    {
+        // To update the UI of chat
+        for (KUSChatSession *session in [_userSession.chatSessionsDataSource allObjects])
+        {
+            KUSChatMessagesDataSource *messagesDataSource = [_userSession chatMessagesDataSourceForSessionId:session.oid];
+            [messagesDataSource fetchLatest];
+        }
+    }
+    else
+    {
+        KUSChatSession *chatSession = chatSessions.firstObject;
+        KUSChatMessagesDataSource *messagesDataSource = [_userSession chatMessagesDataSourceForSessionId:chatSession.oid];
+        [messagesDataSource fetchLatest];
+    }
+}
+
 #pragma mark - Public methods
 
 - (void)onClientActivityTick
@@ -236,39 +312,37 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
 - (void)_onPusherChatMessageSend:(PTPusherEvent *)event
 {
     KUSLogPusher(@"Received chat message from Pusher");
-
-    NSArray<KUSChatMessage *> *chatMessages = [KUSChatMessage objectsWithJSON:event.data[@"data"]];
-    KUSChatMessage *chatMessage = chatMessages.firstObject;
-    KUSChatMessagesDataSource *messagesDataSource = [_userSession chatMessagesDataSourceForSessionId:chatMessage.sessionId];
-
-    // Upsert the messages, but don't notify if we already have the objects
-    BOOL doesNotAlreadyContainMessage = ![messagesDataSource objectWithId:chatMessage.oid];
-    [messagesDataSource upsertNewMessages:chatMessages];
-    if (doesNotAlreadyContainMessage) {
-        [self _notifyForUpdatedChatSession:chatMessage.sessionId];
+    
+    BOOL clippedEvent = event.data[@"clipped"];
+    
+    if (clippedEvent) {
+        NSString *sessionId = NSStringFromKeyPath(event.data, @"data.relationships.session.data.id");
+        NSString *messageId = NSStringFromKeyPath(event.data, @"data.id");
+        KUSChatMessagesDataSource *messagesDataSource = [_userSession chatMessagesDataSourceForSessionId:sessionId];
+        
+        // Upsert the messages, but don't notify if we already have the objects
+        BOOL doesNotAlreadyContainMessage = ![messagesDataSource objectWithId:messageId];
+        if (doesNotAlreadyContainMessage) {
+            [self _fetchMessageById:messageId AndSessionId:sessionId];
+        }
+    } else {
+        NSArray<KUSChatMessage *> *chatMessages = [KUSChatMessage objectsWithJSON:event.data[@"data"]];
+        [self _upsertMessagesAndNotify:chatMessages];
     }
 }
 
 - (void)_onPusherChatSessionEnd:(PTPusherEvent *)event
 {
-    NSArray<KUSChatSession *> *chatSessions = [KUSChatSession objectsWithJSON:event.data[@"data"]];
-    [_userSession.chatSessionsDataSource upsertNewSessions:chatSessions];
+    KUSLogPusher(@"Ended chat session from Pusher");
     
-    KUSChatSettings *settings = [_userSession.chatSettingsDataSource object];
-    if (settings.singleSessionChat)
-    {
-        // To update the UI of chat
-        for (KUSChatSession *session in [_userSession.chatSessionsDataSource allObjects])
-        {
-            KUSChatMessagesDataSource *messagesDataSource = [_userSession chatMessagesDataSourceForSessionId:session.oid];
-            [messagesDataSource fetchLatest];
-        }
-    }
-    else
-    {
-        KUSChatSession *chatSession = chatSessions.firstObject;
-        KUSChatMessagesDataSource *messagesDataSource = [_userSession chatMessagesDataSourceForSessionId:chatSession.oid];
-        [messagesDataSource fetchLatest];
+    BOOL clippedEvent = event.data[@"clipped"];
+    
+    if (clippedEvent) {
+        NSString *sessionId = NSStringFromKeyPath(event.data, @"data.id");
+        [self _fetchSessionById:sessionId];
+    } else {
+        NSArray<KUSChatSession *> *chatSessions = [KUSChatSession objectsWithJSON:event.data[@"data"]];
+        [self _upsertSessions:chatSessions];
     }
     
 }
