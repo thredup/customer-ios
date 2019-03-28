@@ -1,5 +1,14 @@
 # Changelog for Kustomer iOS SDK
 
+## 0.1.38
+
+Release Date: 03/28/2019
+
+* Protect data to ensure HIPAA compliance
+* Added numbers option support in option list
+* Handle the message body text after inline image
+* Update chat setting test cases
+
 ## 0.1.37
 
 Release Date: 03/13/2019
