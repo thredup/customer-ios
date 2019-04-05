@@ -50,6 +50,7 @@
         _offhoursMessage = NSStringFromKeyPath(json, @"attributes.offhoursMessage");
         _offhoursImageUrl = NSStringFromKeyPath(json, @"attributes.offhoursImageUrl");
         _availability = KUSBusinessHoursAvailabilityFromString(NSStringFromKeyPath(json, @"attributes.offhoursDisplay"));
+        _brandingKustomer = BOOLFromKeyPath(json, @"attributes.showBrandingIdentifier");
     }
     return self;
 }

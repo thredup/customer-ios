@@ -48,6 +48,7 @@ typedef NS_ENUM(NSInteger, KUSVolumeControlMode) {
 @property (nonatomic, assign, readonly) BOOL noHistory;
 @property (nonatomic, assign, readonly) KUSVolumeControlMode volumeControlMode;
 @property (nonatomic, assign, readonly) NSInteger upfrontWaitThreshold;
+@property (nonatomic, assign, readonly) BOOL brandingKustomer;
 
 
 @end
