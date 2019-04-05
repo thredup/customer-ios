@@ -10,8 +10,10 @@
 
 #import "KUSAttributionToolbar.h"
 #import "KUSColor.h"
+#import "Kustomer_Private.h"
+#import "KUSUserSession.h"
 
-@interface KUSNavigationController () <UIGestureRecognizerDelegate> {
+@interface KUSNavigationController () <KUSObjectDataSourceListener, UIGestureRecognizerDelegate> {
     UIStatusBarStyle _preferredStatusBarStyle;
     UIInterfaceOrientationMask _supportedInterfaceOrientations;
 }
@@ -29,8 +31,17 @@
         _preferredStatusBarStyle = UIStatusBarStyleDefault;
         _supportedInterfaceOrientations = UIInterfaceOrientationMaskAll;
 
+        KUSUserSession *_userSession = [Kustomer sharedInstance].userSession;
+        if (_userSession.chatSettingsDataSource.didFetch) {
+            KUSChatSettings *settings = [_userSession.chatSettingsDataSource object];
+            [self setToolbarHidden:!settings.brandingKustomer];
+        } else {
+            [self setToolbarHidden:YES];
+            [_userSession.chatSettingsDataSource addListener:self];
+            [_userSession.chatSettingsDataSource fetch];
+        }
+        
         [self setNavigationBarHidden:YES];
-        [self setToolbarHidden:NO];
         [self pushViewController:rootViewController animated:NO];
     }
     return self;
@@ -71,6 +82,19 @@
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
 {
     return self.viewControllers.count > 1;
+}
+
+#pragma mark - KUSObjectDataSourceListener methods
+
+- (void)objectDataSourceDidLoad:(KUSObjectDataSource *)dataSource
+{
+    KUSUserSession *_userSession = [Kustomer sharedInstance].userSession;
+    if (dataSource == _userSession.chatSettingsDataSource) {
+        [_userSession.chatSettingsDataSource removeListener:self];
+        
+        KUSChatSettings *settings = [_userSession.chatSettingsDataSource object];
+        [self setToolbarHidden:!settings.brandingKustomer];
+    }
 }
 
 @end
