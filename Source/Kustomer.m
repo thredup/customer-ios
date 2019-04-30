@@ -11,6 +11,7 @@
 
 #import "KUSLog.h"
 #import "KUSUserSession.h"
+#import "KUSReachabilityManager.h"
 
 static NSString *kKustomerOrgIdKey = @"org";
 static NSString *kKustomerOrgNameKey = @"orgName";
@@ -218,6 +219,9 @@ static NSString *kKustomerOrgNameKey = @"orgName";
 
     self.userSession = [[KUSUserSession alloc] initWithOrgName:self.orgName orgId:self.orgId];
     [self.userSession.delegateProxy setDelegate:self.delegate];
+    
+    //Intialize Reachability manager to get callbacks for newtwork state change
+    [KUSReachabilityManager.sharedInstance startObservingNetworkChange];
 }
 
 - (void)setDelegate:(__weak id<KustomerDelegate>)delegate

@@ -23,6 +23,8 @@
 #import "KUSLocalization.h"
 #import "KUSScheduleDataSource.h"
 
+@class KUSStatsManager;
+
 @interface KUSUserSession : NSObject
 
 - (instancetype)initWithOrgName:(NSString *)orgName orgId:(NSString *)orgId reset:(BOOL)reset NS_DESIGNATED_INITIALIZER;
@@ -44,11 +46,12 @@
 - (KUSChatMessagesDataSource *)chatMessagesDataSourceForSessionId:(NSString *)sessionId;
 - (KUSUserDataSource *)userDataSourceForUserId:(NSString *)userId;
 
-// Request manager & Push client & Delegate proxy & Client activity manager
+// Managers & Push client
 - (KUSRequestManager *)requestManager;
 - (KUSPushClient *)pushClient;
 - (KUSDelegateProxy *)delegateProxy;
 - (KUSClientActivityManager *)activityManager;
+- (KUSStatsManager *)statsManager;
 
 - (KUSUserDefaults *)userDefaults;
 

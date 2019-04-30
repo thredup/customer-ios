@@ -15,7 +15,8 @@
 #import "KUSLog.h"
 #import "KUSNotificationWindow.h"
 #import "KUSUserSession.h"
-#import "KUSWeakTimer.h"
+#import "KUSTimer.h"
+#import "KUSStatsManager.h"
 
 static const NSTimeInterval KUSShouldConnectToPusherRecencyThreshold = 60.0;
 static const NSTimeInterval KUSLazyPollingTimerInterval = 30.0;
@@ -24,7 +25,7 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
 @interface KUSPushClient () <KUSObjectDataSourceListener, KUSPaginatedDataSourceListener, PTPusherDelegate, KUSChatMessagesDataSourceListener> {
     __weak KUSUserSession *_userSession;
 
-    KUSWeakTimer *_pollingTimer;
+    KUSTimer *_pollingTimer;
     PTPusher *_pusherClient;
     PTPusherChannel *_pusherChannel;
 
@@ -32,9 +33,7 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
     NSString *_pendingNotificationSessionId;
     
     BOOL _isPusherTrackingStarted;
-    BOOL _sessionUpdated;
     BOOL _didPusherLossPackets;
-    NSDate *_lastActivity;
 }
 
 @end
@@ -102,9 +101,9 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(KUSShouldConnectToPusherRecencyThreshold * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             _isPusherTrackingStarted = NO;
             
-            [self _updateStats:^{
+            [_userSession.statsManager updateStats:^(BOOL sessionUpdated) {
                 // Get latest session on update to avoid packet loss during socket connection
-                if (_sessionUpdated) {
+                if (sessionUpdated) {
                     _didPusherLossPackets = YES;
                     [_userSession.chatSessionsDataSource fetchLatest];
                 }
@@ -144,7 +143,7 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
         if (_supportViewControllerPresented) {
             if (_pollingTimer == nil || _pollingTimer.timeInterval != KUSActivePollingTimerInterval) {
                 [_pollingTimer invalidate];
-                _pollingTimer = [KUSWeakTimer scheduledTimerWithTimeInterval:KUSActivePollingTimerInterval
+                _pollingTimer = [KUSTimer scheduledTimerWithTimeInterval:KUSActivePollingTimerInterval
                                                                       target:self
                                                                     selector:@selector(_onPollTick)
                                                                      repeats:YES];
@@ -154,7 +153,7 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
             // Make sure we're polling lazily
             if (_pollingTimer == nil || _pollingTimer.timeInterval != KUSLazyPollingTimerInterval) {
                 [_pollingTimer invalidate];
-                _pollingTimer = [KUSWeakTimer scheduledTimerWithTimeInterval:KUSLazyPollingTimerInterval
+                _pollingTimer = [KUSTimer scheduledTimerWithTimeInterval:KUSLazyPollingTimerInterval
                                                                       target:self
                                                                     selector:@selector(_onPollTick)
                                                                      repeats:YES];
@@ -167,9 +166,9 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
 
 - (void)_onPollTick
 {
-    [self _updateStats:^{
+    [_userSession.statsManager updateStats:^(BOOL sessionUpdated) {
         // Get latest session on update
-        if (_sessionUpdated) {
+        if (sessionUpdated) {
             [_userSession.chatSessionsDataSource fetchLatest];
         }
     }];
@@ -193,24 +192,6 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
             [[KUSNotificationWindow sharedInstance] showChatSession:chatSession autoDismiss:shouldAutoDismiss];
         }
     }
-}
-
-- (void)_updateStats:(void (^)(void))completion
-{
-    // Fetch last activity time of the client
-    [_userSession.requestManager
-     getEndpoint:@"/c/v1/chat/customers/stats"
-     authenticated:YES
-     completion:^(NSError *error, NSDictionary *response) {
-         NSDictionary* json = response[@"data"];
-         NSDate* lastActivity = DateFromKeyPath(json, @"attributes.lastActivity");
-         
-         BOOL sessionUpdated = (_lastActivity == nil && lastActivity != nil) || ([_lastActivity compare:lastActivity] != NSOrderedSame);
-         
-         _sessionUpdated = sessionUpdated;
-         _lastActivity = lastActivity;
-         completion();
-     }];
 }
 
 - (void)_fetchMessageById:(NSString *)messageId AndSessionId:(NSString *)sessionId
@@ -386,6 +367,11 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
 
 - (void)paginatedDataSource:(KUSPaginatedDataSource *)dataSource didReceiveError:(NSError *)error
 {
+    if (dataSource == _userSession.chatSessionsDataSource) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [_userSession.chatSessionsDataSource fetchLatest];
+        });
+    }
     if ([dataSource isKindOfClass:[KUSChatMessagesDataSource class]]) {
         KUSChatMessagesDataSource *chatMessagesDataSource = (KUSChatMessagesDataSource *)dataSource;
         if ([chatMessagesDataSource.sessionId isEqualToString:_pendingNotificationSessionId]) {

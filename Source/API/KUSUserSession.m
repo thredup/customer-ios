@@ -7,8 +7,9 @@
 //
 
 #import "KUSUserSession.h"
-
+#import "KUSStatsManager.h"
 #import "KUSLog.h"
+#import "KUSVolumeControlTimerManager.h"
 
 @interface KUSUserSession () <KUSPaginatedDataSourceListener>
 
@@ -30,6 +31,7 @@
 @property (nonatomic, strong, null_resettable) KUSPushClient *pushClient;
 @property (nonatomic, strong, null_resettable) KUSDelegateProxy *delegateProxy;
 @property (nonatomic, strong, null_resettable) KUSClientActivityManager *activityManager;
+@property (nonatomic, strong, null_resettable) KUSStatsManager *statsManager;
 
 @property (nonatomic, strong, null_resettable) KUSUserDefaults *userDefaults;
 
@@ -54,6 +56,7 @@
         if (reset) {
             [self.trackingTokenDataSource reset];
             [self.userDefaults reset];
+            [[KUSVolumeControlTimerManager sharedInstance] reset];
         }
 
         [self.chatSettingsDataSource fetch];
@@ -159,7 +162,7 @@
     return userDataSource;
 }
 
-#pragma mark - Request manager & Push client
+#pragma mark - Managers & Push client 
 
 - (KUSRequestManager *)requestManager
 {
@@ -191,6 +194,14 @@
         _activityManager = [[KUSClientActivityManager alloc] initWithUserSession:self];
     }
     return _activityManager;
+}
+
+- (KUSStatsManager *)statsManager
+{
+    if (_statsManager == nil) {
+        _statsManager = [[KUSStatsManager alloc] initWithUserSession:self];
+    }
+    return _statsManager;
 }
 
 - (KUSUserDefaults *)userDefaults

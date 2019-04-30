@@ -15,12 +15,12 @@
 #import "KUSDate.h"
 #import "KUSUpload.h"
 #import "KUSSessionQueuePollingManager.h"
-
+#import "KUSVolumeControlTimerManager.h"
 #import <SDWebImage/SDImageCache.h>
 
 static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 
-@interface KUSChatMessagesDataSource () <KUSChatMessagesDataSourceListener, KUSObjectDataSourceListener, KUSSessionQueuePollingListener> {
+@interface KUSChatMessagesDataSource () <KUSChatMessagesDataSourceListener, KUSObjectDataSourceListener, KUSSessionQueuePollingListener, KUSVolumeControlTimerListener> {
     NSString *_Nullable _sessionId;
     BOOL _createdLocally;
 
@@ -93,6 +93,15 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
         _sessionId = sessionId;
     }
     return self;
+}
+
+#pragma mark - KUSVolumeControlTimerListener methods
+
+- (void)volumeControlTimerDidComplete:(KUSTimer *)timer
+{
+    _vcTrackingDelayCompleted = YES;
+    [self _insertVolumeControlFormMessageIfNecessary];
+
 }
 
 #pragma mark - KUSObjectDataSourceListener methods
@@ -178,16 +187,9 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 
 - (void)_startVolumeControlFormTrackingAfterDelay:(NSTimeInterval)delay
 {
-    __weak KUSChatMessagesDataSource *weakSelf = self;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        __strong KUSChatMessagesDataSource *strongSelf = weakSelf;
-        if (!strongSelf) {
-            return;
-        }
-        
-        strongSelf->_vcTrackingDelayCompleted = YES;
-        [strongSelf _insertVolumeControlFormMessageIfNecessary];
-    });
+    [[KUSVolumeControlTimerManager sharedInstance] createVolumeControlTimerForSession:_sessionId
+                                                                           listener:self
+                                                                              delay:delay];
 }
 
 - (void)_endVolumeControlFormAfterDelayIfNecessary:(NSTimeInterval)delay
@@ -1242,6 +1244,7 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 {
     _vcFormEnd = YES;
     _vcFormActive = NO;
+    [[KUSVolumeControlTimerManager sharedInstance] invalidateVCTimerForSession:_sessionId];
 }
         
 - (KUSFormQuestion *)_getNextVCFormQuestion:(NSInteger)index previousMessage:(NSString *)previousMessage

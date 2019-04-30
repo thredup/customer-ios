@@ -1,5 +1,5 @@
 //
-//  KUSWeakTimer.h
+//  KUSTimer.h
 //  Kustomer
 //
 //  Created by Daniel Amitay on 2/21/18.
@@ -8,17 +8,19 @@
 
 #import <Foundation/Foundation.h>
 
-@interface KUSWeakTimer : NSObject
+@interface KUSTimer : NSObject
 
 // The underlying NSTimer
 @property (nonatomic, strong, readonly) NSTimer *timer;
-@property (atomic, assign, readonly) NSTimeInterval timeInterval;
 @property (nonatomic, strong) id userInfo;
 
 + (instancetype)scheduledTimerWithTimeInterval:(NSTimeInterval)interval target:(id)target selector:(SEL)selector repeats:(BOOL)repeats;
 
+- (NSTimeInterval)timeInterval;
 - (void)fire;
 - (void)invalidate;
+- (void)resume;
+- (void)pause;
 
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)new NS_UNAVAILABLE;

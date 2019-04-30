@@ -12,14 +12,14 @@
 
 #import "KUSClientActivityDataSource.h"
 #import "KUSUserSession.h"
-#import "KUSWeakTimer.h"
+#import "KUSTimer.h"
 
 @interface KUSClientActivityManager () <KUSObjectDataSourceListener> {
     __weak KUSUserSession *_userSession;
     NSString *_previousPageName;
     NSTimeInterval _currentPageStartTime;
 
-    NSArray<KUSWeakTimer *> *_timers;
+    NSArray<KUSTimer *> *_timers;
     KUSClientActivityDataSource *_activityDataSource;
 }
 
@@ -42,9 +42,9 @@
 
 - (void)_cancelTimers
 {
-    NSArray<KUSWeakTimer *> *timers = [_timers copy];
+    NSArray<KUSTimer *> *timers = [_timers copy];
     _timers = nil;
-    for (KUSWeakTimer *timer in timers) {
+    for (KUSTimer *timer in timers) {
         [timer invalidate];
     }
 }
@@ -57,12 +57,12 @@
         return;
     }
 
-    NSMutableArray<KUSWeakTimer *> *timers = [[NSMutableArray alloc] initWithCapacity:_activityDataSource.intervals.count];
+    NSMutableArray<KUSTimer *> *timers = [[NSMutableArray alloc] initWithCapacity:_activityDataSource.intervals.count];
     for (NSNumber *intervalNumber in _activityDataSource.intervals) {
         // The time intervals in the response are relative to the 0 second start time
         NSTimeInterval intervalTimeFromNow = intervalNumber.doubleValue - _activityDataSource.currentPageSeconds;
         if (intervalTimeFromNow > 0) {
-            KUSWeakTimer *timer = [KUSWeakTimer scheduledTimerWithTimeInterval:intervalNumber.doubleValue
+            KUSTimer *timer = [KUSTimer scheduledTimerWithTimeInterval:intervalNumber.doubleValue
                                                                         target:self
                                                                       selector:@selector(_onActivityTimer:)
                                                                        repeats:NO];
@@ -97,7 +97,7 @@
 
 #pragma mark - Timer methods
 
-- (void)_onActivityTimer:(KUSWeakTimer *)timer
+- (void)_onActivityTimer:(KUSTimer *)timer
 {
     NSNumber *intervalNumber = timer.userInfo;
     [self _requestClientActivityWithCurrentPageSeconds:[intervalNumber doubleValue]];
