@@ -12,6 +12,7 @@
 
 @property (nonatomic, copy, readonly) NSString *displayName;
 @property (nonatomic, copy, readonly) NSString *nodeId;
+@property (nonatomic, assign, readonly) BOOL deleted;
 @property (nonatomic, copy, nullable) NSArray<KUSMLNode *> *nodeChilds;
 
 @end

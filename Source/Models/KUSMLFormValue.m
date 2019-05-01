@@ -30,7 +30,16 @@
     if (self) {
         _displayName = NSStringFromKeyPath(json, @"displayName");
         _lastNodeRequired = BOOLFromKeyPath(json, @"lastNodeRequired");
-        _mlNodes = [KUSMLNode objectsWithJSONs:NSArrayFromKeyPath(json, @"tree.children")];
+        
+        // Filter deleted nodes
+        NSArray<KUSMLNode *> *nodes = [KUSMLNode objectsWithJSONs:NSArrayFromKeyPath(json, @"tree.children")];
+        NSMutableArray<KUSMLNode *> *filteredNodes = [[NSMutableArray alloc] init];
+        for (int i = 0; i < nodes.count; i++) {
+            if (!nodes[i].deleted) {
+                [filteredNodes addObject:nodes[i]];
+            }
+        }
+        _mlNodes = filteredNodes;
     }
     return self;
 }

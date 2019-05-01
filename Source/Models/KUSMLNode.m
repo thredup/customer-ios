@@ -30,7 +30,17 @@
     if (self) {
         _displayName = NSStringFromKeyPath(json, @"displayName");
         _nodeId = NSStringFromKeyPath(json, @"id");
-        _nodeChilds = [KUSMLNode objectsWithJSONs:NSArrayFromKeyPath(json, @"children")];
+        _deleted = BOOLFromKeyPath(json, @"deleted");
+        
+        // Filter deleted nodes
+        NSArray<KUSMLNode *> *nodes = [KUSMLNode objectsWithJSONs:NSArrayFromKeyPath(json, @"children")];
+        NSMutableArray<KUSMLNode *> *filteredNodes = [[NSMutableArray alloc] init];
+        for (int i = 0; i < nodes.count; i++) {
+            if (!nodes[i].deleted) {
+                [filteredNodes addObject:nodes[i]];
+            }
+        }
+        _nodeChilds = filteredNodes;
     }
     return self;
 }
