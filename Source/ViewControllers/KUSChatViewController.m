@@ -942,17 +942,17 @@
 
 - (BOOL)inputBarShouldEnableSend:(KUSInputBar *)inputBar
 {
-    KUSFormQuestion *currentVCQuestion = _chatMessagesDataSource.volumeControlCurrentQuestion;
-    if (currentVCQuestion && currentVCQuestion.property == KUSFormQuestionPropertyCustomerEmail) {
+    KUSFormQuestion *question = _chatMessagesDataSource.volumeControlCurrentQuestion;
+    if (!question) {
+        question = _chatMessagesDataSource.currentQuestion;
+    }
+    
+    if (question && question.property == KUSFormQuestionPropertyCustomerEmail) {
         return [KUSText isValidEmail:inputBar.text];
-    } else if (currentVCQuestion && currentVCQuestion.property == KUSFormQuestionPropertyCustomerPhone) {
+    } else if (question && question.property == KUSFormQuestionPropertyCustomerPhone) {
         return [KUSText isValidPhone:inputBar.text];
     }
     
-    KUSFormQuestion *currentQuestion = _chatMessagesDataSource.currentQuestion;
-    if (currentQuestion && currentQuestion.property == KUSFormQuestionPropertyCustomerEmail) {
-        return [KUSText isValidEmail:inputBar.text];
-    }
     return YES;
 }
 
