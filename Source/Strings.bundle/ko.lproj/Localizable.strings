@@ -49,3 +49,6 @@
 "com.kustomer.volume_control_email_question" = "좋아요, 연락 할 수있는 가장 좋은 이메일은 무엇입니까?";
 "com.kustomer.volume_control_phone_question" = "좋아, 너를 만날 수있는 최고의 전화 번호는 뭐니?";
 "com.kustomer.volume_control_thankyou_response" = "고맙습니다. 곧 다시 연락 드리겠습니다.";
+"com.kustomer.Submit" = "제출";
+"com.kustomer.feedback_thankyou" = "의견을 보내 주셔서 감사합니다!";
+"com.kustomer.Edit" = "편집하다";

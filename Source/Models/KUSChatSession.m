@@ -48,6 +48,10 @@
         _lastSeenAt = DateFromKeyPath(json, @"attributes.lastSeenAt");
         _lastMessageAt = DateFromKeyPath(json, @"attributes.lastMessageAt");
         _lockedAt = DateFromKeyPath(json, @"attributes.lockedAt");
+        
+        _satisfactionId = NSStringFromKeyPath(json, @"attributes.satisfaction.id");
+        _satisfactionStatus = NSStringFromKeyPath(json, @"attributes.satisfaction.status");
+        _satisfactionLockedAt = DateFromKeyPath(json, @"attributes.satisfaction.lockedAt");
     }
     return self;
 }

@@ -49,3 +49,6 @@
 "com.kustomer.volume_control_email_question" = "Відмінно, який найкращий лист для вас?";
 "com.kustomer.volume_control_phone_question" = "Чудово, який найкращий номер телефону для вас?";
 "com.kustomer.volume_control_thankyou_response" = "Дякую. Ми скоро повернемося до вас.";
+"com.kustomer.Submit" = "уявити";
+"com.kustomer.feedback_thankyou" = "Спасибі за ваш відгук!";
+"com.kustomer.Edit" = "редагувати";

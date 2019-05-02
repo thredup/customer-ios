@@ -64,6 +64,11 @@
     return [self imageNamed:@"away_image"];
 }
 
++ (UIImage *)tickImage
+{
+    return [self imageNamed:@"tick"];
+}
+
 + (UIImage *)attachImageWithSize:(CGSize)size
 {
     UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);

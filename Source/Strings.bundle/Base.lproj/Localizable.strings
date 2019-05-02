@@ -49,3 +49,6 @@
 "com.kustomer.volume_control_email_question" = "Great, what's the best email to reach you at?";
 "com.kustomer.volume_control_phone_question" = "Great, what's the best phone number to reach you at?";
 "com.kustomer.volume_control_thankyou_response" = "Thank you. We'll get back to you shortly.";
+"com.kustomer.Submit" = "Submit";
+"com.kustomer.feedback_thankyou" = "Thank you for your feedback!";
+"com.kustomer.Edit" = "Edit";

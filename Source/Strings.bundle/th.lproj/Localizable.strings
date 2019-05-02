@@ -49,3 +49,6 @@
 "com.kustomer.volume_control_email_question" = "อะไรดีอีเมลที่ดีที่สุดในการติดต่อคุณคืออะไร";
 "com.kustomer.volume_control_phone_question" = "หมายเลขโทรศัพท์ที่ดีที่สุดในการติดต่อคุณคืออะไร?";
 "com.kustomer.volume_control_thankyou_response" = "ขอบคุณ. เราจะติดต่อกลับโดยเร็วที่สุด";
+"com.kustomer.Submit" = "เสนอ";
+"com.kustomer.feedback_thankyou" = "ขอบคุณสำหรับความคิดเห็นของคุณ!";
+"com.kustomer.Edit" = "แก้ไข";

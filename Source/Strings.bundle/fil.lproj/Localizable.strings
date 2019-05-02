@@ -49,3 +49,6 @@
 "com.kustomer.volume_control_email_question" = "Mahusay, ano ang pinakamahusay na email upang maabot ka sa?";
 "com.kustomer.volume_control_phone_question" = "Mahusay, ano ang pinakamahusay na numero ng telepono upang maabot ka sa?";
 "com.kustomer.volume_control_thankyou_response" = "Salamat. Kami ay babalik sa iyo sa ilang sandali.";
+"com.kustomer.Submit" = "Ipasa";
+"com.kustomer.feedback_thankyou" = "Salamat sa iyo para sa iyong feedback!";
+"com.kustomer.Edit" = "I-edit";

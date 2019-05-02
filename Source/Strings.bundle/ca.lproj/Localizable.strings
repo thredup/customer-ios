@@ -49,3 +49,6 @@
 "com.kustomer.volume_control_email_question" = "Molt bé, quin és el millor correu electrònic per arribar-hi?";
 "com.kustomer.volume_control_phone_question" = "Molt bé, quin és el millor número de telèfon per arribar-hi?";
 "com.kustomer.volume_control_thankyou_response" = "Gràcies. Us tornarem a contactar en breu.";
+"com.kustomer.Submit" = "Presentar";
+"com.kustomer.feedback_thankyou" = "Gràcies pels seus comentaris!";
+"com.kustomer.Edit" = "editar";

@@ -49,3 +49,6 @@
 "com.kustomer.volume_control_email_question" = "太棒了，什么是最好的电子邮件给你？";
 "com.kustomer.volume_control_phone_question" = "很棒，有什么最适合您的电话号码？";
 "com.kustomer.volume_control_thankyou_response" = "谢谢。我们很快就会回复你。";
+"com.kustomer.Submit" = "提交";
+"com.kustomer.feedback_thankyou" = "感谢您的反馈意见！";
+"com.kustomer.Edit" = "编辑";

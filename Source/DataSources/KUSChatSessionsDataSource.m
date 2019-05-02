@@ -7,8 +7,8 @@
 //
 
 #import "KUSChatSessionsDataSource.h"
-
 #import "KUSPaginatedDataSource_Private.h"
+#import "KUSChatMessagesDataSource_Private.h"
 
 #import "KUSDate.h"
 #import "KUSLog.h"
@@ -402,6 +402,7 @@
         for (NSString *sessionId in sessionIds) {
             KUSChatMessagesDataSource *messagesDataSource = [self.userSession chatMessagesDataSourceForSessionId:sessionId];
             [messagesDataSource addListener:self];
+            [messagesDataSource mayGetSatisfactionFormIfAgentJoined];
         }
     } else if ([dataSource isKindOfClass:[KUSChatMessagesDataSource class]]) {
         [self sortObjects];

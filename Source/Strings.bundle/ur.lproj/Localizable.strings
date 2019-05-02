@@ -49,3 +49,6 @@
 "com.kustomer.volume_control_email_question" = "بہت اچھا، آپ کو پہنچنے کا بہترین ای میل کیا ہے؟";
 "com.kustomer.volume_control_phone_question" = "بہت اچھا، آپ کو پہنچنے کے لئے بہترین فون نمبر کیا ہے؟";
 "com.kustomer.volume_control_thankyou_response" = "شکریہ ہم جلد ہی آپ کو واپس ملیں گے.";
+"com.kustomer.Submit" = "جمع";
+"com.kustomer.feedback_thankyou" = "!آپ کے تبصرے کا شکریہ";
+"com.kustomer.Edit" = "ترمیم";

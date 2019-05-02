@@ -49,3 +49,6 @@
 "com.kustomer.volume_control_email_question" = "Kubwa, ni barua pepe bora gani kufikia wewe?";
 "com.kustomer.volume_control_phone_question" = "Kubwa, nambari bora ya simu kufikia wewe ni nani?";
 "com.kustomer.volume_control_thankyou_response" = "Asante. Tutakuja tena kwa muda mfupi.";
+"com.kustomer.Submit" = "wasilisha";
+"com.kustomer.feedback_thankyou" = "Asante kwa maoni yako!";
+"com.kustomer.Edit" = "Edit";

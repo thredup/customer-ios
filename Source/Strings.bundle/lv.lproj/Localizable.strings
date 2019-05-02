@@ -49,3 +49,6 @@
 "com.kustomer.volume_control_email_question" = "Lieliski, kāds ir labākais e-pasts, lai jūs varētu sazināties?";
 "com.kustomer.volume_control_phone_question" = "Lieliski, kāds ir labākais tālruņa numurs, lai jūs varētu sazināties?";
 "com.kustomer.volume_control_thankyou_response" = "Paldies. Mēs tuvākajā laikā atgriezīsimies pie jums.";
+"com.kustomer.Submit" = "Iesniegt";
+"com.kustomer.feedback_thankyou" = "Paldies par jūsu atsauksmēm!";
+"com.kustomer.Edit" = "rediģēt";

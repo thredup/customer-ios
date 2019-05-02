@@ -322,6 +322,20 @@ The majority of the user interface for the support screens can be configured usi
 [[KUSInputBar appearance] setTextColor:[UIColor whiteColor]];
 [[KUSInputBar appearance] setBackgroundColor:[UIColor colorWithWhite:0.25 alpha:1.0]];
 [[KUSInputBar appearance] setKeyboardAppearance:UIKeyboardAppearanceDark];
+
+// Update colors of a satisfaction form
+[[KUSRatingView appearance] setLowScaleLabelColor:[UIColor whiteColor]];
+[[KUSRatingView appearance] setHighScaleLabelColor:[UIColor whiteColor]];
+
+[[KUSEditFeedbackTableViewCell appearance] setFeedbackTextColor:[UIColor whiteColor]];
+[[KUSEditFeedbackTableViewCell appearance] setEditTextColor:[UIColor whiteColor]];
+
+[[KUSSatisfactionFormTableViewCell appearance] setSubmitButtonBackgroundColor:[KUSColor orangeColor]];
+[[KUSSatisfactionFormTableViewCell appearance] setSubmitButtonTextColor:[UIColor whiteColor]];
+[[KUSSatisfactionFormTableViewCell appearance] setCommentQuestionColor:[UIColor whiteColor]];
+[[KUSSatisfactionFormTableViewCell appearance] setCommentBoxBorderColor:[UIColor whiteColor]];
+[[KUSSatisfactionFormTableViewCell appearance] setSatisfactionQuestionColor:[UIColor whiteColor]];
+[[KUSSatisfactionFormTableViewCell appearance] setCommentBoxTextColor:[UIColor whiteColor]];
 ```
 
 <p align="center" >

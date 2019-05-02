@@ -54,3 +54,6 @@
 "com.kustomer.volume_control_email_question" = "Страхотно, какъв е най-добрият имейл, с който да се свържеш с вас?";
 "com.kustomer.volume_control_phone_question" = "Страхотно, какъв е най-добрият телефонен номер, на който да стигнете?";
 "com.kustomer.volume_control_thankyou_response" = "Благодаря ти. Ще се върнем скоро при вас.";
+"com.kustomer.Submit" = "Изпращане";
+"com.kustomer.feedback_thankyou" = "Благодарим Ви за обратната връзка!";
+"com.kustomer.Edit" = "редактиране";

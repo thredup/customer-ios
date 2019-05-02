@@ -49,3 +49,6 @@
 "com.kustomer.volume_control_email_question" = "Génial, quel est le meilleur email pour vous contacter?";
 "com.kustomer.volume_control_phone_question" = "Génial, quel est le meilleur numéro de téléphone pour vous joindre?";
 "com.kustomer.volume_control_thankyou_response" = "Je vous remercie. Nous reviendrons vers vous sous peu.";
+"com.kustomer.Submit" = "Soumettre";
+"com.kustomer.feedback_thankyou" = "Merci pour votre avis!";
+"com.kustomer.Edit" = "modifier";

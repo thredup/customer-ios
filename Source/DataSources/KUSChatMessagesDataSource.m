@@ -15,6 +15,8 @@
 #import "KUSDate.h"
 #import "KUSUpload.h"
 #import "KUSSessionQueuePollingManager.h"
+#import "KUSSatisfactionResponse.h"
+#import "KUSObjectDataSource_Private.h"
 #import "KUSVolumeControlTimerManager.h"
 #import <SDWebImage/SDImageCache.h>
 
@@ -56,6 +58,7 @@ static const NSTimeInterval kKUSTypingEndDelay = 5.0;
     NSMutableArray<void(^)(BOOL success, NSError *error)> *_onSessionCreationCallbacks;
     NSMutableDictionary<NSString *, void(^)(void)> *_messageRetryBlocksById;
 }
+@property (nonatomic, strong) KUSSatisfactionResponseDataSource *satisfactionResponseDataSource;
 
 @end
 
@@ -119,11 +122,22 @@ static const NSTimeInterval kKUSTypingEndDelay = 5.0;
     if (_form == nil && [dataSource isKindOfClass:[KUSFormDataSource class]]) {
         _form = dataSource.object;
     }
+    
+    if ([dataSource isKindOfClass:[KUSSatisfactionResponseDataSource class]]) {
+        for (id<KUSChatMessagesDataSourceListener> listener in [self.listeners copy]) {
+            if ([listener respondsToSelector:@selector(chatMessagesDataSourceDidFetchSatisfactionForm:)]) {
+                [listener chatMessagesDataSourceDidFetchSatisfactionForm:self];
+            }
+        }
+    }
     [self _insertFormMessageIfNecessary];
 }
 
 - (void)objectDataSource:(KUSObjectDataSource *)dataSource didReceiveError:(NSError *)error
 {
+    if ([dataSource isKindOfClass:[KUSSatisfactionResponseDataSource class]]) {
+        return;
+    }
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [dataSource fetch];
     });
@@ -286,6 +300,15 @@ static const NSTimeInterval kKUSTypingEndDelay = 5.0;
 }
 
 #pragma mark - Public methods
+
+- (KUSSatisfactionResponseDataSource *)satisfactionResponseDataSource
+{
+    if (_satisfactionResponseDataSource == nil && [self isActualSessionExist]) {
+        _satisfactionResponseDataSource = [[KUSSatisfactionResponseDataSource alloc] initWithUserSession:self.userSession AndSessionId:_sessionId];
+        [_satisfactionResponseDataSource addListener:self];
+    }
+    return _satisfactionResponseDataSource;
+}
 
 - (NSString *)sessionId
 {
@@ -793,7 +816,7 @@ static const NSTimeInterval kKUSTypingEndDelay = 5.0;
          
          // Cancel Volume Control Polling if necessary
          [sessionQueuePollingManager cancelPolling];
-         
+         [self mayGetSatisfactionFormIfAgentJoined];
          [self notifyAnnouncersDidChangeContent];
          if (completion != nil) {
              completion(YES);
@@ -804,6 +827,41 @@ static const NSTimeInterval kKUSTypingEndDelay = 5.0;
 - (KUSSessionQueuePollingManager *)sessionQueuePollingManager
 {
     return sessionQueuePollingManager;
+}
+
+- (void)mayGetSatisfactionFormIfAgentJoined
+{
+    if (![self isActualSessionExist]) {
+        return;
+    }
+    
+    KUSChatSession *chatSession = [self.userSession.chatSessionsDataSource objectWithId:_sessionId];
+    BOOL isChatClosed = chatSession.lockedAt;
+    BOOL isSatisfactionResponseFetched = [self.satisfactionResponseDataSource didFetch];
+    BOOL hasAgentMessage = [self otherUserIds].count > 0;
+    BOOL isSatisfactionFormCompleted = NO;
+    if (chatSession.satisfactionLockedAt) {
+        isSatisfactionFormCompleted = [[NSDate date] compare:chatSession.satisfactionLockedAt] != NSOrderedAscending;
+    }
+    
+    BOOL needSatisfactionForm = isChatClosed && hasAgentMessage && !isSatisfactionFormCompleted;
+    BOOL shouldFetchSatisfactionForm = !isSatisfactionResponseFetched && needSatisfactionForm;
+    
+    if (shouldFetchSatisfactionForm) {
+        [self.satisfactionResponseDataSource fetch];
+    }
+}
+
+- (BOOL)shouldShowSatisfactionForm
+{
+    if (![self isActualSessionExist]) {
+        return NO;
+    }
+    KUSChatSession *session = [self.userSession.chatSessionsDataSource objectWithId:_sessionId];
+    BOOL isSessionLocked = session && session.lockedAt;
+    BOOL isSatisfactionResponseFetched = [self.satisfactionResponseDataSource didFetch];
+    BOOL shouldShowSatisfactionForm = isSessionLocked && isSatisfactionResponseFetched;
+    return shouldShowSatisfactionForm;
 }
 
 - (void)sendTypingStatusToPusher:(KUSTypingStatus)typingStatus

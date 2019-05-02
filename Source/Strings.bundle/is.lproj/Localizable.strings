@@ -49,3 +49,6 @@
 "com.kustomer.volume_control_email_question" = "Frábær, hvað er besti tölvupósturinn til að ná þér á?";
 "com.kustomer.volume_control_phone_question" = "Frábær, hvað er besta símanúmerið til að ná þér á?";
 "com.kustomer.volume_control_thankyou_response" = "Þakka þér fyrir. Við munum komast aftur til þín fljótlega.";
+"com.kustomer.Submit" = "Senda inn";
+"com.kustomer.feedback_thankyou" = "Takk fyrir ábendinguna!";
+"com.kustomer.Edit" = "Breyta";

@@ -49,3 +49,6 @@
 "com.kustomer.volume_control_email_question" = "偉大な、あなたに届く最高の電子メールは何ですか？";
 "com.kustomer.volume_control_phone_question" = "あなたに連絡するのに最適な電話番号は何ですか？";
 "com.kustomer.volume_control_thankyou_response" = "ありがとうございました。私たちはまもなくあなたに連絡します。";
+"com.kustomer.Submit" = "提出します";
+"com.kustomer.feedback_thankyou" = "ご意見ありがとうございます！";
+"com.kustomer.Edit" = "編集します";

@@ -49,3 +49,6 @@
 "com.kustomer.volume_control_email_question" = "बढ़िया, आप तक पहुंचने के लिए सबसे अच्छा ईमेल क्या है?";
 "com.kustomer.volume_control_phone_question" = "बढ़िया, आप तक पहुंचने के लिए सबसे अच्छा फोन नंबर क्या है?";
 "com.kustomer.volume_control_thankyou_response" = "धन्यवाद। हम जल्द ही आपसे संपर्क करेंगे।";
+"com.kustomer.Submit" = "जमा करें";
+"com.kustomer.feedback_thankyou" = "आपकी प्रतिक्रिया के लिए आपका धन्यवाद!";
+"com.kustomer.Edit" = "संपादित करें";

@@ -49,3 +49,6 @@
 "com.kustomer.volume_control_email_question" = "Nagyszerű, mi a legjobb e-mail, amivel elérheted?";
 "com.kustomer.volume_control_phone_question" = "Nagyszerű, mi a legjobb telefonszám, amivel elérheted?";
 "com.kustomer.volume_control_thankyou_response" = "Köszönöm. Rövidesen visszajutunk hozzánk.";
+"com.kustomer.Submit" = "beküldése";
+"com.kustomer.feedback_thankyou" = "Köszönjük a visszajelzést!";
+"com.kustomer.Edit" = "szerkesztése";

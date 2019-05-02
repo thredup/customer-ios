@@ -10,6 +10,7 @@
 
 @interface KUSImage : NSObject
 
++ (UIImage *)imageNamed:(NSString *)name;
 + (UIImage *)noImage;
 + (UIImage *)kustyImage;
 + (UIImage *)attachImage;
@@ -18,6 +19,7 @@
 + (UIImage *)pencilImage;
 + (UIImage *)errorImage;
 + (UIImage *)awayImage;
++ (UIImage *)tickImage;
 
 + (UIImage *)attachImageWithSize:(CGSize)size;
 + (UIImage *)sendImageWithSize:(CGSize)size color:(UIColor *)color;

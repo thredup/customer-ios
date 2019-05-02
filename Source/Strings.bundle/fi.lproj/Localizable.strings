@@ -49,3 +49,6 @@
 "com.kustomer.volume_control_email_question" = "Hyvä, mikä on paras sähköpostiosoite tavoittaa sinut?";
 "com.kustomer.volume_control_phone_question" = "Hyvä, mikä on paras puhelinnumero tavoittaa sinut?";
 "com.kustomer.volume_control_thankyou_response" = "Kiitos. Palataan takaisin sinulle pian.";
+"com.kustomer.Submit" = "Lähetä";
+"com.kustomer.feedback_thankyou" = "Kiitos palautteesta!";
+"com.kustomer.Edit" = "Muokata";

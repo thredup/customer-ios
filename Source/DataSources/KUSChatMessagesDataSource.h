@@ -11,6 +11,7 @@
 #import "KUSChatMessage.h"
 #import "KUSFormQuestion.h"
 #import "KUSSessionQueuePollingManager.h"
+#import "KUSSatisfactionResponseDataSource.h"
 #import "KUSTypingIndicator.h"
 
 #import <UIKit/UIKit.h>
@@ -20,6 +21,7 @@
 
 @optional
 - (void)chatMessagesDataSource:(KUSChatMessagesDataSource *)dataSource didCreateSessionId:(NSString *)sessionId;
+- (void)chatMessagesDataSourceDidFetchSatisfactionForm:(KUSChatMessagesDataSource *)dataSource;
 - (void)chatMessagesDataSource:(KUSChatMessagesDataSource *)dataSource didReceiveTypingUpdate:(KUSTypingIndicator *)typingIndicator;
 
 @end
@@ -32,6 +34,7 @@
 
 - (void)addListener:(id<KUSChatMessagesDataSourceListener>)listener;
 
+- (KUSSatisfactionResponseDataSource *)satisfactionResponseDataSource;
 - (NSString *)sessionId;
 - (BOOL)isAnyMessageByCurrentUser;
 - (BOOL)shouldAllowAttachments;
@@ -44,6 +47,7 @@
 - (KUSFormQuestion *)volumeControlCurrentQuestion;
 - (BOOL)isChatClosed;
 - (KUSSessionQueuePollingManager *)sessionQueuePollingManager;
+- (BOOL)shouldShowSatisfactionForm;
 
 - (void)upsertNewMessages:(NSArray<KUSChatMessage *> *)chatMessages;
 - (void)sendMessageWithText:(NSString *)text attachments:(NSArray<UIImage *> *)attachments;

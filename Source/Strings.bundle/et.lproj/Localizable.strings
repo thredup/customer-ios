@@ -49,3 +49,6 @@
 "com.kustomer.volume_control_email_question" = "Hea, mis on parim e-kiri, et jõuda teie juurde?";
 "com.kustomer.volume_control_phone_question" = "Suur, mis on parim telefoninumber, et jõuda teid?";
 "com.kustomer.volume_control_thankyou_response" = "Aitäh. Me lähme peatselt teie juurde.";
+"com.kustomer.Submit" = "Esita";
+"com.kustomer.feedback_thankyou" = "Aitäh tagasiside eest!";
+"com.kustomer.Edit" = "Edit";

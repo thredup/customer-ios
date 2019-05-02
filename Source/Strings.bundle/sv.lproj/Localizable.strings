@@ -49,3 +49,6 @@
 "com.kustomer.volume_control_email_question" = "Bra, vad är den bästa e-postadressen för att nå dig på?";
 "com.kustomer.volume_control_phone_question" = "Bra, vad är det bästa telefonnumret för att nå dig?";
 "com.kustomer.volume_control_thankyou_response" = "Tack. Vi kommer snart tillbaka till dig.";
+"com.kustomer.Submit" = "Lämna";
+"com.kustomer.feedback_thankyou" = "Tack för din feedback!";
+"com.kustomer.Edit" = "Redigera";

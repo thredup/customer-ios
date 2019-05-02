@@ -49,3 +49,6 @@
 "com.kustomer.volume_control_email_question" = "太棒了，什麼是最好的電子郵件給你？";
 "com.kustomer.volume_control_phone_question" = "很棒，有什麼最適合您的電話號碼？";
 "com.kustomer.volume_control_thankyou_response" = "謝謝。我們很快就會回复你。";
+"com.kustomer.Submit" = "提交";
+"com.kustomer.feedback_thankyou" = "感謝您的反饋意見！";
+"com.kustomer.Edit" = "編輯";

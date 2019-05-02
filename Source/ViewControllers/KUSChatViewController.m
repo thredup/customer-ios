@@ -37,6 +37,9 @@
 #import "KUSChatEndedTableViewCell.h"
 #import "KUSMLFormValuesPickerView.h"
 #import "KUSNewSessionButton.h"
+#import "KUSObjectDataSource.h"
+#import "KUSSatisfactionFormTableViewCell.h"
+#import "KUSEditFeedbackTableViewCell.h"
 #import "KUSPushClient.h"
 #import "KUSTypingIndicatorTableViewCell.h"
 #import "KUSTypingIndicator.h"
@@ -47,7 +50,9 @@
                                      NYTPhotosViewControllerDelegate, UITableViewDataSource, UITableViewDelegate,
                                      UINavigationControllerDelegate, UIImagePickerControllerDelegate,
                                      KUSNavigationBarViewDelegate,KUSCloseChatButtonViewDelegate,
-                                     KUSMLFormValuesPickerViewDelegate> {
+                                     KUSMLFormValuesPickerViewDelegate,
+                                     KUSObjectDataSourceListener,KUSSatisfactionFormTableViewCellDelegate,
+                                     KUSEditFeedbackTableViewCellDelegate> {
     KUSUserSession *_userSession;
 
     BOOL _showBackButton;
@@ -57,7 +62,9 @@
     KUSTypingIndicator *_typingIndicator;
 
     KUSTeamsDataSource *_teamOptionsDataSource;
+    BOOL _showSatisfactionForm;
     CGFloat _keyboardHeight;
+    BOOL satisfactionFormEditButtonPressed;
 }
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -86,7 +93,7 @@
         _userSession = userSession;
         _chatSessionId = session.oid;
         _chatMessagesDataSource = [_userSession chatMessagesDataSourceForSessionId:_chatSessionId];
-        
+        _showSatisfactionForm = [_chatMessagesDataSource shouldShowSatisfactionForm];
         KUSChatSettings *chatSettings = [[_userSession chatSettingsDataSource] object];
         _showBackButton = !chatSettings.noHistory;
     }
@@ -646,6 +653,7 @@
     }
     
     [_chatMessagesDataSource addListener:self];
+    _showSatisfactionForm = [_chatMessagesDataSource shouldShowSatisfactionForm];
     [self.tableView reloadData];
     self.inputBarView.hidden = NO;
     [self.sessionButton removeFromSuperview];
@@ -713,7 +721,6 @@
             }
         });
     } else if (dataSource == _teamOptionsDataSource) {
-//        [self _checkShouldShowOptionPicker];
         [self _checkShouldShowInputView];
     }
 }
@@ -734,6 +741,12 @@
     [_chatMessagesDataSource startListeningForTypingUpdate];
     
     [self.view setNeedsLayout];
+}
+
+- (void)chatMessagesDataSourceDidFetchSatisfactionForm:(KUSChatMessagesDataSource *)dataSource
+{
+    _showSatisfactionForm = [_chatMessagesDataSource shouldShowSatisfactionForm];
+    [self.tableView reloadData];
 }
 
 - (void)chatMessagesDataSource:(KUSChatMessagesDataSource *)dataSource didReceiveTypingUpdate:(KUSTypingIndicator *)typingIndicator
@@ -797,7 +810,8 @@
 {
     KUSChatSession *session = [_userSession.chatSessionsDataSource objectWithId:[self getValidChatSessionId]];
     if (session.lockedAt) {
-        return [_chatMessagesDataSource count] + 1;
+        NSInteger satisfactionFormRowCount = _showSatisfactionForm ? 1 : 0;
+        return [_chatMessagesDataSource count] + 1 + satisfactionFormRowCount;
     } else if (_typingIndicator && _typingIndicator.typingStatus == KUSTyping) {
         return [_chatMessagesDataSource count] + 1;
     }
@@ -807,7 +821,41 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     KUSChatSession *session = [_userSession.chatSessionsDataSource objectWithId:[self getValidChatSessionId]];
-    BOOL isChatEndedCell = session.lockedAt && indexPath.row == 0;
+    BOOL shouldShowSatisfactionCell = _showSatisfactionForm && session.lockedAt && indexPath.row == 0;
+    if (shouldShowSatisfactionCell) {
+        KUSSatisfactionResponse *satisfactionResponse = (KUSSatisfactionResponse *)_chatMessagesDataSource.satisfactionResponseDataSource.object;
+        
+        KUSSatisfactionResponseStatus satisfactionStatus = [_chatMessagesDataSource.satisfactionResponseDataSource satisfactionFormCurrentStatus];
+        BOOL isSatisfactionFormCell = satisfactionStatus != KUSSatisfactionResponseStatusCommented || satisfactionFormEditButtonPressed;
+        
+        if (isSatisfactionFormCell) {
+            KUSSatisfactionFormTableViewCell *cell = (KUSSatisfactionFormTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"satisfactionFormCell"];
+            if (cell == nil) {
+                cell = [[KUSSatisfactionFormTableViewCell alloc] initWithReuseIdentifier:@"satisfactionFormCell" userSession:_userSession];
+                cell.transform = tableView.transform;
+                cell.delegate = self;
+            }
+            NSInteger selectedRating = satisfactionFormEditButtonPressed ? 0 : satisfactionResponse.rating;
+            [cell setSatisfactionForm:satisfactionResponse.satisfactionForm rating:selectedRating];
+            return cell;
+        } else {
+            KUSEditFeedbackTableViewCell *cell = (KUSEditFeedbackTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"editFeedbackCell"];
+            if (cell == nil)
+            {
+                cell = [[KUSEditFeedbackTableViewCell alloc] initWithReuseIdentifier:@"editFeedbackCell" userSession:_userSession];
+                cell.delegate = self;
+                cell.transform = tableView.transform;
+            }
+            BOOL showEditButton = NO;
+            if (satisfactionResponse.lockedAt) {
+                showEditButton = [[NSDate date] compare:satisfactionResponse.lockedAt] == NSOrderedAscending;
+            }
+            [cell setEditButtonShow:showEditButton];
+            return cell;
+        }
+    }
+    NSInteger chatEndedCellAdjustedIndex = _showSatisfactionForm ? 1 : 0;
+    BOOL isChatEndedCell = session.lockedAt && indexPath.row == chatEndedCellAdjustedIndex;
     if (isChatEndedCell) {
         KUSChatEndedTableViewCell *cell = (KUSChatEndedTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"chatEndedCell"];
         if (cell == nil) {
@@ -828,8 +876,15 @@
         return cell;
     }
     
-    BOOL shouldAdjustRowCount = session.lockedAt || (_typingIndicator && _typingIndicator.typingStatus == KUSTyping);
-    int adjustRowCount = shouldAdjustRowCount ? -1 : 0;
+    int adjustRowCount = 0;
+    if (session.lockedAt) {
+        adjustRowCount = -1;
+        adjustRowCount += _showSatisfactionForm ? -1 : 0;
+    }
+    else if (_typingIndicator && _typingIndicator.typingStatus == KUSTyping) {
+        adjustRowCount = -1;
+    }
+
     KUSChatMessage *chatMessage = [self messageForRow:indexPath.row+adjustRowCount];
     KUSChatMessage *previousChatMessage = [self messageBeforeRow:indexPath.row+adjustRowCount];
     KUSChatMessage *nextChatMessage = [self messageAfterRow:indexPath.row+adjustRowCount];
@@ -864,7 +919,41 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     KUSChatSession *session = [_userSession.chatSessionsDataSource objectWithId:[self getValidChatSessionId]];
-    BOOL isChatEndedCell = session.lockedAt && indexPath.row == 0;
+    BOOL shouldShowSatisfactionCell = _showSatisfactionForm &&
+                                            session.lockedAt && indexPath.row == 0;
+    if (shouldShowSatisfactionCell) {
+        KUSSatisfactionResponse *satisfactionResponse = (KUSSatisfactionResponse *)_chatMessagesDataSource.satisfactionResponseDataSource.object;
+        
+        KUSSatisfactionResponseStatus satisfactionStatus = [_chatMessagesDataSource.satisfactionResponseDataSource satisfactionFormCurrentStatus];
+        
+        BOOL isSatisfactionFormWithRatingOnly = satisfactionStatus == KUSSatisfactionResponseStatusOffered || satisfactionFormEditButtonPressed;
+        
+        BOOL isSatisfactionFormWithComment = satisfactionStatus == KUSSatisfactionResponseStatusRated;
+        
+        if (isSatisfactionFormWithRatingOnly) {
+            CGFloat formHeight = [KUSSatisfactionFormTableViewCell
+                                  heightForSatisfactionForm:satisfactionResponse.satisfactionForm ratingOnly:YES
+                                  maxWidth:tableView.bounds.size.width];
+            return formHeight;
+            
+        } else if (isSatisfactionFormWithComment) {
+            CGFloat formHeight = [KUSSatisfactionFormTableViewCell
+                                  heightForSatisfactionForm:satisfactionResponse.satisfactionForm ratingOnly:NO
+                                  maxWidth:tableView.bounds.size.width];
+            return formHeight;
+            
+        } else {
+            BOOL showEditButton = NO;
+            if (satisfactionResponse.lockedAt) {
+                showEditButton = [[NSDate date] compare:satisfactionResponse.lockedAt] == NSOrderedAscending;
+            }
+            CGFloat feedbackCellHeight = [KUSEditFeedbackTableViewCell heightForEditFeedbackCellWithEditButton:showEditButton maxWidth:tableView.bounds.size.width];
+            return feedbackCellHeight;
+        }
+    
+    }
+    NSInteger chatEndedCellAdjustedIndex = _showSatisfactionForm ? 1 : 0;
+    BOOL isChatEndedCell = session.lockedAt && indexPath.row == chatEndedCellAdjustedIndex;
     if (isChatEndedCell) {
         return 50;
     }
@@ -873,9 +962,16 @@
     if (isTypingIndicatorCell) {
         return [KUSTypingIndicatorTableViewCell heightForBubble];
     }
-    
-    BOOL shouldAdjustRowCount = session.lockedAt || (_typingIndicator && _typingIndicator.typingStatus == KUSTyping);
-    int adjustRowCount = shouldAdjustRowCount ? -1 : 0;
+
+    int adjustRowCount = 0;
+    if (session.lockedAt) {
+        adjustRowCount = -1;
+        adjustRowCount += _showSatisfactionForm ? -1 : 0;
+    }
+    else if (_typingIndicator && _typingIndicator.typingStatus == KUSTyping) {
+        adjustRowCount = -1;
+    }
+
     KUSChatMessage *chatMessage = [self messageForRow:indexPath.row+adjustRowCount];
     KUSChatMessage *nextChatMessage = [self messageAfterRow:indexPath.row+adjustRowCount];
     BOOL nextMessageOlderThan5Min = nextChatMessage == nil || [nextChatMessage.createdAt timeIntervalSinceDate:chatMessage.createdAt] > 5.0 * 60.0;
@@ -1169,4 +1265,29 @@
     [self.view setNeedsLayout];
     [self.view layoutIfNeeded];
 }
+
+#pragma mark - KUSSatisfactionFormTableViewCellDelegate methods
+
+- (void)satisfactionFormTableViewCell:(KUSSatisfactionFormTableViewCell *)cell didSubmitComment:(NSString *)comment
+{
+    [_chatMessagesDataSource.satisfactionResponseDataSource submitComment:comment];
+    [self.tableView reloadData];
+}
+
+- (void)satisfactionFormTableViewCell:(KUSSatisfactionFormTableViewCell *)cell didSelectRating:(NSInteger)rating
+{
+    satisfactionFormEditButtonPressed = NO;
+    [_chatMessagesDataSource.satisfactionResponseDataSource submitRating:rating];
+    [self.tableView reloadData];
+}
+
+#pragma mark - KUSEditFeedbackTableViewCellDelegate methods
+
+- (void)editFeedbackTableViewCellDidEditButtonPressed:(KUSEditFeedbackTableViewCell *)cell
+{
+    satisfactionFormEditButtonPressed = YES;
+    [self.tableView reloadData];
+}
+
+
 @end

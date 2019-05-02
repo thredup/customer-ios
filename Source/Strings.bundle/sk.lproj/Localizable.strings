@@ -49,3 +49,6 @@
 "com.kustomer.volume_control_email_question" = "Skvelý, aký je najlepší e-mail na vás?";
 "com.kustomer.volume_control_phone_question" = "Skvelé, aké je najlepšie telefónne číslo, na ktoré sa chcete dostať?";
 "com.kustomer.volume_control_thankyou_response" = "Ďakujem. Dostávame sa k vám krátko.";
+"com.kustomer.Submit" = "Predložiť";
+"com.kustomer.feedback_thankyou" = "Ďakujeme vám za vašu reakciu!";
+"com.kustomer.Edit" = "editovať";

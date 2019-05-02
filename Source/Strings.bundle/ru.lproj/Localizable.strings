@@ -49,3 +49,6 @@
 "com.kustomer.volume_control_email_question" = "Замечательно, что для вас самое лучшее письмо?";
 "com.kustomer.volume_control_phone_question" = "Отлично, какой лучший номер телефона для вас?";
 "com.kustomer.volume_control_thankyou_response" = "Спасибо. Мы скоро свяжемся с вами.";
+"com.kustomer.Submit" = "Отправить";
+"com.kustomer.feedback_thankyou" = "Спасибо за ваш отзыв!";
+"com.kustomer.Edit" = "редактировать";

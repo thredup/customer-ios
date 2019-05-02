@@ -49,3 +49,6 @@
 "com.kustomer.volume_control_email_question" = "Tuyệt vời, email tốt nhất để liên hệ với bạn là gì?";
 "com.kustomer.volume_control_phone_question" = "Tuyệt vời, số điện thoại tốt nhất để liên hệ với bạn là gì?";
 "com.kustomer.volume_control_thankyou_response" = "Cảm ơn bạn. Chúng tôi sẽ sớm liên hệ lại với bạn.";
+"com.kustomer.Submit" = "Gửi đi";
+"com.kustomer.feedback_thankyou" = "Cảm ơn phản hôi của bạn!";
+"com.kustomer.Edit" = "Chỉnh sửa";

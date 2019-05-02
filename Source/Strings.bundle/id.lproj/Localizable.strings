@@ -49,3 +49,6 @@
 "com.kustomer.volume_control_email_question" = "Hebat, apa email terbaik untuk menghubungi Anda di?";
 "com.kustomer.volume_control_phone_question" = "Hebat, berapa nomor telepon terbaik untuk dihubungi?";
 "com.kustomer.volume_control_thankyou_response" = "Terima kasih. Kami akan segera menghubungi Anda.";
+"com.kustomer.Submit" = "Menyerahkan";
+"com.kustomer.feedback_thankyou" = "Terima kasih atas tanggapan Anda!";
+"com.kustomer.Edit" = "mengedit";

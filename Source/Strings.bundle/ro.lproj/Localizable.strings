@@ -49,3 +49,6 @@
 "com.kustomer.volume_control_email_question" = "Ce e cel mai bun e-mail pentru a te contacta?";
 "com.kustomer.volume_control_phone_question" = "Grozav, care este cel mai bun număr de telefon la care te afli?";
 "com.kustomer.volume_control_thankyou_response" = "Mulțumesc. Ne vom întoarce în curând.";
+"com.kustomer.Submit" = "A depune";
+"com.kustomer.feedback_thankyou" = "Multumim pentru feedback-ul dvs!";
+"com.kustomer.Edit" = "Editați | ×";

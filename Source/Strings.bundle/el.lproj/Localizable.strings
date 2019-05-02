@@ -49,3 +49,6 @@
 "com.kustomer.volume_control_email_question" = "Μεγάλη, ποιο είναι το καλύτερο ηλεκτρονικό μήνυμα για να σας φτάσω;";
 "com.kustomer.volume_control_phone_question" = "Μεγάλη, ποιος είναι ο καλύτερος αριθμός τηλεφώνου για να σας φτάσει;";
 "com.kustomer.volume_control_thankyou_response" = "Ευχαριστώ. Θα σας επιστρέψουμε σύντομα.";
+"com.kustomer.Submit" = "υποβάλλουν";
+"com.kustomer.feedback_thankyou" = "Ευχαριστούμε για την ανταπόκρισή σας!";
+"com.kustomer.Edit" = "Επεξεργασία";

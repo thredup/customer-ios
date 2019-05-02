@@ -49,3 +49,6 @@
 "com.kustomer.volume_control_email_question" = "Odlično, u čemu je najbolji email za koji ste došli?";
 "com.kustomer.volume_control_phone_question" = "Odlično, koji je najbolji telefonski broj na koji ste došli?";
 "com.kustomer.volume_control_thankyou_response" = "Hvala ti. Vratićemo se tebi uskoro.";
+"com.kustomer.Submit" = "podnijeti";
+"com.kustomer.feedback_thankyou" = "Hvala vam za vaše povratne informacije!";
+"com.kustomer.Edit" = "edit";

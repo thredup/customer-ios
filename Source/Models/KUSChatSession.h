@@ -19,6 +19,10 @@
 @property (nonatomic, copy, readonly) NSDate *lastMessageAt;
 @property (nonatomic, copy, readwrite) NSDate *lockedAt;
 
+@property (nonatomic, copy, readonly) NSString *satisfactionId;
+@property (nonatomic, copy, readonly) NSString *satisfactionStatus;
+@property (nonatomic, copy, readonly) NSDate *satisfactionLockedAt;
+
 + (KUSChatSession *)tempSessionFromChatMessage:(KUSChatMessage *)message;
 
 @end

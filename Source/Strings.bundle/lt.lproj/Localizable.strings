@@ -49,3 +49,6 @@
 "com.kustomer.volume_control_email_question" = "Puiku, koks geriausias el. Laiškas jus pasiekė?";
 "com.kustomer.volume_control_phone_question" = "Puikus, koks geriausias telefono numeris jums pasiekti?";
 "com.kustomer.volume_control_thankyou_response" = "Ačiū. Mes netrukus susisieksime su jumis.";
+"com.kustomer.Submit" = "Pateikti";
+"com.kustomer.feedback_thankyou" = "Dėkojame už jūsų atsiliepimus!";
+"com.kustomer.Edit" = "Redaguoti";

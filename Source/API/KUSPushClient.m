@@ -355,7 +355,6 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
     KUSLogPusher(@"Ended chat session from Pusher");
     
     BOOL clippedEvent = event.data[@"clipped"];
-    
     if (clippedEvent) {
         NSString *sessionId = NSStringFromKeyPath(event.data, @"data.id");
         [self _fetchSessionById:sessionId];
