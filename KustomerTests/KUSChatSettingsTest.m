@@ -58,4 +58,40 @@
     XCTAssertEqual(chatSettingsUnknown.volumeControlMode, KUSVolumeControlModeUnknown);
 }
 
+- (void)testTypingIndicatorSettingCustomerWeb
+{
+    NSDictionary *jsonTypingIndicatorCustomerWebNil = @{@"id": @"__fake", @"type": @"chat_settings", @"attributes": @{ }};
+    KUSChatSettings *chatSettingsTypingIndicatorCustomerWebNil = [[KUSChatSettings alloc] initWithJSON:jsonTypingIndicatorCustomerWebNil];
+    XCTAssertNotNil(chatSettingsTypingIndicatorCustomerWebNil);
+    XCTAssertFalse(chatSettingsTypingIndicatorCustomerWebNil.shouldShowTypingIndicatorCustomerWeb);
+    
+    NSDictionary *jsonTypingIndicatorCustomerWebNo = @{@"id": @"__fake", @"type": @"chat_settings", @"attributes": @{ @"showTypingIndicatorCustomerWeb": @NO}};
+    KUSChatSettings *chatSettingsTypingIndicatorCustomerWebNo = [[KUSChatSettings alloc] initWithJSON:jsonTypingIndicatorCustomerWebNo];
+    XCTAssertNotNil(chatSettingsTypingIndicatorCustomerWebNo);
+    XCTAssertFalse(chatSettingsTypingIndicatorCustomerWebNo.shouldShowTypingIndicatorCustomerWeb);
+    
+    NSDictionary *jsonTypingIndicatorCustomerWebYes = @{@"id": @"__fake", @"type": @"chat_settings", @"attributes": @{ @"showTypingIndicatorCustomerWeb": @YES}};
+    KUSChatSettings *chatSettingsTypingIndicatorCustomerWebYes = [[KUSChatSettings alloc] initWithJSON:jsonTypingIndicatorCustomerWebYes];
+    XCTAssertNotNil(chatSettingsTypingIndicatorCustomerWebYes);
+    XCTAssertTrue(chatSettingsTypingIndicatorCustomerWebYes.shouldShowTypingIndicatorCustomerWeb);
+}
+
+- (void)testTypingIndicatorSettingWeb
+{
+    NSDictionary *jsonTypingIndicatorWebNil = @{@"id": @"__fake", @"type": @"chat_settings", @"attributes": @{ }};
+    KUSChatSettings *chatSettingsTypingIndicatorWebNil = [[KUSChatSettings alloc] initWithJSON:jsonTypingIndicatorWebNil];
+    XCTAssertNotNil(chatSettingsTypingIndicatorWebNil);
+    XCTAssertFalse(chatSettingsTypingIndicatorWebNil.shouldShowTypingIndicatorWeb);
+    
+    NSDictionary *jsonTypingIndicatorWebNo = @{@"id": @"__fake", @"type": @"chat_settings", @"attributes": @{ @"showTypingIndicatorWeb": @NO}};
+    KUSChatSettings *chatSettingsTypingIndicatorWebNo = [[KUSChatSettings alloc] initWithJSON:jsonTypingIndicatorWebNo];
+    XCTAssertNotNil(chatSettingsTypingIndicatorWebNo);
+    XCTAssertFalse(chatSettingsTypingIndicatorWebNo.shouldShowTypingIndicatorWeb);
+    
+    NSDictionary *jsonTypingIndicatorWebYes = @{@"id": @"__fake", @"type": @"chat_settings", @"attributes": @{ @"showTypingIndicatorWeb": @YES}};
+    KUSChatSettings *chatSettingsTypingIndicatorWebYes = [[KUSChatSettings alloc] initWithJSON:jsonTypingIndicatorWebYes];
+    XCTAssertNotNil(chatSettingsTypingIndicatorWebYes);
+    XCTAssertTrue(chatSettingsTypingIndicatorWebYes.shouldShowTypingIndicatorWeb);
+}
+
 @end

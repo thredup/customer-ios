@@ -37,6 +37,10 @@
 #import "KUSChatEndedTableViewCell.h"
 #import "KUSMLFormValuesPickerView.h"
 #import "KUSNewSessionButton.h"
+#import "KUSPushClient.h"
+#import "KUSTypingIndicatorTableViewCell.h"
+#import "KUSTypingIndicator.h"
+#import "KUSTimer.h"
 
 @interface KUSChatViewController () <KUSEmailInputViewDelegate, KUSInputBarDelegate, KUSOptionPickerViewDelegate,
                                      KUSChatMessagesDataSourceListener, KUSChatMessageTableViewCellDelegate,
@@ -50,9 +54,9 @@
     BOOL _showNonBusinessHoursImage;
     NSString *_chatSessionId;
     KUSChatMessagesDataSource *_chatMessagesDataSource;
+    KUSTypingIndicator *_typingIndicator;
 
     KUSTeamsDataSource *_teamOptionsDataSource;
-
     CGFloat _keyboardHeight;
 }
 
@@ -225,6 +229,7 @@
     }
 
     [_userSession.chatSessionsDataSource updateLastSeenAtForSessionId:_chatSessionId completion:nil];
+    [_chatMessagesDataSource startListeningForTypingUpdate];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -234,6 +239,7 @@
     [_inputBarView resignFirstResponder];
 
     [_userSession.chatSessionsDataSource updateLastSeenAtForSessionId:_chatSessionId completion:nil];
+    [_chatMessagesDataSource stopListeningForTypingUpdate];
 }
 
 - (void)viewWillLayoutSubviews
@@ -570,6 +576,21 @@
     [self _checkShouldShowOptionPicker];
 }
 
+- (void)_checkShouldDisconnectTypingListener
+{
+    NSString *sessionId = [self getValidChatSessionId];
+    if (!sessionId) {
+        return;
+    }
+    
+    KUSChatSession *session = [_userSession.chatSessionsDataSource objectWithId:sessionId];
+    
+    BOOL isSessionLocked = session && session.lockedAt;
+    if (isSessionLocked) {
+        [_chatMessagesDataSource stopListeningForTypingUpdate];
+    }
+}
+
 - (void)_updateOptionsPickerOptions
 {
     KUSFormQuestion *vcCurrentQuestion = _chatMessagesDataSource.volumeControlCurrentQuestion;
@@ -663,6 +684,8 @@
         [self.tableView reloadData];
         [self _checkShouldShowInputView];
         [self _checkShouldShowCloseChatButtonView];
+        [self _checkShouldDisconnectTypingListener];
+        
         [self.view setNeedsLayout];
         BOOL shouldAllowAttachments = [_chatMessagesDataSource shouldAllowAttachments];
         if (!shouldAllowAttachments) {
@@ -708,7 +731,15 @@
     [self.fauxNavigationBar setShowsBackButton:_showBackButton];
     [self _checkShouldShowEmailInput];
     [self _checkShouldShowCloseChatButtonView];
+    [_chatMessagesDataSource startListeningForTypingUpdate];
+    
     [self.view setNeedsLayout];
+}
+
+- (void)chatMessagesDataSource:(KUSChatMessagesDataSource *)dataSource didReceiveTypingUpdate:(KUSTypingIndicator *)typingIndicator
+{
+    _typingIndicator = typingIndicator;
+    [self.tableView reloadData];
 }
 
 #pragma mark - NSNotification methods
@@ -767,6 +798,8 @@
     KUSChatSession *session = [_userSession.chatSessionsDataSource objectWithId:[self getValidChatSessionId]];
     if (session.lockedAt) {
         return [_chatMessagesDataSource count] + 1;
+    } else if (_typingIndicator && _typingIndicator.typingStatus == KUSTyping) {
+        return [_chatMessagesDataSource count] + 1;
     }
     return [_chatMessagesDataSource count];
 }
@@ -784,7 +817,19 @@
         return cell;
     }
     
-    int adjustRowCount = session.lockedAt ? -1 : 0;
+    BOOL isTypingIndicatorCell = _typingIndicator && _typingIndicator.typingStatus == KUSTyping && indexPath.row == 0;
+    if (isTypingIndicatorCell) {
+        KUSTypingIndicatorTableViewCell *cell = (KUSTypingIndicatorTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"typingIndicatorCell"];
+        if (cell == nil) {
+            cell = [[KUSTypingIndicatorTableViewCell alloc] initWithReuseIdentifier:@"typingIndicatorCell" userSession:_userSession];
+            [cell setTypingIndicator:_typingIndicator];
+            cell.transform = tableView.transform;
+        }
+        return cell;
+    }
+    
+    BOOL shouldAdjustRowCount = session.lockedAt || (_typingIndicator && _typingIndicator.typingStatus == KUSTyping);
+    int adjustRowCount = shouldAdjustRowCount ? -1 : 0;
     KUSChatMessage *chatMessage = [self messageForRow:indexPath.row+adjustRowCount];
     KUSChatMessage *previousChatMessage = [self messageBeforeRow:indexPath.row+adjustRowCount];
     KUSChatMessage *nextChatMessage = [self messageAfterRow:indexPath.row+adjustRowCount];
@@ -824,7 +869,13 @@
         return 50;
     }
     
-    int adjustRowCount = session.lockedAt ? -1 : 0;
+    BOOL isTypingIndicatorCell = _typingIndicator && _typingIndicator.typingStatus == KUSTyping && indexPath.row == 0;
+    if (isTypingIndicatorCell) {
+        return [KUSTypingIndicatorTableViewCell heightForBubble];
+    }
+    
+    BOOL shouldAdjustRowCount = session.lockedAt || (_typingIndicator && _typingIndicator.typingStatus == KUSTyping);
+    int adjustRowCount = shouldAdjustRowCount ? -1 : 0;
     KUSChatMessage *chatMessage = [self messageForRow:indexPath.row+adjustRowCount];
     KUSChatMessage *nextChatMessage = [self messageAfterRow:indexPath.row+adjustRowCount];
     BOOL nextMessageOlderThan5Min = nextChatMessage == nil || [nextChatMessage.createdAt timeIntervalSinceDate:chatMessage.createdAt] > 5.0 * 60.0;
@@ -963,6 +1014,7 @@
         return;
     }
 
+    [_chatMessagesDataSource sendTypingStatusToPusher:KUSTypingEnded];
     [_chatMessagesDataSource sendMessageWithText:inputBar.text attachments:inputBar.imageAttachments];
     [_inputBarView setText:nil];
     [_inputBarView setImageAttachments:nil];
@@ -1047,6 +1099,16 @@
     _nytPhotosDataSource = [[NYTPhotoViewerArrayDataSource alloc] initWithPhotos:photos];
     NYTPhotosViewController *photosViewController = [[NYTPhotosViewController alloc] initWithDataSource:_nytPhotosDataSource initialPhoto:initialPhoto delegate:self];
     [self presentViewController:photosViewController animated:YES completion:nil];
+}
+
+- (void)inputBarTextDidChange:(KUSInputBar *)inputBar
+{
+    NSString *trimmedText = [inputBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    BOOL isEmpty = [trimmedText isEqualToString:@""];
+    
+    if (!isEmpty) {
+        [_chatMessagesDataSource sendTypingStatusToPusher:KUSTyping];
+    }
 }
 
 #pragma mark - NYTPhotosViewControllerDelegate methods

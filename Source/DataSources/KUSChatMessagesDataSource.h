@@ -11,6 +11,7 @@
 #import "KUSChatMessage.h"
 #import "KUSFormQuestion.h"
 #import "KUSSessionQueuePollingManager.h"
+#import "KUSTypingIndicator.h"
 
 #import <UIKit/UIKit.h>
 
@@ -19,6 +20,7 @@
 
 @optional
 - (void)chatMessagesDataSource:(KUSChatMessagesDataSource *)dataSource didCreateSessionId:(NSString *)sessionId;
+- (void)chatMessagesDataSource:(KUSChatMessagesDataSource *)dataSource didReceiveTypingUpdate:(KUSTypingIndicator *)typingIndicator;
 
 @end
 
@@ -48,5 +50,9 @@
 - (void)sendMessageWithText:(NSString *)text attachments:(NSArray<UIImage *> *)attachments value:(NSString *)value;
 - (void)resendMessage:(KUSChatMessage *)message;
 - (void)endChat:(NSString *)reason withCompletion:(void (^)(BOOL))completion;
+
+- (void)sendTypingStatusToPusher:(KUSTypingStatus)typingStatus;
+- (void)startListeningForTypingUpdate;
+- (void)stopListeningForTypingUpdate;
 
 @end

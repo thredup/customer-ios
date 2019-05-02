@@ -50,5 +50,8 @@ typedef NS_ENUM(NSInteger, KUSVolumeControlMode) {
 @property (nonatomic, assign, readonly) NSInteger upfrontWaitThreshold;
 @property (nonatomic, assign, readonly) BOOL brandingKustomer;
 
+@property (nonatomic, assign, readonly) BOOL shouldShowTypingIndicatorCustomerWeb;
+@property (nonatomic, assign, readonly) BOOL shouldShowTypingIndicatorWeb;
+
 
 @end

@@ -19,8 +19,10 @@
 #import <SDWebImage/SDImageCache.h>
 
 static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
+static const NSTimeInterval kKUSResendTypingStatusDelay = 3.0 * 1000;
+static const NSTimeInterval kKUSTypingEndDelay = 5.0;
 
-@interface KUSChatMessagesDataSource () <KUSChatMessagesDataSourceListener, KUSObjectDataSourceListener, KUSSessionQueuePollingListener, KUSVolumeControlTimerListener> {
+@interface KUSChatMessagesDataSource () <KUSChatMessagesDataSourceListener, KUSObjectDataSourceListener, KUSSessionQueuePollingListener, KUSVolumeControlTimerListener, KUSPushClientListener> {
     NSString *_Nullable _sessionId;
     BOOL _createdLocally;
 
@@ -44,6 +46,12 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     BOOL _nonBusinessHours;
     
     KUSSessionQueuePollingManager *sessionQueuePollingManager;
+    
+    // Typing indicator variables
+    NSDate *_lastTypingStatusSentAt;
+    KUSTimer *_endTypingTimer;
+    KUSTimer *_hideTypingTimer;
+    KUSTypingIndicator *_typingIndicator;
     
     NSMutableArray<void(^)(BOOL success, NSError *error)> *_onSessionCreationCallbacks;
     NSMutableDictionary<NSString *, void(^)(void)> *_messageRetryBlocksById;
@@ -183,6 +191,25 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
     }
 }
 
+#pragma mark - Push Client methods
+
+- (void)pushClient:(KUSPushClient *)pushClient didChange:(KUSTypingIndicator *)typingIndicator
+{
+    if (![typingIndicator.oid isEqualToString:_sessionId]) {
+        return;
+    }
+    
+    BOOL shouldNotifyUpdate = _typingIndicator == nil || ![_typingIndicator isEqual:typingIndicator];
+    if (shouldNotifyUpdate) {
+        _typingIndicator = typingIndicator;
+        [self notifyAnnouncersDidReceiveTypingUpdate];
+    }
+    
+    if (typingIndicator.typingStatus == KUSTyping) {
+        [self _hideTypingIndicatorAfterDelay];
+    }
+}
+
 #pragma mark - Internal Logic methods
 
 - (void)_startVolumeControlFormTrackingAfterDelay:(NSTimeInterval)delay
@@ -221,6 +248,39 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
                 [self.userSession.chatSessionsDataSource updateLastSeenAtForSessionId:chatMsgDataSource.sessionId completion:nil];
                 [chatMsgDataSource endChat:@"customer_ended" withCompletion:nil];
             }
+        }
+    }
+}
+
+- (NSString *)_customerId
+{
+    for (int i = 0; i < self.count; i++) {
+        if (self.allObjects[i].customerId) {
+            return self.allObjects[i].customerId;
+        }
+    }
+    return nil;
+}
+
+- (void)_hideTypingIndicatorAfterDelay
+{
+    if (_hideTypingTimer) {
+        [_hideTypingTimer invalidate];
+        _hideTypingTimer = nil;
+    }
+    _hideTypingTimer = [KUSTimer scheduledTimerWithTimeInterval:kKUSTypingEndDelay
+                                                                  target:self
+                                                                selector:@selector(typingHideDelayComplete:)
+                                                                 repeats:NO];
+}
+
+#pragma mark - Internal listener methods
+
+- (void)notifyAnnouncersDidReceiveTypingUpdate
+{
+    for (id<KUSChatMessagesDataSourceListener> listener in [self.listeners copy]) {
+        if ([listener respondsToSelector:@selector(chatMessagesDataSource:didReceiveTypingUpdate:)]) {
+            [listener chatMessagesDataSource:self didReceiveTypingUpdate:_typingIndicator];
         }
     }
 }
@@ -744,6 +804,109 @@ static const NSTimeInterval KUSChatAutoreplyDelay = 2.0;
 - (KUSSessionQueuePollingManager *)sessionQueuePollingManager
 {
     return sessionQueuePollingManager;
+}
+
+- (void)sendTypingStatusToPusher:(KUSTypingStatus)typingStatus
+{
+    NSString *customerId = [self _customerId];
+    if (!customerId) {
+        return;
+    }
+    
+    KUSChatSettings *settings = self.userSession.chatSettingsDataSource.object;
+    if (!settings || !settings.shouldShowTypingIndicatorWeb) {
+        return;
+    }
+    
+    NSDate *currentDate = [NSDate date];
+    NSTimeInterval now = [currentDate timeIntervalSince1970] * 1000;
+    NSTimeInterval lastSent = [_lastTypingStatusSentAt timeIntervalSince1970] * 1000;
+    BOOL isResendDelayOver = now - lastSent > kKUSResendTypingStatusDelay;
+    
+    BOOL shouldSendStatus = typingStatus == KUSTypingEnded || isResendDelayOver;
+    if (!shouldSendStatus) {
+        return;
+    }
+    
+    NSNumber *createdAt = [NSNumber numberWithLongLong:now];
+    NSDictionary *activityData = @{
+        @"type": @"conversation",
+        @"id": _sessionId,
+        @"userId": customerId,
+        @"status": typingStatus == KUSTyping ? @"typing" : @"typing-ended",
+        @"userType": @"customer",
+        @"createdAt": createdAt
+    };
+    
+    [self.userSession.pushClient sendChatActivityForSessionId:_sessionId
+                                                 activityData:activityData];
+    
+    if (typingStatus == KUSTyping) {
+        _lastTypingStatusSentAt = currentDate;
+        [self sendTypingEndedStatusAfterDelay];
+    }
+    else if (typingStatus == KUSTypingEnded && _endTypingTimer) {
+        [_endTypingTimer invalidate];
+        _endTypingTimer = nil;
+    }
+}
+
+- (void)sendTypingEndedStatusAfterDelay
+{
+    if (_endTypingTimer) {
+        [_endTypingTimer invalidate];
+        _endTypingTimer = nil;
+    }
+    _endTypingTimer = [KUSTimer scheduledTimerWithTimeInterval:kKUSTypingEndDelay
+                                                       target:self
+                                                     selector:@selector(typingEndDelayComplete:)
+                                                      repeats:NO];
+}
+
+- (void)startListeningForTypingUpdate
+{
+    if (![self isActualSessionExist]) {
+        return;
+    }
+    
+    KUSChatSettings *chatSettings = self.userSession.chatSettingsDataSource.object;
+    if (!chatSettings || !chatSettings.shouldShowTypingIndicatorCustomerWeb) {
+        return;
+    }
+    
+    KUSChatSession *chatSession = [self.userSession.chatSessionsDataSource objectWithId:_sessionId];
+    if (!chatSession || chatSession.lockedAt) {
+        return;
+    }
+    
+    [self.userSession.pushClient connectToChatActivityChannel:_sessionId];
+    [self.userSession.pushClient setListener:self];
+}
+
+- (void)stopListeningForTypingUpdate
+{
+    [self sendTypingStatusToPusher:KUSTypingEnded];
+    [self.userSession.pushClient disconnectFromChatAcitvityChannel];
+    [self.userSession.pushClient removeListener:self];
+    
+    [_hideTypingTimer invalidate];
+    _hideTypingTimer = nil;
+    
+    _typingIndicator.typingStatus = KUSTypingEnded;
+    [self notifyAnnouncersDidReceiveTypingUpdate];
+}
+
+#pragma mark - Timer Completion handler
+
+- (void)typingEndDelayComplete:(KUSTimer *)timer
+{
+    [self sendTypingStatusToPusher:KUSTypingEnded];
+}
+
+- (void)typingHideDelayComplete:(KUSTimer *)timer
+{
+    _typingIndicator.typingStatus = KUSTypingEnded;
+    [self notifyAnnouncersDidReceiveTypingUpdate];
 }
 
 #pragma mark - KUSChatMessagesDataSourceListener methods

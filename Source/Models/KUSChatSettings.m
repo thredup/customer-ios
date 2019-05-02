@@ -51,6 +51,9 @@
         _offhoursImageUrl = NSStringFromKeyPath(json, @"attributes.offhoursImageUrl");
         _availability = KUSBusinessHoursAvailabilityFromString(NSStringFromKeyPath(json, @"attributes.offhoursDisplay"));
         _brandingKustomer = BOOLFromKeyPath(json, @"attributes.showBrandingIdentifier");
+        
+        _shouldShowTypingIndicatorCustomerWeb = BOOLFromKeyPath(json, @"attributes.showTypingIndicatorCustomerWeb");
+        _shouldShowTypingIndicatorWeb = BOOLFromKeyPath(json, @"attributes.showTypingIndicatorWeb");
     }
     return self;
 }

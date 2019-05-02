@@ -28,6 +28,7 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
     KUSTimer *_pollingTimer;
     PTPusher *_pusherClient;
     PTPusherChannel *_pusherChannel;
+    PTPusherPrivateChannel *_chatActivityChannel;
 
     NSMutableDictionary<NSString *, KUSChatSession *> *_previousChatSessions;
     NSString *_pendingNotificationSessionId;
@@ -35,6 +36,8 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
     BOOL _isPusherTrackingStarted;
     BOOL _didPusherLossPackets;
 }
+
+@property (nonatomic, strong, readwrite) id<KUSPushClientListener> listener;
 
 @end
 
@@ -80,6 +83,11 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
         return [NSString stringWithFormat:@"presence-external-%@-tracking-%@", _userSession.orgId, trackingTokenObj.trackingId];
     }
     return nil;
+}
+
+- (NSString *)_chatActivityChannelNameForSessionId:(NSString *)sessionId
+{
+    return [NSString stringWithFormat:@"private-external-%@-chat-activity-%@", _userSession.orgId, sessionId];
 }
 
 #pragma mark - Internal methods
@@ -280,6 +288,36 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
     }
 }
 
+- (void)connectToChatActivityChannel:(NSString *)sessionId
+{
+    [self disconnectFromChatAcitvityChannel];
+    
+    NSString *chatActivityChannelName = [self _chatActivityChannelNameForSessionId:sessionId];
+    _chatActivityChannel = (PTPusherPrivateChannel *) [_pusherClient subscribeToChannelNamed:chatActivityChannelName];
+    [_chatActivityChannel bindToEventNamed:@"client-kustomer.app.chat.activity.typing"
+                                    target:self
+                                    action:@selector(_onPusherChatActivityTyping:)];
+}
+
+- (void)disconnectFromChatAcitvityChannel
+{
+    if (_chatActivityChannel) {
+        [_chatActivityChannel unsubscribe];
+        _chatActivityChannel = nil;
+    }
+}
+
+- (void)sendChatActivityForSessionId:(NSString *)sessionId activityData:(NSDictionary *)activityData
+{
+    NSString *activityChannelName = [self _chatActivityChannelNameForSessionId:sessionId];
+    if (![_chatActivityChannel.name isEqualToString:activityChannelName]) {
+        [self connectToChatActivityChannel:sessionId];
+    }
+    
+    [_chatActivityChannel triggerEventNamed:@"client-kustomer.app.chat.activity.typing"
+                                       data:activityData];
+}
+
 #pragma mark - Property methods
 
 - (void)setSupportViewControllerPresented:(BOOL)supportViewControllerPresented
@@ -326,6 +364,33 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
         [self _upsertSessions:chatSessions];
     }
     
+}
+
+- (void)_onPusherChatActivityTyping:(PTPusherEvent *)event
+{
+    KUSLogPusher(@"Typing event from Pusher");
+    
+    BOOL shouldNotifyChange = _listener && [_listener respondsToSelector:@selector(pushClient:didChange:)];
+    if (shouldNotifyChange) {
+        KUSTypingIndicator *typingIndicator = [[KUSTypingIndicator alloc] initWithJSON:event.data];
+        [_listener pushClient:self didChange:typingIndicator];
+    }
+}
+
+#pragma mark - Listener methods
+
+- (void)setListener:(id<KUSPushClientListener>)listener
+{
+    _listener = listener;
+}
+
+- (void)removeListener:(id<KUSPushClientListener>)listener
+{
+    if (_listener != listener) {
+        return;
+    }
+    
+    self.listener = nil;
 }
 
 #pragma mark - KUSObjectDataSourceListener methods

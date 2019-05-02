@@ -306,11 +306,13 @@ The majority of the user interface for the support screens can be configured usi
 
 // Give the messages table view and cells a light gray background
 // Make the bubbles orange for user message and dark gray for company messages
+// Update the typing indicator color
 [[KUSChatTableView appearance] setBackgroundColor:[UIColor lightGrayColor]];
 [[KUSChatMessageTableViewCell appearance] setBackgroundColor:[UIColor lightGrayColor]];
 [[KUSChatMessageTableViewCell appearance] setCompanyTextColor:[UIColor whiteColor]];
 [[KUSChatMessageTableViewCell appearance] setCompanyBubbleColor:[UIColor colorWithWhite:0.25 alpha:1.0]];
 [[KUSChatMessageTableViewCell appearance] setUserBubbleColor:[KUSColor orangeColor]];
+[[KUSTypingIndicatorTableViewCell appearance] setTypingIndicatorColor:[KUSColor orangeColor]];
 
 // Give the input bar an orange send button and cursor,
 // and a dark background and keyboard

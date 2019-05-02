@@ -7,8 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "KUSTypingIndicator.h"
 
 @class KUSUserSession;
+@protocol KUSPushClientListener;
 @interface KUSPushClient : NSObject
 
 @property (nonatomic, assign) BOOL supportViewControllerPresented;
@@ -17,5 +19,22 @@
 - (instancetype)init NS_UNAVAILABLE;
 
 - (void)onClientActivityTick;
+
+// Listener methods
+- (void)setListener:(id<KUSPushClientListener>)listener;
+- (void)removeListener:(id<KUSPushClientListener>)listener;
+
+// Typing indicator methods
+- (void)connectToChatActivityChannel:(NSString *)sessionId;
+- (void)disconnectFromChatAcitvityChannel;
+- (void)sendChatActivityForSessionId:(NSString *)sessionId activityData:(NSDictionary *)activityData;
+
+
+@end
+
+@protocol KUSPushClientListener <NSObject>
+
+@optional
+- (void)pushClient:(KUSPushClient *)pushClient didChange:(KUSTypingIndicator *)typingIndicator;
 
 @end
