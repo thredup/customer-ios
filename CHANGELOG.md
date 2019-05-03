@@ -1,5 +1,15 @@
 # Changelog for Kustomer iOS SDK
 
+## 0.2.0
+
+Release Date: 05/03/2019
+
+* Implemented typing indicator feature
+* Implemented customer satisfaction feature
+* Added support to stop volume control form tracking incase of no internet
+* Fixed phone validation issue in conversational assistant form
+* Fixed the deleted node issue in multi-level list form
+
 ## 0.1.39
 
 Release Date: 04/05/2019
