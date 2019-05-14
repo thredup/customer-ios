@@ -13,6 +13,7 @@
 
 @interface KUSSatisfactionResponseDataSource () <KUSObjectDataSourceListener> {
     NSString *_sessionId;
+    BOOL _isEnabled;
 }
 @end
 
@@ -25,6 +26,7 @@
     self = [super initWithUserSession:userSession];
     if (self) {
         _sessionId = sessionId;
+        _isEnabled = YES;
     }
     return self;
 }
@@ -41,7 +43,13 @@
                                                  params:nil
                                           authenticated:YES
                                       additionalHeaders:[self _additionalHeaders]
-                                             completion:completion];
+                                             completion:^(NSError *error, NSDictionary *response) {
+                                                 // Check if the response is empty
+                                                 if (error.code == 3840) {
+                                                     _isEnabled = NO;
+                                                 }
+                                                 completion(error, response);
+                                             }];
 }
 
 - (Class)modelClass
@@ -131,4 +139,8 @@
     return KUSSatisfactionResponseStatusCommented;
 }
 
+- (BOOL)isSatisfactionEnabled
+{
+    return _isEnabled;
+}
 @end

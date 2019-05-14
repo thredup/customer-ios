@@ -838,6 +838,7 @@ static const NSTimeInterval kKUSTypingEndDelay = 5.0;
     KUSChatSession *chatSession = [self.userSession.chatSessionsDataSource objectWithId:_sessionId];
     BOOL isChatClosed = chatSession.lockedAt;
     BOOL isSatisfactionResponseFetched = [self.satisfactionResponseDataSource didFetch];
+    BOOL isSatisfactionFormEnabled = [self.satisfactionResponseDataSource isSatisfactionEnabled];
     BOOL hasAgentMessage = [self otherUserIds].count > 0;
     BOOL isSatisfactionFormCompleted = NO;
     if (chatSession.satisfactionLockedAt) {
@@ -845,7 +846,7 @@ static const NSTimeInterval kKUSTypingEndDelay = 5.0;
     }
     
     BOOL needSatisfactionForm = isChatClosed && hasAgentMessage && !isSatisfactionFormCompleted;
-    BOOL shouldFetchSatisfactionForm = !isSatisfactionResponseFetched && needSatisfactionForm;
+    BOOL shouldFetchSatisfactionForm = !isSatisfactionResponseFetched && isSatisfactionFormEnabled && needSatisfactionForm;
     
     if (shouldFetchSatisfactionForm) {
         [self.satisfactionResponseDataSource fetch];

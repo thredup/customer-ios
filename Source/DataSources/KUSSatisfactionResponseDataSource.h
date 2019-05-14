@@ -14,5 +14,6 @@
 - (instancetype)initWithUserSession:(KUSUserSession *)userSession AndSessionId:(NSString *)sessionId;
 - (void)submitRating:(NSInteger)rating;
 - (void)submitComment:(NSString *)comment;
+- (BOOL)isSatisfactionEnabled;
 - (KUSSatisfactionResponseStatus)satisfactionFormCurrentStatus;
 @end
