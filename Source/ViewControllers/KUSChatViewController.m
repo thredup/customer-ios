@@ -208,7 +208,7 @@
     }
 
     [self _checkShouldShowEmailInput];
-    [self _checkShouldShowInputView];
+    [self _checkShouldUpdateInputView];
     [self _checkShouldShowCloseChatButtonView];
 
     // Force layout so that animated presentations start from the right state
@@ -364,7 +364,6 @@
                             [self.view addSubview:self.closeChatButtonView];
                             [self.view setNeedsLayout];
                         });
-                        return;
                     }
                     return;
                 }
@@ -381,7 +380,9 @@
 {
     KUSChatSettings *settings = [_userSession.chatSettingsDataSource object];
     BOOL isChatCloseable = settings != nil && settings.closableChat;
-    BOOL shouldShowEmailInput = [_userSession shouldCaptureEmail] && [self getValidChatSessionId] != nil && !isChatCloseable;
+    BOOL shouldShowEmailInput = [_userSession shouldCaptureEmail] &&
+                                [self getValidChatSessionId] != nil &&
+                                !isChatCloseable;
     if (shouldShowEmailInput) {
         if (self.emailInputView == nil) {
             self.emailInputView = [[KUSEmailInputView alloc] init];
@@ -396,191 +397,202 @@
     }
 }
 
-- (void)_checkShouldShowOptionPicker
+- (void)_showMLFormValuePickerWithValue:(KUSMLFormValue *)mlFormValue
 {
-    KUSChatSession *session = [_userSession.chatSessionsDataSource objectWithId:[self getValidChatSessionId]];
-    if (session.lockedAt) {
-        return;
+    [self.optionPickerView removeFromSuperview];
+    self.optionPickerView = nil;
+    
+    [self.closedChatView removeFromSuperview];
+    self.closedChatView = nil;
+    
+    self.inputBarView.hidden = YES;
+    if ([self.inputBarView isFirstResponder]) {
+        [self.inputBarView resignFirstResponder];
     }
     
-    if (_chatMessagesDataSource.isChatClosed && [_chatMessagesDataSource otherUserIds].count == 0) {
-        return;
-    }
-        
-    KUSFormQuestion *vcCurrentQuestion = _chatMessagesDataSource.volumeControlCurrentQuestion;
-    BOOL wantsOptionPicker = (vcCurrentQuestion
-                              && vcCurrentQuestion.property == KUSFormQuestionPropertyFollowupChannel);
-    if (wantsOptionPicker) {
-        self.inputBarView.hidden = YES;
-        if ([self.inputBarView isFirstResponder]) {
-            [self.inputBarView resignFirstResponder];
-        }
-        
-        if (vcCurrentQuestion.values.count > 0 && self.optionPickerView == nil) {
-            self.optionPickerView = [[KUSOptionPickerView alloc] init];
-            self.optionPickerView.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth);
-            self.optionPickerView.delegate = self;
-            [self.view addSubview:self.optionPickerView];
-            [self _updateOptionsPickerOptions];
-        }
-        
-        return;
-    }
-    
-    KUSFormQuestion *currentQuestion = _chatMessagesDataSource.currentQuestion;
-    
-    BOOL wantsMultiLevelValuesPicker = (currentQuestion
-                                        && currentQuestion.property == KUSFormQuestionPropertyMLV);
-    if (wantsMultiLevelValuesPicker) {
-        self.inputBarView.hidden = YES;
-        if ([self.inputBarView isFirstResponder]) {
-            [self.inputBarView resignFirstResponder];
-        }
-        if (currentQuestion.mlFormValues && currentQuestion.mlFormValues.mlNodes) {
-            if (currentQuestion.mlFormValues.mlNodes.count > 0 && self.mlFormValuesPickerView == nil) {
-                self.mlFormValuesPickerView = [[KUSMLFormValuesPickerView alloc] init];
-                self.mlFormValuesPickerView.delegate = self;
-                self.mlFormValuesPickerView.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth);
-                [self.view addSubview:self.mlFormValuesPickerView];
-                [self.mlFormValuesPickerView setMLFormValuesPicker:currentQuestion.mlFormValues.mlNodes with:currentQuestion.mlFormValues.lastNodeRequired];
-                [self.view setNeedsLayout];
-                [self.view layoutIfNeeded];
-            }
-        }
-        return;
-    }
-    
-    wantsOptionPicker = (currentQuestion
-                         && currentQuestion.property == KUSFormQuestionPropertyValues
-                         && currentQuestion.values.count > 0);
-    if (wantsOptionPicker) {
-        self.inputBarView.hidden = YES;
-        if ([self.inputBarView isFirstResponder]) {
-            [self.inputBarView resignFirstResponder];
-        }
-        
-        if (self.optionPickerView == nil) {
-            self.optionPickerView = [[KUSOptionPickerView alloc] init];
-            self.optionPickerView.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth);
-            self.optionPickerView.delegate = self;
-            [self.view addSubview:self.optionPickerView];
-            [self _updateOptionsPickerOptions];
-        }
-        return;
-    }
-    
-        
-    wantsOptionPicker = (currentQuestion
-                              && currentQuestion.property == KUSFormQuestionPropertyConversationTeam
-                              && currentQuestion.values.count > 0);
-    BOOL teamOptionsDidFail = _teamOptionsDataSource.error || (_teamOptionsDataSource.didFetch && _teamOptionsDataSource.count == 0);
-    if (wantsOptionPicker && !teamOptionsDidFail) {
-        self.inputBarView.hidden = YES;
-        if ([self.inputBarView isFirstResponder]) {
-            [self.inputBarView resignFirstResponder];
-        }
-
-        NSArray<NSString *> *teamIds = currentQuestion.values;
-        if (_teamOptionsDataSource == nil || ![_teamOptionsDataSource.teamIds isEqual:teamIds]) {
-            _teamOptionsDataSource = [[KUSTeamsDataSource alloc] initWithUserSession:_userSession teamIds:teamIds];
-            [_teamOptionsDataSource addListener:self];
-            [_teamOptionsDataSource fetchLatest];
-        }
-
-        if (self.optionPickerView == nil) {
-            self.optionPickerView = [[KUSOptionPickerView alloc] init];
-            self.optionPickerView.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth);
-            self.optionPickerView.delegate = self;
-            [self.view addSubview:self.optionPickerView];
-            [self _updateOptionsPickerOptions];
-        }
-    } else {
-        _teamOptionsDataSource = nil;
-
-        self.inputBarView.hidden = NO;
-        [self.optionPickerView removeFromSuperview];
-        self.optionPickerView = nil;
-        
-        [self.closedChatView removeFromSuperview];
-        self.closedChatView = nil;
-        
-        [self.mlFormValuesPickerView removeFromSuperview];
-        self.mlFormValuesPickerView = nil;
-        
+    if (self.mlFormValuesPickerView == nil) {
+        self.mlFormValuesPickerView = [[KUSMLFormValuesPickerView alloc] init];
+        self.mlFormValuesPickerView.delegate = self;
+        self.mlFormValuesPickerView.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth);
+        [self.view addSubview:self.mlFormValuesPickerView];
+        [self.mlFormValuesPickerView setMLFormValuesPicker:mlFormValue.mlNodes with:mlFormValue.lastNodeRequired];
         [self.view setNeedsLayout];
+        [self.view layoutIfNeeded];
+    }
+}
+
+- (void)_showOptionPickerView
+{
+    [self.closedChatView removeFromSuperview];
+    self.closedChatView = nil;
+    
+    [self.mlFormValuesPickerView removeFromSuperview];
+    self.mlFormValuesPickerView = nil;
+    
+    self.inputBarView.hidden = YES;
+    if ([self.inputBarView isFirstResponder]) {
+        [self.inputBarView resignFirstResponder];
+    }
+    
+    if (self.optionPickerView == nil) {
+        self.optionPickerView = [[KUSOptionPickerView alloc] init];
+        self.optionPickerView.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth);
+        self.optionPickerView.delegate = self;
+        [self.view addSubview:self.optionPickerView];
+        
+        [self _updateOptionsPickerOptions];
     }
     
 }
 
-- (void)_checkShouldShowInputView
+
+- (void)_showSessionButton
 {
-    KUSChatSession *session = [_userSession.chatSessionsDataSource objectWithId:[self getValidChatSessionId]];
-    if (session.lockedAt) {
-        self.inputBarView.hidden = YES;
-        if ([self.inputBarView isFirstResponder]) {
-            [self.inputBarView resignFirstResponder];
+    self.inputBarView.hidden = YES;
+    if ([self.inputBarView isFirstResponder]) {
+        [self.inputBarView resignFirstResponder];
+    }
+    
+    [self.optionPickerView removeFromSuperview];
+    self.optionPickerView = nil;
+    
+    [self.closedChatView removeFromSuperview];
+    self.closedChatView = nil;
+    
+    [self.mlFormValuesPickerView removeFromSuperview];
+    self.mlFormValuesPickerView = nil;
+    
+    if (_userSession.userDefaults.shouldHideNewConversationButtonInClosedChat) {
+        if (self.sessionButton != nil) {
+            [self.sessionButton removeFromSuperview];
+            self.sessionButton = nil;
         }
-        
-        [self.optionPickerView removeFromSuperview];
-        self.optionPickerView = nil;
-        
-        [self.closedChatView removeFromSuperview];
-        self.closedChatView = nil;
-        
-        if (_userSession.userDefaults.shouldHideNewConversationButtonInClosedChat) {
-            if (self.sessionButton != nil) {
-                [self.sessionButton removeFromSuperview];
-                self.sessionButton = nil;
-            }
+        [self.view setNeedsLayout];
+    }
+    else {
+        if (self.sessionButton == nil) {
             
+            self.sessionButton = [[KUSNewSessionButton alloc] initWithUserSession:_userSession];
+            [self.sessionButton setTextColor:[KUSColor blueColor]];
+            [self.sessionButton setBackgroundColor:[UIColor whiteColor]];
+            [self.sessionButton setColor:nil];
+            [self.sessionButton setHasShadow:NO];
+            [self.sessionButton setText:[[KUSLocalization sharedInstance] localizedString:@"Start a New Conversation"]];
+            [self.sessionButton setImage:[KUSImage noImage]];
+            [self.sessionButton setTextFont:[UIFont boldSystemFontOfSize:14.0]];
+            [self.sessionButton setTitleColor:[[KUSColor blueColor] colorWithAlphaComponent:0.5] forState:UIControlStateHighlighted];
+            
+            self.sessionButton.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth);
+            [self.sessionButton addTarget:self
+                                   action:@selector(_createSession)
+                         forControlEvents:UIControlEventTouchUpInside];
+            [self.view addSubview:self.sessionButton];
             [self.view setNeedsLayout];
         }
-        else {
-            if (self.sessionButton == nil) {
-                
-                self.sessionButton = [[KUSNewSessionButton alloc] initWithUserSession:_userSession];
-                [self.sessionButton setTextColor:[KUSColor blueColor]];
-                [self.sessionButton setBackgroundColor:[UIColor whiteColor]];
-                [self.sessionButton setColor:nil];
-                [self.sessionButton setHasShadow:NO];
-                [self.sessionButton setText:[[KUSLocalization sharedInstance] localizedString:@"Start a New Conversation"]];
-                [self.sessionButton setImage:[KUSImage noImage]];
-                [self.sessionButton setTextFont:[UIFont boldSystemFontOfSize:14.0]];
-                [self.sessionButton setTitleColor:[[KUSColor blueColor] colorWithAlphaComponent:0.5] forState:UIControlStateHighlighted];
-                
-                self.sessionButton.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth);
-                [self.sessionButton addTarget:self
-                                       action:@selector(_createSession)
-                             forControlEvents:UIControlEventTouchUpInside];
-                [self.view addSubview:self.sessionButton];
-                [self.view setNeedsLayout];
-            }
-        }
-        
+    }
+}
+
+- (void)_showClosedChatView
+{
+    self.inputBarView.hidden = YES;
+    if ([self.inputBarView isFirstResponder]) {
+        [self.inputBarView resignFirstResponder];
+    }
+    
+    [self.optionPickerView removeFromSuperview];
+    self.optionPickerView = nil;
+    
+    [self.mlFormValuesPickerView removeFromSuperview];
+    self.mlFormValuesPickerView = nil;
+    
+    if (self.closedChatView == nil) {
+        self.closedChatView = [[KUSClosedChatView alloc] init];
+        self.closedChatView.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth);
+        [self.view addSubview:self.closedChatView];
+        [self.view setNeedsLayout];
+    }
+}
+
+- (void)_checkShouldUpdateInputView
+{
+    KUSChatSession *session = [_userSession.chatSessionsDataSource objectWithId:[self getValidChatSessionId]];
+    BOOL isSessionLocked = session.lockedAt;
+    if (isSessionLocked) {
+        [self _showSessionButton];
         return;
     }
     
     BOOL wantsClosedView = _chatMessagesDataSource.isChatClosed && ([_chatMessagesDataSource otherUserIds].count == 0);
     if (wantsClosedView) {
-        self.inputBarView.hidden = YES;
-        if ([self.inputBarView isFirstResponder]) {
-            [self.inputBarView resignFirstResponder];
-        }
-        
-        [self.optionPickerView removeFromSuperview];
-        self.optionPickerView = nil;
-        
-        if (self.closedChatView == nil) {
-            self.closedChatView = [[KUSClosedChatView alloc] init];
-            self.closedChatView.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth);
-            [self.view addSubview:self.closedChatView];
-            [self.view setNeedsLayout];
-        }
-        
+        [self _showClosedChatView];
         return;
     }
     
-    [self _checkShouldShowOptionPicker];
+    if ([self _isCurrentFormQuestionInserted]) {
+        KUSFormQuestion *vcCurrentQuestion = _chatMessagesDataSource.volumeControlCurrentQuestion;
+        KUSFormQuestion *currentQuestion = _chatMessagesDataSource.currentQuestion;
+        
+        BOOL isFollowupChannelQuestion = (vcCurrentQuestion
+                                            && vcCurrentQuestion.property == KUSFormQuestionPropertyFollowupChannel
+                                            && vcCurrentQuestion.values.count > 0);
+        BOOL isPropertyValueQuestion = (currentQuestion
+                                            && currentQuestion.property == KUSFormQuestionPropertyValues
+                                            && currentQuestion.values.count > 0);
+        BOOL isConversationTeamQuestion = (currentQuestion
+                                               && currentQuestion.property == KUSFormQuestionPropertyConversationTeam
+                                               && currentQuestion.values.count > 0);
+        
+        BOOL teamOptionsDidFail = NO;
+        if (isConversationTeamQuestion) {
+            teamOptionsDidFail = _teamOptionsDataSource.error || (_teamOptionsDataSource.didFetch
+                                                                  && _teamOptionsDataSource.count == 0);
+            if (!teamOptionsDidFail) {
+                NSArray<NSString *> *teamIds = currentQuestion.values;
+                if (_teamOptionsDataSource == nil || ![_teamOptionsDataSource.teamIds isEqual:teamIds]) {
+                    _teamOptionsDataSource = [[KUSTeamsDataSource alloc] initWithUserSession:_userSession teamIds:teamIds];
+                    [_teamOptionsDataSource addListener:self];
+                    [_teamOptionsDataSource fetchLatest];
+                }
+            }
+        }
+        
+        BOOL wantsOptionPicker = isFollowupChannelQuestion
+                                    || isPropertyValueQuestion
+                                    || (isConversationTeamQuestion && !teamOptionsDidFail);
+        if (wantsOptionPicker) {
+            [self _showOptionPickerView];
+            return;
+        }
+        
+        BOOL isMLVPropertyFormQuestion = (currentQuestion
+                                          && currentQuestion.property == KUSFormQuestionPropertyMLV);
+        BOOL hasMLFormValues = currentQuestion.mlFormValues
+                                && currentQuestion.mlFormValues.mlNodes
+                                && currentQuestion.mlFormValues.mlNodes.count > 0;
+        BOOL wantsMultiLevelValuesPicker = isMLVPropertyFormQuestion && hasMLFormValues;
+        
+        if (wantsMultiLevelValuesPicker) {
+            [self _showMLFormValuePickerWithValue: currentQuestion.mlFormValues];
+            return;
+        }
+        
+    }
+    
+    _teamOptionsDataSource = nil;
+    
+    self.inputBarView.hidden = NO;
+    [self inputBarShouldEnableSend:self.inputBarView];
+    
+    [self.optionPickerView removeFromSuperview];
+    self.optionPickerView = nil;
+    
+    [self.closedChatView removeFromSuperview];
+    self.closedChatView = nil;
+    
+    [self.mlFormValuesPickerView removeFromSuperview];
+    self.mlFormValuesPickerView = nil;
+    
+    [self.view setNeedsLayout];
 }
 
 - (void)_checkShouldDisconnectTypingListener
@@ -662,13 +674,30 @@
     [self.fauxNavigationBar setSessionId:_chatSessionId];
     [self _checkShouldShowEmailInput];
     [self _checkShouldShowCloseChatButtonView];
-    [self _checkShouldShowInputView];
+    [self _checkShouldUpdateInputView];
     
     [UIView animateWithDuration:0.2 animations:^{
         [self.view setNeedsLayout];
         [self.view layoutIfNeeded];
     }];
     
+}
+
+- (BOOL)_isCurrentFormQuestionInserted
+{
+    KUSChatMessage *latestMessage = _chatMessagesDataSource.allObjects.firstObject;
+    KUSFormQuestion *vcCurrentQuestion = _chatMessagesDataSource.volumeControlCurrentQuestion;
+    if (vcCurrentQuestion) {
+        return [vcCurrentQuestion.oid isEqualToString:latestMessage.oid];
+    }
+    
+    KUSFormQuestion *currentQuestion = _chatMessagesDataSource.currentQuestion;
+    if (currentQuestion) {
+        NSString *questionId = [NSString stringWithFormat:@"question_%@", currentQuestion.oid];
+        return [questionId isEqualToString:latestMessage.oid];
+    }
+    
+    return NO;
 }
 
 #pragma mark - KUSChatMessagesDataSourceListener methods
@@ -690,7 +719,7 @@
 {
     if (dataSource == _chatMessagesDataSource) {
         [self.tableView reloadData];
-        [self _checkShouldShowInputView];
+        [self _checkShouldUpdateInputView];
         [self _checkShouldShowCloseChatButtonView];
         [self _checkShouldDisconnectTypingListener];
         
@@ -705,7 +734,7 @@
         self.nonBusinessHourImageView.hidden = !_showNonBusinessHoursImage;
         
     } else if (dataSource == _teamOptionsDataSource) {
-        [self _checkShouldShowInputView];
+        [self _checkShouldUpdateInputView];
         [self _updateOptionsPickerOptions];
     }
 }
@@ -721,7 +750,7 @@
             }
         });
     } else if (dataSource == _teamOptionsDataSource) {
-        [self _checkShouldShowInputView];
+        [self _checkShouldUpdateInputView];
     }
 }
 
@@ -1092,6 +1121,9 @@
     KUSFormQuestion *question = _chatMessagesDataSource.volumeControlCurrentQuestion;
     if (!question) {
         question = _chatMessagesDataSource.currentQuestion;
+        if (question && !KUSFormQuestionRequiresResponse(question)) {
+            return NO;
+        }
     }
     
     if (question && question.property == KUSFormQuestionPropertyCustomerEmail) {

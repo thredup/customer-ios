@@ -999,52 +999,40 @@ static const NSTimeInterval kKUSTypingEndDelay = 5.0;
         return;
     }
 
-    // Make sure we submit the form if we just inserted a non-response question
-    if (!_submittingForm && !KUSFormQuestionRequiresResponse(_formQuestion) && _questionIndex == _form.questions.count - 1 && _delayedChatMessageIds.count == 0) {
-        [self _submitFormResponses];
-    }
-
     KUSChatMessage *lastMessage = [self latestMessage];
-    if (!KUSChatMessageSentByUser(lastMessage)) {
-        return;
-    }
+    
     if ([self shouldPreventSendingMessage]) {
         return;
     }
-
-    NSTimeInterval additionalInsertDelay = 0;
-    NSInteger latestQuestionIndex = _questionIndex;
-    NSInteger startingOffset = (_formQuestion ? 1 : 0);
-    for (NSInteger i = MAX(_questionIndex + startingOffset, 0); i < _form.questions.count; i++) {
-        KUSFormQuestion *question = _form.questions[i];
-
-        NSDate *createdAt = [lastMessage.createdAt dateByAddingTimeInterval:KUSChatAutoreplyDelay + additionalInsertDelay];
-        NSString *questionId = [NSString stringWithFormat:@"question_%@", question.oid];
-        NSDictionary *json = @{
-            @"type": @"chat_message",
-            @"id": questionId,
-            @"attributes": @{
-                @"body": question.prompt,
-                @"direction": @"out",
-                @"createdAt": [KUSDate stringFromDate:createdAt]
-            }
-        };
-        KUSChatMessage *formMessage = [[KUSChatMessage alloc] initWithJSON:json];
-        [self _insertDelayedMessage:formMessage];
-        additionalInsertDelay += KUSChatAutoreplyDelay;
-
-        latestQuestionIndex = i;
-        if (KUSFormQuestionRequiresResponse(question)) {
-            break;
-        }
+    
+    BOOL isResponseRequired = _formQuestion && KUSFormQuestionRequiresResponse(_formQuestion);
+    BOOL isAnswered = KUSChatMessageSentByUser(lastMessage);
+    if (isResponseRequired && !isAnswered) {
+        return;
     }
-
-    if (latestQuestionIndex == _questionIndex) {
+    
+    BOOL isLastQuestion = _questionIndex == _form.questions.count - 1;
+    if (isLastQuestion && !_submittingForm) {
         [self _submitFormResponses];
-    } else {
-        _questionIndex = latestQuestionIndex;
-        _formQuestion = _form.questions[_questionIndex];
+        return;
     }
+    
+    _questionIndex++;
+    _formQuestion = _form.questions[_questionIndex];
+    NSDate *createdAt = [lastMessage.createdAt dateByAddingTimeInterval:KUSChatAutoreplyDelay];
+    NSString *questionId = [NSString stringWithFormat:@"question_%@", _formQuestion.oid];
+    NSDictionary *json = @{
+                           @"type": @"chat_message",
+                           @"id": questionId,
+                           @"attributes": @{
+                                   @"body": _formQuestion.prompt,
+                                   @"direction": @"out",
+                                   @"createdAt": [KUSDate stringFromDate:createdAt]
+                                   }
+                           };
+    KUSChatMessage *formMessage = [[KUSChatMessage alloc] initWithJSON:json];
+    [self _insertDelayedMessage:formMessage];
+
 }
 
 - (void)_submitFormResponses
@@ -1410,12 +1398,13 @@ static const NSTimeInterval kKUSTypingEndDelay = 5.0;
                  }
              }
              
+             _submittingForm = NO;
+             _vcChatClosed = YES;
+             
              [self removeObjects:temporaryMessages];
              [self removeObjects:_temporaryVCMessagesResponses];
              [self upsertNewMessages:chatMessages];
              
-             _vcChatClosed = YES;
-             _submittingForm = NO;
              
              // Cancel Volume Control Polling if necessary
              [sessionQueuePollingManager cancelPolling];
