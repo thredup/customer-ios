@@ -1,5 +1,12 @@
 # Changelog for Kustomer iOS SDK
 
+## 0.2.1
+
+Release Date: 05/16/2019
+
+* Optimized & Improved Performance of API calls that fetch Satisfaction Forms data
+* Fixed duplicate chatbot text issue in conversational form
+
 ## 0.2.0
 
 Release Date: 05/03/2019
