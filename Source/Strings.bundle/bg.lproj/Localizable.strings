@@ -7,14 +7,6 @@
 */
 
 
-"com.kustomer.week" = "седмица";
-"com.kustomer.day" = "ден";
-"com.kustomer.hour" = "час";
-"com.kustomer.minute" = "минута";
-"com.kustomer.weeks" = "седмици";
-"com.kustomer.days" = "дни";
-"com.kustomer.hours" = "часа";
-"com.kustomer.minutes" = "минути";
 "com.kustomer.Just now" = "Точно сега";
 "com.kustomer.Attachment" = "Прикачен файл";
 "com.kustomer.Camera" = "Камера";
@@ -27,8 +19,6 @@
 "com.kustomer.example@domain.com" = "example@domain.com";
 "com.kustomer.Type a message..." = "Въведете съобщение ...";
 "com.kustomer.Loading..." = "Зареждане...";
-"com.kustomer.ago" = "преди";
-"com.kustomer.Chat with" = "Чатя с";
 "com.kustomer.CLOSED" = "ЗАТВОРЕНО";
 "com.kustomer.Start a New Conversation" = "Започнете нова разговор";
 "com.kustomer.Thank You! We'll follow up on your request." = "Благодаря ти! Ще проследим искането ви.";
@@ -43,12 +33,7 @@
 "com.kustomer.Home" = "У дома";
 "com.kustomer.Please select an item" = "Моля, изберете елемент";
 "com.kustomer.Leave a message" = "Остави съобщение";
-"com.kustomer.greater than one day" = "повече от един ден";
 "com.kustomer.Someone should be with you momentarily" = "Някой трябва да бъде с теб за момент";
-"com.kustomer.Your expected wait time is" = "Очаквано време за изчакване е";
-"com.kustomer.second" = "втори";
-"com.kustomer.seconds" = "секунди";
-"com.kustomer.Our current wait time is approximately" = "Настоящото време на изчакване е приблизително";
 "com.kustomer.upfront_volume_control_alternative_method_question" = "Можете да изберете да изчакате следващия наличен агент или да изберете алтернатива контактен метод, за да можем да продължим с Вас.";
 "com.kustomer.volume_control_alternative_method_question" = "За съжаление изглежда, че никой не е станал достъпен във времето, което очаквахме. Моля, изберете алтернативен метод за връзка, за да можем да продължим с Вас ...";
 "com.kustomer.volume_control_email_question" = "Страхотно, какъв е най-добрият имейл, с който да се свържеш с вас?";
@@ -57,3 +42,26 @@
 "com.kustomer.Submit" = "Изпращане";
 "com.kustomer.feedback_thankyou" = "Благодарим Ви за обратната връзка!";
 "com.kustomer.Edit" = "редактиране";
+"com.kustomer.chat_with_param" = "Говорете с %@";
+"com.kustomer.your_expected_wait_time_is_param_second" = "Вашият очакван час на изчакване е %@ секунда";
+"com.kustomer.your_expected_wait_time_is_param_seconds" = "Вашият очакван час на изчакване е %@ секунди";
+"com.kustomer.your_expected_wait_time_is_param_minute" = "Вашият очакван час на изчакване е %@ минута";
+"com.kustomer.your_expected_wait_time_is_param_minutes" = "Вашият очакван час на изчакване е %@ минути";
+"com.kustomer.your_expected_wait_time_is_param_hour" = "Вашият очакван час на изчакване е %@ час";
+"com.kustomer.your_expected_wait_time_is_param_hours" = "Вашият очакван час на изчакване е %@ часа";
+"com.kustomer.your_expected_wait_time_is_greater_than_one_day" = "Вашият очакван час на изчакване е по-голям от един ден";
+"com.kustomer.our_expected_wait_time_is_approximately_param_second" = "Времето за текущо изчакване е приблизително %@ секунда";
+"com.kustomer.our_expected_wait_time_is_approximately_param_seconds" = "Времето за изчакване е приблизително %@ секунди";
+"com.kustomer.our_expected_wait_time_is_approximately_param_minute" = "Времето за чакане е приблизително %@ минута";
+"com.kustomer.our_expected_wait_time_is_approximately_param_minutes" = "Времето за чакане е приблизително %@ минути";
+"com.kustomer.our_expected_wait_time_is_approximately_param_hour" = "Времето за чакане е около %@ час";
+"com.kustomer.our_expected_wait_time_is_approximately_param_hours" = "Времето за чакане е приблизително %@ часа";
+"com.kustomer.our_expected_wait_time_is_approximately_greater_than_one_day" = "Настоящото ни време на чакане е приблизително по-голямо от един ден";
+"com.kustomer.param_minute_ago" = "Преди %@ минута";
+"com.kustomer.param_minutes_ago" = "Преди %@ минути";
+"com.kustomer.param_hour_ago" = "преди %@ час";
+"com.kustomer.param_hours_ago" = "Преди %@ часа";
+"com.kustomer.param_day_ago" = "Преди %@ ден";
+"com.kustomer.param_days_ago" = "преди %@ дни";
+"com.kustomer.param_week_ago" = "преди %@ седмица";
+"com.kustomer.param_weeks_ago" = "преди %@ седмици";

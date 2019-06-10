@@ -7,14 +7,6 @@
 */
 
 
-"com.kustomer.week" = "sedmicu";
-"com.kustomer.day" = "dan";
-"com.kustomer.hour" = "sat";
-"com.kustomer.minute" = "minut";
-"com.kustomer.weeks" = "nedelje";
-"com.kustomer.days" = "dana";
-"com.kustomer.hours" = "sati";
-"com.kustomer.minutes" = "minuta";
 "com.kustomer.Just now" = "Upravo sada";
 "com.kustomer.Attachment" = "Prilog";
 "com.kustomer.Camera" = "Kamera";
@@ -27,8 +19,6 @@
 "com.kustomer.example@domain.com" = "example@domain.com";
 "com.kustomer.Type a message..." = "Unesite poruku ...";
 "com.kustomer.Loading..." = "Učitavanje...";
-"com.kustomer.ago" = "pre";
-"com.kustomer.Chat with" = "Chat sa";
 "com.kustomer.CLOSED" = "ZATVORENO";
 "com.kustomer.Start a New Conversation" = "Započnite novi razgovor";
 "com.kustomer.Thank You! We'll follow up on your request." = "Hvala ti! Mi ćemo pratiti vaš zahtev.";
@@ -38,12 +28,7 @@
 "com.kustomer.Home" = "Dom";
 "com.kustomer.Please select an item" = "Molimo izaberite stavku";
 "com.kustomer.Leave a message" = "Ostavi poruku";
-"com.kustomer.greater than one day" = "veći od jednog dana";
 "com.kustomer.Someone should be with you momentarily" = "Neko bi trebao biti sa vama trenutno";
-"com.kustomer.Your expected wait time is" = "Vaše očekivano vreme čekanja je";
-"com.kustomer.second" = "sekunda";
-"com.kustomer.seconds" = "sekunde";
-"com.kustomer.Our current wait time is approximately" = "Naš trenutni trenutak čekanja je otprilike";
 "com.kustomer.upfront_volume_control_alternative_method_question" = "Možete odabrati da sačekate sledećeg raspoloživog agenta ili izaberete alternativu metod kontakta koji ćemo pratiti s vama.";
 "com.kustomer.volume_control_alternative_method_question" = "Izvinite, izgleda da niko nije postao dostupan u vremenu koje smo očekivali. Molimo vas da izaberete alternativni kontakt metod da se nadjemo sa vama ...";
 "com.kustomer.volume_control_email_question" = "Odlično, u čemu je najbolji email za koji ste došli?";
@@ -52,3 +37,26 @@
 "com.kustomer.Submit" = "podnijeti";
 "com.kustomer.feedback_thankyou" = "Hvala vam za vaše povratne informacije!";
 "com.kustomer.Edit" = "edit";
+"com.kustomer.chat_with_param" = "Chat sa %@";
+"com.kustomer.your_expected_wait_time_is_param_second" = "Vaše očekivano vreme čekanja je %@ sekunda";
+"com.kustomer.your_expected_wait_time_is_param_seconds" = "Očekivano vreme čekanja je %@ sekunde";
+"com.kustomer.your_expected_wait_time_is_param_minute" = "Očekivano vrijeme čekanja je %@ minuta";
+"com.kustomer.your_expected_wait_time_is_param_minutes" = "Očekivano vrijeme čekanja je %@ minute";
+"com.kustomer.your_expected_wait_time_is_param_hour" = "Očekivano vrijeme čekanja je %@ sat";
+"com.kustomer.your_expected_wait_time_is_param_hours" = "Očekivano vrijeme čekanja je %@ sata";
+"com.kustomer.your_expected_wait_time_is_greater_than_one_day" = "Vaše očekivano vreme čekanja je veće od jednog dana";
+"com.kustomer.our_expected_wait_time_is_approximately_param_second" = "Trenutno vreme čekanja je približno %@ sekunda";
+"com.kustomer.our_expected_wait_time_is_approximately_param_seconds" = "Trenutno vreme čekanja je oko %@ sekunde";
+"com.kustomer.our_expected_wait_time_is_approximately_param_minute" = "Naše trenutno vreme čekanja je približno %@ minut";
+"com.kustomer.our_expected_wait_time_is_approximately_param_minutes" = "Trenutno vreme čekanja je oko %@ minuta";
+"com.kustomer.our_expected_wait_time_is_approximately_param_hour" = "Naše trenutno vreme čekanja je približno %@ sat";
+"com.kustomer.our_expected_wait_time_is_approximately_param_hours" = "Trenutno vreme čekanja je oko %@ sata";
+"com.kustomer.our_expected_wait_time_is_approximately_greater_than_one_day" = "Naše trenutno vreme čekanja je približno veće od jednog dana";
+"com.kustomer.param_minute_ago" = "Pre %@ minut";
+"com.kustomer.param_minutes_ago" = "Pre %@ minuta";
+"com.kustomer.param_hour_ago" = "Pre %@ sat";
+"com.kustomer.param_hours_ago" = "Pre %@ sata";
+"com.kustomer.param_day_ago" = "Pre %@ dan";
+"com.kustomer.param_days_ago" = "Pre %@ dana";
+"com.kustomer.param_week_ago" = "Pre %@ nedelju";
+"com.kustomer.param_weeks_ago" = "Pre %@ nedelje";

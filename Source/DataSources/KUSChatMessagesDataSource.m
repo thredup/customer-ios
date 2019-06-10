@@ -1477,11 +1477,10 @@ static const NSTimeInterval kKUSTypingEndDelay = 5.0;
         
         if (chatSettings.volumeControlMode == KUSVolumeControlModeUpfront &&
             sessionQueue.estimatedWaitTimeSeconds != 0) {
-            NSString *currentWaitTime = [[KUSLocalization sharedInstance] localizedString:@"Our current wait time is approximately"];
-            NSString *upfrontAlternatePrompt = [[KUSLocalization sharedInstance] localizedString:@"upfront_volume_control_alternative_method_question"];
             
-            NSString *humanReadableTextFromSeconds = [KUSDate humanReadableTextFromSeconds:sessionQueue.estimatedWaitTimeSeconds];
-            prompt = [[NSString alloc] initWithFormat:@"%@ %@. %@", currentWaitTime, humanReadableTextFromSeconds, upfrontAlternatePrompt];
+            NSString *currentWaitTimeMessage = [KUSDate volumeControlCurrentWaitTimeMessageForSeconds:sessionQueue.estimatedWaitTimeSeconds];
+            NSString *upfrontAlternatePrompt = [[KUSLocalization sharedInstance] localizedString:@"upfront_volume_control_alternative_method_question"];
+            prompt = [[NSString alloc] initWithFormat:@"%@. %@", currentWaitTimeMessage, upfrontAlternatePrompt];
         }
         
         KUSFormQuestion *question = [[KUSFormQuestion alloc]

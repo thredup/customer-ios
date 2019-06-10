@@ -7,14 +7,6 @@
 */
 
 
-"com.kustomer.week" = "săptămână";
-"com.kustomer.day" = "zi";
-"com.kustomer.hour" = "ora";
-"com.kustomer.minute" = "minut";
-"com.kustomer.weeks" = "săptămâni";
-"com.kustomer.days" = "zi";
-"com.kustomer.hours" = "ore";
-"com.kustomer.minutes" = "minute";
 "com.kustomer.Just now" = "Chiar acum";
 "com.kustomer.Attachment" = "Atașament";
 "com.kustomer.Camera" = "aparat foto";
@@ -27,8 +19,6 @@
 "com.kustomer.example@domain.com" = "example@domain.com";
 "com.kustomer.Type a message..." = "Scrie un mesaj...";
 "com.kustomer.Loading..." = "Se incarca...";
-"com.kustomer.ago" = "în urmă";
-"com.kustomer.Chat with" = "Chat cu";
 "com.kustomer.CLOSED" = "ÎNCHIS";
 "com.kustomer.Start a New Conversation" = "Porniți o nouă conversație";
 "com.kustomer.Thank You! We'll follow up on your request." = "Mulțumesc! Vom urmări solicitarea dvs.";
@@ -38,12 +28,7 @@
 "com.kustomer.Home" = "Acasă";
 "com.kustomer.Please select an item" = "Selectați un element";
 "com.kustomer.Leave a message" = "Lăsați un mesaj";
-"com.kustomer.greater than one day" = "mai mult de o zi";
 "com.kustomer.Someone should be with you momentarily" = "Cineva ar trebui să fie cu tine pentru moment";
-"com.kustomer.Your expected wait time is" = "Timpul așteptat de așteptare este";
-"com.kustomer.second" = "al doilea";
-"com.kustomer.seconds" = "secunde";
-"com.kustomer.Our current wait time is approximately" = "Timpul nostru de așteptare este aproximativ";
 "com.kustomer.upfront_volume_control_alternative_method_question" = "Puteți alege să așteptați următorul agent disponibil sau să selectați o alternativă modalitate de contact pentru ca noi să urmărim cu dvs.";
 "com.kustomer.volume_control_alternative_method_question" = "Ne pare rău, se pare că nimeni nu a devenit disponibil în perioada în care ne-am așteptat. Selectați o metodă de contact alternativă pentru a vă urma cu dvs. ...";
 "com.kustomer.volume_control_email_question" = "Ce e cel mai bun e-mail pentru a te contacta?";
@@ -52,3 +37,26 @@
 "com.kustomer.Submit" = "A depune";
 "com.kustomer.feedback_thankyou" = "Multumim pentru feedback-ul dvs!";
 "com.kustomer.Edit" = "Editați | ×";
+"com.kustomer.chat_with_param" = "Chat cu %@";
+"com.kustomer.your_expected_wait_time_is_param_second" = "Timpul așteptat de așteptare este de %@ secundă";
+"com.kustomer.your_expected_wait_time_is_param_seconds" = "Timpul așteptat de așteptare este de %@ secunde";
+"com.kustomer.your_expected_wait_time_is_param_minute" = "Timpul așteptat de așteptare este de %@ minut";
+"com.kustomer.your_expected_wait_time_is_param_minutes" = "Timpul așteptat de așteptare este de %@ minute";
+"com.kustomer.your_expected_wait_time_is_param_hour" = "Timpul așteptat de așteptare este de %@ oră";
+"com.kustomer.your_expected_wait_time_is_param_hours" = "Timpul așteptat de așteptare este de %@ ore";
+"com.kustomer.your_expected_wait_time_is_greater_than_one_day" = "Timpul așteptat de așteptare este mai mare decât o zi";
+"com.kustomer.our_expected_wait_time_is_approximately_param_second" = "Timpul de așteptare curent este de aproximativ %@ secundă";
+"com.kustomer.our_expected_wait_time_is_approximately_param_seconds" = "Timpul de așteptare curent este de aproximativ %@ secunde";
+"com.kustomer.our_expected_wait_time_is_approximately_param_minute" = "Timpul nostru de așteptare este de aproximativ %@ minut";
+"com.kustomer.our_expected_wait_time_is_approximately_param_minutes" = "Timpul nostru de așteptare este de aproximativ %@ minute";
+"com.kustomer.our_expected_wait_time_is_approximately_param_hour" = "Timpul nostru de așteptare este de aproximativ %@ oră";
+"com.kustomer.our_expected_wait_time_is_approximately_param_hours" = "Timpul nostru de așteptare este de aproximativ %@ ore";
+"com.kustomer.our_expected_wait_time_is_approximately_greater_than_one_day" = "Timpul de așteptare actual este aproximativ mai mare decât o zi";
+"com.kustomer.param_minute_ago" = "Acum %@ minut";
+"com.kustomer.param_minutes_ago" = "acum %@ minute";
+"com.kustomer.param_hour_ago" = "%@ oră în urmă";
+"com.kustomer.param_hours_ago" = "%@ ore în urmă";
+"com.kustomer.param_day_ago" = "Acum o zi";
+"com.kustomer.param_days_ago" = "%@ zile în urmă";
+"com.kustomer.param_week_ago" = "%@ săptămână în urmă";
+"com.kustomer.param_weeks_ago" = "acum %@ saptamani";

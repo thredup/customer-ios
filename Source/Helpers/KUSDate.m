@@ -42,29 +42,54 @@ const NSTimeInterval kDaysPerWeek = 7.0;
     }
 }
 
-+ (NSString *)humanReadableTextFromSeconds:(NSUInteger)seconds
++ (NSString *)volumeControlCurrentWaitTimeMessageForSeconds:(NSUInteger)seconds
 {
+    NSString *localizedMessage;
+    int time;
     if (seconds < kSecondsPerMinute) {
-        return _textWithCountAndUnit(seconds, @"second");
+        time = (int)seconds;
+        NSString *localizedKey = _ourWaitTimeWithUnit(time, @"second");
+        localizedMessage = [[KUSLocalization sharedInstance] localizedString:localizedKey];
     } else if (seconds < kSecondsPerMinute * kMinutesPerHour) {
-        int minutes = (int)ceil(seconds / kSecondsPerMinute);
-        return _textWithCountAndUnit(minutes, @"minute");
+        time = (int)ceil(seconds / kSecondsPerMinute);
+        NSString *localizedKey = _ourWaitTimeWithUnit(time, @"minute");
+        localizedMessage = [[KUSLocalization sharedInstance] localizedString:localizedKey];
     } else if (seconds < kSecondsPerMinute * kMinutesPerHour * kHoursPerDay) {
-        int hours = (int)ceil(seconds / (kSecondsPerMinute * kMinutesPerHour));
-        return _textWithCountAndUnit(hours, @"hour");
+        time = (int)ceil(seconds / (kSecondsPerMinute * kMinutesPerHour));
+        NSString *localizedKey = _ourWaitTimeWithUnit(time, @"hour");
+        localizedMessage = [[KUSLocalization sharedInstance] localizedString:localizedKey];
     } else {
-        return [[KUSLocalization sharedInstance] localizedString:@"greater than one day"];
+        return localizedMessage = [[KUSLocalization sharedInstance] localizedString:@"our_expected_wait_time_is_approximately_greater_than_one_day"];
     }
+    
+    NSString *timeString = [[NSString alloc] initWithFormat:@"%i", time];
+    return [[NSString alloc] initWithFormat:localizedMessage, timeString];
 }
 
-+ (NSString *)humanReadableUpfrontVolumeControlWaitingTimeFromSeconds:(NSUInteger)seconds
++ (NSString *)volumeControlExpectedWaitTimeMessageForSeconds:(NSUInteger)seconds
 {
     if (seconds == 0) {
         return [[KUSLocalization sharedInstance] localizedString:@"Someone should be with you momentarily"];
     } else {
-        NSString *waitTime = [KUSDate humanReadableTextFromSeconds:seconds];
-        NSString *localizedMessage = [[KUSLocalization sharedInstance] localizedString:@"Your expected wait time is"];
-        return [[NSString alloc] initWithFormat:@"%@ %@", localizedMessage, waitTime];
+        NSString *localizedMessage;
+        int time;
+        if (seconds < kSecondsPerMinute) {
+            time = (int)seconds;
+            NSString *localizedKey = _yourExpectedWaitTimeWithUnit(time, @"second");
+            localizedMessage = [[KUSLocalization sharedInstance] localizedString:localizedKey];
+        } else if (seconds < kSecondsPerMinute * kMinutesPerHour) {
+            time = (int)ceil(seconds / kSecondsPerMinute);
+            NSString *localizedKey = _yourExpectedWaitTimeWithUnit(time, @"minute");
+            localizedMessage = [[KUSLocalization sharedInstance] localizedString:localizedKey];
+        } else if (seconds < kSecondsPerMinute * kMinutesPerHour * kHoursPerDay) {
+            time = (int)ceil(seconds / (kSecondsPerMinute * kMinutesPerHour));
+            NSString *localizedKey = _yourExpectedWaitTimeWithUnit(time, @"hour");
+            localizedMessage = [[KUSLocalization sharedInstance] localizedString:localizedKey];
+        } else {
+            return localizedMessage = [[KUSLocalization sharedInstance] localizedString:@"your_expected_wait_time_is_greater_than_one_day"];
+        }
+        NSString *timeString = [[NSString alloc] initWithFormat:@"%i", time];
+        return [[NSString alloc] initWithFormat:localizedMessage, timeString];
     }
 }
 
@@ -85,6 +110,21 @@ const NSTimeInterval kDaysPerWeek = 7.0;
 
 #pragma mark - Helper logic
 
+static NSString *_ourWaitTimeWithUnit(NSTimeInterval unitCount, NSString *unit)
+{
+    NSString *localizedMessage = @"our_expected_wait_time_is_approximately_param_";
+    int integerUnit = (int)round(unitCount);
+    return [[NSString alloc] initWithFormat:@"%@%@%@", localizedMessage, unit, integerUnit > 1 ? @"s": @""];
+}
+
+
+static NSString *_yourExpectedWaitTimeWithUnit(NSTimeInterval unitCount, NSString *unit)
+{
+    NSString *localizedMessage = @"your_expected_wait_time_is_param_";
+    int integerUnit = (int)round(unitCount);
+    return [[NSString alloc] initWithFormat:@"%@%@%@", localizedMessage, unit, integerUnit > 1 ? @"s": @""];
+}
+
 static NSDateFormatter *_ShortRelativeDateFormatter(void)
 {
     static NSDateFormatter *_dateFormatter;
@@ -101,17 +141,12 @@ static NSDateFormatter *_ShortRelativeDateFormatter(void)
 
 static NSString *_AgoTextWithCountAndUnit(NSTimeInterval unitCount, NSString *unit)
 {
-    int integerUnit = (int)round(unitCount);
-    NSString* ago = [[KUSLocalization sharedInstance] localizedString:@"ago"];
-    NSString* localizedUnit = [[KUSLocalization sharedInstance] localizedString:[NSString stringWithFormat:@"%@%@", unit, (integerUnit > 1 ? @"s": @"")]];
-    return [NSString stringWithFormat:@"%i %@ %@", integerUnit, localizedUnit, ago];
-}
-
-static NSString *_textWithCountAndUnit(NSTimeInterval unitCount, NSString *unit)
-{
-    int integerUnit = (int)round(unitCount);
-    NSString* localizedUnit = [[KUSLocalization sharedInstance] localizedString:[NSString stringWithFormat:@"%@%@", unit, (integerUnit > 1 ? @"s": @"")]];
-    return [NSString stringWithFormat:@"%i %@", integerUnit, localizedUnit];
+    int integerUnitCount = (int)round(unitCount);
+    NSString *unitString = [NSString stringWithFormat:@"%@%@", unit, (integerUnitCount > 1 ? @"s": @"")];
+    NSString* localizedKey = [NSString stringWithFormat:@"param_%@_ago", unitString];
+    NSString *localizedString = [[KUSLocalization sharedInstance] localizedString:localizedKey];
+    NSString *unitCountString = [NSString stringWithFormat:@"%i", integerUnitCount];
+    return [NSString stringWithFormat:localizedString,unitCountString];
 }
 
 static NSDateFormatter *_ISO8601DateFormatterFromDate(void)

@@ -6,14 +6,6 @@
   Copyright © 2018 Kustomer. All rights reserved.
  */
 
-"com.kustomer.week" = "nnawɔtwe";
-"com.kustomer.day" = "da";
-"com.kustomer.hour" = "dɔnhwere";
-"com.kustomer.minute" = "sima";
-"com.kustomer.weeks" = "nnawɔtwe";
-"com.kustomer.days" = "nna";
-"com.kustomer.hours" = "dɔnhwere";
-"com.kustomer.minutes" = "sima";
 "com.kustomer.Just now" = "Seesei ara";
 "com.kustomer.Attachment" = "Nea yԑde reka ho";
 "com.kustomer.Camera" = "adeԑ a yԑde twa mfonin";
@@ -26,8 +18,6 @@
 "com.kustomer.example@domain.com" = "nhwԑsoɔ@domain.com";
 "com.kustomer.Type a message..." = "Twerԑ biribi...";
 "com.kustomer.Loading..." = "Ɛrekɔ so...";
-"com.kustomer.ago" = "nkyԑree";
-"com.kustomer.Chat with" = "Ɛne obi nni nkɔmmɔ";
 "com.kustomer.CLOSED" = "ASI";
 "com.kustomer.Start a New Conversation" = "Hyԑ nkɔmmɔ foforɔ ase";
 "com.kustomer.Thank You! We'll follow up on your request." = "Yԑda wo ase. Yԑbԑdi w’abisadeԑ no akyi.";
@@ -37,12 +27,7 @@
 "com.kustomer.Home" = "Efie";
 "com.kustomer.Please select an item" = "Yi biribi";
 "com.kustomer.Leave a message" = "Gya w’ano asԑm";
-"com.kustomer.greater than one day" = "Ɛboro ԑda baako";
 "com.kustomer.Someone should be with you momentarily" = "Ɛwɔ sԑ obi bԑboa wo seesei ara";
-"com.kustomer.Your expected wait time is" = "Mmerԑ a ԑwɔ sԑ wotwԑn wɔ no yԑ";
-"com.kustomer.second" = "anitԑtԑ";
-"com.kustomer.seconds" = "anitԑtԑ";
-"com.kustomer.Our current wait time is approximately" = "Wobԑgyina so bԑyԑ sԑ";
 "com.kustomer.upfront_volume_control_alternative_method_question" = "Wobԑtumi atwԑn nnipa foforɔ a ɔdi hɔ, anaa wobԑtumi ayi kwan foforɔ a yԑbԑfa so ahwԑ wo.";
 "com.kustomer.volume_control_alternative_method_question" = "Kafra ԑyԑ ayԑ sԑ obiara nni hɔ berԑ a na yԑrehwԑ no. Mepawokyԑw yi kwan foforɔ bi a yԑbԑfa so ne wo akasa.¦";
 "com.kustomer.volume_control_email_question" = "Mo, email bԑn so na yԑbԑfa so a yԑn nsa bԑka wo?";

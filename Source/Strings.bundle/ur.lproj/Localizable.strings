@@ -7,14 +7,6 @@
 */
 
 
-"com.kustomer.week" = "ہفتہ";
-"com.kustomer.day" = "دن";
-"com.kustomer.hour" = "گھنٹہ";
-"com.kustomer.minute" = "منٹ";
-"com.kustomer.weeks" = "ہفتوں";
-"com.kustomer.days" = "دن";
-"com.kustomer.hours" = "گھنٹے";
-"com.kustomer.minutes" = "منٹ";
 "com.kustomer.Just now" = "ابھی ابھی";
 "com.kustomer.Attachment" = "منسلکہ";
 "com.kustomer.Camera" = "کیمرہ";
@@ -27,8 +19,6 @@
 "com.kustomer.example@domain.com" = "example@domain.com";
 "com.kustomer.Type a message..." = "ایک پیغام ٹائپ کریں ...";
 "com.kustomer.Loading..." = "لوڈ کر رہا ہے ...";
-"com.kustomer.ago" = "پہلے";
-"com.kustomer.Chat with" = "کے ساتھ چیٹ کریں";
 "com.kustomer.CLOSED" = "بند";
 "com.kustomer.Start a New Conversation" = "نئی گفتگو شروع کریں";
 "com.kustomer.Thank You! We'll follow up on your request." = "آپ کا شکریہ! ہم آپ کی درخواست پر عمل کریں گے";
@@ -38,12 +28,7 @@
 "com.kustomer.Home" = "گھر";
 "com.kustomer.Please select an item" = "ایک آئٹم منتخب کریں";
 "com.kustomer.Leave a message" = "ایک پیغام چھوڑ دو";
-"com.kustomer.greater than one day" = "ایک دن سے زیادہ";
 "com.kustomer.Someone should be with you momentarily" = "تھوڑی ہی دیر میں کوئی نمائندہ آپ کے ساتھ بات کرے گا";
-"com.kustomer.Your expected wait time is" = "آپ کا متوقع انتظار کا وقت ہے";
-"com.kustomer.second" = "سیکنڈ";
-"com.kustomer.seconds" = "سیکنڈ";
-"com.kustomer.Our current wait time is approximately" = "ہمارے موجودہ انتظار کا وقت تقریبا ہے";
 "com.kustomer.upfront_volume_control_alternative_method_question" = "آپ اگلے دستیاب ایجنٹ کے انتظار کا انتخاب کرسکتے ہیں یا آپ کے ساتھ تعقیب کرنے کے لئے ہمارے لئے ایک متبادل رابطہ کا طریقہ منتخب کریں.";
 "com.kustomer.volume_control_alternative_method_question" = "افسوس، ایسا لگتا ہے جیسے ہم امید کرتے وقت کسی کو بھی دستیاب نہیں ہوا ہے. براہ کرم ہمارے ساتھ پیروی کرنے کے لئے ایک متبادل رابطہ کا طریقہ منتخب کریں ...";
 "com.kustomer.volume_control_email_question" = "بہت اچھا، آپ کو پہنچنے کا بہترین ای میل کیا ہے؟";
@@ -52,3 +37,27 @@
 "com.kustomer.Submit" = "جمع";
 "com.kustomer.feedback_thankyou" = "!آپ کے تبصرے کا شکریہ";
 "com.kustomer.Edit" = "ترمیم";
+"com.kustomer.chat_with_param" = "%@ کے ساتھ چیٹ کریں";
+"com.kustomer.your_expected_wait_time_is_param_second" = "آپ توقع انتظار کا وقت %@ سیکنڈ ہے";
+"com.kustomer.your_expected_wait_time_is_param_seconds" = "آپ توقع انتظار کا وقت %@ سیکنڈ ہے";
+"com.kustomer.your_expected_wait_time_is_param_minute" = "آپ توقع انتظار کا وقت %@ منٹ ہے";
+"com.kustomer.your_expected_wait_time_is_param_minutes" = "آپ توقع انتظار کا وقت %@ منٹ ہے";
+"com.kustomer.your_expected_wait_time_is_param_hour" = "آپ توقع انتظار کا وقت %@ گھنٹہ ہے";
+"com.kustomer.your_expected_wait_time_is_param_hours" = "آپ توقع انتظار کا وقت %@ گھنٹے ہے";
+"com.kustomer.your_expected_wait_time_is_greater_than_one_day" = "آپ توقع انتظار وقت ایک سے زیادہ دن ہے";
+"com.kustomer.our_expected_wait_time_is_approximately_param_second" = "ہماری موجودہ انتظار کا وقت تقریبا %@ سیکنڈ ہے";
+"com.kustomer.our_expected_wait_time_is_approximately_param_seconds" = "ہماری موجودہ انتظار وقت تقریبا %@ سیکنڈ ہے";
+"com.kustomer.our_expected_wait_time_is_approximately_param_minute" = "ہماری موجودہ انتظار کا وقت تقریبا %@ منٹ ہے";
+"com.kustomer.our_expected_wait_time_is_approximately_param_minutes" = "ہماری موجودہ انتظار وقت تقریبا %@ منٹ ہے";
+"com.kustomer.our_expected_wait_time_is_approximately_param_hour" = "ہماری موجودہ انتظار کا وقت %@ گھنٹہ تقریبا ہے";
+"com.kustomer.our_expected_wait_time_is_approximately_param_hours" = "ہماری موجودہ انتظار وقت تقریبا %@ گھنٹے ہے";
+"com.kustomer.our_expected_wait_time_is_approximately_greater_than_one_day" = "ہماری موجودہ انتظار کے وقت ایک دن کے مقابلے میں تقریبا بڑا ہے";
+"com.kustomer.param_minute_ago" = "%@ منٹ پہلے";
+"com.kustomer.param_minutes_ago" = "%@ منٹ پہلے";
+"com.kustomer.param_hour_ago" = "%@ گھنٹہ پہلے";
+"com.kustomer.param_hours_ago" = "%@ گھنٹے پہلے";
+"com.kustomer.param_day_ago" = "%@ دن قبل";
+"com.kustomer.param_days_ago" = "%@ دن پہلے";
+"com.kustomer.param_week_ago" = "%@ ہفتہ پہلے";
+"com.kustomer.param_weeks_ago" = "%@ ہفتے پہلے";
+

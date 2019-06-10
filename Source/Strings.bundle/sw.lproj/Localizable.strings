@@ -6,15 +6,6 @@
   Copyright © 2018 Kustomer. All rights reserved.
 */
 
-
-"com.kustomer.week" = "wiki";
-"com.kustomer.day" = "siku";
-"com.kustomer.hour" = "saa";
-"com.kustomer.minute" = "dakika";
-"com.kustomer.weeks" = "weeks";
-"com.kustomer.days" = "wiki";
-"com.kustomer.hours" = "masaa";
-"com.kustomer.minutes" = "dakika";
 "com.kustomer.Just now" = "sasa hivi";
 "com.kustomer.Attachment" = "kiambatisho";
 "com.kustomer.Camera" = "kamera";
@@ -27,8 +18,6 @@
 "com.kustomer.example@domain.com" = "mfano@domain.com";
 "com.kustomer.Type a message..." = "Andika ujumbe...";
 "com.kustomer.Loading..." = "Inapakia...";
-"com.kustomer.ago" = "iliyopita";
-"com.kustomer.Chat with" = "Ongea na";
 "com.kustomer.CLOSED" = "IMEFUNGWA";
 "com.kustomer.Start a New Conversation" = "Anza Majadiliano Mapya";
 "com.kustomer.Thank You! We'll follow up on your request." = "Asante! Tutafuatilia ombi lako.";
@@ -38,12 +27,7 @@
 "com.kustomer.Home" = "nyumbani";
 "com.kustomer.Please select an item" = "Tafadhali chagua kipengee";
 "com.kustomer.Leave a message" = "Acha ujumbe";
-"com.kustomer.greater than one day" = "zaidi ya siku moja";
 "com.kustomer.Someone should be with you momentarily" = "Mtu anapaswa kuwa na wewe kwa wakati";
-"com.kustomer.Your expected wait time is" = "Wakati wako wa kusubiri uliotarajiwa ni";
-"com.kustomer.second" = "pili";
-"com.kustomer.seconds" = "sekunde";
-"com.kustomer.Our current wait time is approximately" = "Wakati wetu wa kusubiri sasa ni takribani";
 "com.kustomer.upfront_volume_control_alternative_method_question" = "Unaweza kuchagua kusubiri wakala unaofuata au chagua mbadala fanya njia ya kuwasiliana na wewe.";
 "com.kustomer.volume_control_alternative_method_question" = "Samahani, inaonekana kama hakuna mtu aliyepatikana wakati tunatarajia. Tafadhali chagua mbinu mbadala ya kuwasiliana na sisi kufuatilia na wewe ...";
 "com.kustomer.volume_control_email_question" = "Kubwa, ni barua pepe bora gani kufikia wewe?";
@@ -52,3 +36,26 @@
 "com.kustomer.Submit" = "wasilisha";
 "com.kustomer.feedback_thankyou" = "Asante kwa maoni yako!";
 "com.kustomer.Edit" = "Edit";
+"com.kustomer.chat_with_param" = "Ongea na %@";
+"com.kustomer.your_expected_wait_time_is_param_second" = "Wakati wako wa kusubiri uliotarajiwa ni wa pili";
+"com.kustomer.your_expected_wait_time_is_param_seconds" = "Wakati wako wa kusubiri uliotarajiwa ni sekunde %@";
+"com.kustomer.your_expected_wait_time_is_param_minute" = "Wakati wako wa kusubiri uliotarajiwa ni dakika %@";
+"com.kustomer.your_expected_wait_time_is_param_minutes" = "Wakati wako wa kusubiri uliotarajiwa ni dakika %@";
+"com.kustomer.your_expected_wait_time_is_param_hour" = "Wakati wako wa kusubiri uliotarajiwa ni saa %@";
+"com.kustomer.your_expected_wait_time_is_param_hours" = "Wakati wako wa kusubiri uliotarajiwa ni saa %@";
+"com.kustomer.your_expected_wait_time_is_greater_than_one_day" = "Wakati wako wa kusubiri uliotarajiwa ni mkubwa kuliko siku moja";
+"com.kustomer.our_expected_wait_time_is_approximately_param_second" = "Wakati wetu wa kusubiri sasa ni takribani %@ pili";
+"com.kustomer.our_expected_wait_time_is_approximately_param_seconds" = "Wakati wetu wa kusubiri sasa ni takriban sekunde %@";
+"com.kustomer.our_expected_wait_time_is_approximately_param_minute" = "Wakati wetu wa kusubiri sasa ni takriban dakika %@";
+"com.kustomer.our_expected_wait_time_is_approximately_param_minutes" = "Wakati wetu wa kusubiri sasa ni takribani dakika %@";
+"com.kustomer.our_expected_wait_time_is_approximately_param_hour" = "Wakati wetu wa kusubiri sasa ni takribani saa %@";
+"com.kustomer.our_expected_wait_time_is_approximately_param_hours" = "Wakati wetu wa kusubiri sasa ni takriban masaa %@";
+"com.kustomer.our_expected_wait_time_is_approximately_greater_than_one_day" = "Wakati wetu wa kusubiri sasa ni karibu zaidi ya siku moja";
+"com.kustomer.param_minute_ago" = "Dakika %@ iliyopita";
+"com.kustomer.param_minutes_ago" = "Miezi %@ iliyopita";
+"com.kustomer.param_hour_ago" = "Saa %@ iliyopita";
+"com.kustomer.param_hours_ago" = "Saa %@ zilizopita";
+"com.kustomer.param_day_ago" = "Siku %@ iliyopita";
+"com.kustomer.param_days_ago" = "siku %@ zilizopita";
+"com.kustomer.param_week_ago" = "Wiki %@ iliyopita";
+"com.kustomer.param_weeks_ago" = "Wiki %@ zilizopita";

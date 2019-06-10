@@ -238,8 +238,10 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
     CGSize unreadSize = [_unreadCountLabel sizeThatFits:CGSizeMake(CGFLOAT_MAX, 15.0)];
     unreadSize.height = MAX(ceil(unreadSize.height + 4.0), 15.0);
     unreadSize.width = MAX(ceil(unreadSize.width + 4.0), 15.0);
+    CGFloat unreadCountHorizontalPadding = _backButton.frame.size.width / 2.0 + _backButtonImage.size.width / 2.0 + 4.0;
+    CGFloat unreadCountOriginX = isRTL ? _backButton.frame.size.width - unreadCountHorizontalPadding - unreadSize.width : unreadCountHorizontalPadding;
     _unreadCountLabel.frame = (CGRect) {
-        .origin.x = _backButton.frame.size.width / 2.0 + _backButtonImage.size.width / 2.0 + 4.0,
+        .origin.x = unreadCountOriginX,
         .origin.y = (_backButton.frame.size.height - unreadSize.height) / 2.0,
         .size = unreadSize
     };
@@ -367,7 +369,7 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
                                         !_chatMessagesDataSource.sessionQueuePollingManager.isPollingCanceled;
     if (isVolumeControlPollingActive) {
         KUSSessionQueue *sessionQueue = [_chatMessagesDataSource.sessionQueuePollingManager sessionQueue];
-        _waitingMessage = [KUSDate humanReadableUpfrontVolumeControlWaitingTimeFromSeconds:sessionQueue.estimatedWaitTimeSeconds];
+        _waitingMessage = [KUSDate volumeControlExpectedWaitTimeMessageForSeconds:sessionQueue.estimatedWaitTimeSeconds];
     }
     
     [self _updateTextLabels];
@@ -414,7 +416,7 @@ static const CGSize kKUSNavigationBarDismissImageSize = { 17.0, 17.0 };
 #pragma mark - KUSPaginatedDataSourceListener methods
 - (void)sessionQueuePollingManager:(KUSSessionQueuePollingManager *)manager didUpdateSessionQueue:(KUSSessionQueue *)sessionQueue
 {
-    _waitingMessage = [KUSDate humanReadableUpfrontVolumeControlWaitingTimeFromSeconds:sessionQueue.estimatedWaitTimeSeconds];
+    _waitingMessage = [KUSDate volumeControlExpectedWaitTimeMessageForSeconds:sessionQueue.estimatedWaitTimeSeconds];
     [self _updateTextLabels];
 }
 
