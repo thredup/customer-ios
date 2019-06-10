@@ -7,7 +7,7 @@
 //
 
 #import "KUSReachabilityManager.h"
-#import "Reachability.h"
+#import "KUSReachability.h"
 #import "Kustomer_Private.h"
 #import "KUSUserSession.h"
 #import "KUSStatsManager.h"
@@ -17,7 +17,7 @@
     NSMutableDictionary<NSString *, KUSChatSession *> *_previousChatSessions;
 }
 
-@property (nonatomic) Reachability *internetReachability;
+@property (nonatomic) KUSReachability *internetReachability;
 
 @end
 
@@ -42,7 +42,7 @@
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
     
-    _internetReachability = [Reachability reachabilityForInternetConnection];
+    _internetReachability = [KUSReachability reachabilityForInternetConnection];
     [self.internetReachability startNotifier];
 }
 
@@ -70,8 +70,8 @@
 
 - (void)_reachabilityChanged:(NSNotification *)note
 {
-    Reachability* currentReachability = [note object];
-    if ([currentReachability isKindOfClass:[Reachability class]]) {
+    KUSReachability* currentReachability = [note object];
+    if ([currentReachability isKindOfClass:[KUSReachability class]]) {
         _internetReachability = currentReachability;
         KUSNetworkConnectionState connectionState = [self networkConnectionState];
         if (connectionState == KUSNetworkConnectionStateConnected) {
