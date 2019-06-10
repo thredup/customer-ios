@@ -156,8 +156,8 @@ CGFloat KUSChatSessionTableViewCellHeight = 88.0;
         KUSChatSettings *chatSettings = [_userSession.chatSettingsDataSource object];
         responderName = chatSettings.teamName.length ? chatSettings.teamName : _userSession.organizationName;
     }
-    NSString *localizedTitle = [[KUSLocalization sharedInstance] localizedString:@"Chat with"];
-    self.titleLabel.text = [NSString stringWithFormat:NSLocalizedString(@"%@ %@", nil), localizedTitle, responderName];
+    NSString *localizedTitle = [[KUSLocalization sharedInstance] localizedString:@"chat_with_param"];
+    self.titleLabel.text = [NSString stringWithFormat:localizedTitle, responderName];
 
     // Subtitle text (from last message, or preview text)
     KUSChatMessage *latestTextMessage = nil;

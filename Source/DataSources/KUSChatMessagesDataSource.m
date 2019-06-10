@@ -35,6 +35,7 @@ static const NSTimeInterval kKUSTypingEndDelay = 5.0;
     KUSFormQuestion *_formQuestion;
     BOOL _submittingForm;
     BOOL _creatingSession;
+    BOOL _isChatEnding;
 
     NSInteger _vcformQuestionIndex;
     BOOL _vcTrackingStarted;
@@ -75,6 +76,7 @@ static const NSTimeInterval kKUSTypingEndDelay = 5.0;
         _vcFormActive = NO;
         _vcChatClosed = NO;
         _nonBusinessHours = NO;
+        _isChatEnding = NO;
         _temporaryVCMessagesResponses = [[NSMutableArray alloc] init];
         _delayedChatMessageIds = [[NSMutableSet alloc] init];
         _messageRetryBlocksById = [[NSMutableDictionary alloc] init];
@@ -244,8 +246,11 @@ static const NSTimeInterval kKUSTypingEndDelay = 5.0;
         
         // End Control Tracking and Automatically marked it Closed, if form not end
         if (!strongSelf->_vcFormEnd) {
-            [strongSelf _endVolumeControlTracking];
-            [strongSelf endChat:@"timed_out" withCompletion:nil];
+            [strongSelf endChat:@"timed_out" withCompletion:^(BOOL ended) {
+                if (ended) {
+                    [strongSelf _endVolumeControlTracking];
+                }
+            }];
         }
     });
 }
@@ -795,6 +800,7 @@ static const NSTimeInterval kKUSTypingEndDelay = 5.0;
 
 - (void)endChat:(NSString *)reason withCompletion:(void (^)(BOOL))completion
 {
+    _isChatEnding = YES;
     [self.userSession.requestManager
      performRequestType:KUSRequestTypePut
      endpoint:[[NSString alloc] initWithFormat:@"/c/v1/chat/sessions/%@", _sessionId]
@@ -803,10 +809,13 @@ static const NSTimeInterval kKUSTypingEndDelay = 5.0;
               }
      authenticated:YES
      completion:^(NSError *error, NSDictionary *response) {
+        _isChatEnding = NO;
          if (error) {
              if (completion != nil) {
                  completion(NO);
              }
+             // Submit VCForm response if pending
+             [self _insertVolumeControlFormMessageIfNecessary];
              return;
          }
 
@@ -1286,8 +1295,12 @@ static const NSTimeInterval kKUSTypingEndDelay = 5.0;
     
     // If last question, send request on backend
     if (_vcformQuestionIndex == 3) {
-        [self _endVolumeControlTracking];
-        [self _submitVCFormResponses];
+        
+        // Submit VCForm response if chatEnding request is not in process
+        if (!_isChatEnding) {
+            [self _endVolumeControlTracking];
+            [self _submitVCFormResponses];
+        }
         return;
     }
     
@@ -1477,11 +1490,10 @@ static const NSTimeInterval kKUSTypingEndDelay = 5.0;
         
         if (chatSettings.volumeControlMode == KUSVolumeControlModeUpfront &&
             sessionQueue.estimatedWaitTimeSeconds != 0) {
-            NSString *currentWaitTime = [[KUSLocalization sharedInstance] localizedString:@"Our current wait time is approximately"];
-            NSString *upfrontAlternatePrompt = [[KUSLocalization sharedInstance] localizedString:@"upfront_volume_control_alternative_method_question"];
             
-            NSString *humanReadableTextFromSeconds = [KUSDate humanReadableTextFromSeconds:sessionQueue.estimatedWaitTimeSeconds];
-            prompt = [[NSString alloc] initWithFormat:@"%@ %@. %@", currentWaitTime, humanReadableTextFromSeconds, upfrontAlternatePrompt];
+            NSString *currentWaitTimeMessage = [KUSDate volumeControlCurrentWaitTimeMessageForSeconds:sessionQueue.estimatedWaitTimeSeconds];
+            NSString *upfrontAlternatePrompt = [[KUSLocalization sharedInstance] localizedString:@"upfront_volume_control_alternative_method_question"];
+            prompt = [[NSString alloc] initWithFormat:@"%@. %@", currentWaitTimeMessage, upfrontAlternatePrompt];
         }
         
         KUSFormQuestion *question = [[KUSFormQuestion alloc]

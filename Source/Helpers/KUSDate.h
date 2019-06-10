@@ -11,9 +11,9 @@
 @interface KUSDate : NSObject
 
 + (NSString *)humanReadableTextFromDate:(NSDate *)date;
-+ (NSString *)humanReadableTextFromSeconds:(NSUInteger)seconds;
-+ (NSString *)humanReadableUpfrontVolumeControlWaitingTimeFromSeconds:(NSUInteger)seconds;
++ (NSString *)volumeControlExpectedWaitTimeMessageForSeconds:(NSUInteger)seconds;
 + (NSString *)messageTimestampTextFromDate:(NSDate *)date;
++ (NSString *)volumeControlCurrentWaitTimeMessageForSeconds:(NSUInteger)seconds;
 
 + (NSDate *)dateFromString:(NSString *)string;
 + (NSString *)stringFromDate:(NSDate *)date;
