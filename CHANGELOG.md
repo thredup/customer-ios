@@ -1,5 +1,13 @@
 # Changelog for Kustomer iOS SDK
 
+## 0.2.2
+
+Release Date: 06/10/2019
+
+* Updated language translations for couple of strings
+* Updated Reachability class name with KUS prefix
+* Fixed volume control prompt issue on network reconnection
+
 ## 0.2.1
 
 Release Date: 05/16/2019
