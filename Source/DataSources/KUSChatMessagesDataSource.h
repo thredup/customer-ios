@@ -23,6 +23,7 @@
 - (void)chatMessagesDataSource:(KUSChatMessagesDataSource *)dataSource didCreateSessionId:(NSString *)sessionId;
 - (void)chatMessagesDataSourceDidFetchSatisfactionForm:(KUSChatMessagesDataSource *)dataSource;
 - (void)chatMessagesDataSource:(KUSChatMessagesDataSource *)dataSource didReceiveTypingUpdate:(KUSTypingIndicator *)typingIndicator;
+- (void)chatMessagesDataSourceDidEndChatSession:(KUSChatMessagesDataSource *)dataSource;
 
 @end
 

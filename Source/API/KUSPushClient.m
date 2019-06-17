@@ -17,6 +17,7 @@
 #import "KUSUserSession.h"
 #import "KUSTimer.h"
 #import "KUSStatsManager.h"
+#import "KUSChatMessagesDataSource_Private.h"
 
 static const NSTimeInterval KUSShouldConnectToPusherRecencyThreshold = 60.0;
 static const NSTimeInterval KUSLazyPollingTimerInterval = 30.0;
@@ -221,7 +222,7 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
      }];
 }
 
-- (void)_fetchSessionById:(NSString *)sessionId
+- (void)_fetchEndedSessionById:(NSString *)sessionId
 {
     [_userSession.requestManager
      getEndpoint: @"/c/v1/chat/sessions"
@@ -229,7 +230,7 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
      completion:^(NSError *error, NSDictionary *response) {
          if (error != nil) {
              dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                 [self _fetchSessionById:sessionId];
+                 [self _fetchEndedSessionById:sessionId];
              });
              return;
          }
@@ -237,7 +238,7 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
          for (KUSChatSession *session in chatSessions)
          {
              if ([sessionId isEqualToString:session.oid]) {
-                 [self _upsertSessions:@[session]];
+                 [self _upsertEndedSessionsAndNotify:@[session]];
                  break;
              }
          }
@@ -257,24 +258,22 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
     }
 }
 
-- (void)_upsertSessions:(NSArray<KUSChatSession *> *)chatSessions
+- (void)_upsertEndedSessionsAndNotify:(NSArray<KUSChatSession *> *)chatSessions
 {
     [_userSession.chatSessionsDataSource upsertNewSessions:chatSessions];
     KUSChatSettings *settings = [_userSession.chatSettingsDataSource object];
-    if (settings.singleSessionChat)
-    {
+    if (settings.singleSessionChat) {
         // To update the UI of chat
         for (KUSChatSession *session in [_userSession.chatSessionsDataSource allObjects])
         {
             KUSChatMessagesDataSource *messagesDataSource = [_userSession chatMessagesDataSourceForSessionId:session.oid];
-            [messagesDataSource fetchLatest];
+            [messagesDataSource notifyAnnouncersDidEndChatSession];
         }
-    }
-    else
-    {
+    } else {
+        
         KUSChatSession *chatSession = chatSessions.firstObject;
         KUSChatMessagesDataSource *messagesDataSource = [_userSession chatMessagesDataSourceForSessionId:chatSession.oid];
-        [messagesDataSource fetchLatest];
+        [messagesDataSource notifyAnnouncersDidEndChatSession];
     }
 }
 
@@ -357,10 +356,10 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
     BOOL clippedEvent = event.data[@"clipped"];
     if (clippedEvent) {
         NSString *sessionId = NSStringFromKeyPath(event.data, @"data.id");
-        [self _fetchSessionById:sessionId];
+        [self _fetchEndedSessionById:sessionId];
     } else {
         NSArray<KUSChatSession *> *chatSessions = [KUSChatSession objectsWithJSON:event.data[@"data"]];
-        [self _upsertSessions:chatSessions];
+        [self _upsertEndedSessionsAndNotify:chatSessions];
     }
     
 }

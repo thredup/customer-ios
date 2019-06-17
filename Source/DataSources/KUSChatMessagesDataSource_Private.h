@@ -11,5 +11,6 @@
 @interface KUSChatMessagesDataSource (Private)
 
 - (void)mayGetSatisfactionFormIfAgentJoined;
+- (void)notifyAnnouncersDidEndChatSession;
 
 @end

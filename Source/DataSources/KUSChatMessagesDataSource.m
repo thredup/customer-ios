@@ -823,10 +823,8 @@ static const NSTimeInterval kKUSTypingEndDelay = 5.0;
          KUSChatSession *session = [self.userSession.chatSessionsDataSource objectWithId:_sessionId];
          session.lockedAt = [[NSDate alloc] init];
          
-         // Cancel Volume Control Polling if necessary
-         [sessionQueuePollingManager cancelPolling];
-         [self mayGetSatisfactionFormIfAgentJoined];
-         [self notifyAnnouncersDidChangeContent];
+         [self notifyAnnouncersDidEndChatSession];
+         
          if (completion != nil) {
              completion(YES);
          }
@@ -845,7 +843,7 @@ static const NSTimeInterval kKUSTypingEndDelay = 5.0;
     }
     
     KUSChatSession *chatSession = [self.userSession.chatSessionsDataSource objectWithId:_sessionId];
-    BOOL isChatClosed = chatSession.lockedAt;
+    BOOL isChatClosed = chatSession.lockedAt != nil;
     BOOL isSatisfactionResponseFetched = [self.satisfactionResponseDataSource didFetch];
     BOOL isSatisfactionFormEnabled = [self.satisfactionResponseDataSource isSatisfactionEnabled];
     BOOL hasAgentMessage = [self otherUserIds].count > 0;
@@ -964,6 +962,15 @@ static const NSTimeInterval kKUSTypingEndDelay = 5.0;
     [self notifyAnnouncersDidReceiveTypingUpdate];
 }
 
+- (void)notifyAnnouncersDidEndChatSession
+{
+    for (id<KUSChatMessagesDataSourceListener> listener in [self.listeners copy]) {
+        if ([listener respondsToSelector:@selector(chatMessagesDataSourceDidEndChatSession:)]) {
+            [listener chatMessagesDataSourceDidEndChatSession:self];
+        }
+    }
+}
+
 #pragma mark - Timer Completion handler
 
 - (void)typingEndDelayComplete:(KUSTimer *)timer
@@ -990,6 +997,15 @@ static const NSTimeInterval kKUSTypingEndDelay = 5.0;
     [self _startVolumeControlTracking];
     [self _closeProactiveCampaignIfNecessary];
     
+}
+
+- (void)chatMessagesDataSourceDidEndChatSession:(KUSChatMessagesDataSource *)dataSource
+{
+    // Cancel Volume Control Polling if necessary
+    [sessionQueuePollingManager cancelPolling];
+    
+    // Fetch Customer Satisfaction Form If necessary
+    [self mayGetSatisfactionFormIfAgentJoined];
 }
 
 - (void)_insertFormMessageIfNecessary

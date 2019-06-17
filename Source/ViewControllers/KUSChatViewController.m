@@ -12,7 +12,7 @@
 #import <NYTPhotoViewer/NYTPhotosViewController.h>
 #import <SafariServices/SafariServices.h>
 #import <SDWebImage/UIImageView+WebCache.h>
-
+#import "KUSChatMessagesDataSource_Private.h"
 #import "KUSChatSession.h"
 #import "KUSUserSession.h"
 
@@ -93,6 +93,7 @@
         _userSession = userSession;
         _chatSessionId = session.oid;
         _chatMessagesDataSource = [_userSession chatMessagesDataSourceForSessionId:_chatSessionId];
+        [_chatMessagesDataSource mayGetSatisfactionFormIfAgentJoined];
         _showSatisfactionForm = [_chatMessagesDataSource shouldShowSatisfactionForm];
         KUSChatSettings *chatSettings = [[_userSession chatSettingsDataSource] object];
         _showBackButton = !chatSettings.noHistory;
@@ -516,7 +517,7 @@
 - (void)_checkShouldUpdateInputView
 {
     KUSChatSession *session = [_userSession.chatSessionsDataSource objectWithId:[self getValidChatSessionId]];
-    BOOL isSessionLocked = session.lockedAt;
+    BOOL isSessionLocked = session.lockedAt != nil;
     if (isSessionLocked) {
         [self _showSessionButton];
         return;
@@ -782,6 +783,17 @@
 {
     _typingIndicator = typingIndicator;
     [self.tableView reloadData];
+}
+
+- (void)chatMessagesDataSourceDidEndChatSession:(KUSChatMessagesDataSource *)dataSource
+{
+    if (dataSource == _chatMessagesDataSource) {
+        [self.tableView reloadData];
+        [self _checkShouldUpdateInputView];
+        [self _checkShouldShowCloseChatButtonView];
+        [self _checkShouldDisconnectTypingListener];
+        [self.view setNeedsLayout];
+    }
 }
 
 #pragma mark - NSNotification methods
