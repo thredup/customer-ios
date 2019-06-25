@@ -21,11 +21,8 @@
 @interface KUSNavigationBarView : UIView
 
 @property (nonatomic, strong) UIColor *nameColor UI_APPEARANCE_SELECTOR;
-@property (nonatomic, strong) UIFont *nameFont UI_APPEARANCE_SELECTOR;
 @property (nonatomic, strong) UIColor *greetingColor UI_APPEARANCE_SELECTOR;
-@property (nonatomic, strong) UIFont *greetingFont UI_APPEARANCE_SELECTOR;
 @property (nonatomic, strong) UIColor *waitingColor UI_APPEARANCE_SELECTOR;
-@property (nonatomic, strong) UIFont *waitingFont UI_APPEARANCE_SELECTOR;
 @property (nonatomic, strong) UIColor *separatorColor UI_APPEARANCE_SELECTOR;
 @property (nonatomic, strong) UIImage *backButtonImage UI_APPEARANCE_SELECTOR;
 @property (nonatomic, strong) UIImage *dismissButtonImage UI_APPEARANCE_SELECTOR;
