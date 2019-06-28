@@ -1,4 +1,8 @@
-# Changelog for Kustomer iOS SDK
+# Changelog for Kustomer iOS SDK'
+
+## 0.2.3
+* Wrap chat Greeting text to 2 lines and truncate past that. 
+* Optimized & Improved Performance of API calls that fetch Satisfaction Forms data
 
 ## 0.2.2
 
