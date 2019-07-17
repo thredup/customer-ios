@@ -236,7 +236,7 @@ static NSString *_hostDomainOverride = nil;
 
 + (NSString *)hostDomain
 {
-    return _hostDomainOverride ?: @"kustomerapp.com";
+    return _hostDomainOverride ?: @"helpapp.io";
 }
 
 + (void)setHostDomain:(NSString *)hostDomain
